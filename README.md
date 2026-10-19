@@ -2,7 +2,7 @@
 
 Luma é uma companheira humanoide para **Minecraft Java Edition 26.2 com Fabric**. Ela tem uma skin própria em roxo e ciano, acompanha o dono, recebe ordens em português do Brasil e pode responder em voz alta por um painel no navegador.
 
-**[Baixar o pacote pronto para instalar](https://github.com/lucasmac412/Mods/releases/download/v0.1.0/Luma-Fabric-26.2.zip)** — inclui Luma, Fabric API e o guia `COMECE-AQUI.txt`. O pacote é uma versão inicial; confira os testes e os limites abaixo.
+**[Baixar o pacote pronto para instalar](https://raw.githubusercontent.com/lucasmac412/Mods/78c7926696ade6fe15d4255ce9533c8a5c27c4fe/downloads/Luma-Fabric-26.2.zip)** — inclui Luma, Fabric API e o guia `COMECE-AQUI.txt`. O pacote é uma versão inicial; confira os testes e os limites abaixo.
 
 **Comece pelo [passo a passo de instalação](docs/INSTALAR.md).** Ele explica onde colocar os arquivos mesmo para quem nunca instalou um mod. Se você recebeu um pacote de instalação com os JARs, use esses arquivos. O ZIP do código-fonte é diferente: ele precisa ser compilado para virar um mod.
 
