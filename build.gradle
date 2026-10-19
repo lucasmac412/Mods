@@ -1,0 +1,64 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+loom {
+    splitEnvironmentSourceSets()
+    mods {
+        luma {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+}
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = 'UTF-8'
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+    withSourcesJar()
+}
+test { useJUnitPlatform() }
+// Development launches should use the same explicit proxy and trust as Gradle.
+// This is a no-op on a normal desktop without these system properties.
+tasks.withType(JavaExec).configureEach {
+    ['http.proxyHost', 'http.proxyPort', 'http.nonProxyHosts', 'https.proxyHost',
+     'https.proxyPort', 'javax.net.ssl.trustStore', 'javax.net.ssl.trustStorePassword'].each { key ->
+        def value = System.getProperty(key)
+        if (value != null) systemProperty key, value
+    }
+}
+base { archivesName = 'luma-companion' }
+jar { from('LICENSE') }
+
+// Dedicated-server checks exercise the actual registered entity, world and inventory.
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = 'luma_gametest'
+        enableGameTests = true
+        enableClientGameTests = false
+    }
+}
+tasks.named('runGameTest', JavaExec) {
+    def gameTestReport = layout.buildDirectory.file('test-results/gametest.xml')
+    systemProperty 'fabric-api.gametest.report-file', gameTestReport.get().asFile.absolutePath
+    doFirst { gameTestReport.get().asFile.parentFile.mkdirs() }
+}

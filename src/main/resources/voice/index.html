@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Luma · Voz e conversa</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><span class="mark" aria-hidden="true">L</span><div><p class="eyebrow">SUA COMPANHEIRA NO MINECRAFT</p><h1>Converse com a Luma</h1></div></header>
+    <p>Deixe esta aba aberta enquanto joga no seu mundo individual. Digite uma ordem ou use o microfone para falar em português.</p>
+    <section aria-labelledby="connection-heading">
+      <h2 id="connection-heading">Conexão local</h2>
+      <p id="status" role="status" aria-live="polite">Aguardando sua ativação.</p>
+      <div class="actions"><button id="activate" type="button">Ativar conexão e voz</button><button id="pause" class="secondary" type="button" disabled>Pausar tudo</button></div>
+      <label for="voice">Voz em português</label>
+      <select id="voice"><option value="">Voz padrão em português do sistema</option></select>
+      <label class="check"><input id="speak" type="checkbox" checked> Ler as respostas da Luma em voz alta</label>
+    </section>
+    <section aria-labelledby="message-heading">
+      <h2 id="message-heading">Sua mensagem</h2>
+      <form id="message-form">
+        <label for="message">Ordem ou conversa (até 500 caracteres)</label>
+        <textarea id="message" rows="3" maxlength="500" placeholder="Luma, me siga" disabled></textarea>
+        <div class="actions"><button id="send" type="submit" disabled>Enviar para a Luma</button><button id="microphone" class="secondary" type="button" aria-pressed="false" disabled>Falar pelo microfone</button></div>
+      </form>
+      <p id="microphone-status" role="status" aria-live="polite">O microfone só é aberto quando você clica em “Falar pelo microfone”.</p>
+      <p class="small">O reconhecimento de voz depende do navegador (geralmente Chrome ou Edge) e pode enviar áudio ao fornecedor dele. O uso do microfone requer sua permissão. A fala é sintetizada pelas vozes do sistema/navegador; algumas usam serviços online e podem enviar o texto ao fornecedor. Não é uma dublagem gravada. Se não houver uma voz pt-BR, instale uma nas configurações do sistema. Texto funciona sem microfone.</p>
+    </section>
+    <section aria-labelledby="conversation-heading"><h2 id="conversation-heading">Conversa desta aba</h2><ol id="conversation" aria-live="polite" aria-relevant="additions"></ol></section>
+    <footer>Este painel se conecta somente ao seu jogo neste computador. Não compartilhe o link recebido no jogo. Para desligar o serviço de voz no jogo, use /luma voz parar.</footer>
+  </main>
+</body>
+</html>

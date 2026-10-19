@@ -1,0 +1,29 @@
+:root { color-scheme: dark; font-family: system-ui, sans-serif; color: #eef8ff; background: #09151f; line-height: 1.6; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { width: min(740px, 100%); margin: 0 auto; padding: 32px 20px 48px; }
+header { display: flex; align-items: center; gap: 18px; }
+.mark { display: grid; place-items: center; width: 64px; height: 64px; flex-shrink: 0; background: #8ff2d2; color: #08251f; font-size: 36px; font-weight: 900; border-radius: 18px; box-shadow: 5px 5px 0 #335b75; }
+.eyebrow { font-size: 10px; letter-spacing: .16em; color: #a0edda; margin: 0 0 3px; font-weight: 700; }
+h1 { font-size: clamp(23px, 5vw, 33px); line-height: 1.2; margin: 0; }
+h2 { font-size: 18px; margin: 0 0 12px; }
+section { padding: 22px; margin: 22px 0; border: 1px solid #294659; border-radius: 15px; background: #10222f; }
+p { color: #c0d4e2; }
+label { display: block; margin: 18px 0 6px; font-size: 14px; }
+select, textarea { width: 100%; background: #091822; color: #eef8ff; border: 1px solid #57788d; border-radius: 8px; padding: 11px; font: inherit; }
+textarea { resize: vertical; }
+.check { display: flex; align-items: center; gap: 9px; }
+.check input { width: 18px; height: 18px; accent-color: #8ff2d2; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+button { padding: 11px 16px; border: 1px solid transparent; border-radius: 8px; background: #8ff2d2; color: #08251f; font: inherit; font-weight: 700; cursor: pointer; }
+button.secondary { background: #1c3648; border-color: #608197; color: #eef8ff; }
+button:disabled { opacity: .45; cursor: default; }
+button:hover:enabled { filter: brightness(1.1); }
+:focus-visible { outline: 3px solid #ffe29d; outline-offset: 3px; }
+#microphone[aria-pressed="true"] { background: #a72b47; border-color: #ffc1ca; }
+#status, #microphone-status { min-height: 25px; }
+.small, footer { font-size: 12px; color: #a9c2d1; }
+#conversation { margin: 0; padding: 0; list-style: none; overflow-wrap: anywhere; }
+#conversation li { padding: 12px 0; border-bottom: 1px solid #294659; }
+#conversation strong { color: #8ff2d2; }
+@media (max-width: 440px) { section { padding: 16px; } .actions button { width: 100%; } }

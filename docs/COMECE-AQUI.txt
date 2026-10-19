@@ -1,0 +1,78 @@
+LUMA — COMPANHIA DE AVENTURA
+Minecraft Java Edition 26.2 | Fabric Loader 0.19.5 ou superior compatível
+
+Você não precisa programar nem compilar para usar este pacote.
+Não funciona no Minecraft Bedrock, celular, console, Forge ou NeoForge.
+É necessário ter acesso oficial ao Minecraft Java Edition.
+
+1. EXTRAIA O ZIP
+Clique com o botão direito no ZIP e escolha "Extrair tudo" ou equivalente.
+Dentro da pasta extraída, abra a pasta "mods": há dois arquivos .jar.
+Não descompacte esses JARs e não tente instalá-los com dois cliques.
+
+2. PREPARE O MINECRAFT
+No Minecraft Launcher oficial, abra Java Edition, escolha a versão 26.2,
+inicie o jogo uma vez e depois feche-o.
+
+3. INSTALE O FABRIC
+Acesse: https://fabricmc.net/use/installer/
+Baixe o instalador oficial. Selecione "Client", Minecraft 26.2 e Fabric
+Loader 0.19.5 ou superior compatível. Instale com criação de perfil ativada.
+No Launcher, selecione o novo perfil Fabric correspondente a 26.2.
+
+O jogo precisa de Java 25. Se houver erro de Java ou de jdk.httpserver,
+instale o JDK 25 completo: https://adoptium.net/temurin/releases/?version=25
+No perfil Fabric, em Editar > Mais opções > Executável Java, selecione
+o javaw.exe desse JDK no Windows, ou o java correspondente no Linux/macOS.
+
+4. COPIE OS DOIS MODS
+Feche o jogo. Abra a pasta de jogo usada pelo seu perfil Fabric.
+No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
+Se o diretório estiver vazio, no Windows aperte Windows + R, digite
+%APPDATA%\.minecraft e pressione Enter.
+macOS: ~/Library/Application Support/minecraft
+Linux: ~/.minecraft
+Se usa outro Launcher, abra a pasta da instância selecionada.
+
+Abra ou crie a subpasta "mods" nessa pasta de jogo.
+Copie para ela OS DOIS JARs da pasta "mods" deste pacote:
+- luma-companion-0.1.0.jar
+- fabric-api-0.161.0+26.2.jar
+Não deixe duas versões do mesmo mod na pasta.
+
+5. COMECE EM UM MUNDO NOVO
+Abra o perfil Fabric 26.2. Crie um mundo Criativo com comandos ativados.
+Faça backup antes de experimentar em um mundo importante.
+Abra o chat com T e digite uma linha de cada vez:
+/luma criar
+/luma seguir
+/luma falar Oi, Luma!
+Para fazê-la esperar: /luma ficar
+Para interromper uma tarefa: /luma parar
+Para ajuda: /luma ajuda
+
+6. VOZ EM PORTUGUÊS
+Em um mundo de um jogador, digite: /luma voz
+Abra o link completo no Chrome ou Edge, no mesmo computador do jogo.
+Clique em "Ativar conexão e voz". Para falar, clique no botão de microfone
+e autorize seu uso. Você também pode digitar no painel.
+A voz usa as vozes do sistema/navegador, sem dublagem humana gravada.
+O reconhecimento pode enviar áudio ao fornecedor do navegador e exigir
+internet. Não compartilhe o link. Para desligar: /luma voz parar
+
+7. PRIMEIRO ABRIGO
+Prepare terreno plano com área 5 x 5 livre e cinco blocos de altura vazios.
+Retire até capim e flores. Fique perto dessa área e da Luma.
+Segure 64 tábuas na mão e use /luma entregar.
+Depois segure mais 32 tábuas e use /luma entregar novamente.
+São 96 blocos no total. Agora use /luma construir.
+Ela faz um abrigo fixo com entrada aberta, sem porta, cama ou tochas.
+As trocas de itens exigem distância máxima de seis blocos.
+
+MAIS INSTRUÇÕES
+Leia docs/INSTALAR.md para os comandos, mineração, limites e IA opcional.
+Leia docs/TESTES.md para saber o que foi realmente testado nesta versão.
+O modo básico funciona sem instalar Ollama nem criar uma conta de IA.
+Luma não joga como uma pessoa em todas as situações nem termina o jogo
+sozinha. Mineração e construção dependem de materiais, ferramentas,
+acesso ao local e da regra minecraft:mob_griefing estar ativada.

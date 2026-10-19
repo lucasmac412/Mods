@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "luma_gametest",
+  "version": "1.0.0",
+  "name": "Luma — testes de integração",
+  "environment": "server",
+  "license": "MIT",
+  "entrypoints": {
+    "fabric-gametest": ["br.com.luma.test.CompanionGameTests"]
+  },
+  "depends": {
+    "luma": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}
