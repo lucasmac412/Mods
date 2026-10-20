@@ -1,18 +1,57 @@
 #!/usr/bin/env python3
-"""Package the verified experimental mod and existing official Fabric API, offline."""
+"""Package Luma, the client voice add-on and the verified Portuguese speech model."""
 from pathlib import Path
 import hashlib
 import io
 import json
+from pathlib import PurePosixPath
+import urllib.request
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.3.0-experimental"
-PACKAGE = "Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip"
+VERSION = "0.4.0-experimental"
+PACKAGE = "Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip"
 OLD_ZIP_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 # Checked against maven.fabricmc.net's official .jar.sha256 on 2026-10-20.
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
 MODEL_RESOURCE = "assets/luma/models/luma-native.luma"
+VOICE_MODEL_URL = "https://alphacephei.com/vosk/models/vosk-model-small-pt-0.3.zip"
+VOICE_MODEL_SHA = "6e1ce909032e1afa7a88e68a3d628ecafff302bdf195befab308826c395e93b7"
+
+
+def speech_model():
+    """Use a cached pinned archive, or download from the same documented official source."""
+    path = ROOT.parent / ".cache/luma/v04/vosk-model-small-pt-0.3.zip"
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with urllib.request.urlopen(VOICE_MODEL_URL, timeout=60) as response:
+            data = response.read(100 * 1024 * 1024 + 1)
+        if len(data) > 100 * 1024 * 1024 or sha(data) != VOICE_MODEL_SHA:
+            raise SystemExit("Download do modelo de voz não corresponde ao arquivo documentado.")
+        path.write_bytes(data)
+    data = path.read_bytes()
+    if sha(data) != VOICE_MODEL_SHA:
+        raise SystemExit("Checksum inválido do modelo de voz em cache.")
+    provenance = json.loads((ROOT / "third-party/voice/vosk-model-provenance.json").read_text())
+    entries = {}
+    with zipfile.ZipFile(io.BytesIO(data)) as archive:
+        if archive.testzip() is not None:
+            raise SystemExit("CRC inválido do modelo de voz.")
+        for info in archive.infolist():
+            parts = PurePosixPath(info.filename).parts
+            if (not parts or parts[0] != "vosk-model-small-pt-0.3" or ".." in parts
+                    or "\\" in info.filename or (info.external_attr >> 16) & 0o170000 == 0o120000):
+                raise SystemExit("Caminho inesperado no modelo de voz.")
+            if info.is_dir():
+                continue
+            relative = PurePosixPath(*parts[1:]).as_posix()
+            value = archive.read(info)
+            if sha(value) != provenance["files"].get(relative):
+                raise SystemExit("Conteúdo do modelo de voz diverge do manifesto: " + relative)
+            entries["config/luma-voice/model/" + relative] = value
+    if len(entries) != len(provenance["files"]):
+        raise SystemExit("O modelo de voz está incompleto.")
+    return entries
 
 
 def sha(payload):
@@ -42,13 +81,32 @@ def main():
         if any("gametest" in name.lower() for name in archive.namelist()):
             raise SystemExit("O mod instalável contém arquivos de GameTest.")
 
+    voice = (ROOT / f"voice-input/build/libs/luma-voice-{VERSION}.jar").read_bytes()
+    with zipfile.ZipFile(io.BytesIO(voice)) as archive:
+        metadata = json.loads(archive.read("fabric.mod.json"))
+        if metadata["id"] != "luma_voice" or metadata["version"] != VERSION or metadata["environment"] != "client":
+            raise SystemExit("JAR de voz tem identificação/versão/ambiente incorreto.")
+        dependencies = metadata.get("jars", [])
+        if not any("vosk" in entry["file"] for entry in dependencies) or not any("jna" in entry["file"] for entry in dependencies):
+            raise SystemExit("O complemento de voz precisa incluir Vosk e JNA.")
+        for entry in dependencies:
+            if entry["file"] not in archive.namelist():
+                raise SystemExit("Dependência de voz ausente: " + entry["file"])
+
     entries = {
         f"mods/luma-companion-{VERSION}.jar": mod,
+        f"mods/luma-voice-{VERSION}.jar": voice,
         "mods/fabric-api-0.161.0+26.2.jar": fabric,
         "COMECE-AQUI.txt": (ROOT / "docs/COMECE-AQUI.txt").read_bytes(),
         "LICENSE": (ROOT / "LICENSE").read_bytes(),
     }
-    for name in ["INSTALAR.md", "TESTES.md"]:
+    entries.update(speech_model())
+    for path in sorted((ROOT / "third-party/voice").rglob("*")):
+        if path.is_file():
+            entries[path.relative_to(ROOT).as_posix()] = path.read_bytes()
+    entries["voice-input/README.md"] = (ROOT / "voice-input/README.md").read_bytes()
+    entries["voice-input/THIRD-PARTY-NOTICES.md"] = (ROOT / "voice-input/THIRD-PARTY-NOTICES.md").read_bytes()
+    for name in ["INSTALAR.md", "TESTES.md", "OLLAMA-E-VOZ.md"]:
         entries[f"docs/{name}"] = (ROOT / "docs" / name).read_bytes()
     for directory in ["data", "data-v2", "data-v2-grounded", "data-v2-copy", "docs", "experiments", "experiments-v2"]:
         for path in sorted((ROOT / "native-ai" / directory).rglob("*")):
@@ -57,11 +115,15 @@ def main():
     entries["native-ai/README.md"] = (ROOT / "native-ai/README.md").read_bytes()
     entries["README.txt"] = (
         f"Luma {VERSION} para Minecraft Java 26.2 / Fabric.\n"
-        "Abra COMECE-AQUI.txt. Copie apenas os dois JARs de mods para a pasta mods do jogo.\n"
-        "IA de texto original incluída, experimental e desligada por padrão.\n"
-        "O gerador usa uma memória local autoral; ainda pode errar e não equivale a um modelo grande.\n"
-        "Nenhum Ollama, modelo pronto, chave de API ou serviço pago é necessário.\n"
-        "Voz e microfone continuam usando recursos do navegador/sistema.\n"
+        "Abra COMECE-AQUI.txt. Copie os três JARs de mods para a pasta mods do jogo\n"
+        "e mescle config/luma-voice na pasta config do mesmo perfil do Minecraft.\n"
+        "Instale o Ollama e baixe qwen2.5:3b para a conversa: instruções no guia.\n"
+        "O modelo de conversa do Ollama não está neste ZIP. /luma ia ollama ativa a integração.\n"
+        "O modelo original pequeno ainda acompanha a Luma: /luma ia propria.\n"
+        "O complemento Luma Voz usa Vosk com modelo de terceiros para reconhecer português\n"
+        "localmente. Segure V para gravar e solte para enviar. A voz de saída depende\n"
+        "do sintetizador do sistema e de uma voz adequada instalada. Veja os limites no guia.\n"
+        "Ollama e os modelos de terceiros têm suas próprias licenças. Consulte third-party.\n"
         "Os relatórios e dados acompanham o pacote para consulta. Comandos de desenvolvimento\n"
         "do laboratório exigem o repositório completo: https://github.com/lucasmac412/Mods\n"
     ).encode("utf-8")

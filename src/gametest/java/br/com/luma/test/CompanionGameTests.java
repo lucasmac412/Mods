@@ -240,6 +240,19 @@ public final class CompanionGameTests {
         List<CompanionEntity> firstSpawn = ownedCompanions(helper, f.owner);
         helper.assertTrue(firstSpawn.size() == 1, "The registered create command must spawn exactly one companion");
         CompanionEntity created = firstSpawn.getFirst();
+        // Selecting a provider never needs a running Ollama. Model names include a colon.
+        for (String aiCommand : new String[]{"luma ia modelo qwen2.5:3b", "luma ia ollama", "luma ia status",
+                "luma seguir", "luma ia propria", "luma ia desligar", "luma parar"}) {
+            try {
+                int result = helper.getLevel().getServer().getCommands().getDispatcher()
+                        .execute(aiCommand, f.owner.createCommandSourceStack());
+                helper.assertTrue(result == 1, "AI command must execute without a model server: " + aiCommand);
+            } catch (com.mojang.brigadier.exceptions.CommandSyntaxException failure) {
+                helper.assertTrue(false, "AI command must parse and execute: " + aiCommand);
+            }
+        }
+        helper.assertTrue(created.describe().startsWith("Estou parada."),
+                "Stopping after provider changes must still apply immediately without contacting Ollama");
         command(helper, f.owner, "luma criar");
         List<CompanionEntity> afterSecondCreate = ownedCompanions(helper, f.owner);
         helper.assertTrue(afterSecondCreate.size() == 1

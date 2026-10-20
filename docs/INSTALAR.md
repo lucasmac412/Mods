@@ -1,23 +1,24 @@
-# Instalar e usar a Luma 0.3.0-experimental, do zero
+# Instalar e usar a Luma 0.4.0-experimental, do zero
 
 Este guia é para **Minecraft Java Edition 26.2 no computador**. Não serve para Minecraft de celular, console ou Bedrock Edition. Você precisará de uma conta com acesso ao Minecraft Java Edition.
 
-**[Baixar Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/v0.3.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip)**
+**[Baixar Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/v0.4.0-experimental/downloads/Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip)**
 
-No Chrome, abra o link acima e aguarde o download. Aperte `Ctrl + J` para encontrar o ZIP baixado e clique em **Mostrar na pasta**. Clique com o botão direito no ZIP e escolha **Extrair tudo**. O pacote contém a Luma, o Fabric API e este guia: você não precisa programar, compilar ou treinar um modelo para instalá-lo.
+No Chrome, abra o link acima e aguarde o download. Aperte `Ctrl + J` para encontrar o ZIP baixado e clique em **Mostrar na pasta**. Clique com o botão direito no ZIP e escolha **Extrair tudo**. O pacote contém Luma, Luma Voz, Fabric API, o modelo offline de reconhecimento de fala em português e este guia. Você não precisa programar, compilar ou treinar um modelo para instalar. O Ollama e o modelo de conversa são baixados separadamente no passo 7.
 
-A Luma inclui uma **IA de texto própria, pequena e experimental, orientada por uma memória local de informações autorais**. O modelo e a memória já vêm no JAR; basta ativar a opção no jogo. A memória pode escolher uma informação inadequada e o modelo ainda pode gerar texto errado ou sem sentido. A IA começa desligada por padrão. As ordens e as tarefas do NPC continuam disponíveis com ela desligada.
+A conversa pode usar o **Ollama local**, e o complemento **Luma Voz** permite segurar uma tecla para falar dentro do Minecraft. O pequeno modelo próprio anterior continua disponível por uma opção separada. A IA começa desligada a cada sessão; as ordens e tarefas do NPC funcionam com ela desligada. Ollama, Qwen e Vosk são componentes de terceiros, conforme as respectivas licenças.
 
 Um ZIP com pastas como `src` e `gradle` é o **código-fonte**. Se você recebeu apenas esse projeto, veja a seção **Gerar o JAR a partir deste projeto** no fim do guia.
 
 ## 1. Separe os arquivos
 
-Você precisa destes dois mods:
+No pacote pronto há **três JARs**, que vão na pasta `mods` do jogo:
 
-1. **Luma**: `luma-companion-0.3.0-experimental.jar`. Use o JAR da pasta `mods` do pacote extraído. O modelo de texto e a memória local já estão dentro dele. Para quem compila, a saída original fica em `build/libs`.
-2. **Fabric API para Minecraft 26.2**: versão `0.161.0+26.2` ou posterior compatível com 26.2. Use o arquivo incluído no pacote, se houver, ou baixe pela [página do Fabric API no Modrinth](https://modrinth.com/mod/fabric-api/versions), selecionando a versão correta do jogo.
+1. **Luma**: `luma-companion-0.4.0-experimental.jar`, a companheira e a integração com Ollama.
+2. **Luma Voz**: `luma-voice-0.4.0-experimental.jar`, o complemento cliente para microfone e respostas faladas dentro do jogo.
+3. **Fabric API**: `fabric-api-0.161.0+26.2.jar`, dependência compatível com Minecraft 26.2.
 
-Consulte [o estado dos testes](TESTES.md) para saber o que já foi verificado. A qualidade do modelo de texto é registrada separadamente no [relatório de resultados](https://github.com/lucasmac412/Mods/blob/v0.3.0-experimental/native-ai/experiments-v2/RESULTADOS.md).
+Há também a pasta **`config/luma-voice/model`**, com o modelo de reconhecimento de português. Ela vai na pasta `config` do jogo, **fora de `mods`**. O modelo de conversa do Ollama não está no ZIP; será baixado pelo próprio Ollama. Consulte [os testes e pendências](TESTES.md).
 
 Não abra o JAR da Luma com dois cliques para instalar. Ele será colocado em uma pasta específica no passo 4. Não instale o arquivo `-sources.jar`.
 
@@ -43,7 +44,7 @@ O perfil precisa executar Java 25. O Launcher oficial costuma gerenciar seu pró
 
 Se houver erro envolvendo o módulo **`jdk.httpserver`** ou classes **`com.sun.net.httpserver`**, use o **JDK 25 completo** do Temurin nesse mesmo campo do Launcher. Alguns runtimes reduzidos não incluem o componente Java necessário ao painel local de voz.
 
-## 4. Coloque os dois JARs na pasta certa
+## 4. Copie os três JARs e o modelo de voz
 
 O que importa é a pasta de jogo usada pelo **perfil Fabric selecionado**. Se você usa Prism Launcher ou outro gerenciador, use a opção de abrir a pasta da instância e depois abra `mods`.
 
@@ -59,11 +60,13 @@ No Windows, aperte `Windows + R`, cole `%APPDATA%\.minecraft` e pressione Enter.
 
 1. Feche o Minecraft. Se já usa mods em um mundo importante, copie a pasta `saves` do jogo para outro local antes de atualizar.
 2. Entre na pasta do jogo e abra a subpasta **mods**. Crie a pasta `mods` se ela não existir.
-3. Se já houver um JAR antigo da Luma, mova-o para uma pasta de backup **fora de `mods`**. Faça o mesmo com um Fabric API antigo que será substituído. Não deixe duas versões do mesmo mod juntas.
-4. Abra a pasta **mods do ZIP extraído** e copie os dois JARs para a pasta **mods do jogo**: `luma-companion-0.3.0-experimental.jar` e o Fabric API para 26.2. Não copie o ZIP inteiro.
-5. No Launcher, selecione o perfil **Fabric 26.2** e clique em **Jogar**.
+3. Se já houver JARs antigos da Luma, Luma Voz ou Fabric API, mova os que serão substituídos para uma pasta de backup **fora de `mods`**. Não deixe duas versões do mesmo mod juntas.
+4. Abra a pasta **mods do ZIP extraído** e copie os **três JARs** para a pasta **mods do jogo**. Não copie o ZIP inteiro.
+5. Na pasta extraída, abra `config`. Copie a pasta `luma-voice` para a pasta `config` do jogo; crie `config` se ela não existir. **Mescle as pastas**, sem substituir a pasta `config` inteira nem apagar configurações de outros mods.
+6. Confira o resultado: dentro da pasta de jogo deve existir `config/luma-voice/model/final.mdl`. Não deixe uma pasta extra `vosk-model-small-pt-0.3` entre `model` e os arquivos.
+7. No Launcher, selecione o perfil **Fabric 26.2** e clique em **Jogar**.
 
-Não é necessário colocar o projeto inteiro dentro de `mods`, descompactar os JARs ou instalar outro mod de voz.
+Não coloque o projeto inteiro dentro de `mods` e não descompacte os JARs. O complemento Luma Voz é opcional para quem prefere só texto; para usar a tecla de microfone, instale-o e copie o modelo conforme acima. Não instale Luma Voz no servidor dedicado: ele funciona no cliente.
 
 ## 5. Faça o primeiro teste em um mundo novo
 
@@ -110,8 +113,11 @@ Você controla a sua própria companheira. No chat, comece a frase com o nome de
 | `/luma remover` | Remove sua companheira e devolve os itens; aproxime-se a até seis blocos. |
 | `/luma voz` | Abre o acesso ao painel local de voz. |
 | `/luma voz parar` | Desliga o painel de voz local. |
-| `/luma ia ligar` | Ativa as falas geradas pela IA própria experimental com memória local incluída no mod. |
-| `/luma ia desligar` | Desativa as falas do modelo e mantém as respostas básicas e as ordens. |
+| `/luma ia ollama` ou `/luma ia ligar` | Seleciona o Ollama local nesta sessão. |
+| `/luma ia modelo qwen2.5:3b` | Escolhe o modelo já instalado no Ollama; vale só para a sessão. |
+| `/luma ia status` | Mostra o provedor e o modelo configurados, sem testar a conexão. |
+| `/luma ia propria` | Seleciona o pequeno modelo próprio experimental incluído no mod. |
+| `/luma ia desligar` | Desliga a conversa com o modelo e descarta o histórico; preserva ordens e respostas básicas. |
 
 Exemplos de frases simples: `Luma, me proteja`, `Luma, fique aqui`, `Luma, minere`, `Luma, construa`, `Luma, parar` e `Luma, status`. O modo local reconhece um conjunto limitado de frases. Para interromper, use **parar**; frases negativas como “não construa” não iniciam uma nova tarefa.
 
@@ -159,54 +165,89 @@ Mineração e construção respeitam a regra do mundo **`minecraft:mob_griefing`
 
 Em servidor, a alteração dessa regra cabe ao administrador e também afeta outros comportamentos do Minecraft. A Luma continua podendo seguir e combater quando a regra impede alterações em blocos.
 
-## 6. Ouvir e falar com a Luma
+## 6. Fale pelo microfone dentro do Minecraft
 
-O painel de voz funciona no **mesmo computador de um mundo de um jogador**. Esta versão não oferece esse painel para quem entra em um servidor dedicado. Em multiplayer, use as mensagens e os comandos de texto.
+Com o complemento Luma Voz e a pasta do modelo instalados:
 
-1. Com o mundo aberto, use `/luma voz`.
-2. Abra o link completo mostrado no chat no **Chrome ou Edge**. O endereço começa com `http://127.0.0.1:` e inclui uma porta e um código depois de `#token=`. A porta pode mudar a cada sessão.
-3. Clique em **Ativar conexão e voz** no painel. Mantenha o jogo e a página abertos.
-4. Deixe marcada a opção de ler as respostas em voz alta e escolha uma voz **pt-BR**, se estiver disponível.
-5. Para falar, clique em **Falar pelo microfone** e permita o acesso ao microfone quando o navegador perguntar. Diga, por exemplo, “Luma, me siga”.
-6. Você também pode escrever no campo de mensagem e clicar em **Enviar para a Luma**.
-7. Para interromper a sessão, use o botão de pausa. Para desligar o serviço local, use `/luma voz parar` no jogo.
+1. Conecte o microfone e configure-o como dispositivo de entrada padrão do sistema.
+2. Abra o mundo, crie a companheira com `/luma criar` e feche o chat e os menus.
+3. **Segure V**, aguarde o aviso **“Pode falar agora”**, diga uma frase curta como “me siga” e **solte V** para transcrever e enviar. Você não precisa começar com “Luma”.
+4. Confira no chat o texto reconhecido e a resposta da companheira. O reconhecimento pode errar; para interromper uma tarefa, use `/luma parar` pelo teclado se necessário.
+5. Para alterar a tecla, abra **Opções → Controles → Teclas** e procure a categoria **Luma Voz**. Resolva conflitos se outro mod também usar V.
 
-O microfone só começa a ser usado depois da sua ação no painel. O reconhecimento de fala pode enviar o áudio ao serviço do navegador e precisar de internet. A fala da Luma usa as vozes do sistema/navegador e também pode depender do fornecedor da voz. **Não criamos um modelo próprio de voz ou reconhecimento de áudio.** Não é uma dublagem gravada e não inclui clonagem de voz. A IA própria descrita abaixo gera somente o texto.
+Na primeira tentativa, a tecla prepara o modelo; se não gravar ainda, aguarde e tente novamente. A gravação só acontece durante o acionamento da tecla, com limite de **15 segundos**. O Vosk reconhece a fala em português **no seu computador**, sem enviar a gravação ao Ollama. O texto reconhecido é enviado à Luma como `/luma falar ...`; em servidor, ele chega ao servidor que executa o mod. Isto não é um chat de voz por proximidade nem transmite sua voz aos outros jogadores.
 
-Se não aparecer uma voz brasileira, instale uma voz de português do Brasil nas configurações de idioma e fala do seu sistema. No Windows, procure por **Configurações → Hora e idioma → Fala**; os nomes variam conforme a versão do Windows. Depois reinicie o navegador e abra um novo link pelo jogo.
+**K** liga/desliga a leitura das respostas dentro do jogo e salva a preferência em `config/luma-voice.json`. A fala usa a voz padrão do sistema, sem escolha de idioma pelo complemento. No Windows/macOS, instale/configure uma voz de **português do Brasil**; no Linux, a biblioteca nativa usa Flite em inglês e não garante pronúncia pt-BR; não há dublagem humana gravada nem clonagem de voz. Veja os controles de fala e detalhes do sistema em [OLLAMA-E-VOZ.md](OLLAMA-E-VOZ.md). Microfone real, áudio e desempenho precisam ser conferidos no seu computador.
 
-Não compartilhe o link do painel. O código do link autoriza o controle da Luma naquela sessão local. Depois de uma desconexão, obtenha um novo link com `/luma voz` em vez de reutilizar um favorito antigo. Se você atualizar a página e a conexão parar, abra novamente o link completo pelo jogo.
+No Windows, se não gravar, procure **Configurações → Privacidade e segurança → Microfone** e permita o acesso para aplicativos de área de trabalho; em **Sistema → Som → Entrada**, selecione e teste o dispositivo padrão. Os nomes variam entre versões do Windows. Use fones de ouvido para reduzir a chance de a Luma ouvir a própria voz.
 
-## 7. Experimentar a IA própria de texto — opcional
+### Alternativa pelo Chrome/Edge
 
-O projeto usa um gerador próprio, pesos treinados pelo próprio projeto e uma memória local de informações autorais. A memória procura uma nota relacionada à pergunta, e o modelo usa essa nota para gerar a fala. A busca pode escolher o assunto errado; não significa que a personagem saiba tudo sobre o jogo. O modelo e a memória já estão incluídos no JAR, sem arquivo extra ou configuração para você fazer.
+O painel antigo continua disponível em um mundo **de um jogador, no mesmo computador**. Use `/luma voz`, abra o link completo no Chrome/Edge e clique em **Ativar conexão e voz**. Você pode digitar no painel ou clicar no botão de microfone. Escolha uma voz pt-BR disponível e mantenha a página e o jogo abertos.
 
-Você não precisa instalar Ollama, baixar outro modelo, criar conta de IA, configurar uma API ou pagar por conversas. Minecraft, Java e Fabric continuam sendo necessários para jogar. A IA começa desligada em cada sessão.
+O reconhecimento do navegador pode enviar áudio ao fornecedor dele e precisar de internet. Algumas vozes também usam serviços online. Não compartilhe o link privado; para encerrar, use `/luma voz parar`. Não use a leitura do painel e do complemento ao mesmo tempo, para evitar duas vozes lendo a mesma resposta. O painel não é oferecido a clientes de servidor dedicado.
 
-1. Abra seu mundo de teste e crie a companheira com `/luma criar`, se ainda não a criou.
-2. No chat do jogo, digite `/luma ia ligar` e leia o aviso de qualidade experimental.
-3. Digite `/luma falar Como podemos começar nossa aventura?` e aguarde a resposta.
-4. Para continuar, envie outra mensagem com `/luma falar` ou pelo painel de voz.
-5. Para desligar o modelo, digite `/luma ia desligar`. Você ainda poderá usar `/luma seguir`, `/luma construir` e os demais comandos.
+## 7. Instale o Ollama e ative a conversa
 
-**A resposta pode ter palavras sem sentido, erros ou não responder à pergunta.** Este é um modelo muito pequeno, ainda distante de uma IA generativa comparável aos modelos grandes usados com Ollama. Não confie nas falas como instruções corretas sobre o jogo. Veja os resultados reais no [relatório do modelo](https://github.com/lucasmac412/Mods/blob/v0.3.0-experimental/native-ai/experiments-v2/RESULTADOS.md).
+O Ollama executa um modelo de linguagem no computador que hospeda o mundo. Para seu mundo de um jogador, é o mesmo computador em que você joga. **Instalar o Ollama sozinho não basta: também é necessário baixar um modelo.**
 
-Perguntas como `/luma falar Não sei por onde começar` e `/luma falar Uso madeira ou pedra?` agora podem chegar ao modelo quando forem reconhecidas como conversa. Usar palavras como “não”, “ou” e “talvez” não bloqueia a conversa por si só. Isso não garante que a resposta esteja correta.
+1. Acesse [ollama.com/download](https://ollama.com/download), baixe o instalador do seu sistema e conclua a instalação.
+2. Abra o Ollama e mantenha o aplicativo/serviço em execução.
+3. No Windows, abra o menu Iniciar, procure **PowerShell** e abra-o. No Linux/macOS, abra o terminal.
+4. Execute:
 
-O modelo **gera falas**. As ações da Luma continuam sendo escolhidas pelas regras que reconhecem ordens e pelos comportamentos já programados. Uma ordem clara, como `/luma seguir` ou `/luma parar`, continua imediata; a fala gerada não executa tarefas. Ativar o modelo não acrescenta novas construções, receitas, ferramentas ou capacidade de jogar sozinha. Para uma tarefa, use uma ordem clara; para experimentar a conversa, use `/luma falar`.
+   ```text
+   ollama pull qwen2.5:3b
+   ```
 
-A memória incluída contém informações do projeto; ela não registra automaticamente o que você conta, não aprende enquanto você joga e não dá ao modelo acesso à sua tela ou inventário.
+   Aguarde o download terminar. Precisa de internet para baixar; não exige chave de API ou assinatura. Se o comando não for reconhecido, feche/reabra o PowerShell após instalar.
 
-A geração de texto funciona no próprio computador, sem enviar a conversa a um serviço de IA, e pode funcionar **offline** depois da instalação. Microfone e leitura em voz alta continuam usando Chrome/Edge e o sistema operacional, podendo precisar de internet conforme explicado no passo 6.
+5. Para testar fora do jogo, execute `ollama run qwen2.5:3b` e escreva uma pergunta em português. Para sair dessa conversa, digite `/bye`. Deixe o aplicativo/serviço Ollama aberto.
+6. No mundo de teste, digite uma linha por vez:
 
-Este gerador usa o **processador (CPU), em Java**. Ele não usa sua RTX 4060 para a IA. Ter 16 GB de RAM não melhora por si só o conhecimento ou a qualidade do modelo; isso depende do treinamento e do tamanho dele. Não compre hardware nem serviços para esta versão. Se o jogo ficar lento ao conversar, desligue a IA com `/luma ia desligar` e continue usando os comandos.
+   ```text
+   /luma criar
+   /luma ia ollama
+   /luma falar Como podemos começar nossa aventura?
+   ```
+
+   Se a Luma já existir, pule a primeira linha. `/luma ia ligar` também seleciona o Ollama.
+
+7. Aguarde a resposta; o primeiro carregamento pode levar até dois minutos. Depois, você também pode segurar V para conversar por voz. Ordens claras, como “me siga” e “parar”, continuam locais e imediatas, mesmo sem o Ollama.
+
+O mod usa `http://127.0.0.1:11434/api/chat`. Não é necessário editar endereço, abrir porta na internet ou configurar `LUMA_AI_*`. Em servidor dedicado, o Ollama deve estar na máquina do **servidor**; instalá-lo só no seu computador cliente não fornece IA ao servidor. Combine a configuração com o administrador.
+
+A Luma fornece ao modelo um resumo do próprio estado, vida/dimensão/posição do jogador e até quatro turnos recentes. O histórico é temporário e é descartado ao desligar, trocar o provedor/modelo ou sair. As escolhas de IA/modelo também valem só para a sessão: ative novamente quando entrar. `/luma ia status` mostra a seleção, **sem confirmar se o Ollama está funcionando**.
+
+A fala do modelo não executa comandos nem cria habilidades novas. Ele pode orientar a conversa, mas as tarefas continuam limitadas às capacidades documentadas: seguir, esperar, combater, minerar alguns blocos e construir o abrigo fixo. Não confie numa frase dizendo “já fiz” como prova de execução; confira o jogo e `/luma status`.
+
+### Se seu computador ficar lento
+
+Sua RTX 4060 com 16 GB de RAM pode experimentar um modelo pequeno, mas Minecraft e IA competem por memória e processamento. O Ollama pode usar hardware compatível; não garantimos FPS ou velocidade. Se precisar, baixe a opção menor no PowerShell:
+
+```text
+ollama pull qwen2.5:1.5b
+```
+
+No jogo:
+
+```text
+/luma ia modelo qwen2.5:1.5b
+/luma ia ollama
+```
+
+Para interromper uma resposta pendente e uma tarefa, use `/luma parar`. Para desligar a IA, use `/luma ia desligar`; o Ollama continua sendo um aplicativo separado. Não compre hardware ou serviços para experimentar esta versão.
+
+### Usar o experimento próprio anterior
+
+`/luma ia propria` seleciona o modelo próprio de 277.504 parâmetros e a memória local incluídos no JAR, sem Ollama. Ele continua pequeno e pouco confiável: teve 11/40 respostas úteis num teste sintético avaliado por Codex, sem revisão humana independente. Esse resultado é do **modelo próprio**, não do modelo Qwen/Ollama. Ele usa CPU, não aprende durante a partida e não guarda conversas. Consulte [o relatório histórico](https://github.com/lucasmac412/Mods/blob/v0.3.0-experimental/native-ai/experiments-v2/RESULTADOS.md).
 
 ## Gerar o JAR a partir deste projeto
 
 Esta etapa é necessária se você recebeu apenas o código-fonte. Você não precisa editar Java, mas precisa executar um comando para transformar os arquivos em um mod. A primeira compilação precisa de internet para baixar o Gradle, o Minecraft e as dependências do Fabric.
 
 1. Instale o **JDK 25** pelo [Eclipse Temurin](https://adoptium.net/temurin/releases/?version=25). Escolha JDK, versão 25, seu sistema e arquitetura. No Windows, habilite `PATH` e `JAVA_HOME` no instalador, se oferecidos.
-2. Baixe o [código-fonte da versão 0.3.0-experimental](https://github.com/lucasmac412/Mods/archive/refs/tags/v0.3.0-experimental.zip), ou use a cópia do projeto que recebeu. Extraia o ZIP para uma pasta simples, como `Documentos\Luma`.
+2. Baixe o [código-fonte da versão 0.4.0-experimental](https://github.com/lucasmac412/Mods/archive/refs/tags/v0.4.0-experimental.zip), ou use a cópia do projeto que recebeu. Extraia o ZIP para uma pasta simples, como `Documentos\Luma`.
 3. Abra a pasta que contém `gradlew.bat`, `gradlew` e `build.gradle`. Não abra uma pasta acima dela.
 4. No Windows, clique na barra de endereço do Explorador de Arquivos, digite `powershell` e pressione Enter. No Linux/macOS, abra um terminal nessa pasta.
 5. Confirme o Java:
@@ -231,7 +272,7 @@ Esta etapa é necessária se você recebeu apenas o código-fonte. Você não pr
    ```
 
 7. Aguarde o comando terminar. Só prossiga se aparecer **`BUILD SUCCESSFUL`**. O primeiro download pode levar vários minutos.
-8. Abra a pasta `build/libs` e copie **`luma-companion-0.3.0-experimental.jar`** para a pasta `mods`, conforme o passo 4 deste guia. Deixe o arquivo `-sources.jar` fora de `mods`.
+8. Abra a pasta `build/libs` e copie **`luma-companion-0.4.0-experimental.jar`** para a pasta `mods`, conforme o passo 4 deste guia. Para compilar o complemento, execute também `./gradlew -p voice-input build` no Linux/macOS ou `.\gradlew.bat -p voice-input build` no PowerShell; o JAR estará em `voice-input/build/libs`. Deixe arquivos `-sources.jar` fora de `mods`. O modelo de reconhecimento de fala é um dado separado; o pacote pronto já inclui a pasta correta, e a origem está documentada em `voice-input/README.md`.
 
 Se aparecer **`BUILD FAILED`**, a compilação não foi concluída. Não renomeie um ZIP para `.jar` e não use um arquivo de uma tentativa anterior como se tivesse passado. Guarde a primeira mensagem de erro para identificar a causa; consulte [TESTES.md](TESTES.md) para o estado conhecido desta versão.
 
@@ -248,10 +289,16 @@ Se aparecer **`BUILD FAILED`**, a compilação não foi concluída. Não renomei
 | A Luma ficou longe | Use `/luma localizar`, vá à dimensão e ao local indicados para carregar a região e depois tente `/luma chamar`. |
 | O painel de voz não conecta | Mantenha o mundo de um jogador aberto no mesmo computador e obtenha um link novo com `/luma voz`. Abra o endereço completo. |
 | Erro `jdk.httpserver` ou `com.sun.net.httpserver` | Instale o JDK 25 completo e selecione seu executável Java nas opções do perfil Fabric. |
-| O botão de microfone não funciona | Use Chrome/Edge, confira a permissão de microfone, o dispositivo selecionado e a conexão exigida pelo reconhecimento. Você pode continuar por texto. |
-| Há texto, mas não há som | Ative a conexão, marque a leitura em voz alta, confira o volume da aba/sistema e escolha ou instale uma voz pt-BR. |
-| A IA responde sem sentido ou muda de assunto | A memória local pode escolher uma nota inadequada e o modelo experimental ainda pode errar ao gerar. Use `/luma ia desligar` para continuar com respostas básicas e comandos. Instalar outro programa ou comprar hardware não corrige o treinamento deste modelo. |
-| A IA própria não inicia ou fica lenta | Confira se está usando o JAR `0.3.0-experimental` do pacote completo e leia a mensagem no chat. Use `/luma ia desligar` para continuar pelas ordens básicas e guarde o trecho relevante do log para relatar. |
+| V não inicia a gravação | Confira se Luma Voz está em `mods`, se há um mundo aberto sem chat/menu, se a tecla não está em conflito e se o sistema permitiu o microfone para aplicativos de área de trabalho. |
+| Aparece que falta o modelo de voz | Confira `config/luma-voice/model/final.mdl` dentro da pasta do perfil usado. Copie a pasta de configuração do pacote, sem criar um nível extra de diretório. |
+| O texto reconhecido está errado | Confira o microfone padrão, reduza ruído, fale uma ordem curta em português e solte V. Use `/luma parar` digitado para interromper se o reconhecimento falhar. |
+| Há resposta no chat, mas não há voz no jogo | Confira a opção de leitura do complemento, volume e disponibilidade da voz do sistema. Instale/configure uma voz pt-BR; veja OLLAMA-E-VOZ.md. |
+| O microfone do painel não funciona | No Chrome/Edge, confira a permissão e o serviço de reconhecimento do navegador; isso é separado da tecla V do complemento. |
+| A Luma diz que não conseguiu falar com Ollama | Abra o Ollama no computador que hospeda o mundo/servidor. Teste `ollama run qwen2.5:3b` no terminal; confira o modelo selecionado com `/luma ia status`. |
+| O modelo não está instalado | No PowerShell/terminal execute `ollama pull` seguido do mesmo nome escolhido em `/luma ia modelo`, aguarde terminar e tente novamente. |
+| O Ollama demora ou o jogo perde desempenho | Aguarde o primeiro carregamento, feche aplicativos pesados ou experimente `qwen2.5:1.5b`. Você pode usar `/luma ia desligar` e continuar com ordens locais. |
+| A IA diz que fez algo que não aconteceu | Texto gerado pode errar. Confira o mundo e use os comandos reais; a conversa não executa ações arbitrárias. |
+| A IA própria responde sem sentido | O pequeno modelo próprio continua experimental. Use `/luma ia ollama` para a integração nova, ou `/luma ia desligar` para respostas básicas. |
 | A compilação falha ao baixar arquivos | Confira a internet e os domínios indicados no erro. Não desative certificados, assinaturas ou verificações de segurança para contornar o problema. |
 
 Para relatar um problema, informe as versões de Minecraft, Java, Fabric Loader e Fabric API; a ação realizada; o que aconteceu; e o trecho relevante de `logs/latest.log` na pasta do jogo. Remova links privados do painel de voz, chaves, tokens e dados pessoais antes de compartilhar.

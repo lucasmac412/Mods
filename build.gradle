@@ -14,7 +14,7 @@ loom {
 
 repositories { mavenCentral() }
 
-// The small original language model is bundled directly; no external model service is needed.
+// Keep the optional original model available alongside the local Ollama integration.
 sourceSets.main.java.srcDir('native-ai/src/main/java')
 sourceSets.main.resources.srcDir('native-ai/mod-resources')
 

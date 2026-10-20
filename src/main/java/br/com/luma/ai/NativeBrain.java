@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /** Optional, original, CPU-only language experiment. Generated text never selects game actions. */
-public final class NativeBrain implements AutoCloseable {
+public final class NativeBrain implements ConversationBrain {
     private static final String LABEL = "IA experimental: ";
     private final Engine engine;
     private CompletableFuture<String> pending;

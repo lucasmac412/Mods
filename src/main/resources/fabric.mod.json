@@ -3,7 +3,7 @@
   "id": "luma",
   "version": "${version}",
   "name": "Luma — Companhia de aventura",
-  "description": "Uma companheira com aparência humana, ações de sobrevivência e conversa em português brasileiro.",
+  "description": "Companheira com ações de sobrevivência, conversa por Ollama local e suporte ao complemento Luma Voz.",
   "authors": ["lucasmac412"],
   "license": "MIT",
   "icon": "assets/luma/icon.png",

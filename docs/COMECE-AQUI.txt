@@ -1,127 +1,126 @@
-LUMA 0.3.0-experimental — COMPANHIA DE AVENTURA
-Minecraft Java Edition 26.2 | Fabric Loader 0.19.5 ou superior compatível
+LUMA 0.4.0-experimental — OLLAMA E VOZ DENTRO DO MINECRAFT
+Minecraft Java Edition 26.2 | Fabric Loader 0.19.5+ compatível | Java 25
 
-Você não precisa programar nem compilar para usar este pacote.
-Não funciona no Minecraft Bedrock, celular, console, Forge ou NeoForge.
+Você não precisa programar nem compilar para instalar este pacote.
+Não funciona em Bedrock, celular, console, Forge ou NeoForge.
 É necessário ter acesso oficial ao Minecraft Java Edition.
-O pacote inclui IA própria de texto com uma memória local de informações autorais.
-É uma opção experimental e começa desligada por padrão. A busca e o modelo
-podem errar; os comandos funcionam com a IA desligada.
 
-1. BAIXE E EXTRAIA O ZIP
-Pacote: Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip
-Download:
-https://raw.githubusercontent.com/lucasmac412/Mods/v0.3.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip
-No Chrome, aperte Ctrl + J para ver o download e "Mostrar na pasta".
-Se o Codex disser que não pôde baixar o artefato, use esse link do GitHub.
-Clique com o botão direito no ZIP e escolha "Extrair tudo" ou equivalente.
-Dentro da pasta extraída, abra a pasta "mods": há dois arquivos .jar.
-Não descompacte esses JARs e não tente instalá-los com dois cliques.
+1. BAIXE E EXTRAIA O PACOTE
+https://raw.githubusercontent.com/lucasmac412/Mods/v0.4.0-experimental/downloads/Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip
+No Chrome, use Ctrl + J e "Mostrar na pasta" para encontrar o download.
+Se o Codex disser que não conseguiu baixar o artefato, use esse link do GitHub.
+Clique com o botão direito no ZIP e escolha "Extrair tudo".
+Abra a pasta extraída. Você encontrará "mods", "config" e este guia.
 Um ZIP com "src" e "gradle" é o código-fonte, não o pacote pronto.
 
-2. PREPARE O MINECRAFT
-No Minecraft Launcher oficial, abra Java Edition, escolha a versão 26.2,
-inicie o jogo uma vez e depois feche-o.
-
-3. INSTALE O FABRIC
-Acesse: https://fabricmc.net/use/installer/
-Baixe o instalador oficial. Selecione "Client", Minecraft 26.2 e Fabric
-Loader 0.19.5 ou superior compatível. Instale com criação de perfil ativada.
-No Launcher, selecione o novo perfil Fabric correspondente a 26.2.
-
-O jogo precisa de Java 25. Se houver erro de Java ou de jdk.httpserver,
+2. PREPARE O JOGO E INSTALE FABRIC
+No Launcher oficial, abra Minecraft Java Edition 26.2 uma vez e feche.
+Baixe o instalador oficial em https://fabricmc.net/use/installer/
+Escolha "Client", Minecraft 26.2, Loader 0.19.5 ou superior compatível e
+criação de perfil. Conclua a instalação e selecione o perfil Fabric 26.2.
+O jogo precisa de Java 25. Se aparecer erro de Java ou jdk.httpserver,
 instale o JDK 25 completo: https://adoptium.net/temurin/releases/?version=25
-No perfil Fabric, em Editar > Mais opções > Executável Java, selecione
-o javaw.exe desse JDK no Windows, ou o java correspondente no Linux/macOS.
+No perfil, Editar > Mais opções > Executável Java: selecione o javaw.exe
+desse JDK no Windows, ou o java correspondente no Linux/macOS.
 
-4. COPIE OS DOIS MODS
-Feche o jogo. Se for atualizar, faça uma cópia da pasta "saves" para outro
-local antes de usar a nova versão em um mundo importante.
-Abra a pasta de jogo usada pelo seu perfil Fabric.
+3. ENCONTRE A PASTA DO SEU PERFIL
+Feche o jogo. Se já tem um mundo importante, copie "saves" para outro local.
 No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
-Se o diretório estiver vazio, no Windows aperte Windows + R, digite
-%APPDATA%\.minecraft e pressione Enter.
+Se o campo estiver vazio, os locais padrão são:
+Windows: Windows + R, digite %APPDATA%\.minecraft e pressione Enter.
 macOS: ~/Library/Application Support/minecraft
 Linux: ~/.minecraft
-Se usa outro Launcher, abra a pasta da instância selecionada.
+Em outro Launcher, abra a pasta da instância selecionada.
 
-Abra ou crie a subpasta "mods" nessa pasta de jogo.
-Se já houver uma versão antiga da Luma ou do Fabric API que será trocada,
-mova o JAR antigo para um backup FORA da pasta "mods".
-Copie para ela OS DOIS JARs da pasta "mods" deste pacote:
-- luma-companion-0.3.0-experimental.jar
+4. COPIE OS TRÊS JARS E A PASTA DE VOZ
+Na pasta do jogo, abra ou crie "mods".
+Mova versões antigas dos mesmos mods para um backup FORA de "mods".
+Da pasta "mods" do pacote, copie os TRÊS arquivos para "mods" do jogo:
+- luma-companion-0.4.0-experimental.jar
+- luma-voice-0.4.0-experimental.jar
 - fabric-api-0.161.0+26.2.jar
-Não deixe duas versões do mesmo mod na pasta.
-O modelo e a memória local já estão dentro do JAR da Luma.
-Não há outro modelo ou arquivo de memória para instalar ou configurar.
+Não descompacte os JARs nem tente instalá-los com dois cliques.
+Não deixe duas versões do mesmo mod.
 
-5. COMECE EM UM MUNDO NOVO
-Abra o perfil Fabric 26.2. Crie um mundo Criativo com comandos ativados.
-Faça backup antes de experimentar em um mundo importante.
-Abra o chat com T e digite uma linha de cada vez:
+Agora, da pasta "config" do pacote, copie "luma-voice" para a pasta
+"config" do jogo. Crie "config" se ela não existir.
+Mescle as pastas: NÃO substitua a pasta config inteira nem apague as
+configurações dos outros mods.
+Confira: deve existir config/luma-voice/model/final.mdl na pasta do jogo.
+Esse é o modelo de reconhecimento de fala; não vai dentro de "mods".
+O pacote NÃO inclui o modelo de conversa do Ollama. Baixe-o no próximo passo.
+
+5. INSTALE O OLLAMA E BAIXE UM MODELO
+Baixe o instalador do seu sistema em https://ollama.com/download
+Instale e abra o Ollama. Deixe o aplicativo/serviço em execução.
+No Windows, abra o menu Iniciar, procure PowerShell e abra-o.
+No Linux/macOS, abra o terminal. Execute:
+ollama pull qwen2.5:3b
+Aguarde terminar. Precisa de internet para baixar, sem assinatura/chave de API.
+Se "ollama" não for reconhecido, feche e reabra o PowerShell após instalar.
+Para testar: ollama run qwen2.5:3b
+Converse em português. Para sair da conversa do terminal, digite /bye.
+Deixe o aplicativo/serviço Ollama aberto para a Luma usá-lo.
+
+6. ATIVE A LUMA E A CONVERSA
+Abra Fabric 26.2 e crie um mundo novo Criativo com comandos ativados.
+No chat (T), digite uma linha de cada vez:
 /luma criar
 /luma seguir
-/luma falar Oi, Luma!
-Para fazê-la esperar: /luma ficar
-Para interromper uma tarefa: /luma parar
-Para ajuda: /luma ajuda
-
-6. EXPERIMENTE A IA PRÓPRIA DE TEXTO — OPCIONAL
-No chat, digite uma linha de cada vez:
-/luma ia ligar
+/luma ia ollama
 /luma falar Como podemos começar nossa aventura?
-Leia o aviso experimental e aguarde a resposta.
-Para desligar o modelo: /luma ia desligar
-Os comandos como /luma seguir e /luma construir continuam funcionando.
+A primeira resposta pode demorar até dois minutos para carregar o modelo.
+A mensagem de seleção no chat não confirma que o Ollama está funcionando.
+Para conferir a seleção: /luma ia status
+Para desligar a IA: /luma ia desligar
+Para parar uma tarefa e cancelar uma resposta pendente: /luma parar
+O modelo só gera falas: ele não executa comandos arbitrários nem cria
+habilidades novas. As ordens simples funcionam sem o Ollama.
 
-O gerador e os pesos são do próprio projeto. Uma memória local procura uma
-nota relacionada à pergunta, e o modelo usa essa nota para gerar a fala.
-A busca pode escolher uma informação de outro assunto e a geração ainda erra.
-Você não precisa instalar Ollama, criar conta de IA, configurar API ou pagar.
-A geração de texto acontece no computador e pode funcionar offline após
-a instalação. Ainda é um modelo muito pequeno, distante da qualidade dos
-modelos grandes usados com Ollama. Pode escrever frases erradas ou sem sentido.
-Você pode experimentar perguntas como:
-/luma falar Não sei por onde começar
-/luma falar Uso madeira ou pedra?
-Palavras como "não", "ou" e "talvez" não bloqueiam a conversa por si só.
-Ainda não há garantia de uma resposta correta.
+7. FALE POR UMA TECLA DENTRO DO JOGO
+Configure seu microfone como entrada padrão do sistema.
+No mundo, feche o chat e os menus. SEGURE V e aguarde "Pode falar agora".
+Continue segurando, fale "me siga" e SOLTE V para enviar.
+Não é necessário dizer "Luma". Confira o texto reconhecido no chat.
+Na primeira vez, preparar o modelo pode demorar. Continue segurando até
+o aviso; se soltou antes dele, tente novamente. O limite é de 15 segundos.
+Para mudar a tecla, abra Opções > Controles > Teclas e procure "Luma Voz".
+K liga/desliga a leitura das respostas da Luma pela voz do sistema.
+O reconhecimento Vosk é local e não envia áudio ao Ollama.
+A transcrição vira uma mensagem /luma falar para o mundo/servidor.
+Não é um chat de voz com outros jogadores.
 
-O modelo só gera falas. As ações do NPC continuam seguindo as ordens e regras
-já programadas; a fala gerada não executa tarefas. Use /luma parar para
-interromper uma tarefa. A IA não acrescenta construções novas nem joga uma
-campanha sozinha. A memória não aprende automaticamente com suas conversas.
+Para ouvir em português no Windows/macOS, instale/configure a voz padrão
+pt-BR do sistema. O complemento não escolhe vozes pelo idioma. No Linux,
+a voz nativa incluída usa Flite em inglês: não há garantia de pronúncia pt-BR.
+Não há atriz, dublagem gravada ou clonagem de voz. Use fones para reduzir eco.
+Microfone/áudio real e desempenho no seu PC ainda precisam ser testados.
 
-Esta versão gera texto no processador (CPU), em Java, sem usar a RTX 4060.
-Ter 16 GB de RAM não garante qualidade de um modelo grande. Não compre
-hardware nem serviços para esta versão. Se ficar lento, desligue a IA.
+Se o Windows não permitir gravar, confira Configurações > Privacidade e
+segurança > Microfone e acesso para aplicativos de área de trabalho.
+Confira também Sistema > Som > Entrada e o dispositivo padrão.
+Alguns dispositivos não aceitam o formato 16 kHz mono exigido nesta versão.
 
-7. VOZ EM PORTUGUÊS
-Em um mundo de um jogador, digite: /luma voz
-Abra o link completo no Chrome ou Edge, no mesmo computador do jogo.
-Clique em "Ativar conexão e voz". Para falar, clique no botão de microfone
-e autorize seu uso. Você também pode digitar no painel.
-A voz usa as vozes do sistema/navegador, sem dublagem humana gravada.
-O reconhecimento pode enviar áudio ao fornecedor do navegador e exigir
-internet. A leitura em voz alta também depende da voz escolhida.
-Não criamos modelo próprio de voz ou reconhecimento do microfone.
-Selecione uma voz pt-BR no painel; pode ser preciso instalá-la no sistema.
-Não compartilhe o link. Para desligar: /luma voz parar
+8. SE FICAR LENTO OU DER ERRO
+Minecraft e IA competem por memória e processamento. Sua RTX 4060/16 GB
+não garante uma velocidade específica. Experimente um modelo menor:
+No PowerShell: ollama pull qwen2.5:1.5b
+No jogo: /luma ia modelo qwen2.5:1.5b
+Depois: /luma ia ollama
 
-8. PRIMEIRO ABRIGO
-Prepare terreno plano com área 5 x 5 livre e cinco blocos de altura vazios.
-Retire até capim e flores. Fique perto dessa área e da Luma.
-Segure 64 tábuas na mão e use /luma entregar.
-Depois segure mais 32 tábuas e use /luma entregar novamente.
-São 96 blocos no total. Agora use /luma construir.
-Ela faz um abrigo fixo com entrada aberta, sem porta, cama ou tochas.
-As trocas de itens exigem distância máxima de seis blocos.
+Se o Ollama estiver indisponível, as ordens básicas continuam funcionando.
+Para testar o pequeno modelo próprio anterior: /luma ia propria
+Ele é experimental e pode gerar frases erradas ou sem sentido.
+As escolhas e o histórico curto da IA valem só para a sessão.
+Ao entrar novamente, ative a IA outra vez.
 
-MAIS INSTRUÇÕES
-Leia docs/INSTALAR.md para os comandos, mineração, limites e IA opcional.
-Leia docs/TESTES.md para saber o que foi realmente testado nesta versão.
-Resultados reais do modelo próprio:
-https://github.com/lucasmac412/Mods/blob/v0.3.0-experimental/native-ai/experiments-v2/RESULTADOS.md
-Luma não joga como uma pessoa em todas as situações nem termina o jogo
-sozinha. Mineração e construção dependem de materiais, ferramentas,
-acesso ao local e da regra minecraft:mob_griefing estar ativada.
+MAIS AJUDA
+Leia docs/INSTALAR.md e docs/OLLAMA-E-VOZ.md para detalhes e soluções.
+Leia docs/TESTES.md para saber o que foi realmente verificado.
+O painel /luma voz do Chrome continua como alternativa para um jogador;
+não use a leitura dele e a do complemento ao mesmo tempo, para evitar duas vozes.
+Esse painel pode usar serviços online de áudio do navegador.
+Em servidor dedicado, Ollama deve rodar na máquina do servidor; Luma Voz
+fica só no cliente. Não instale Luma Voz no servidor.
+O mod mantém os limites anteriores de construção/mineração: abrigo fixo com
+96 blocos, materiais entregues pelo dono, ferramentas e área acessível.

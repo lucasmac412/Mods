@@ -1,0 +1,25 @@
+Vosk — reconhecimento de fala offline
+
+Biblioteca: Vosk API 0.3.45, Alpha Cephei Inc.
+Código-fonte: https://github.com/alphacep/vosk-api
+Artefato Java: com.alphacephei:vosk:0.3.45
+Licença: Apache License 2.0; veja LICENSE-VOSK.txt.
+
+Modelo: vosk-model-small-pt-0.3
+Idioma anunciado pelo distribuidor: Portuguese/Brazilian Portuguese.
+Distribuição oficial: https://alphacephei.com/vosk/models
+Download: https://alphacephei.com/vosk/models/vosk-model-small-pt-0.3.zip
+Licença indicada na página oficial para esse modelo: Apache 2.0;
+veja LICENSE-APACHE-2.0.txt. O README original do arquivo foi preservado.
+O modelo é de terceiros; não foi treinado pelo projeto Luma.
+
+SHA-256 do ZIP baixado:
+6e1ce909032e1afa7a88e68a3d628ecafff302bdf195befab308826c395e93b7
+Tamanho do ZIP: 32.453.112 bytes; conteúdo: 53.552.717 bytes.
+O hash foi calculado localmente após download HTTPS. Não encontramos
+checksum independente publicado pelo distribuidor para comparar.
+
+O uso deste modelo não envia o áudio à rede. A qualidade de transcrição
+varia com sotaque, ruído, dispositivo e clareza da fala; não é uma voz de
+saída nem um modelo de conversa. No pacote Luma, somente a transcrição
+é enviada pelo complemento ao comando de conversa dentro do Minecraft.

@@ -1,18 +1,21 @@
-# Instalar a Luma
+# Instalar Luma com Ollama e voz
 
-**[Baixar Luma 0.3.0 experimental com IA própria](https://raw.githubusercontent.com/lucasmac412/Mods/v0.3.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip)**.
+**[Baixar o pacote pronto 0.4.0 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/v0.4.0-experimental/downloads/Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip)**.
 
-O ZIP inclui o mod compilado, o Fabric API compatível e o passo a passo. O modelo próprio e a memória local já estão dentro do JAR. Não é necessário programar, compilar, instalar Ollama ou configurar uma API. A geração melhorou neste teste pequeno, mas ainda erra bastante: 11/40 respostas úteis, pela avaliação Codex, contra zero na versão anterior. É um experimento opcional, desligado por padrão, com [resultados e falhas registrados](../native-ai/experiments-v2/RESULTADOS.md).
+O ZIP inclui os três JARs de Luma, Luma Voz e Fabric API, o modelo offline de reconhecimento de português e o passo a passo. Você não precisa programar ou compilar. O Ollama e seu modelo de conversa são instalados separadamente; o [guia](../docs/OLLAMA-E-VOZ.md) mostra como fazer isso sem assinatura ou chave de API.
 
-1. Clique no link acima. No Chrome, aperte **Ctrl + J** e use **Mostrar na pasta**.
+1. No Chrome, clique no link acima. Aperte **Ctrl + J** e use **Mostrar na pasta**.
 2. Extraia o ZIP e abra **COMECE-AQUI.txt**.
-3. Siga o guia para instalar Fabric em Minecraft Java Edition 26.2 e copiar apenas os dois JARs para a pasta `mods`.
-4. Se já tem a Luma antiga, mova o JAR antigo para fora de `mods`; mantenha só uma versão.
+3. Instale Fabric para Minecraft Java Edition 26.2. Copie os **três JARs** para `mods` e a pasta `config/luma-voice` para `config` no diretório de jogo do perfil.
+4. Para atualizar, mova JARs antigos dos mesmos mods para fora de `mods`. Mescle a pasta de configuração, preservando as configurações de outros mods.
+5. Instale e abra Ollama, execute `ollama pull qwen2.5:3b` e, no mundo, use `/luma criar` e `/luma ia ollama`. Segure V para falar e solte para enviar.
 
-O erro “não foi possível baixar o artefato” refere-se à entrega de arquivos da conversa. Este link baixa o arquivo pelo GitHub. Se estiver na lista de arquivos do repositório, abra o ZIP e clique em **Download raw file**. **Code → Download ZIP** baixa o código-fonte e não substitui este pacote de instalação.
+O erro “não foi possível baixar o artefato” refere-se à entrega de arquivos da conversa. Este link baixa pelo GitHub. Na lista de arquivos do repositório, abra o ZIP e clique em **Download raw file**. **Code → Download ZIP** baixa o código-fonte e não substitui este pacote pronto.
 
-`SHA256SUMS.txt` registra os checksums dos pacotes. O [guia completo](../docs/INSTALAR.md) e os [testes](../docs/TESTES.md) estão no projeto e no pacote. Voz/microfone continuam usando navegador/sistema, possivelmente com internet.
+`SHA256SUMS.txt` registra os checksums. Leia o [guia completo](../docs/INSTALAR.md), o [guia de Ollama e voz](../docs/OLLAMA-E-VOZ.md) e os [testes](../docs/TESTES.md).
 
-`Luma-Fabric-26.2.zip` é o arquivo preservado da versão 0.1.0; ele não inclui o modelo próprio. `Luma-Fabric-26.2-IA-Propria-Experimental.zip` preserva a versão 0.2.0; use o link da versão 0.3.0 acima para a atualização.
+Os pacotes 0.1, 0.2 e 0.3 são preservados para referência. O nome `Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip` identifica a versão anterior, sem esta integração com Ollama e sem o complemento de tecla de microfone.
 
-Para reproduzir o pacote experimental após um build aprovado: `python3 scripts/package-installation.py`. O script verifica o mod, o checkpoint, o Fabric API e o CRC do ZIP antes de finalizar.
+Luma Voz usa Vosk e um modelo de português de terceiros, com licenças e origem documentadas no pacote. A fala da Luma depende da voz do sistema. O reconhecimento do complemento ocorre localmente; o painel opcional no Chrome pode depender de serviços online do navegador.
+
+Para reproduzir o pacote após os builds aprovados, use o script de empacotamento documentado no repositório. Não instale arquivos `-sources.jar` nem copie o ZIP inteiro para `mods`.

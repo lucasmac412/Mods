@@ -1,0 +1,62 @@
+{
+  "model": {
+    "name": "vosk-model-small-pt-0.3",
+    "language": "Portuguese/Brazilian Portuguese",
+    "download_url": "https://alphacephei.com/vosk/models/vosk-model-small-pt-0.3.zip",
+    "license": "Apache-2.0",
+    "license_source": "https://alphacephei.com/vosk/models",
+    "sha256": "6e1ce909032e1afa7a88e68a3d628ecafff302bdf195befab308826c395e93b7",
+    "bytes": 32453112,
+    "hash_provenance": "Locally calculated after HTTPS download; no separately published publisher checksum found.",
+    "uncompressed_bytes": 53552717,
+    "required_destination": "config/luma-voice/model/ (copy directory contents, not enclosing vosk directory)",
+    "files": {
+      "HCLr.fst": "8b45be1fa72913d61e37ac0b411177803848f4cda7728f74139b39acd1c0cf36",
+      "phones.txt": "dc207b906747b59e9e3da0af30e8f8d6712c9897ad7df06929d4b2cae7ee13f1",
+      "Gr.fst": "d81023936f5557c06930802b1db4880f56d6ac51b16ed4e5060ceba06895442c",
+      "README": "85353085fa2096ef12cac654fa9534b186bef9b56a61f544da3ebfbd006b78bb",
+      "final.mdl": "3e10e43ec01cf8d968bcc24c626a2eae2bfa77863bee82f36a554854afa1f147",
+      "disambig_tid.int": "ca8970bc50b8ae2452749f75f5a12049e511075f9fc3f63acc1526c280a33748",
+      "mfcc.conf": "d3d4c517da7e6d02ed85803eebf77bca3f7f48c9ab6dc035013250b36187f274",
+      "word_boundary.int": "b8f981d84d8765fb15003ac54ec0f9599efa65a00d6d4d60086e5969ad45ff01",
+      "ivector/final.dubm": "28dcdc395b13a2085d20f7a2e850ef7e5216ba33ded76391b9690dd60f5143de",
+      "ivector/final.mat": "e310571390a3183718fce914bb022d297777c7ed860892a1812b576a698ec420",
+      "ivector/splice.conf": "9f0c5f7c82d18eaf25d8bce470efa9f7741f88411fe428774bc0a9bb69a24756",
+      "ivector/final.ie": "9345786636c358c9539591da71fb685ae82d8a96ce5de533fb8ac5fdafa965f0",
+      "ivector/online_cmvn.conf": "a2f3571754b64297cb7efb2e7ca3df61995c5a45fcbb97188f90613552bb2dfe",
+      "ivector/global_cmvn.stats": "8848c2dcf9919fbb3db574cbce59f980c3b11107c29adfa1fc42a4faed27e1a8"
+    }
+  },
+  "library": {
+    "coordinates": "com.alphacephei:vosk:0.3.45",
+    "jar_bytes": 25861916,
+    "sha256": "9e38e96e4448a41d889bb254b2f8424945554945c6e77e1cd97a3d8633fac2ba",
+    "matches_official_maven_sha256": true,
+    "official_sha256_url": "https://repo.maven.apache.org/maven2/com/alphacephei/vosk/0.3.45/vosk-0.3.45.jar.sha256",
+    "native_platforms": [
+      "Linux x86_64",
+      "Windows x86_64",
+      "macOS universal x86_64+ARM64"
+    ],
+    "license": "Apache-2.0",
+    "jna_dependency_original_pom": "5.7.0",
+    "jna_used_in_smoke": "5.17.0"
+  },
+  "smoke": {
+    "jdk": "25.0.4.1+1",
+    "platform": "Linux x86_64",
+    "model_load": true,
+    "recognizer_created_at_sample_rate": 16000,
+    "input": "1 second all-zero PCM16LE mono silence",
+    "final_text": "",
+    "elapsed_ms": 500,
+    "physical_microphone_tested": false,
+    "human_speech_recognition_tested": false
+  },
+  "notices": [
+    "LICENSE-VOSK.txt",
+    "LICENSE-APACHE-2.0.txt",
+    "JNA-LICENSE",
+    "THIRD-PARTY-VOSK.txt"
+  ]
+}

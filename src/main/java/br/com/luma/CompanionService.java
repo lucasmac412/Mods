@@ -3,7 +3,9 @@ package br.com.luma;
 import br.com.luma.ai.Action;
 import br.com.luma.ai.Intent;
 import br.com.luma.ai.IntentParser;
+import br.com.luma.ai.ConversationBrain;
 import br.com.luma.ai.NativeBrain;
+import br.com.luma.ai.OllamaBrain;
 import br.com.luma.entity.CompanionEntity;
 import br.com.luma.voice.VoiceBridge;
 import com.mojang.brigadier.CommandDispatcher;
@@ -32,8 +34,10 @@ import net.minecraft.world.phys.Vec3;
 /** All Minecraft state is touched only on the server thread. */
 final class CompanionService implements AutoCloseable {
     private final MinecraftServer server;
-    private final Map<UUID, NativeBrain> brains = new HashMap<>();
+    private final Map<UUID, ConversationBrain> brains = new HashMap<>();
     private final NativeBrain.Engine brainEngine = new NativeBrain.Engine();
+    private final OllamaBrain.Engine ollamaEngine = new OllamaBrain.Engine();
+    private final Map<UUID, String> models = new HashMap<>();
     private final Map<UUID, Long> generations = new HashMap<>();
     private final Map<UUID, Long> lastMessage = new HashMap<>();
     private VoiceBridge voice;
@@ -74,8 +78,16 @@ final class CompanionService implements AutoCloseable {
         root.then(Commands.literal("localizar").executes(ctx -> run(ctx.getSource(), s -> s.locate(ctx.getSource().getPlayerOrException()))));
         root.then(Commands.literal("remover").executes(ctx -> run(ctx.getSource(), s -> s.remove(ctx.getSource().getPlayerOrException()))));
         root.then(Commands.literal("ia")
+                .executes(ctx -> run(ctx.getSource(), s -> s.brainStatus(ctx.getSource().getPlayerOrException())))
                 .then(Commands.literal("ligar").executes(ctx -> run(ctx.getSource(), s -> s.enableBrain(ctx.getSource().getPlayerOrException(), true))))
-                .then(Commands.literal("desligar").executes(ctx -> run(ctx.getSource(), s -> s.enableBrain(ctx.getSource().getPlayerOrException(), false)))));
+                .then(Commands.literal("ollama").executes(ctx -> run(ctx.getSource(), s -> s.enableBrain(ctx.getSource().getPlayerOrException(), true))))
+                .then(Commands.literal("propria").executes(ctx -> run(ctx.getSource(), s -> s.enableBrain(ctx.getSource().getPlayerOrException(), false))))
+                .then(Commands.literal("desligar").executes(ctx -> run(ctx.getSource(), s -> s.disableBrain(ctx.getSource().getPlayerOrException()))))
+                .then(Commands.literal("status").executes(ctx -> run(ctx.getSource(), s -> s.brainStatus(ctx.getSource().getPlayerOrException()))))
+                .then(Commands.literal("modelo")
+                        .executes(ctx -> run(ctx.getSource(), s -> s.brainStatus(ctx.getSource().getPlayerOrException())))
+                        .then(Commands.argument("nome", StringArgumentType.greedyString()).executes(ctx -> run(ctx.getSource(),
+                                s -> s.setModel(ctx.getSource().getPlayerOrException(), StringArgumentType.getString(ctx, "nome")))))));
         var voice = Commands.literal("voz").executes(ctx -> run(ctx.getSource(), s -> s.startVoice(ctx.getSource().getPlayerOrException())));
         for (String stop : new String[]{"parar", "desligar"}) {
             voice.then(Commands.literal(stop).executes(ctx -> run(ctx.getSource(), s -> s.stopVoice(ctx.getSource().getPlayerOrException()))));
@@ -107,7 +119,8 @@ final class CompanionService implements AutoCloseable {
     private void help(ServerPlayer player) {
         tell(player, "Olá! Crie sua companheira com /luma criar. Depois use seguir, ficar, autonomo, proteger, minerar, construir ou parar.");
         tell(player, "Segure um item e use /luma entregar. /luma devolver recupera itens. /luma falar <mensagem> conversa; /luma voz abre o painel de voz no seu computador.");
-        tell(player, "Outros: status, chamar, localizar, remover e ia ligar/desligar. Você também pode escrever “Luma, me siga” no chat.");
+        tell(player, "IA: /luma ia ollama (ou ligar), /luma ia modelo <nome>, /luma ia propria, /luma ia status e /luma ia desligar.");
+        tell(player, "Você também pode escrever “Luma, me siga” no chat. Com o complemento Luma Voz, segure V para falar dentro do jogo.");
     }
 
     private Map<String, String> bindings() { return server.overworld().getAttachedOrCreate(LumaMod.BINDINGS); }
@@ -246,7 +259,7 @@ final class CompanionService implements AutoCloseable {
     }
     private long bump(UUID owner) {
         long generation = generations.merge(owner, 1L, Long::sum);
-        NativeBrain brain = brains.get(owner);
+        ConversationBrain brain = brains.get(owner);
         if (brain != null) brain.cancelPending();
         return generation;
     }
@@ -267,32 +280,71 @@ final class CompanionService implements AutoCloseable {
         lastMessage.put(player.getUUID(), now);
         if (local.action() != Action.CHAT) { order(player, local.action()); return; }
         long generation = bump(player.getUUID());
-        NativeBrain brain = brains.get(player.getUUID());
+        ConversationBrain brain = brains.get(player.getUUID());
         if (brain == null) { speak(entity, local.reply()); return; }
         UUID owner = player.getUUID(), entityId = entity.getUUID();
-        brain.respond(text, entity.describe()).thenAccept(intent -> {
+        var dimension = player.level().dimension();
+        String context = "Estado confirmado da Luma: " + entity.describe()
+                + " Dimensão da Luma: " + entity.level().dimension().identifier()
+                + ". Dimensão do jogador: " + dimension.identifier()
+                + ". Vida do jogador: " + Math.round(player.getHealth()) + "/" + Math.round(player.getMaxHealth())
+                + ". Posição do jogador: " + player.blockPosition().toShortString()
+                + ". Estes dados são um retrato do momento e podem mudar.";
+        brain.respond(text, context).thenAccept(intent -> {
             if (closed) return;
             server.execute(() -> {
                 if (closed || generations.getOrDefault(owner, 0L) != generation) return;
                 ServerPlayer current = server.getPlayerList().getPlayer(owner);
                 CompanionEntity currentEntity = find(owner);
-                if (current != player || !current.isAlive() || currentEntity == null
+                if (current != player || !current.isAlive() || !dimension.equals(current.level().dimension()) || currentEntity == null
                         || !entityId.equals(currentEntity.getUUID())) return;
                 // Learned text is conversation only. Explicit parser/commands control world changes.
                 speak(currentEntity, intent.reply());
             });
         });
     }
-    private void enableBrain(ServerPlayer player, boolean enabled) {
+    private void enableBrain(ServerPlayer player, boolean ollama) {
         if (closed) return;
         bump(player.getUUID());
-        NativeBrain previous = brains.remove(player.getUUID());
+        ConversationBrain previous = brains.remove(player.getUUID());
         if (previous != null) previous.close();
-        if (enabled) brains.put(player.getUUID(), new NativeBrain(brainEngine));
-        tell(player, enabled ? "IA própria com memória local ligada nesta sessão, sem serviço externo. "
+        if (ollama) {
+            String model = model(player);
+            brains.put(player.getUUID(), new OllamaBrain(ollamaEngine, model));
+            tell(player, "Ollama selecionado nesta sessão, modelo " + model + ". Deixe o Ollama aberto neste computador. "
+                    + "Se ainda não baixou o modelo, execute no PowerShell: ollama pull " + model
+                    + ". A primeira resposta pode demorar enquanto o modelo carrega; esta mensagem não confirma a conexão.");
+        } else {
+            brains.put(player.getUUID(), new NativeBrain(brainEngine));
+            tell(player, "IA própria com memória local ligada nesta sessão, sem serviço externo. "
                 + "Ela ainda é experimental e pode errar ou produzir frases confusas; não conversa como modelos grandes. "
-                + "As ações continuam por ordens simples. /luma ia desligar desativa." :
-                "IA própria desligada. As ordens e respostas locais continuam disponíveis.");
+                + "As ações continuam por ordens simples. /luma ia desligar desativa.");
+        }
+    }
+    private void disableBrain(ServerPlayer player) {
+        if (closed) return;
+        bump(player.getUUID());
+        ConversationBrain previous = brains.remove(player.getUUID());
+        if (previous != null) previous.close();
+        tell(player, "IA desligada e histórico de conversa descartado. As ordens e respostas locais continuam disponíveis.");
+    }
+    private String model(ServerPlayer player) { return models.getOrDefault(player.getUUID(), OllamaBrain.DEFAULT_MODEL); }
+    private void setModel(ServerPlayer player, String name) {
+        if (closed) return;
+        if (!OllamaBrain.isValidModel(name)) {
+            tell(player, "Nome de modelo inválido. Exemplo: /luma ia modelo qwen2.5:3b"); return;
+        }
+        models.put(player.getUUID(), name);
+        if (brains.get(player.getUUID()) instanceof OllamaBrain) enableBrain(player, true);
+        else tell(player, "Modelo Ollama desta sessão: " + name + ". Use /luma ia ollama para ativar. "
+                + "Baixe antes com: ollama pull " + name);
+    }
+    private void brainStatus(ServerPlayer player) {
+        ConversationBrain brain = brains.get(player.getUUID());
+        String provider = brain == null ? "desligada" : brain instanceof OllamaBrain ? "Ollama" : "própria experimental";
+        tell(player, "IA: " + provider + ". Modelo Ollama selecionado: " + model(player) + ". "
+                + "O Ollama deve rodar no computador que executa o mundo/servidor; as escolhas valem para esta sessão. "
+                + "Este status mostra a configuração, sem testar a conexão.");
     }
     private void startVoice(ServerPlayer player) {
         if (closed) return;
@@ -345,8 +397,9 @@ final class CompanionService implements AutoCloseable {
         if (closed) return;
         UUID owner = player.getUUID();
         bump(owner);
-        NativeBrain brain = brains.remove(owner);
+        ConversationBrain brain = brains.remove(owner);
         if (brain != null) brain.close();
+        models.remove(owner);
         lastMessage.remove(owner);
         if (owner.equals(voiceOwner)) endVoice();
     }
@@ -392,8 +445,10 @@ final class CompanionService implements AutoCloseable {
         if (closed) return;
         closed = true;
         endVoice();
-        brains.values().forEach(NativeBrain::close);
+        brains.values().forEach(ConversationBrain::close);
         brainEngine.close();
+        ollamaEngine.close();
+        models.clear();
         brains.clear(); generations.clear(); lastMessage.clear();
     }
 }

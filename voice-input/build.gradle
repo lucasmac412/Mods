@@ -1,0 +1,50 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version '1.18.4'
+}
+
+loom {
+    splitEnvironmentSourceSets()
+    mods {
+        luma_voice {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+repositories { mavenCentral() }
+dependencies {
+    minecraft 'com.mojang:minecraft:26.2'
+    implementation 'net.fabricmc:fabric-loader:0.19.5'
+    implementation 'net.fabricmc.fabric-api:fabric-api:0.161.0+26.2'
+    implementation('com.alphacephei:vosk:0.3.45') { transitive = false }
+    include('com.alphacephei:vosk:0.3.45') { transitive = false }
+    implementation 'net.java.dev.jna:jna:5.17.0'
+    include 'net.java.dev.jna:jna:5.17.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+}
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = 'UTF-8'
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+    withSourcesJar()
+}
+test { useJUnitPlatform() }
+base { archivesName = 'luma-voice' }
+jar {
+    from('../LICENSE')
+    from('THIRD-PARTY-NOTICES.md')
+    from('../third-party/voice') {
+        include '*LICENSE*', 'THIRD-PARTY-VOSK.txt'
+        into 'META-INF/licenses/luma_voice'
+    }
+}
