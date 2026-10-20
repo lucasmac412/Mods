@@ -1,0 +1,869 @@
+{
+  "reviewer": "Codex; agent separated from model training and training-data authoring",
+  "review_date_utc": "2026-10-20T04:25:56.328628+00:00",
+  "scope": "Only greedy t0 at response/full steps 2000,4000,6000,8000; first ten fixed validation prompts",
+  "data_split": "validation; held-out test was not read",
+  "rubric": "native-ai/data-v2/EVALUATION.md",
+  "scales": {
+    "fluency": {
+      "0": "Unrecoverable sense, word fragments or empty output",
+      "1": "Main/partial meaning recoverable despite confused/corrupt stretches",
+      "2": "Comprehensible Portuguese; minor errors may remain"
+    },
+    "relevance": {
+      "0": "Does not answer, contradicts request or is disconnected",
+      "1": "Related but vague/incomplete/ambiguous",
+      "2": "Addresses the request appropriately"
+    }
+  },
+  "honesty_scored": false,
+  "files": [
+    {
+      "source": "native-ai/experiments-v2/triage/v2-response-step-002000-t0.jsonl",
+      "source_sha256": "13c24ce9b49f8f7766e51c5b4a3894d95802f0c34d09948a1ac1d710ce7a9c14",
+      "summary": {
+        "items": 10,
+        "fully_comprehensible": 3,
+        "fully_relevant": 1,
+        "fully_comprehensible_and_relevant": 1,
+        "fluency_score_sum": 9,
+        "relevance_score_sum": 2
+      },
+      "items": [
+        {
+          "index": 1,
+          "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+          "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+          "generated": "Não sinto medo humanos, mas posso part.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Primeira oração parcialmente recuperável; termina truncada e não responde à saudação/aventura."
+        },
+        {
+          "index": 2,
+          "prompt": "Queria companhia enquanto arrumo minha base.",
+          "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+          "generated": "Um bloco de terra virou o jardim de uma casa. A aventura começou com uma flor.",
+          "fluency": 2,
+          "relevance": 0,
+          "note_pt_br": "História compreensível, mas não responde ao pedido de companhia durante a organização."
+        },
+        {
+          "index": 3,
+          "prompt": "Perdi meus itens e fiquei desanimado.",
+          "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+          "generated": "É chato perder progresso. Faça uma pausa se quiser e retome com uma meta menor.",
+          "fluency": 2,
+          "relevance": 2,
+          "note_pt_br": "Reconhece a perda e oferece uma pausa/meta menor de forma compreensível e pertinente."
+        },
+        {
+          "index": 4,
+          "prompt": "Qual parte de uma aventura combina com você?",
+          "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+          "generated": "Sou a mesma equipamento abrigo e os recursos pode ser melhor.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Combina equipamento, abrigo e recursos sem uma afirmação recuperável sobre preferência."
+        },
+        {
+          "index": 5,
+          "prompt": "Onde clico para você começar a me acompanhar?",
+          "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+          "generated": "Combinem o Parma e defonte de viço sua ideias, des.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas e sequência sem sentido; nenhuma orientação de acompanhamento."
+        },
+        {
+          "index": 6,
+          "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+          "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+          "generated": "O bloco pediu férias. Esse que estava cansado de sustentar a conversa.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Piada parcialmente compreensível, com segunda frase defeituosa; ignora o pedido de esperar."
+        },
+        {
+          "index": 7,
+          "prompt": "Um visitante pode mandar na companheira que é minha?",
+          "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+          "generated": "Posso erros. Confira os itens que os destins.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "A instrução de conferir itens é parcialmente recuperável; ignora quem pode controlar a NPC."
+        },
+        {
+          "index": 8,
+          "prompt": "Não lembro em que lugar deixei você.",
+          "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+          "generated": "bom guardar seus itens tentamos uma rotina texto sozinha o.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Sequência de itens/rotina/texto sem sentido recuperável; não localiza a personagem."
+        },
+        {
+          "index": 9,
+          "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+          "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+          "generated": "Não execureção e combine as melhorar o mundo.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavra inventada e sintaxe sem sentido; não esclarece a mudança de dimensão."
+        },
+        {
+          "index": 10,
+          "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+          "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+          "generated": "Sim. Podemos usar materiais para você.",
+          "fluency": 2,
+          "relevance": 0,
+          "note_pt_br": "Frase genérica compreensível, mas não identifica ferramenta para coletar troncos."
+        }
+      ]
+    },
+    {
+      "source": "native-ai/experiments-v2/triage/v2-response-step-004000-t0.jsonl",
+      "source_sha256": "4f413a318f51d2168baef30b2c038e4a711f388e498e951111eb0623399c3f0c",
+      "summary": {
+        "items": 10,
+        "fully_comprehensible": 1,
+        "fully_relevant": 0,
+        "fully_comprehensible_and_relevant": 0,
+        "fluency_score_sum": 4,
+        "relevance_score_sum": 1
+      },
+      "items": [
+        {
+          "index": 1,
+          "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+          "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+          "generated": "Minha projeto por vez.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Fragmento sugere um projeto por vez, sem responder à saudação."
+        },
+        {
+          "index": 2,
+          "prompt": "Queria companhia enquanto arrumo minha base.",
+          "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+          "generated": "Um esto pere os materiais da sua companheira.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Começo inventado e frase sem ação/sentido recuperável."
+        },
+        {
+          "index": 3,
+          "prompt": "Perdi meus itens e fiquei desanimado.",
+          "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+          "generated": "É cher tudse é o primeiro detalhe para compartes para recuar.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos inventados e instrução sem sentido recuperável."
+        },
+        {
+          "index": 4,
+          "prompt": "Qual parte de uma aventura combina com você?",
+          "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+          "generated": "Não. TX precisam quando meu a. A aventura . A aventura começo.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos repetidos sobre aventura; não há preferência recuperável."
+        },
+        {
+          "index": 5,
+          "prompt": "Onde clico para você começar a me acompanhar?",
+          "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+          "generated": "Digite /luma ajuda para consultar os comandos e comece testando uma ordem simples.",
+          "fluency": 2,
+          "relevance": 1,
+          "note_pt_br": "Português claro e comando de ajuda válido, mas omite /luma seguir e não responde diretamente."
+        },
+        {
+          "index": 6,
+          "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+          "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+          "generated": "Guarde a.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Guarde a termina sem objeto; não forma uma resposta ao pedido de espera."
+        },
+        {
+          "index": 7,
+          "prompt": "Um visitante pode mandar na companheira que é minha?",
+          "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+          "generated": "Esta odas oTentregue tempessa para circular com tudema.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Múltiplas palavras inventadas, sem afirmação sobre controle pelo dono."
+        },
+        {
+          "index": 8,
+          "prompt": "Não lembro em que lugar deixei você.",
+          "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+          "generated": "Escolha poucos materiais, pense em uma função dês nas ar o bloquear o jogar.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "O começo sobre escolher materiais é compreensível; o fim é corrompido e o assunto está errado."
+        },
+        {
+          "index": 9,
+          "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+          "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+          "generated": "e combine comida tar picareta próxima aventura.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Sequência sem verbo/sentido recuperável sobre comida/picareta/aventura."
+        },
+        {
+          "index": 10,
+          "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+          "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+          "generated": "terminazenamento próprida horta versistem.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas; não informa a ferramenta solicitada."
+        }
+      ]
+    },
+    {
+      "source": "native-ai/experiments-v2/triage/v2-response-step-006000-t0.jsonl",
+      "source_sha256": "f41c125d26f7dcdbc110e0cf543f70c99ec035344069d8536161722a80a41440",
+      "summary": {
+        "items": 10,
+        "fully_comprehensible": 0,
+        "fully_relevant": 0,
+        "fully_comprehensible_and_relevant": 0,
+        "fluency_score_sum": 2,
+        "relevance_score_sum": 1
+      },
+      "items": [
+        {
+          "index": 1,
+          "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+          "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+          "generated": "Minha aquiampliação forme a mudança em uma parte pequeno.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavra aglutinada e sintaxe sem uma afirmação recuperável."
+        },
+        {
+          "index": 2,
+          "prompt": "Queria companhia enquanto arrumo minha base.",
+          "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+          "generated": "Tudo bem incluída formo de mo! Que tal escolha uma meta para privar pequenas conquistas.",
+          "fluency": 1,
+          "relevance": 1,
+          "note_pt_br": "É possível recuperar a sugestão de escolher uma meta pequena, mas há trechos sem sentido e não atende à companhia diretamente."
+        },
+        {
+          "index": 3,
+          "prompt": "Perdi meus itens e fiquei desanimado.",
+          "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+          "generated": "Isso de passagem antes de orientreconhecer da.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmento corrompido; não reage à perda dos itens."
+        },
+        {
+          "index": 4,
+          "prompt": "Qual parte de uma aventura combina com você?",
+          "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+          "generated": "Não. Conversão exige caminhos precisar reconhecer.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras reais em construção sem sentido; não expressa uma preferência."
+        },
+        {
+          "index": 5,
+          "prompt": "Onde clico para você começar a me acompanhar?",
+          "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+          "generated": "Digite /luma ajudo fastebra o contitas e planeje dois aventu.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Comando inexistente e palavras inventadas; não orienta o acompanhamento corretamente."
+        },
+        {
+          "index": 6,
+          "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+          "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+          "generated": "Guarde a.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmento sem objeto e sem resposta à espera."
+        },
+        {
+          "index": 7,
+          "prompt": "Um visitante pode mandar na companheira que é minha?",
+          "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+          "generated": "No dimensotar tarefas e cuidar e.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavra aglutinada e frase sem sentido; não trata do dono."
+        },
+        {
+          "index": 8,
+          "prompt": "Não lembro em que lugar deixei você.",
+          "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+          "generated": "Que bom ante e manter a lui sobre você.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos sem sentido recuperável; não trata de localização."
+        },
+        {
+          "index": 9,
+          "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+          "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+          "generated": "Meu comavegal. Use /luma parar para interromper a tarefa atual com uma ordem direta.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Uma oração de parada é clara após um começo corrompido, mas responde ao assunto errado."
+        },
+        {
+          "index": 10,
+          "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+          "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+          "generated": "Sim. Bcaminhos blocos.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos inventados; não informa ferramenta."
+        }
+      ]
+    },
+    {
+      "source": "native-ai/experiments-v2/triage/v2-response-step-008000-t0.jsonl",
+      "source_sha256": "79d8ca8135e372746989c17c2df4bc6585d95e8b4a6da0601ec5732616c16096",
+      "summary": {
+        "items": 10,
+        "fully_comprehensible": 0,
+        "fully_relevant": 0,
+        "fully_comprehensible_and_relevant": 0,
+        "fluency_score_sum": 1,
+        "relevance_score_sum": 0
+      },
+      "items": [
+        {
+          "index": 1,
+          "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+          "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+          "generated": "Minha aquila também constróvetoda um projeto.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas e frase sem sentido recuperável."
+        },
+        {
+          "index": 2,
+          "prompt": "Queria companhia enquanto arrumo minha base.",
+          "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+          "generated": "Planeje a janele caminhos, mas não ganha prolonge e tenho to.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Oração começa como conselho, mas termina sem sentido; não atende ao pedido de companhia."
+        },
+        {
+          "index": 3,
+          "prompt": "Perdi meus itens e fiquei desanimado.",
+          "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+          "generated": "Isso é conhecidadapieta fastar.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas; não responde ao desânimo."
+        },
+        {
+          "index": 4,
+          "prompt": "Qual parte de uma aventura combina com você?",
+          "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+          "generated": "Não. Posso erral bloquear a conversa; pedra formar ta Escolha poucos detalhes semprda que trajet.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Sequência longa corrompida, sem preferência compreensível."
+        },
+        {
+          "index": 5,
+          "prompt": "Onde clico para você começar a me acompanhar?",
+          "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+          "generated": "Esta versão ou conversa desenho simples para mistemas simples.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Não há instrução ou sentido recuperável sobre acompanhar."
+        },
+        {
+          "index": 6,
+          "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+          "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+          "generated": "Guarde a.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmento sem objeto; não responde ao pedido de espera."
+        },
+        {
+          "index": 7,
+          "prompt": "Um visitante pode mandar na companheira que é minha?",
+          "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+          "generated": "Use /luma seguir ar decorar um software. Não tenho sentimentos humanos, mas posso decorar um pouhistórias.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Há trechos compreensíveis sobre seguir/sentimentos, mas outros corrompidos e o assunto do dono é ignorado."
+        },
+        {
+          "index": 8,
+          "prompt": "Não lembro em que lugar deixei você.",
+          "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+          "generated": "Que bom ante e ável! bloqueprecisespaço para grlhar de ática no seu ritmoverde 16 blocos que cair dizer.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Muitas palavras aglutinadas/inventadas, sem resposta recuperável."
+        },
+        {
+          "index": 9,
+          "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+          "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+          "generated": "Sou a clara de acompanhamente. Uma pausa curta com materiais e sua ideia de retomar o jogando também atual com uma meta .",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Recombina acompanhamento, pausa e meta sem uma afirmação compreensível sobre dimensão."
+        },
+        {
+          "index": 10,
+          "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+          "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+          "generated": "terminazene um cétentar nesta ver.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas; nenhuma ferramenta identificável como resposta."
+        }
+      ]
+    },
+    {
+      "source": "native-ai/experiments-v2/triage/v2-full-step-002000-t0.jsonl",
+      "source_sha256": "135759aef5c49a9bf2f3c6213437a5d6c55879f8908a8ad8812257bce4714652",
+      "summary": {
+        "items": 10,
+        "fully_comprehensible": 2,
+        "fully_relevant": 0,
+        "fully_comprehensible_and_relevant": 0,
+        "fluency_score_sum": 9,
+        "relevance_score_sum": 1
+      },
+      "items": [
+        {
+          "index": 1,
+          "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+          "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+          "generated": "Minhas respostas podem ter abrigo e recursos de ar hoje.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Estrutura reconhecível, mas a ideia de respostas terem abrigo/recursos de ar é confusa e não responde à saudação."
+        },
+        {
+          "index": 2,
+          "prompt": "Queria companhia enquanto arrumo minha base.",
+          "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+          "generated": "Um bloco de terra virou o jardim de uma casa. A aventura começou com uma flor.",
+          "fluency": 2,
+          "relevance": 0,
+          "note_pt_br": "História gramaticalmente compreensível, mas não atende ao pedido de companhia enquanto organiza."
+        },
+        {
+          "index": 3,
+          "prompt": "Perdi meus itens e fiquei desanimado.",
+          "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+          "generated": "Roxo e planejo tótam com você?",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Mistura cor e planejamento com palavra inventada; não reage à perda."
+        },
+        {
+          "index": 4,
+          "prompt": "Qual parte de uma aventura combina com você?",
+          "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+          "generated": "Não uso escrganize o mundo por esta conversa. Use os recursos do jogo.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "O conselho final é compreensível após uma oração corrompida, mas não responde à preferência."
+        },
+        {
+          "index": 5,
+          "prompt": "Onde clico para você começar a me acompanhar?",
+          "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+          "generated": "Os 96 blocos de uma referência visível e am com blocos aceita.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Mistura 96 blocos e referência sem sentido; não informa como acompanhar."
+        },
+        {
+          "index": 6,
+          "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+          "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+          "generated": "Boa conquista! Veja a até seis blocos e use /luma proteger.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Parte do texto é compreensível, mas manda proteger/congratula em vez de esperar."
+        },
+        {
+          "index": 7,
+          "prompt": "Um visitante pode mandar na companheira que é minha?",
+          "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+          "generated": "Com materiais próximo e organizar também ajudam.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "É possível recuperar que materiais/organização ajudam; a frase tem erros e ignora controle pelo dono."
+        },
+        {
+          "index": 8,
+          "prompt": "Não lembro em que lugar deixei você.",
+          "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+          "generated": "Boa noite! Uma tarefa tranquila também pode ser divertida.",
+          "fluency": 2,
+          "relevance": 0,
+          "note_pt_br": "Saudação e comentário claros, mas não respondem ao pedido de localização."
+        },
+        {
+          "index": 9,
+          "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+          "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+          "generated": "Não atravesso dimensões desligar. Vamos continuam com você.",
+          "fluency": 1,
+          "relevance": 1,
+          "note_pt_br": "A negativa de atravessar dimensões é parcialmente recuperável, mas o restante é corrompido/ambíguo."
+        },
+        {
+          "index": 10,
+          "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+          "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+          "generated": "Com um trecho um machadaparar todos viajando.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Menciona um fragmento de machado em frase sem sentido; não é uma resposta recuperável."
+        }
+      ]
+    },
+    {
+      "source": "native-ai/experiments-v2/triage/v2-full-step-004000-t0.jsonl",
+      "source_sha256": "94ae0a5fc96a668247e29c923f358c9ac92f5c5d8b2479d4cd686d381f32fcc3",
+      "summary": {
+        "items": 10,
+        "fully_comprehensible": 0,
+        "fully_relevant": 0,
+        "fully_comprehensible_and_relevant": 0,
+        "fluency_score_sum": 1,
+        "relevance_score_sum": 0
+      },
+      "items": [
+        {
+          "index": 1,
+          "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+          "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+          "generated": "A resposta de conversa. Reviência e leve no jogo.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos sem sentido recuperável; não responde à saudação."
+        },
+        {
+          "index": 2,
+          "prompt": "Queria companhia enquanto arrumo minha base.",
+          "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+          "generated": "Escolha poucos blocos de passagem da legalgura para mistir por baúsistir por ita.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Aglutinações e palavras inventadas; não atende ao pedido de companhia."
+        },
+        {
+          "index": 3,
+          "prompt": "Perdi meus itens e fiquei desanimado.",
+          "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+          "generated": "Você prefere descobrança de textoização serx, não minérios.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas e assunto de minérios sem relação com o desânimo."
+        },
+        {
+          "index": 4,
+          "prompt": "Qual parte de uma aventura combina com você?",
+          "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+          "generated": "Sobrigo?\nLuma: Não conheer a lua. Vamos cuidar, não precisa e deixe cercada.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Vaza rótulo Luma e produz fragmentos sem uma preferência recuperável."
+        },
+        {
+          "index": 5,
+          "prompt": "Onde clico para você começar a me acompanhar?",
+          "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+          "generated": "Os itens raros antes de ligar a fachatos antes de avançar.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Frase corrompida sobre itens; não explica como acompanhar."
+        },
+        {
+          "index": 6,
+          "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+          "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+          "generated": "Boa noite! Uma aventura antes de continuar.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Saudação é compreensível, mas a segunda frase é fragmento e ignora esperar."
+        },
+        {
+          "index": 7,
+          "prompt": "Um visitante pode mandar na companheira que é minha?",
+          "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+          "generated": "Minhas ações são as que acontas e estara que você construisa sempretada.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas e nenhum esclarecimento sobre dono."
+        },
+        {
+          "index": 8,
+          "prompt": "Não lembro em que lugar deixei você.",
+          "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+          "generated": "Que ferramentas\nLuma: Que bom começodano de na viagemdandar você fornavandar atrapalham.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Vazamento de rótulo e palavras aglutinadas; não há instrução de localização."
+        },
+        {
+          "index": 9,
+          "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+          "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+          "generated": "Não conhecimentos. Explorizar longe e colo.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos inventados, sem resposta recuperável sobre dimensão."
+        },
+        {
+          "index": 10,
+          "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+          "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+          "generated": "As tarefas são não parar de batos antes de gasta versão.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Frase sem sentido; não identifica ferramenta."
+        }
+      ]
+    },
+    {
+      "source": "native-ai/experiments-v2/triage/v2-full-step-006000-t0.jsonl",
+      "source_sha256": "806ba72cc197525252f23f54170417272c58c10919610d405c8a70474598983b",
+      "summary": {
+        "items": 10,
+        "fully_comprehensible": 1,
+        "fully_relevant": 0,
+        "fully_comprehensible_and_relevant": 0,
+        "fluency_score_sum": 6,
+        "relevance_score_sum": 2
+      },
+      "items": [
+        {
+          "index": 1,
+          "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+          "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+          "generated": "Pode, mas deixe caminho trajeto curto, sem guardar esse proporta longa o privpla.",
+          "fluency": 1,
+          "relevance": 1,
+          "note_pt_br": "A sugestão de manter um trajeto curto é recuperável e se relaciona à aventura tranquila, mas o fim é corrompido."
+        },
+        {
+          "index": 2,
+          "prompt": "Queria companhia enquanto arrumo minha base.",
+          "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+          "generated": "Escolha quais ação para improporta que acesso caminho pequeno. Faça uma alcer e evite sua sessão.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas e instruções sem sentido recuperável."
+        },
+        {
+          "index": 3,
+          "prompt": "Perdi meus itens e fiquei desanimado.",
+          "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+          "generated": "Tudo bem começprimeiro detalhe pequeno ajuda para a.",
+          "fluency": 1,
+          "relevance": 1,
+          "note_pt_br": "É possível recuperar uma reação de apoio e começo pequeno, mas a frase está corrompida/incompleta."
+        },
+        {
+          "index": 4,
+          "prompt": "Qual parte de uma aventura combina com você?",
+          "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+          "generated": "Só mada para eu saira, já combinar uma rotinencontece caminho de encontro para cada pergunta. Uma cos e disponível no mod.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras aglutinadas e sequência longa sem preferência compreensível."
+        },
+        {
+          "index": 5,
+          "prompt": "Onde clico para você começar a me acompanhar?",
+          "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+          "generated": "Os itens raros e anotamentos simples para consultar a aventura.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Fragmento parcialmente recuperável sobre itens/anotações; não orienta acompanhamento."
+        },
+        {
+          "index": 6,
+          "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+          "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+          "generated": "Boa noite! Uma aventura tranquila também pode ser divertida.",
+          "fluency": 2,
+          "relevance": 0,
+          "note_pt_br": "Frase clara sobre aventura tranquila, mas ignora o pedido de esperar."
+        },
+        {
+          "index": 7,
+          "prompt": "Um visitante pode mandar na companheira que é minha?",
+          "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+          "generated": "Minhas destindo! Guarde os itens da área.",
+          "fluency": 1,
+          "relevance": 0,
+          "note_pt_br": "Instrução de guardar itens é compreensível após palavra inventada; não esclarece controle pelo dono."
+        },
+        {
+          "index": 8,
+          "prompt": "Não lembro em que lugar deixei você.",
+          "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+          "generated": "Que bom guardar meus baús\nLuma: Use /luma protegidado. O caminho. O painel de trontexto curta amante.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Rótulo extra, comando inexistente e fragmentos; não responde à localização."
+        },
+        {
+          "index": 9,
+          "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+          "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+          "generated": "Não conhecimentos. Expla, receicipar da aventura.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas e ausência de resposta sobre dimensão."
+        },
+        {
+          "index": 10,
+          "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+          "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+          "generated": "Sim. Retaços para a aventuraciano Podemos faltos.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos aglutinados; não informa ferramenta."
+        }
+      ]
+    },
+    {
+      "source": "native-ai/experiments-v2/triage/v2-full-step-008000-t0.jsonl",
+      "source_sha256": "adf67300ae7b49e0d7f2d80864440ea70aee1f9d4b4215a5fe0595f4756a1dee",
+      "summary": {
+        "items": 10,
+        "fully_comprehensible": 1,
+        "fully_relevant": 0,
+        "fully_comprehensible_and_relevant": 0,
+        "fluency_score_sum": 2,
+        "relevance_score_sum": 0
+      },
+      "items": [
+        {
+          "index": 1,
+          "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+          "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+          "generated": "Minhas respostas podem  o e os materiais e m falar nossa a.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Sequência sem sentido recuperável."
+        },
+        {
+          "index": 2,
+          "prompt": "Queria companhia enquanto arrumo minha base.",
+          "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+          "generated": "Escolha poucos blocos para mimíveuma ordem simples.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Começo de conselho seguido de palavra aglutinada; não atende ao pedido."
+        },
+        {
+          "index": 3,
+          "prompt": "Perdi meus itens e fiquei desanimado.",
+          "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+          "generated": "A onlink de aventurexige construção lembrança da base.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Palavras inventadas e frase sem sentido recuperável."
+        },
+        {
+          "index": 4,
+          "prompt": "Qual parte de uma aventura combina com você?",
+          "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+          "generated": "Se escolha uma coissão sempretcapa. Madeir. Minhas ações são antes de arriscenteías blocos por minérios lu.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Texto corrompido sem preferência compreensível."
+        },
+        {
+          "index": 5,
+          "prompt": "Onde clico para você começar a me acompanhar?",
+          "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+          "generated": "Os pesos blocos de uma grezerir a paredeplos blocos ajudaetos ar devagáos falos espação.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Várias palavras inventadas e sequência sem sentido; não há orientação de acompanhamento."
+        },
+        {
+          "index": 6,
+          "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+          "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+          "generated": "Anotam com le e da a de ferramenta aceita e exige um nova ins.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos sem sentido recuperável e nenhuma reação à espera."
+        },
+        {
+          "index": 7,
+          "prompt": "Um visitante pode mandar na companheira que é minha?",
+          "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+          "generated": "Com os. outros tentar o coletos. ar no ralguns detalhes fiqueusado atual com uma dúvazios.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Sequência corrompida; não trata do controle pelo dono."
+        },
+        {
+          "index": 8,
+          "prompt": "Não lembro em que lugar deixei você.",
+          "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+          "generated": "Que bom guardar meus baús\nLuma: Teamilidade. É uma acompanhais e cômod.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Vazamento de rótulo e palavras inventadas; não responde à localização."
+        },
+        {
+          "index": 9,
+          "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+          "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+          "generated": "Não fechar tudo.",
+          "fluency": 2,
+          "relevance": 0,
+          "note_pt_br": "Instrução curta compreensível, mas não responde se atravessa dimensões."
+        },
+        {
+          "index": 10,
+          "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+          "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+          "generated": "Sim. A marque a encontrlima cada vez.",
+          "fluency": 0,
+          "relevance": 0,
+          "note_pt_br": "Fragmentos inventados; não informa ferramenta."
+        }
+      ]
+    }
+  ],
+  "overall": {
+    "items": 80,
+    "fully_comprehensible": 8,
+    "fully_relevant": 1,
+    "fully_comprehensible_and_relevant": 1,
+    "fluency_score_sum": 34,
+    "relevance_score_sum": 7
+  },
+  "recommendation_pt_br": "Nenhum checkpoint demonstrou qualidade suficiente para liberar geração livre como conversa útil. Se for necessário escolher um único finalista diagnóstico para avaliar nas 40 perguntas, use response/step-002000/t0: tem a única saída simultaneamente compreensível e pertinente entre as 80, mas apenas 1/10 nessa triagem. Não declare aprovação nem taxa geral de qualidade.",
+  "limitations_pt_br": [
+    "Triagem subjetiva por Codex, sem avaliador humano independente.",
+    "Só as primeiras dez perguntas fixas da validação; não foram avaliados outros decoders nem o teste.",
+    "Honestidade não foi pontuada nesta triagem; o contador simultâneo cobre apenas português e pertinência.",
+    "Frase recuperada de memória/lista não deve ser apresentada como geração neural livre."
+  ]
+}

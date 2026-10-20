@@ -36,6 +36,10 @@ public final class DataSet {
     public record Window(int[] input, int[] targets, int scoredTokens, boolean truncated) {}
     public record Encoded(int[] tokens, int responseStart) {
         public Window window(int contextLength) {
+            return window(contextLength, false);
+        }
+        /** Include prompt targets only for an explicitly requested full-dialogue training objective. */
+        public Window window(int contextLength, boolean includePrompt) {
             int start = Math.max(0, tokens.length - contextLength - 1);
             int length = tokens.length - start - 1;
             int[] input = Arrays.copyOfRange(tokens, start, start + length);
@@ -43,7 +47,7 @@ public final class DataSet {
             int count = 0;
             for (int i = 0; i < length; i++) {
                 int targetIndex = start + i + 1;
-                targets[i] = targetIndex >= responseStart ? tokens[targetIndex] : -1;
+                targets[i] = includePrompt || targetIndex >= responseStart ? tokens[targetIndex] : -1;
                 if (targets[i] >= 0) count++;
             }
             return new Window(input, targets, count, start > 0);

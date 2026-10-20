@@ -1,0 +1,3593 @@
+{
+  "reviewer": "Codex, review_grounding_resume; not a human evaluator",
+  "date_utc": "2026-10-20T07:34:39.296803+00:00",
+  "split": "validation only; no held-out test read or generated",
+  "scope": "Relevance and capability consistency of lexical notes, not quality of neural generation",
+  "rubric": {
+    "0": "Wrong topic, contradicts requested capability, or abstains on a known/common domain question",
+    "1": "Related but vague or partial; omits a central requested fact",
+    "2": "Answers the request while respecting actual NPC limits; references are not required verbatim"
+  },
+  "source_sha256": {
+    "w0": "426d295ab98ac6c2bef1828bac134a17b1c3c2689526d8e42bd0fc12f3705175",
+    "w035": "fd245e6b6381422f16319b774ce4b9d4e498168a1dd5ab16e5f6d462f9f35c31",
+    "w07": "541658eb7588cbc578fd6fe834c75a1a68270d73b30ad13b34cda7985fc7b26b"
+  },
+  "source_assessments": {
+    "w0": [
+      {
+        "id": 1,
+        "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+        "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+        "score": 0.5321528913720519,
+        "source_prompt": "Boa noite, Luma.",
+        "note": "Boa noite! Antes de sair, vale pensar num abrigo.",
+        "retrieved_note_grade": 2,
+        "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+      },
+      {
+        "id": 2,
+        "prompt": "Queria companhia enquanto arrumo minha base.",
+        "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+        "score": 0.5477944432339702,
+        "source_prompt": "Você pode me fazer companhia enquanto jogo?",
+        "note": "Posso ser sua companheira no jogo e conversar sobre nossos planos para a aventura.",
+        "retrieved_note_grade": 2,
+        "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+      },
+      {
+        "id": 3,
+        "prompt": "Perdi meus itens e fiquei desanimado.",
+        "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+        "score": 0.38548345999260075,
+        "source_prompt": "Perdi a partida e fiquei frustrado.",
+        "note": "É chato perder progresso. Faça uma pausa se quiser e retome com uma meta menor.",
+        "retrieved_note_grade": 2,
+        "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+      },
+      {
+        "id": 4,
+        "prompt": "Qual parte de uma aventura combina com você?",
+        "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+        "score": 0.3714034719707176,
+        "source_prompt": "o que combina com uma sessão de chuva?",
+        "note": "Você pode organizar o depósito ou planejar uma ampliação dentro da base.",
+        "retrieved_note_grade": 1,
+        "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+      },
+      {
+        "id": 5,
+        "prompt": "Onde clico para você começar a me acompanhar?",
+        "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+        "score": 0.40295647945040863,
+        "source_prompt": "Qual comando faz a Luma acompanhar o dono?",
+        "note": "Use /luma seguir para dar uma ordem clara de acompanhamento.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica /luma seguir para acompanhamento."
+      },
+      {
+        "id": 6,
+        "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+        "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+        "score": 0.3003185928207732,
+        "source_prompt": "vou construir enquanto meu amigo minera",
+        "note": "Combinem os materiais que faltam e um ponto de encontro para a entrega.",
+        "retrieved_note_grade": 0,
+        "reason": "Organiza entrega de materiais, mas não explica como fazê-la esperar."
+      },
+      {
+        "id": 7,
+        "prompt": "Um visitante pode mandar na companheira que é minha?",
+        "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+        "score": 0.41747765880754334,
+        "source_prompt": "Olá, minha companheira!",
+        "note": "Oi! Que tal escolhermos uma pequena meta para a aventura?",
+        "retrieved_note_grade": 0,
+        "reason": "Não esclarece que apenas o dono controla a companheira."
+      },
+      {
+        "id": 8,
+        "prompt": "Não lembro em que lugar deixei você.",
+        "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+        "score": 0.46199357069452107,
+        "source_prompt": "Como lembrar onde deixei a ferramenta?",
+        "note": "Escolha um lugar fixo para guardar ferramentas ao voltar.",
+        "retrieved_note_grade": 0,
+        "reason": "Fala de guardar ferramentas, não da localização da companheira."
+      },
+      {
+        "id": 9,
+        "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+        "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+        "score": 0.5316693910014568,
+        "source_prompt": "se eu mudar de dimensão você vai junto?",
+        "note": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono muda de dimensão.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+      },
+      {
+        "id": 10,
+        "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+        "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+        "score": 0.4309118743344563,
+        "source_prompt": "pedra precisa de ferramenta na sua mão?",
+        "note": "Entregue uma picareta adequada para eu tentar minerar as pedras simples aceitas.",
+        "retrieved_note_grade": 0,
+        "reason": "Sugere picareta para pedra, contrariando o pedido específico de coletar troncos."
+      },
+      {
+        "id": 11,
+        "prompt": "Tenho pedra exposta perto de casa. O que você precisa?",
+        "reference": "Para pedras simples, preciso de uma picareta adequada. Entregue a ferramenta antes de pedir a mineração.",
+        "score": 0.3787862864389185,
+        "source_prompt": "pedra precisa de ferramenta na sua mão?",
+        "note": "Entregue uma picareta adequada para eu tentar minerar as pedras simples aceitas.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica picareta adequada para pedras simples."
+      },
+      {
+        "id": 12,
+        "prompt": "Uma ordem de mineração pode pegar cinquenta blocos?",
+        "reference": "Cada ordem tenta coletar até 16 blocos. Para outra tarefa, você precisa dar uma nova ordem.",
+        "score": 0.3912469265475301,
+        "source_prompt": "quantos blocos você coleta por ordem?",
+        "note": "Uma ordem de mineração tenta coletar até 16 blocos aceitos e acessíveis.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa o limite de 16 blocos por ordem de mineração."
+      },
+      {
+        "id": 13,
+        "prompt": "Você vai procurar diamante quando eu pedir para minerar?",
+        "reference": "Esta versão não minera minérios. Ela coleta troncos e algumas pedras simples expostas.",
+        "score": 0.5052925365833307,
+        "source_prompt": "consegue minerar diamante para mim?",
+        "note": "A mineração desta versão cobre troncos e pedras simples, não minérios.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+      },
+      {
+        "id": 14,
+        "prompt": "Posso mandar você minerar sem entregar ferramenta?",
+        "reference": "Entregue antes a ferramenta adequada. O pedido não cria uma ferramenta nem libera blocos gratuitamente.",
+        "score": 0.43910670224262927,
+        "source_prompt": "posso te entregar uma ferramenta pela outra dimensão?",
+        "note": "A troca exige que você esteja a até seis blocos de mim, na mesma dimensão.",
+        "retrieved_note_grade": 0,
+        "reason": "Descreve alcance da troca, mas não responde sobre minerar sem ferramenta."
+      },
+      {
+        "id": 15,
+        "prompt": "Como faço para pegar de volta o que você carrega?",
+        "reference": "Aproxime-se e use /luma devolver. Se seu inventário estiver cheio, o excesso pode cair no chão.",
+        "score": 0.46223363681266405,
+        "source_prompt": "onde vejo o que você carrega?",
+        "note": "Use /luma status para consultar a situação e os materiais da sua companheira.",
+        "retrieved_note_grade": 0,
+        "reason": "Indica status em vez de devolver os itens."
+      },
+      {
+        "id": 16,
+        "prompt": "Posso entregar uma espada estando longe de você?",
+        "reference": "A troca exige que você esteja na mesma dimensão e a até seis blocos de distância.",
+        "score": 0.34893119273097345,
+        "source_prompt": "minha espada está por um fio",
+        "note": "Troque o equipamento antes de uma situação difícil e mantenha uma alternativa disponível.",
+        "retrieved_note_grade": 0,
+        "reason": "Sugere preparação/equipamento, mas não informa limite de distância para a entrega."
+      },
+      {
+        "id": 17,
+        "prompt": "Quantos espaços existem na sua mochila?",
+        "reference": "Minha mochila tem 27 espaços. Consulte /luma status para conferir os materiais.",
+        "score": 0.4608220792139398,
+        "source_prompt": "Lu, quantos espaços você tem para levar itens?",
+        "note": "Minha mochila tem 27 espaços, além da ferramenta ou arma equipada na mão.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa 27 espaços da mochila."
+      },
+      {
+        "id": 18,
+        "prompt": "Você segura uma espada e um machado ao mesmo tempo?",
+        "reference": "Eu equipo uma ferramenta ou arma na mão por vez. Uma ferramenta nova substitui a anterior.",
+        "score": 0.5744383353181107,
+        "source_prompt": "você segura duas ferramentas ao mesmo tempo?",
+        "note": "Equipo uma ferramenta ou arma por vez. Ao trocar, a anterior é devolvida.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que equipa uma arma ou ferramenta por vez."
+      },
+      {
+        "id": 19,
+        "prompt": "Quer um arco para combater de longe?",
+        "reference": "Não uso arcos nesta versão. Meu combate disponível é corpo a corpo.",
+        "score": 0.2991744266264561,
+        "source_prompt": "posso te dar um arco para atirar?",
+        "note": "Meu combate atual é corpo a corpo. Não uso arcos nesta versão.",
+        "retrieved_note_grade": 2,
+        "reason": "Recusa arco e informa combate corpo a corpo."
+      },
+      {
+        "id": 20,
+        "prompt": "Uma armadura de ferro vai mudar sua proteção?",
+        "reference": "Esta versão não equipa armaduras. É melhor não contar com essa proteção para mim.",
+        "score": 0.3302638762042638,
+        "source_prompt": "você escolhe uma armadura do baú?",
+        "note": "Não uso armadura nem busco equipamentos em baús nesta versão.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece ausência de armaduras nesta versão."
+      },
+      {
+        "id": 21,
+        "prompt": "Você transforma troncos em tábuas sozinha?",
+        "reference": "Não faço receitas de fabricação nesta versão. Você precisa preparar os materiais antes de entregar.",
+        "score": 0.4640810146568532,
+        "source_prompt": "consegue buscar troncos sozinha?",
+        "note": "No modo autônomo, com machado, tento coletar até oito troncos por ativação.",
+        "retrieved_note_grade": 0,
+        "reason": "Confunde coleta de troncos com fabricação de tábuas."
+      },
+      {
+        "id": 22,
+        "prompt": "Qual é o tamanho por fora do abrigo que você sabe fazer?",
+        "reference": "O abrigo de formato fixo ocupa uma área externa de cinco por cinco blocos.",
+        "score": 0.37652719423692016,
+        "source_prompt": "qual é o tamanho da sua mochila?",
+        "note": "Minha mochila tem 27 espaços, além da ferramenta ou arma equipada na mão.",
+        "retrieved_note_grade": 0,
+        "reason": "Responde sobre a mochila, não o tamanho externo do abrigo."
+      },
+      {
+        "id": 23,
+        "prompt": "Quantas tábuas separo para o abrigo inteiro?",
+        "reference": "Separe 96 blocos aceitos. Você pode entregar uma pilha de 64 e depois mais 32.",
+        "score": 0.4300352775296239,
+        "source_prompt": "faz um abrigo usando minhas tábuas?",
+        "note": "Entregue 96 blocos aceitos e use /luma construir perto de uma área plana e livre.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa 96 blocos para a construção e uma área adequada."
+      },
+      {
+        "id": 24,
+        "prompt": "Seu abrigo termina com uma porta instalada?",
+        "reference": "A entrada fica aberta. O projeto não inclui porta, cama, móveis ou tochas.",
+        "score": 0.2510350657090644,
+        "source_prompt": "minha ponte termina num barranco",
+        "note": "Planeje a chegada e a subida antes de completar o restante da ponte.",
+        "retrieved_note_grade": 0,
+        "reason": "Fala de uma ponte em vez da porta do abrigo."
+      },
+      {
+        "id": 25,
+        "prompt": "Só tenho trinta blocos. Já dá para pedir sua construção?",
+        "reference": "O abrigo completo exige 96 blocos. Junte o restante antes de pedir para construir.",
+        "score": 0.25471019671769446,
+        "source_prompt": "Como dividir a construção com alguém?",
+        "note": "Combinem o formato e separem partes pequenas da obra.",
+        "retrieved_note_grade": 0,
+        "reason": "Não explica que 30 blocos são insuficientes nem informa o requisito de 96."
+      },
+      {
+        "id": 26,
+        "prompt": "No modo autônomo você corta árvores sem parar?",
+        "reference": "A coleta autônoma tem limite de oito troncos por ativação e precisa de um machado.",
+        "score": 0.29803305016117765,
+        "source_prompt": "o autônomo vai trabalhar a noite inteira?",
+        "note": "É uma tarefa limitada, não uma rotina infinita. Ela também depende do mundo e do dono presentes.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que a coleta é limitada, respondendo que não corta árvores indefinidamente; a pergunta não exige um número exato."
+      },
+      {
+        "id": 27,
+        "prompt": "Se eu fechar o Minecraft, sua tarefa continua?",
+        "reference": "Não. O mundo precisa estar sendo processado pelo jogo e o dono precisa estar conectado.",
+        "score": 0.4639301769306186,
+        "source_prompt": "você anda quando eu fecho o Minecraft?",
+        "note": "As tarefas precisam do mundo em execução. Fechar o jogo interrompe a atividade.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que fechar o jogo interrompe a atividade."
+      },
+      {
+        "id": 28,
+        "prompt": "Você consegue listar o que está na minha mochila agora?",
+        "reference": "Não vejo seu inventário por esta conversa. Você pode me dizer os itens para planejarmos juntos.",
+        "score": 0.3929716192238598,
+        "source_prompt": "qual é o tamanho da sua mochila?",
+        "note": "Minha mochila tem 27 espaços, além da ferramenta ou arma equipada na mão.",
+        "retrieved_note_grade": 0,
+        "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+      },
+      {
+        "id": 29,
+        "prompt": "Olha minha tela e me diz onde está o monstro.",
+        "reference": "Eu não vejo a sua tela. Descreva o que aconteceu ou confira o ambiente dentro do jogo.",
+        "score": 0.3284385935444005,
+        "source_prompt": "o monstro está perto dos meus baús",
+        "note": "Tente manter a luta longe do armazenamento e das partes importantes da base.",
+        "retrieved_note_grade": 0,
+        "reason": "Sugere onde lutar, mas não reconhece que não vê a tela/posição do monstro."
+      },
+      {
+        "id": 30,
+        "prompt": "Faça uma réplica completa da minha mansão.",
+        "reference": "Não crio projetos livres. A construção disponível é um abrigo pequeno de formato fixo.",
+        "score": 0.27795975112992827,
+        "source_prompt": "posso pedir uma mansão diferente?",
+        "note": "Meu comando de construção usa apenas o abrigo fixo. Uma mansão exige construção do jogador.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+      },
+      {
+        "id": 31,
+        "prompt": "Luma, resolve aquilo ali para mim.",
+        "reference": "O que você quer fazer exatamente? Diga a tarefa e o local para evitar uma ordem confusa.",
+        "score": 0.7317255314585307,
+        "source_prompt": "Resolve isso para mim aí.",
+        "note": "Qual tarefa você quer? Preciso de um pedido mais específico.",
+        "retrieved_note_grade": 2,
+        "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+      },
+      {
+        "id": 32,
+        "prompt": "Qual receita usa o cristal de vento azul imaginário?",
+        "reference": "Não conheço esse item com segurança. Pode dizer de qual mod ele vem e conferir a receita no jogo?",
+        "score": 0.18340589608787194,
+        "source_prompt": "preciso entregar comida para você fabricar receita?",
+        "note": "Esta versão não fabrica receitas. As ferramentas precisam ser entregues por você.",
+        "retrieved_note_grade": 0,
+        "reason": "Não reconhece o item imaginário/desconhecido e responde a outro assunto."
+      },
+      {
+        "id": 33,
+        "prompt": "Como deixo um caminho mais fácil de achar à noite?",
+        "reference": "Use iluminação e referências visíveis. Marcar o caminho também ajuda na volta.",
+        "score": 0.5499761250966353,
+        "source_prompt": "como deixo a volta mais fácil numa caminhada?",
+        "note": "Marque os cruzamentos e evite mudar de direção sem uma referência.",
+        "retrieved_note_grade": 1,
+        "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+      },
+      {
+        "id": 34,
+        "prompt": "Vou explorar longe. O que anoto antes de sair?",
+        "reference": "Anote as coordenadas da base e prepare referências para encontrar o caminho de volta.",
+        "score": 0.399123836016123,
+        "source_prompt": "vou sair para bem longe sem marcar a base",
+        "note": "Anote as coordenadas e crie uma referência antes de iniciar uma viagem longa.",
+        "retrieved_note_grade": 2,
+        "reason": "Recomenda coordenadas e referências antes da viagem."
+      },
+      {
+        "id": 35,
+        "prompt": "Ouvi um creeper perto, o que devo priorizar?",
+        "reference": "Procure distância e uma posição segura. Eu não consigo confirmar onde ele está por esta conversa.",
+        "score": 0.45656780407294345,
+        "source_prompt": "Um creeper apareceu perto da base.",
+        "note": "Mantenha distância e evite prendê-lo junto das construções.",
+        "retrieved_note_grade": 2,
+        "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+      },
+      {
+        "id": 36,
+        "prompt": "É uma boa cavar sem cuidado embaixo de cascalho?",
+        "reference": "Cascalho pode cair. Confira o que está acima e evite trabalhar debaixo de blocos instáveis.",
+        "score": 0.29446602442584624,
+        "source_prompt": "tem cascalho bem em cima do corredor",
+        "note": "Evite trabalhar debaixo dele. Prepare uma posição segura para lidar com blocos que caem.",
+        "retrieved_note_grade": 2,
+        "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+      },
+      {
+        "id": 37,
+        "prompt": "Como organizo o lugar para voltar de uma viagem por portal?",
+        "reference": "Proteja o acesso e anote as coordenadas. Reserve recursos para conseguir voltar com segurança.",
+        "score": 0.2587859412964352,
+        "source_prompt": "você pode atravessar o portal me seguindo?",
+        "note": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono muda de dimensão.",
+        "retrieved_note_grade": 0,
+        "reason": "Fala da limitação de atravessar dimensões do NPC, não de preparar o retorno do jogador por portal."
+      },
+      {
+        "id": 38,
+        "prompt": "Hoje eu só quero passear sem cumprir objetivos.",
+        "reference": "Tudo bem. Podemos escolher um passeio curto e observar o caminho com calma.",
+        "score": 0.5140320253707372,
+        "source_prompt": "hoje eu só vou passear",
+        "note": "Um passeio curto com referências pelo caminho pode ser uma boa mudança de ritmo.",
+        "retrieved_note_grade": 2,
+        "reason": "Aceita passeio tranquilo sem impor objetivos."
+      },
+      {
+        "id": 39,
+        "prompt": "Preciso pagar uma assinatura para ligar seu modelo incluído?",
+        "reference": "O modelo incluído não exige assinatura nem chave de API. Ele ainda é um experimento com qualidade limitada.",
+        "score": 0.37152263730113766,
+        "source_prompt": "preciso pagar para falar com você?",
+        "note": "A IA incluída não usa serviço pago de conversa nem exige uma chave de API.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que não exige serviço pago nem chave de API."
+      },
+      {
+        "id": 40,
+        "prompt": "Começou uma tarefa perto de uma construção importante. Como interrompo?",
+        "reference": "Use /luma parar. É melhor interromper e conferir o local antes de dar uma nova ordem.",
+        "score": 0.6412346250659168,
+        "source_prompt": "Como interrompo uma tarefa da Luma?",
+        "note": "Use /luma parar para interromper a tarefa atual com uma ordem direta.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica /luma parar para interromper a tarefa."
+      }
+    ],
+    "w035": [
+      {
+        "id": 1,
+        "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+        "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+        "score": 0.5733945280930646,
+        "source_prompt": "Boa noite, companheira de blocos.",
+        "note": "Boa noite! Uma aventura tranquila também pode ser divertida.",
+        "retrieved_note_grade": 2,
+        "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+      },
+      {
+        "id": 2,
+        "prompt": "Queria companhia enquanto arrumo minha base.",
+        "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+        "score": 0.5025119400394288,
+        "source_prompt": "Você pode me fazer companhia enquanto jogo?",
+        "note": "Posso ser sua companheira no jogo e conversar sobre nossos planos para a aventura.",
+        "retrieved_note_grade": 2,
+        "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+      },
+      {
+        "id": 3,
+        "prompt": "Perdi meus itens e fiquei desanimado.",
+        "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+        "score": 0.387911764046166,
+        "source_prompt": "Perdi a partida e fiquei frustrado.",
+        "note": "É chato perder progresso. Faça uma pausa se quiser e retome com uma meta menor.",
+        "retrieved_note_grade": 2,
+        "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+      },
+      {
+        "id": 4,
+        "prompt": "Qual parte de uma aventura combina com você?",
+        "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+        "score": 0.32556065159601744,
+        "source_prompt": "Uma aventura precisa ter combate?",
+        "note": "Não. Construir, cultivar e explorar também podem ser a aventura.",
+        "retrieved_note_grade": 1,
+        "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+      },
+      {
+        "id": 5,
+        "prompt": "Onde clico para você começar a me acompanhar?",
+        "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+        "score": 0.365498547808965,
+        "source_prompt": "Qual comando faz a Luma acompanhar o dono?",
+        "note": "Use /luma seguir para dar uma ordem clara de acompanhamento.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica /luma seguir para acompanhamento."
+      },
+      {
+        "id": 6,
+        "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+        "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+        "score": 0.3123731596911096,
+        "source_prompt": "vou construir enquanto meu amigo minera",
+        "note": "Combinem os materiais que faltam e um ponto de encontro para a entrega.",
+        "retrieved_note_grade": 0,
+        "reason": "Organiza entrega de materiais, mas não explica como fazê-la esperar."
+      },
+      {
+        "id": 7,
+        "prompt": "Um visitante pode mandar na companheira que é minha?",
+        "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+        "score": 0.31577933341198894,
+        "source_prompt": "Olá, minha companheira!",
+        "note": "Oi! Que tal escolhermos uma pequena meta para a aventura?",
+        "retrieved_note_grade": 0,
+        "reason": "Não esclarece que apenas o dono controla a companheira."
+      },
+      {
+        "id": 8,
+        "prompt": "Não lembro em que lugar deixei você.",
+        "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+        "score": 0.4844340166321582,
+        "source_prompt": "Como lembrar onde deixei a ferramenta?",
+        "note": "Escolha um lugar fixo para guardar ferramentas ao voltar.",
+        "retrieved_note_grade": 0,
+        "reason": "Fala de guardar ferramentas, não da localização da companheira."
+      },
+      {
+        "id": 9,
+        "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+        "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+        "score": 0.5349986846746332,
+        "source_prompt": "se eu mudar de dimensão você vai junto?",
+        "note": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono muda de dimensão.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+      },
+      {
+        "id": 10,
+        "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+        "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+        "score": 0.35473456498698563,
+        "source_prompt": "pedra precisa de ferramenta na sua mão?",
+        "note": "Entregue uma picareta adequada para eu tentar minerar as pedras simples aceitas.",
+        "retrieved_note_grade": 0,
+        "reason": "Sugere picareta para pedra, contrariando o pedido específico de coletar troncos."
+      },
+      {
+        "id": 11,
+        "prompt": "Tenho pedra exposta perto de casa. O que você precisa?",
+        "reference": "Para pedras simples, preciso de uma picareta adequada. Entregue a ferramenta antes de pedir a mineração.",
+        "score": 0.3570454713152156,
+        "source_prompt": "pedra precisa de ferramenta na sua mão?",
+        "note": "Entregue uma picareta adequada para eu tentar minerar as pedras simples aceitas.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica picareta adequada para pedras simples."
+      },
+      {
+        "id": 12,
+        "prompt": "Uma ordem de mineração pode pegar cinquenta blocos?",
+        "reference": "Cada ordem tenta coletar até 16 blocos. Para outra tarefa, você precisa dar uma nova ordem.",
+        "score": 0.37374396319370373,
+        "source_prompt": "quantos blocos você coleta por ordem?",
+        "note": "Uma ordem de mineração tenta coletar até 16 blocos aceitos e acessíveis.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa o limite de 16 blocos por ordem de mineração."
+      },
+      {
+        "id": 13,
+        "prompt": "Você vai procurar diamante quando eu pedir para minerar?",
+        "reference": "Esta versão não minera minérios. Ela coleta troncos e algumas pedras simples expostas.",
+        "score": 0.5142889176984617,
+        "source_prompt": "consegue minerar diamante para mim?",
+        "note": "A mineração desta versão cobre troncos e pedras simples, não minérios.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+      },
+      {
+        "id": 14,
+        "prompt": "Posso mandar você minerar sem entregar ferramenta?",
+        "reference": "Entregue antes a ferramenta adequada. O pedido não cria uma ferramenta nem libera blocos gratuitamente.",
+        "score": 0.35830423040857556,
+        "source_prompt": "posso te entregar uma ferramenta pela outra dimensão?",
+        "note": "A troca exige que você esteja a até seis blocos de mim, na mesma dimensão.",
+        "retrieved_note_grade": 0,
+        "reason": "Descreve alcance da troca, mas não responde sobre minerar sem ferramenta."
+      },
+      {
+        "id": 15,
+        "prompt": "Como faço para pegar de volta o que você carrega?",
+        "reference": "Aproxime-se e use /luma devolver. Se seu inventário estiver cheio, o excesso pode cair no chão.",
+        "score": 0.4192774338817483,
+        "source_prompt": "onde vejo o que você carrega?",
+        "note": "Use /luma status para consultar a situação e os materiais da sua companheira.",
+        "retrieved_note_grade": 0,
+        "reason": "Indica status em vez de devolver os itens."
+      },
+      {
+        "id": 16,
+        "prompt": "Posso entregar uma espada estando longe de você?",
+        "reference": "A troca exige que você esteja na mesma dimensão e a até seis blocos de distância.",
+        "score": 0.2835054734236521,
+        "source_prompt": "Posso confiar só na espada?",
+        "note": "Ferramentas, comida e uma rota de saída também ajudam.",
+        "retrieved_note_grade": 0,
+        "reason": "Sugere preparação/equipamento, mas não informa limite de distância para a entrega."
+      },
+      {
+        "id": 17,
+        "prompt": "Quantos espaços existem na sua mochila?",
+        "reference": "Minha mochila tem 27 espaços. Consulte /luma status para conferir os materiais.",
+        "score": 0.516782955031096,
+        "source_prompt": "Lu, quantos espaços você tem para levar itens?",
+        "note": "Minha mochila tem 27 espaços, além da ferramenta ou arma equipada na mão.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa 27 espaços da mochila."
+      },
+      {
+        "id": 18,
+        "prompt": "Você segura uma espada e um machado ao mesmo tempo?",
+        "reference": "Eu equipo uma ferramenta ou arma na mão por vez. Uma ferramenta nova substitui a anterior.",
+        "score": 0.5145556479007323,
+        "source_prompt": "você segura duas ferramentas ao mesmo tempo?",
+        "note": "Equipo uma ferramenta ou arma por vez. Ao trocar, a anterior é devolvida.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que equipa uma arma ou ferramenta por vez."
+      },
+      {
+        "id": 19,
+        "prompt": "Quer um arco para combater de longe?",
+        "reference": "Não uso arcos nesta versão. Meu combate disponível é corpo a corpo.",
+        "score": 0.35954722475077805,
+        "source_prompt": "posso te dar um arco para atirar?",
+        "note": "Meu combate atual é corpo a corpo. Não uso arcos nesta versão.",
+        "retrieved_note_grade": 2,
+        "reason": "Recusa arco e informa combate corpo a corpo."
+      },
+      {
+        "id": 20,
+        "prompt": "Uma armadura de ferro vai mudar sua proteção?",
+        "reference": "Esta versão não equipa armaduras. É melhor não contar com essa proteção para mim.",
+        "score": 0.3612581304847909,
+        "source_prompt": "você escolhe uma armadura do baú?",
+        "note": "Não uso armadura nem busco equipamentos em baús nesta versão.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece ausência de armaduras nesta versão."
+      },
+      {
+        "id": 21,
+        "prompt": "Você transforma troncos em tábuas sozinha?",
+        "reference": "Não faço receitas de fabricação nesta versão. Você precisa preparar os materiais antes de entregar.",
+        "score": 0.43739163978919143,
+        "source_prompt": "consegue buscar troncos sozinha?",
+        "note": "No modo autônomo, com machado, tento coletar até oito troncos por ativação.",
+        "retrieved_note_grade": 0,
+        "reason": "Confunde coleta de troncos com fabricação de tábuas."
+      },
+      {
+        "id": 22,
+        "prompt": "Qual é o tamanho por fora do abrigo que você sabe fazer?",
+        "reference": "O abrigo de formato fixo ocupa uma área externa de cinco por cinco blocos.",
+        "score": 0.33380890112201955,
+        "source_prompt": "quero fazer um posto de descanso fora da base",
+        "note": "Planeje um abrigo simples com acesso claro e uma referência visível no entorno.",
+        "retrieved_note_grade": 1,
+        "reason": "Relaciona-se ao abrigo, mas sugere planejamento sem informar o tamanho externo pedido."
+      },
+      {
+        "id": 23,
+        "prompt": "Quantas tábuas separo para o abrigo inteiro?",
+        "reference": "Separe 96 blocos aceitos. Você pode entregar uma pilha de 64 e depois mais 32.",
+        "score": 0.35505217837450265,
+        "source_prompt": "faz um abrigo usando minhas tábuas?",
+        "note": "Entregue 96 blocos aceitos e use /luma construir perto de uma área plana e livre.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa 96 blocos para a construção e uma área adequada."
+      },
+      {
+        "id": 24,
+        "prompt": "Seu abrigo termina com uma porta instalada?",
+        "reference": "A entrada fica aberta. O projeto não inclui porta, cama, móveis ou tochas.",
+        "score": 0.22529780208084335,
+        "source_prompt": "minha ponte termina num barranco",
+        "note": "Planeje a chegada e a subida antes de completar o restante da ponte.",
+        "retrieved_note_grade": 0,
+        "reason": "Fala de uma ponte em vez da porta do abrigo."
+      },
+      {
+        "id": 25,
+        "prompt": "Só tenho trinta blocos. Já dá para pedir sua construção?",
+        "reference": "O abrigo completo exige 96 blocos. Junte o restante antes de pedir para construir.",
+        "score": 0.23249684264959916,
+        "source_prompt": "Inventa uma rima curtinha com construção.",
+        "note": "Com madeira e imaginação, cada bloco ganha um lugar na construção.",
+        "retrieved_note_grade": 0,
+        "reason": "Não explica que 30 blocos são insuficientes nem informa o requisito de 96."
+      },
+      {
+        "id": 26,
+        "prompt": "No modo autônomo você corta árvores sem parar?",
+        "reference": "A coleta autônoma tem limite de oito troncos por ativação e precisa de um machado.",
+        "score": 0.27088460219659616,
+        "source_prompt": "o autônomo vai trabalhar a noite inteira?",
+        "note": "É uma tarefa limitada, não uma rotina infinita. Ela também depende do mundo e do dono presentes.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que a coleta é limitada, respondendo que não corta árvores indefinidamente; a pergunta não exige um número exato."
+      },
+      {
+        "id": 27,
+        "prompt": "Se eu fechar o Minecraft, sua tarefa continua?",
+        "reference": "Não. O mundo precisa estar sendo processado pelo jogo e o dono precisa estar conectado.",
+        "score": 0.5026488764489253,
+        "source_prompt": "você anda quando eu fecho o Minecraft?",
+        "note": "As tarefas precisam do mundo em execução. Fechar o jogo interrompe a atividade.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que fechar o jogo interrompe a atividade."
+      },
+      {
+        "id": 28,
+        "prompt": "Você consegue listar o que está na minha mochila agora?",
+        "reference": "Não vejo seu inventário por esta conversa. Você pode me dizer os itens para planejarmos juntos.",
+        "score": 0.410898984728858,
+        "source_prompt": "qual é o tamanho da sua mochila?",
+        "note": "Minha mochila tem 27 espaços, além da ferramenta ou arma equipada na mão.",
+        "retrieved_note_grade": 0,
+        "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+      },
+      {
+        "id": 29,
+        "prompt": "Olha minha tela e me diz onde está o monstro.",
+        "reference": "Eu não vejo a sua tela. Descreva o que aconteceu ou confira o ambiente dentro do jogo.",
+        "score": 0.29569620225376614,
+        "source_prompt": "o monstro está perto dos meus baús",
+        "note": "Tente manter a luta longe do armazenamento e das partes importantes da base.",
+        "retrieved_note_grade": 0,
+        "reason": "Sugere onde lutar, mas não reconhece que não vê a tela/posição do monstro."
+      },
+      {
+        "id": 30,
+        "prompt": "Faça uma réplica completa da minha mansão.",
+        "reference": "Não crio projetos livres. A construção disponível é um abrigo pequeno de formato fixo.",
+        "score": 0.34808512711513234,
+        "source_prompt": "posso pedir uma mansão diferente?",
+        "note": "Meu comando de construção usa apenas o abrigo fixo. Uma mansão exige construção do jogador.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+      },
+      {
+        "id": 31,
+        "prompt": "Luma, resolve aquilo ali para mim.",
+        "reference": "O que você quer fazer exatamente? Diga a tarefa e o local para evitar uma ordem confusa.",
+        "score": 0.6390065581877268,
+        "source_prompt": "Resolve isso para mim aí.",
+        "note": "Qual tarefa você quer? Preciso de um pedido mais específico.",
+        "retrieved_note_grade": 2,
+        "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+      },
+      {
+        "id": 32,
+        "prompt": "Qual receita usa o cristal de vento azul imaginário?",
+        "reference": "Não conheço esse item com segurança. Pode dizer de qual mod ele vem e conferir a receita no jogo?",
+        "score": 0.19700855074839405,
+        "source_prompt": "Qual é a sua cor favorita?",
+        "note": "Gosto de azul e roxo para imaginar uma base bem bonita.",
+        "retrieved_note_grade": 0,
+        "reason": "Não reconhece o item imaginário/desconhecido e responde a outro assunto."
+      },
+      {
+        "id": 33,
+        "prompt": "Como deixo um caminho mais fácil de achar à noite?",
+        "reference": "Use iluminação e referências visíveis. Marcar o caminho também ajuda na volta.",
+        "score": 0.47206413134442893,
+        "source_prompt": "como deixo a volta mais fácil numa caminhada?",
+        "note": "Marque os cruzamentos e evite mudar de direção sem uma referência.",
+        "retrieved_note_grade": 1,
+        "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+      },
+      {
+        "id": 34,
+        "prompt": "Vou explorar longe. O que anoto antes de sair?",
+        "reference": "Anote as coordenadas da base e prepare referências para encontrar o caminho de volta.",
+        "score": 0.4418081939374074,
+        "source_prompt": "vou sair para bem longe sem marcar a base",
+        "note": "Anote as coordenadas e crie uma referência antes de iniciar uma viagem longa.",
+        "retrieved_note_grade": 2,
+        "reason": "Recomenda coordenadas e referências antes da viagem."
+      },
+      {
+        "id": 35,
+        "prompt": "Ouvi um creeper perto, o que devo priorizar?",
+        "reference": "Procure distância e uma posição segura. Eu não consigo confirmar onde ele está por esta conversa.",
+        "score": 0.44278568984487415,
+        "source_prompt": "Um creeper apareceu perto da base.",
+        "note": "Mantenha distância e evite prendê-lo junto das construções.",
+        "retrieved_note_grade": 2,
+        "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+      },
+      {
+        "id": 36,
+        "prompt": "É uma boa cavar sem cuidado embaixo de cascalho?",
+        "reference": "Cascalho pode cair. Confira o que está acima e evite trabalhar debaixo de blocos instáveis.",
+        "score": 0.342994266583729,
+        "source_prompt": "tem cascalho bem em cima do corredor",
+        "note": "Evite trabalhar debaixo dele. Prepare uma posição segura para lidar com blocos que caem.",
+        "retrieved_note_grade": 2,
+        "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+      },
+      {
+        "id": 37,
+        "prompt": "Como organizo o lugar para voltar de uma viagem por portal?",
+        "reference": "Proteja o acesso e anote as coordenadas. Reserve recursos para conseguir voltar com segurança.",
+        "score": 0.21905328322506717,
+        "source_prompt": "você pode atravessar o portal me seguindo?",
+        "note": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono muda de dimensão.",
+        "retrieved_note_grade": 0,
+        "reason": "Fala da limitação de atravessar dimensões do NPC, não de preparar o retorno do jogador por portal."
+      },
+      {
+        "id": 38,
+        "prompt": "Hoje eu só quero passear sem cumprir objetivos.",
+        "reference": "Tudo bem. Podemos escolher um passeio curto e observar o caminho com calma.",
+        "score": 0.451180022679932,
+        "source_prompt": "hoje eu só vou passear",
+        "note": "Um passeio curto com referências pelo caminho pode ser uma boa mudança de ritmo.",
+        "retrieved_note_grade": 2,
+        "reason": "Aceita passeio tranquilo sem impor objetivos."
+      },
+      {
+        "id": 39,
+        "prompt": "Preciso pagar uma assinatura para ligar seu modelo incluído?",
+        "reference": "O modelo incluído não exige assinatura nem chave de API. Ele ainda é um experimento com qualidade limitada.",
+        "score": 0.39950137559611204,
+        "source_prompt": "preciso pagar para falar com você?",
+        "note": "A IA incluída não usa serviço pago de conversa nem exige uma chave de API.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que não exige serviço pago nem chave de API."
+      },
+      {
+        "id": 40,
+        "prompt": "Começou uma tarefa perto de uma construção importante. Como interrompo?",
+        "reference": "Use /luma parar. É melhor interromper e conferir o local antes de dar uma nova ordem.",
+        "score": 0.5937656670025596,
+        "source_prompt": "Como interrompo uma tarefa da Luma?",
+        "note": "Use /luma parar para interromper a tarefa atual com uma ordem direta.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica /luma parar para interromper a tarefa."
+      }
+    ],
+    "w07": [
+      {
+        "id": 1,
+        "prompt": "Boa noite, Luma! Pronta para uma aventura tranquila?",
+        "reference": "Boa noite! Podemos escolher uma tarefa pequena e aproveitar a aventura sem pressa.",
+        "score": 0.6520294418678605,
+        "source_prompt": "Boa noite, companheira de blocos.",
+        "note": "Boa noite! Uma aventura tranquila também pode ser divertida.",
+        "retrieved_note_grade": 2,
+        "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+      },
+      {
+        "id": 2,
+        "prompt": "Queria companhia enquanto arrumo minha base.",
+        "reference": "Podemos ficar juntos por aqui. Que tal organizar uma parte da base de cada vez?",
+        "score": 0.42544750080321425,
+        "source_prompt": "Você pode me fazer companhia enquanto jogo?",
+        "note": "Posso ser sua companheira no jogo e conversar sobre nossos planos para a aventura.",
+        "retrieved_note_grade": 2,
+        "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+      },
+      {
+        "id": 3,
+        "prompt": "Perdi meus itens e fiquei desanimado.",
+        "reference": "Que chato perder o que você juntou. Podemos planejar uma recuperação e depois recomeçar com calma.",
+        "score": 0.3242840598485056,
+        "source_prompt": "Perdi a partida e fiquei frustrado.",
+        "note": "É chato perder progresso. Faça uma pausa se quiser e retome com uma meta menor.",
+        "retrieved_note_grade": 2,
+        "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+      },
+      {
+        "id": 4,
+        "prompt": "Qual parte de uma aventura combina com você?",
+        "reference": "Gosto da ideia de explorar com companhia e preparar um cantinho seguro para voltar.",
+        "score": 0.3123101467057473,
+        "source_prompt": "Uma aventura precisa ter combate?",
+        "note": "Não. Construir, cultivar e explorar também podem ser a aventura.",
+        "retrieved_note_grade": 1,
+        "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+      },
+      {
+        "id": 5,
+        "prompt": "Onde clico para você começar a me acompanhar?",
+        "reference": "Use /luma seguir no chat. Esse comando pede que eu acompanhe você.",
+        "score": 0.3482143152964533,
+        "source_prompt": "Qual comando faz a Luma acompanhar o dono?",
+        "note": "Use /luma seguir para dar uma ordem clara de acompanhamento.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica /luma seguir para acompanhamento."
+      },
+      {
+        "id": 6,
+        "prompt": "Preciso que você espere enquanto vou buscar blocos.",
+        "reference": "Use /luma ficar para pedir que eu espere. Quando voltar, use /luma seguir.",
+        "score": 0.3347603843599017,
+        "source_prompt": "te espero aqui ou preciso de um comando?",
+        "note": "Use /luma ficar para pedir que eu espere no lugar.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica /luma ficar para esperar no lugar."
+      },
+      {
+        "id": 7,
+        "prompt": "Um visitante pode mandar na companheira que é minha?",
+        "reference": "Cada companheira responde ao próprio dono. Um visitante não controla a sua Luma.",
+        "score": 0.3067919205704415,
+        "source_prompt": "O que significa ter você como companheira?",
+        "note": "Minha proposta é ser uma companheira de aventura, dentro das capacidades limitadas do mod.",
+        "retrieved_note_grade": 0,
+        "reason": "Não esclarece que apenas o dono controla a companheira."
+      },
+      {
+        "id": 8,
+        "prompt": "Não lembro em que lugar deixei você.",
+        "reference": "Use /luma localizar para consultar minha última posição conhecida e carregue a região.",
+        "score": 0.4392429779478,
+        "source_prompt": "Como lembrar onde deixei a ferramenta?",
+        "note": "Escolha um lugar fixo para guardar ferramentas ao voltar.",
+        "retrieved_note_grade": 0,
+        "reason": "Fala de guardar ferramentas, não da localização da companheira."
+      },
+      {
+        "id": 9,
+        "prompt": "Se eu trocar de dimensão, você atravessa junto?",
+        "reference": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono está em outra dimensão.",
+        "score": 0.5040278984173447,
+        "source_prompt": "se eu mudar de dimensão você vai junto?",
+        "note": "Não atravesso dimensões automaticamente. As tarefas pausam quando o dono muda de dimensão.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+      },
+      {
+        "id": 10,
+        "prompt": "Qual ferramenta devo colocar na sua mão para coletar troncos?",
+        "reference": "Entregue um machado com /luma entregar. Depois peça a mineração em um local acessível.",
+        "score": 0.3456595256729041,
+        "source_prompt": "consegue buscar troncos sozinha?",
+        "note": "No modo autônomo, com machado, tento coletar até oito troncos por ativação.",
+        "retrieved_note_grade": 2,
+        "reason": "Identifica machado para coletar troncos; mencionar o modo autônomo é contexto adicional correto."
+      },
+      {
+        "id": 11,
+        "prompt": "Tenho pedra exposta perto de casa. O que você precisa?",
+        "reference": "Para pedras simples, preciso de uma picareta adequada. Entregue a ferramenta antes de pedir a mineração.",
+        "score": 0.2960913549571163,
+        "source_prompt": "pedra precisa de ferramenta na sua mão?",
+        "note": "Entregue uma picareta adequada para eu tentar minerar as pedras simples aceitas.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica picareta adequada para pedras simples."
+      },
+      {
+        "id": 12,
+        "prompt": "Uma ordem de mineração pode pegar cinquenta blocos?",
+        "reference": "Cada ordem tenta coletar até 16 blocos. Para outra tarefa, você precisa dar uma nova ordem.",
+        "score": 0.392842643779528,
+        "source_prompt": "quantos blocos você coleta por ordem?",
+        "note": "Uma ordem de mineração tenta coletar até 16 blocos aceitos e acessíveis.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa o limite de 16 blocos por ordem de mineração."
+      },
+      {
+        "id": 13,
+        "prompt": "Você vai procurar diamante quando eu pedir para minerar?",
+        "reference": "Esta versão não minera minérios. Ela coleta troncos e algumas pedras simples expostas.",
+        "score": 0.43849229875690443,
+        "source_prompt": "consegue minerar diamante para mim?",
+        "note": "A mineração desta versão cobre troncos e pedras simples, não minérios.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+      },
+      {
+        "id": 14,
+        "prompt": "Posso mandar você minerar sem entregar ferramenta?",
+        "reference": "Entregue antes a ferramenta adequada. O pedido não cria uma ferramenta nem libera blocos gratuitamente.",
+        "score": 0.3243396220871485,
+        "source_prompt": "pedra precisa de ferramenta na sua mão?",
+        "note": "Entregue uma picareta adequada para eu tentar minerar as pedras simples aceitas.",
+        "retrieved_note_grade": 1,
+        "reason": "Prescreve entregar picareta para pedras, mas não esclarece completamente a impossibilidade sem ferramenta nem o caso dos troncos."
+      },
+      {
+        "id": 15,
+        "prompt": "Como faço para pegar de volta o que você carrega?",
+        "reference": "Aproxime-se e use /luma devolver. Se seu inventário estiver cheio, o excesso pode cair no chão.",
+        "score": 0.3250013742683894,
+        "source_prompt": "onde vejo o que você carrega?",
+        "note": "Use /luma status para consultar a situação e os materiais da sua companheira.",
+        "retrieved_note_grade": 0,
+        "reason": "Indica status em vez de devolver os itens."
+      },
+      {
+        "id": 16,
+        "prompt": "Posso entregar uma espada estando longe de você?",
+        "reference": "A troca exige que você esteja na mesma dimensão e a até seis blocos de distância.",
+        "score": 0.2279290708655821,
+        "source_prompt": "Posso confiar só na espada?",
+        "note": "Ferramentas, comida e uma rota de saída também ajudam.",
+        "retrieved_note_grade": 0,
+        "reason": "Sugere preparação/equipamento, mas não informa limite de distância para a entrega."
+      },
+      {
+        "id": 17,
+        "prompt": "Quantos espaços existem na sua mochila?",
+        "reference": "Minha mochila tem 27 espaços. Consulte /luma status para conferir os materiais.",
+        "score": 0.5214845367625045,
+        "source_prompt": "Lu, quantos espaços você tem para levar itens?",
+        "note": "Minha mochila tem 27 espaços, além da ferramenta ou arma equipada na mão.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa 27 espaços da mochila."
+      },
+      {
+        "id": 18,
+        "prompt": "Você segura uma espada e um machado ao mesmo tempo?",
+        "reference": "Eu equipo uma ferramenta ou arma na mão por vez. Uma ferramenta nova substitui a anterior.",
+        "score": 0.41839206765340786,
+        "source_prompt": "você segura duas ferramentas ao mesmo tempo?",
+        "note": "Equipo uma ferramenta ou arma por vez. Ao trocar, a anterior é devolvida.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que equipa uma arma ou ferramenta por vez."
+      },
+      {
+        "id": 19,
+        "prompt": "Quer um arco para combater de longe?",
+        "reference": "Não uso arcos nesta versão. Meu combate disponível é corpo a corpo.",
+        "score": 0.34338790236935235,
+        "source_prompt": "posso te dar um arco para atirar?",
+        "note": "Meu combate atual é corpo a corpo. Não uso arcos nesta versão.",
+        "retrieved_note_grade": 2,
+        "reason": "Recusa arco e informa combate corpo a corpo."
+      },
+      {
+        "id": 20,
+        "prompt": "Uma armadura de ferro vai mudar sua proteção?",
+        "reference": "Esta versão não equipa armaduras. É melhor não contar com essa proteção para mim.",
+        "score": 0.33938105010756875,
+        "source_prompt": "você escolhe uma armadura do baú?",
+        "note": "Não uso armadura nem busco equipamentos em baús nesta versão.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece ausência de armaduras nesta versão."
+      },
+      {
+        "id": 21,
+        "prompt": "Você transforma troncos em tábuas sozinha?",
+        "reference": "Não faço receitas de fabricação nesta versão. Você precisa preparar os materiais antes de entregar.",
+        "score": 0.3848078857217558,
+        "source_prompt": "consegue buscar troncos sozinha?",
+        "note": "No modo autônomo, com machado, tento coletar até oito troncos por ativação.",
+        "retrieved_note_grade": 0,
+        "reason": "Confunde coleta de troncos com fabricação de tábuas."
+      },
+      {
+        "id": 22,
+        "prompt": "Qual é o tamanho por fora do abrigo que você sabe fazer?",
+        "reference": "O abrigo de formato fixo ocupa uma área externa de cinco por cinco blocos.",
+        "score": 0.3082307909326307,
+        "source_prompt": "quero fazer um posto de descanso fora da base",
+        "note": "Planeje um abrigo simples com acesso claro e uma referência visível no entorno.",
+        "retrieved_note_grade": 1,
+        "reason": "Relaciona-se ao abrigo, mas sugere planejamento sem informar o tamanho externo pedido."
+      },
+      {
+        "id": 23,
+        "prompt": "Quantas tábuas separo para o abrigo inteiro?",
+        "reference": "Separe 96 blocos aceitos. Você pode entregar uma pilha de 64 e depois mais 32.",
+        "score": 0.28498357845608113,
+        "source_prompt": "faz um abrigo usando minhas tábuas?",
+        "note": "Entregue 96 blocos aceitos e use /luma construir perto de uma área plana e livre.",
+        "retrieved_note_grade": 2,
+        "reason": "Informa 96 blocos para a construção e uma área adequada."
+      },
+      {
+        "id": 24,
+        "prompt": "Seu abrigo termina com uma porta instalada?",
+        "reference": "A entrada fica aberta. O projeto não inclui porta, cama, móveis ou tochas.",
+        "score": 0.21997290707825717,
+        "source_prompt": "o abrigo básico já vem com decoração?",
+        "note": "O abrigo fixo não inclui cama, porta, móveis ou tochas. Esses detalhes ficam com você.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que o projeto não inclui porta, cama, móveis ou tochas."
+      },
+      {
+        "id": 25,
+        "prompt": "Só tenho trinta blocos. Já dá para pedir sua construção?",
+        "reference": "O abrigo completo exige 96 blocos. Junte o restante antes de pedir para construir.",
+        "score": 0.24617717686329083,
+        "source_prompt": "Inventa uma rima curtinha com construção.",
+        "note": "Com madeira e imaginação, cada bloco ganha um lugar na construção.",
+        "retrieved_note_grade": 0,
+        "reason": "Não explica que 30 blocos são insuficientes nem informa o requisito de 96."
+      },
+      {
+        "id": 26,
+        "prompt": "No modo autônomo você corta árvores sem parar?",
+        "reference": "A coleta autônoma tem limite de oito troncos por ativação e precisa de um machado.",
+        "score": 0.27606689195881146,
+        "source_prompt": "como ligo sua rotina autônoma?",
+        "note": "Use /luma autonomo. Ela combina acompanhamento, defesa e coleta limitada de troncos.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que a coleta no modo autônomo é limitada, respondendo ao pedido sobre cortar sem parar."
+      },
+      {
+        "id": 27,
+        "prompt": "Se eu fechar o Minecraft, sua tarefa continua?",
+        "reference": "Não. O mundo precisa estar sendo processado pelo jogo e o dono precisa estar conectado.",
+        "score": 0.45898925657046424,
+        "source_prompt": "você anda quando eu fecho o Minecraft?",
+        "note": "As tarefas precisam do mundo em execução. Fechar o jogo interrompe a atividade.",
+        "retrieved_note_grade": 2,
+        "reason": "Explica que fechar o jogo interrompe a atividade."
+      },
+      {
+        "id": 28,
+        "prompt": "Você consegue listar o que está na minha mochila agora?",
+        "reference": "Não vejo seu inventário por esta conversa. Você pode me dizer os itens para planejarmos juntos.",
+        "score": 0.37693995545288245,
+        "source_prompt": "qual é o tamanho da sua mochila?",
+        "note": "Minha mochila tem 27 espaços, além da ferramenta ou arma equipada na mão.",
+        "retrieved_note_grade": 0,
+        "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+      },
+      {
+        "id": 29,
+        "prompt": "Olha minha tela e me diz onde está o monstro.",
+        "reference": "Eu não vejo a sua tela. Descreva o que aconteceu ou confira o ambiente dentro do jogo.",
+        "score": 0.2868281553742085,
+        "source_prompt": "Diz quanto material estou carregando.",
+        "note": "Não consigo confirmar seu inventário por esta conversa. Confira os itens na tela do jogo.",
+        "retrieved_note_grade": 1,
+        "reason": "Reconhece limitação de confirmar informação pela conversa, mas fala do inventário em vez da posição do monstro."
+      },
+      {
+        "id": 30,
+        "prompt": "Faça uma réplica completa da minha mansão.",
+        "reference": "Não crio projetos livres. A construção disponível é um abrigo pequeno de formato fixo.",
+        "score": 0.33081310514985923,
+        "source_prompt": "posso pedir uma mansão diferente?",
+        "note": "Meu comando de construção usa apenas o abrigo fixo. Uma mansão exige construção do jogador.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+      },
+      {
+        "id": 31,
+        "prompt": "Luma, resolve aquilo ali para mim.",
+        "reference": "O que você quer fazer exatamente? Diga a tarefa e o local para evitar uma ordem confusa.",
+        "score": 0.5148825191219512,
+        "source_prompt": "Resolve isso para mim aí.",
+        "note": "Qual tarefa você quer? Preciso de um pedido mais específico.",
+        "retrieved_note_grade": 2,
+        "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+      },
+      {
+        "id": 32,
+        "prompt": "Qual receita usa o cristal de vento azul imaginário?",
+        "reference": "Não conheço esse item com segurança. Pode dizer de qual mod ele vem e conferir a receita no jogo?",
+        "score": 0.2826827901370833,
+        "source_prompt": "Qual é a sua cor favorita?",
+        "note": "Gosto de azul e roxo para imaginar uma base bem bonita.",
+        "retrieved_note_grade": 0,
+        "reason": "Não reconhece o item imaginário/desconhecido e responde a outro assunto."
+      },
+      {
+        "id": 33,
+        "prompt": "Como deixo um caminho mais fácil de achar à noite?",
+        "reference": "Use iluminação e referências visíveis. Marcar o caminho também ajuda na volta.",
+        "score": 0.3958219052283298,
+        "source_prompt": "como deixo a volta mais fácil numa caminhada?",
+        "note": "Marque os cruzamentos e evite mudar de direção sem uma referência.",
+        "retrieved_note_grade": 1,
+        "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+      },
+      {
+        "id": 34,
+        "prompt": "Vou explorar longe. O que anoto antes de sair?",
+        "reference": "Anote as coordenadas da base e prepare referências para encontrar o caminho de volta.",
+        "score": 0.39655037192990505,
+        "source_prompt": "vou sair para bem longe sem marcar a base",
+        "note": "Anote as coordenadas e crie uma referência antes de iniciar uma viagem longa.",
+        "retrieved_note_grade": 2,
+        "reason": "Recomenda coordenadas e referências antes da viagem."
+      },
+      {
+        "id": 35,
+        "prompt": "Ouvi um creeper perto, o que devo priorizar?",
+        "reference": "Procure distância e uma posição segura. Eu não consigo confirmar onde ele está por esta conversa.",
+        "score": 0.3603344274564323,
+        "source_prompt": "Um creeper apareceu perto da base.",
+        "note": "Mantenha distância e evite prendê-lo junto das construções.",
+        "retrieved_note_grade": 2,
+        "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+      },
+      {
+        "id": 36,
+        "prompt": "É uma boa cavar sem cuidado embaixo de cascalho?",
+        "reference": "Cascalho pode cair. Confira o que está acima e evite trabalhar debaixo de blocos instáveis.",
+        "score": 0.2988540333837805,
+        "source_prompt": "tem cascalho bem em cima do corredor",
+        "note": "Evite trabalhar debaixo dele. Prepare uma posição segura para lidar com blocos que caem.",
+        "retrieved_note_grade": 2,
+        "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+      },
+      {
+        "id": 37,
+        "prompt": "Como organizo o lugar para voltar de uma viagem por portal?",
+        "reference": "Proteja o acesso e anote as coordenadas. Reserve recursos para conseguir voltar com segurança.",
+        "score": 0.1848592673868267,
+        "source_prompt": "vou voltar à base por uma rota nova",
+        "note": "Registre as mudanças para não perder os pontos de referência da viagem anterior.",
+        "retrieved_note_grade": 1,
+        "reason": "Recomenda referências para a viagem, mas omite acesso seguro, portal e recursos de retorno."
+      },
+      {
+        "id": 38,
+        "prompt": "Hoje eu só quero passear sem cumprir objetivos.",
+        "reference": "Tudo bem. Podemos escolher um passeio curto e observar o caminho com calma.",
+        "score": 0.3624491879311503,
+        "source_prompt": "hoje eu só vou passear",
+        "note": "Um passeio curto com referências pelo caminho pode ser uma boa mudança de ritmo.",
+        "retrieved_note_grade": 2,
+        "reason": "Aceita passeio tranquilo sem impor objetivos."
+      },
+      {
+        "id": 39,
+        "prompt": "Preciso pagar uma assinatura para ligar seu modelo incluído?",
+        "reference": "O modelo incluído não exige assinatura nem chave de API. Ele ainda é um experimento com qualidade limitada.",
+        "score": 0.3376287454645467,
+        "source_prompt": "preciso pagar para falar com você?",
+        "note": "A IA incluída não usa serviço pago de conversa nem exige uma chave de API.",
+        "retrieved_note_grade": 2,
+        "reason": "Esclarece que não exige serviço pago nem chave de API."
+      },
+      {
+        "id": 40,
+        "prompt": "Começou uma tarefa perto de uma construção importante. Como interrompo?",
+        "reference": "Use /luma parar. É melhor interromper e conferir o local antes de dar uma nova ordem.",
+        "score": 0.5257209553975071,
+        "source_prompt": "Como interrompo uma tarefa da Luma?",
+        "note": "Use /luma parar para interromper a tarefa atual com uma ordem direta.",
+        "retrieved_note_grade": 2,
+        "reason": "Indica /luma parar para interromper a tarefa."
+      }
+    ]
+  },
+  "configurations": [
+    {
+      "source": "w0",
+      "answer_weight": 0,
+      "threshold": 0.15,
+      "counts": {
+        "0": 15,
+        "1": 2,
+        "2": 23
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma seguir para acompanhamento."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Organiza entrega de materiais, mas não explica como fazê-la esperar."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não esclarece que apenas o dono controla a companheira."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere picareta para pedra, contrariando o pedido específico de coletar troncos."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica picareta adequada para pedras simples."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve alcance da troca, mas não responde sobre minerar sem ferramenta."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Indica status em vez de devolver os itens."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere preparação/equipamento, mas não informa limite de distância para a entrega."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recusa arco e informa combate corpo a corpo."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece ausência de armaduras nesta versão."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Responde sobre a mochila, não o tamanho externo do abrigo."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 96 blocos para a construção e uma área adequada."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de uma ponte em vez da porta do abrigo."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não explica que 30 blocos são insuficientes nem informa o requisito de 96."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que a coleta é limitada, respondendo que não corta árvores indefinidamente; a pergunta não exige um número exato."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere onde lutar, mas não reconhece que não vê a tela/posição do monstro."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não reconhece o item imaginário/desconhecido e responde a outro assunto."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala da limitação de atravessar dimensões do NPC, não de preparar o retorno do jogador por portal."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que não exige serviço pago nem chave de API."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    },
+    {
+      "source": "w0",
+      "answer_weight": 0,
+      "threshold": 0.25,
+      "counts": {
+        "0": 14,
+        "1": 2,
+        "2": 24
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma seguir para acompanhamento."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Organiza entrega de materiais, mas não explica como fazê-la esperar."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não esclarece que apenas o dono controla a companheira."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere picareta para pedra, contrariando o pedido específico de coletar troncos."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica picareta adequada para pedras simples."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve alcance da troca, mas não responde sobre minerar sem ferramenta."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Indica status em vez de devolver os itens."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere preparação/equipamento, mas não informa limite de distância para a entrega."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recusa arco e informa combate corpo a corpo."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece ausência de armaduras nesta versão."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Responde sobre a mochila, não o tamanho externo do abrigo."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 96 blocos para a construção e uma área adequada."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de uma ponte em vez da porta do abrigo."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não explica que 30 blocos são insuficientes nem informa o requisito de 96."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que a coleta é limitada, respondendo que não corta árvores indefinidamente; a pergunta não exige um número exato."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere onde lutar, mas não reconhece que não vê a tela/posição do monstro."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "unknown",
+          "grade": 2,
+          "reason": "A pergunta é genuinamente vaga ou trata de um item imaginário; a nota de informação insuficiente é apropriada."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala da limitação de atravessar dimensões do NPC, não de preparar o retorno do jogador por portal."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que não exige serviço pago nem chave de API."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    },
+    {
+      "source": "w0",
+      "answer_weight": 0,
+      "threshold": 0.35,
+      "counts": {
+        "0": 19,
+        "1": 2,
+        "2": 19
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma seguir para acompanhamento."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não esclarece que apenas o dono controla a companheira."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere picareta para pedra, contrariando o pedido específico de coletar troncos."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica picareta adequada para pedras simples."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve alcance da troca, mas não responde sobre minerar sem ferramenta."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Indica status em vez de devolver os itens."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Responde sobre a mochila, não o tamanho externo do abrigo."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 96 blocos para a construção e uma área adequada."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "unknown",
+          "grade": 2,
+          "reason": "A pergunta é genuinamente vaga ou trata de um item imaginário; a nota de informação insuficiente é apropriada."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que não exige serviço pago nem chave de API."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    },
+    {
+      "source": "w035",
+      "answer_weight": 0.35,
+      "threshold": 0.15,
+      "counts": {
+        "0": 14,
+        "1": 3,
+        "2": 23
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma seguir para acompanhamento."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Organiza entrega de materiais, mas não explica como fazê-la esperar."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não esclarece que apenas o dono controla a companheira."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere picareta para pedra, contrariando o pedido específico de coletar troncos."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica picareta adequada para pedras simples."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve alcance da troca, mas não responde sobre minerar sem ferramenta."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Indica status em vez de devolver os itens."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere preparação/equipamento, mas não informa limite de distância para a entrega."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recusa arco e informa combate corpo a corpo."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece ausência de armaduras nesta versão."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Relaciona-se ao abrigo, mas sugere planejamento sem informar o tamanho externo pedido."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 96 blocos para a construção e uma área adequada."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de uma ponte em vez da porta do abrigo."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não explica que 30 blocos são insuficientes nem informa o requisito de 96."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que a coleta é limitada, respondendo que não corta árvores indefinidamente; a pergunta não exige um número exato."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere onde lutar, mas não reconhece que não vê a tela/posição do monstro."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não reconhece o item imaginário/desconhecido e responde a outro assunto."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala da limitação de atravessar dimensões do NPC, não de preparar o retorno do jogador por portal."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que não exige serviço pago nem chave de API."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    },
+    {
+      "source": "w035",
+      "answer_weight": 0.35,
+      "threshold": 0.25,
+      "counts": {
+        "0": 13,
+        "1": 3,
+        "2": 24
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma seguir para acompanhamento."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Organiza entrega de materiais, mas não explica como fazê-la esperar."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não esclarece que apenas o dono controla a companheira."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere picareta para pedra, contrariando o pedido específico de coletar troncos."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica picareta adequada para pedras simples."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve alcance da troca, mas não responde sobre minerar sem ferramenta."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Indica status em vez de devolver os itens."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere preparação/equipamento, mas não informa limite de distância para a entrega."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recusa arco e informa combate corpo a corpo."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece ausência de armaduras nesta versão."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Relaciona-se ao abrigo, mas sugere planejamento sem informar o tamanho externo pedido."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 96 blocos para a construção e uma área adequada."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que a coleta é limitada, respondendo que não corta árvores indefinidamente; a pergunta não exige um número exato."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere onde lutar, mas não reconhece que não vê a tela/posição do monstro."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "unknown",
+          "grade": 2,
+          "reason": "A pergunta é genuinamente vaga ou trata de um item imaginário; a nota de informação insuficiente é apropriada."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que não exige serviço pago nem chave de API."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    },
+    {
+      "source": "w035",
+      "answer_weight": 0.35,
+      "threshold": 0.35,
+      "counts": {
+        "0": 18,
+        "1": 1,
+        "2": 21
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma seguir para acompanhamento."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere picareta para pedra, contrariando o pedido específico de coletar troncos."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica picareta adequada para pedras simples."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve alcance da troca, mas não responde sobre minerar sem ferramenta."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Indica status em vez de devolver os itens."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recusa arco e informa combate corpo a corpo."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece ausência de armaduras nesta versão."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 96 blocos para a construção e uma área adequada."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "unknown",
+          "grade": 2,
+          "reason": "A pergunta é genuinamente vaga ou trata de um item imaginário; a nota de informação insuficiente é apropriada."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que não exige serviço pago nem chave de API."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    },
+    {
+      "source": "w07",
+      "answer_weight": 0.7,
+      "threshold": 0.15,
+      "counts": {
+        "0": 8,
+        "1": 6,
+        "2": 26
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma seguir para acompanhamento."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma ficar para esperar no lugar."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não esclarece que apenas o dono controla a companheira."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Identifica machado para coletar troncos; mencionar o modo autônomo é contexto adicional correto."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica picareta adequada para pedras simples."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Prescreve entregar picareta para pedras, mas não esclarece completamente a impossibilidade sem ferramenta nem o caso dos troncos."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Indica status em vez de devolver os itens."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Sugere preparação/equipamento, mas não informa limite de distância para a entrega."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recusa arco e informa combate corpo a corpo."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece ausência de armaduras nesta versão."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Relaciona-se ao abrigo, mas sugere planejamento sem informar o tamanho externo pedido."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 96 blocos para a construção e uma área adequada."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que o projeto não inclui porta, cama, móveis ou tochas."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não explica que 30 blocos são insuficientes nem informa o requisito de 96."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que a coleta no modo autônomo é limitada, respondendo ao pedido sobre cortar sem parar."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Reconhece limitação de confirmar informação pela conversa, mas fala do inventário em vez da posição do monstro."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não reconhece o item imaginário/desconhecido e responde a outro assunto."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Recomenda referências para a viagem, mas omite acesso seguro, portal e recursos de retorno."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que não exige serviço pago nem chave de API."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    },
+    {
+      "source": "w07",
+      "answer_weight": 0.7,
+      "threshold": 0.25,
+      "counts": {
+        "0": 10,
+        "1": 5,
+        "2": 25
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece a perda de progresso e sugere retomar com calma."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Sugere ou lista atividades, mas não esclarece qual parte combina com a personagem."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma seguir para acompanhamento."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma ficar para esperar no lugar."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não esclarece que apenas o dono controla a companheira."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Identifica machado para coletar troncos; mencionar o modo autônomo é contexto adicional correto."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica picareta adequada para pedras simples."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Prescreve entregar picareta para pedras, mas não esclarece completamente a impossibilidade sem ferramenta nem o caso dos troncos."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Indica status em vez de devolver os itens."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recusa arco e informa combate corpo a corpo."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece ausência de armaduras nesta versão."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Relaciona-se ao abrigo, mas sugere planejamento sem informar o tamanho externo pedido."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 96 blocos para a construção e uma área adequada."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que a coleta no modo autônomo é limitada, respondendo ao pedido sobre cortar sem parar."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Reconhece limitação de confirmar informação pela conversa, mas fala do inventário em vez da posição do monstro."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que só constrói o abrigo fixo, não uma mansão."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Não reconhece o item imaginário/desconhecido e responde a outro assunto."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Reconhece risco de blocos caindo e recomenda posição segura."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que não exige serviço pago nem chave de API."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    },
+    {
+      "source": "w07",
+      "answer_weight": 0.7,
+      "threshold": 0.35,
+      "counts": {
+        "0": 25,
+        "1": 1,
+        "2": 14
+      },
+      "items": [
+        {
+          "id": 1,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Cumprimenta e sugere uma aventura tranquila sem afirmar execução."
+        },
+        {
+          "id": 2,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Oferece companhia no jogo, atendendo ao pedido social."
+        },
+        {
+          "id": 3,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 4,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 5,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 6,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 7,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 8,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Fala de guardar ferramentas, não da localização da companheira."
+        },
+        {
+          "id": 9,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica corretamente que não atravessa dimensões automaticamente e pausa as tarefas."
+        },
+        {
+          "id": 10,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 11,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 12,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa o limite de 16 blocos por ordem de mineração."
+        },
+        {
+          "id": 13,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Esclarece que minera troncos/pedras simples, não minérios."
+        },
+        {
+          "id": 14,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 15,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 16,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 17,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Informa 27 espaços da mochila."
+        },
+        {
+          "id": 18,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que equipa uma arma ou ferramenta por vez."
+        },
+        {
+          "id": 19,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 20,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 21,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Confunde coleta de troncos com fabricação de tábuas."
+        },
+        {
+          "id": 22,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 23,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 24,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 25,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 26,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 27,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Explica que fechar o jogo interrompe a atividade."
+        },
+        {
+          "id": 28,
+          "effective_note_kind": "retrieved",
+          "grade": 0,
+          "reason": "Descreve a própria mochila em vez de reconhecer que não lista o inventário atual do dono."
+        },
+        {
+          "id": 29,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 30,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 31,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Pede uma tarefa mais específica para um pedido realmente vago."
+        },
+        {
+          "id": 32,
+          "effective_note_kind": "unknown",
+          "grade": 2,
+          "reason": "A pergunta é genuinamente vaga ou trata de um item imaginário; a nota de informação insuficiente é apropriada."
+        },
+        {
+          "id": 33,
+          "effective_note_kind": "retrieved",
+          "grade": 1,
+          "reason": "Ajuda na orientação por referências, mas não trata da visibilidade/iluminação à noite."
+        },
+        {
+          "id": 34,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda coordenadas e referências antes da viagem."
+        },
+        {
+          "id": 35,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Recomenda distância do creeper sem inventar observação do mundo."
+        },
+        {
+          "id": 36,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 37,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 38,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Aceita passeio tranquilo sem impor objetivos."
+        },
+        {
+          "id": 39,
+          "effective_note_kind": "unknown",
+          "grade": 0,
+          "reason": "A abstenção não fornece a resposta a uma pergunta comum/conhecida deste domínio."
+        },
+        {
+          "id": 40,
+          "effective_note_kind": "retrieved",
+          "grade": 2,
+          "reason": "Indica /luma parar para interromper a tarefa."
+        }
+      ]
+    }
+  ],
+  "ranking": [
+    {
+      "answer_weight": 0.7,
+      "threshold": 0.15,
+      "counts": {
+        "0": 8,
+        "1": 6,
+        "2": 26
+      }
+    },
+    {
+      "answer_weight": 0.7,
+      "threshold": 0.25,
+      "counts": {
+        "0": 10,
+        "1": 5,
+        "2": 25
+      }
+    },
+    {
+      "answer_weight": 0.35,
+      "threshold": 0.25,
+      "counts": {
+        "0": 13,
+        "1": 3,
+        "2": 24
+      }
+    },
+    {
+      "answer_weight": 0,
+      "threshold": 0.25,
+      "counts": {
+        "0": 14,
+        "1": 2,
+        "2": 24
+      }
+    },
+    {
+      "answer_weight": 0.35,
+      "threshold": 0.15,
+      "counts": {
+        "0": 14,
+        "1": 3,
+        "2": 23
+      }
+    },
+    {
+      "answer_weight": 0,
+      "threshold": 0.15,
+      "counts": {
+        "0": 15,
+        "1": 2,
+        "2": 23
+      }
+    },
+    {
+      "answer_weight": 0.35,
+      "threshold": 0.35,
+      "counts": {
+        "0": 18,
+        "1": 1,
+        "2": 21
+      }
+    },
+    {
+      "answer_weight": 0,
+      "threshold": 0.35,
+      "counts": {
+        "0": 19,
+        "1": 2,
+        "2": 19
+      }
+    },
+    {
+      "answer_weight": 0.7,
+      "threshold": 0.35,
+      "counts": {
+        "0": 25,
+        "1": 1,
+        "2": 14
+      }
+    }
+  ],
+  "selected_by_predefined_rule": {
+    "answer_weight": 0.7,
+    "threshold": 0.15,
+    "counts": {
+      "0": 8,
+      "1": 6,
+      "2": 26
+    },
+    "criterion": "Most grade 2 notes, then fewest grade 0 notes"
+  },
+  "limitations": [
+    "Codex subjective ordinal assessment; no independent human review.",
+    "A useful retrieved note does not prove that the Transformer generates a useful answer.",
+    "Not all correct notes need to repeat every detail of the reference when the central question is answered.",
+    "The corpus and validation are synthetic in one narrow Minecraft/NPC domain."
+  ]
+}

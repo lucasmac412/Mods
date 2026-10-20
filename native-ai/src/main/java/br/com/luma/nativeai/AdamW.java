@@ -11,15 +11,14 @@ public final class AdamW {
     private static final double EPSILON = 1e-8;
     // Keep squared, bias-corrected moments below the finite double range with rounding headroom.
     private static final double MAX_SAFE_GRADIENT = Math.sqrt(Double.MAX_VALUE) / 2;
-    private final double learningRate;
+    private double learningRate;
     private final double weightDecay;
     private final double gradientClip;
     private final Map<Transformer.Parameter, State> state = new IdentityHashMap<>();
     private long step;
 
     public AdamW(double learningRate, double weightDecay, double gradientClip) {
-        if (!Double.isFinite(learningRate) || learningRate <= 0 || learningRate > 1)
-            throw new IllegalArgumentException("learningRate must be finite, greater than 0, and at most 1");
+        validateLearningRate(learningRate);
         if (!Double.isFinite(weightDecay) || weightDecay < 0 || weightDecay > 1)
             throw new IllegalArgumentException("weightDecay must be finite and between 0 and 1");
         if (!Double.isFinite(gradientClip) || gradientClip <= 0)
@@ -30,6 +29,19 @@ public final class AdamW {
     }
 
     public synchronized long step() { return step; }
+
+    public synchronized double learningRate() { return learningRate; }
+
+    /** Changes only the step size; accumulated moments and the update counter are retained. */
+    public synchronized void setLearningRate(double learningRate) {
+        validateLearningRate(learningRate);
+        this.learningRate = learningRate;
+    }
+
+    private static void validateLearningRate(double learningRate) {
+        if (!Double.isFinite(learningRate) || learningRate <= 0 || learningRate > 1)
+            throw new IllegalArgumentException("learningRate must be finite, greater than 0, and at most 1");
+    }
 
     synchronized void update(List<Transformer.Parameter> parameters) {
         // Check the complete gradient before touching any weight or optimizer state.

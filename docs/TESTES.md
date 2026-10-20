@@ -9,16 +9,16 @@ Validação em 20/10/2026, com **Minecraft 26.2, Fabric Loader 0.19.5, Fabric AP
 | Verificação | Resultado |
 | --- | --- |
 | Setup e build | `bash scripts/setup-cloud.sh` atualizado e executado com sucesso; builds do mod e do laboratório concluídos com `BUILD SUCCESSFUL` |
-| Código comum e cliente | Compilados; JAR produzido em `build/libs/luma-companion-0.2.0-experimental.jar` |
-| JUnit do mod: português, IA própria, adaptador legado e HTTP de voz | **60 executados, 60 aprovados, zero falhas ou pulos** |
-| JUnit do laboratório `native-ai` | **48 executados, 48 aprovados, zero falhas ou pulos** |
+| Código comum e cliente | Compilados; JAR produzido em `build/libs/luma-companion-0.3.0-experimental.jar` |
+| JUnit do mod: português, IA própria, adaptador legado e HTTP de voz | **62 executados, 62 aprovados, zero falhas ou pulos** |
+| JUnit do laboratório `native-ai` | **66 executados, 66 aprovados, zero falhas ou pulos** |
 | GameTests no servidor real | **Sete cenários Luma aprovados**, mais um controle interno `minecraft:always_pass`; oito no relatório total |
-| Artefatos | Skin, renderer, painel de voz e checkpoint original incluídos; mod de testes excluído do JAR instalável |
-| Qualidade da IA própria | Três treinos comparados por validação; 24 respostas de teste e dez adicionais registradas. **Ainda não produz conversa útil**; veja [os resultados](../native-ai/experiments/RESULTADOS.md) |
+| Artefatos | Skin, renderer, painel de voz, checkpoint original e índice de memória incluídos; mod de testes excluído do JAR instalável |
+| Qualidade da IA própria | Seleção pela validação e teste separado com 40 perguntas em cada versão; veja [os resultados e todas as falhas](../native-ai/experiments-v2/RESULTADOS.md) |
 
 Os sete GameTests verificaram registro e atributos; entrega e devolução sem duplicação e recusa de intruso; parada e navegação real; extração de 16 entre 17 troncos com loot e desgaste; abrigo de 96 blocos preservando terreno ocupado; serialização de dono, vida, modo, equipamento e materiais; combate com espada contra monstro e recusa de atacar o dono; e o fluxo de comandos criar, entregar, remover e recriar. Registro/atributos/inventário compõem um único cenário.
 
-Não foram executados um cliente gráfico, captura real do microfone, reprodução audível nem login Microsoft. O modelo original foi treinado e executado em CPU; a integração foi exercitada com o checkpoint real incluído, além de geradores controlados para os testes de concorrência. O adaptador HTTP antigo permanece apenas para referência/testes; `/luma ia ligar` usa `NativeBrain`, sem endpoint externo. Não instalamos Ollama. O runner registrou uma consulta de chaves públicas Mojang recusada pela rede; isso não impediu os testes, que usam jogadores simulados. A instalação para jogar usa a conta e a rede do computador do jogador.
+Não foram executados um cliente gráfico, captura real do microfone, reprodução audível nem login Microsoft. O modelo original foi treinado e executado em CPU; o refinamento usa apenas os nossos próprios pesos. A integração foi exercitada com o checkpoint e o índice reais incluídos, além de geradores controlados para os testes de concorrência. O adaptador HTTP antigo permanece apenas para referência/testes; `/luma ia ligar` usa `NativeBrain`, sem endpoint externo. Não instalamos Ollama. O runner registrou uma consulta de chaves públicas Mojang recusada pela rede; isso não impediu os testes, que usam jogadores simulados. A instalação para jogar usa a conta e a rede do computador do jogador.
 
 Relatórios atuais: `build/test-results/test/TEST-*.xml` e `build/test-results/gametest.xml`. O teste de controle do runner é contado separadamente dos sete cenários que verificam a Luma.
 
@@ -36,13 +36,13 @@ No Windows PowerShell:
 .\gradlew.bat build
 ```
 
-O comando deve terminar com `BUILD SUCCESSFUL`. O relatório de testes será gerado em `build/reports/tests/test/index.html`. O JAR instalável será `build/libs/luma-companion-0.2.0-experimental.jar`.
+O comando deve terminar com `BUILD SUCCESSFUL`. O relatório de testes será gerado em `build/reports/tests/test/index.html`. O JAR instalável será `build/libs/luma-companion-0.3.0-experimental.jar`.
 
 `build` também inicia e encerra o servidor GameTest automaticamente. Para executar apenas esses cenários, use `./gradlew runGameTest`; para JUnit, use `./gradlew test`.
 
-Os testes de `IntentParserTest` cobrem ordens em português, interrupções, negações e ambiguidades. `NativeBrainTest` cobre carga/geração com o modelo incluído, parser, saída somente de conversa, limpeza/limites, cancelamento, timeout, fila, falhas e fechamento. `RemoteBrainTest` preserva testes do adaptador legado com HTTP controlado. `VoiceBridgeTest` verifica autenticação, origem/host, limites, cursor e revogação do painel.
+Os testes de `IntentParserTest` cobrem ordens em português, interrupções, negações e ambiguidades. `NativeBrainTest` cobre carga/geração com modelo e memória incluídos, uso da nota como entrada sem substituir a saída do gerador, encaminhamento de conversas com “não/ou/talvez”, preservação de ordens reais, saída somente de conversa, limpeza/limites, cancelamento, timeout, fila, falhas e fechamento. `RemoteBrainTest` preserva testes do adaptador legado com HTTP controlado. `VoiceBridgeTest` verifica autenticação, origem/host, limites, cursor e revogação do painel.
 
-Os 48 testes do motor original são executados separadamente com `./gradlew -p native-ai build`, e têm relatórios em `native-ai/build/test-results/test`. Eles verificam gradientes, causalidade, aprendizagem de sequência pequena, tokenização, arquivos, máscaras, clipping, geração e integridade do pipeline. Não demonstram qualidade comparável a modelos grandes. O modelo não aprende durante o jogo e cada pergunta é independente.
+Os 66 testes do motor original são executados separadamente com `./gradlew -p native-ai build`, e têm relatórios em `native-ai/build/test-results/test`. Eles verificam gradientes, causalidade, aprendizagem de sequência pequena, tokenização, arquivos, máscaras, clipping, geração, agendas de aprendizado, snapshots, reaproveitamento de nossos checkpoints com AdamW novo, recuperação lexical e ausência de referências reservadas no índice/notas. Não demonstram qualidade comparável a modelos grandes. O modelo não aprende durante o jogo e cada pergunta é independente.
 
 ## Roteiro manual no Minecraft
 
@@ -78,7 +78,7 @@ Registre cada linha como **passou**, **falhou** ou **não testado**, com uma obs
 | Painel privado | Tente usar o painel sem o código válido; ele não deve aceitar comandos. Não publique o código ao registrar o teste. |
 | Servidor dedicado | Confira que o mod carrega sem classes gráficas no servidor. O painel local de voz deve permanecer indisponível; texto continua sendo o canal previsto. |
 | IA desligada | Com IA desativada, envie ordens e conversa local; não deve ser necessário ter aplicativo de IA ou chave. |
-| IA própria | Use `/luma ia ligar` e envie conversa; confira aviso experimental, tentativa de geração e ausência de travamento do jogo. Registre texto incorreto como falha de qualidade, sem esperar português compreensível deste checkpoint. |
+| IA própria | Use `/luma ia ligar` e envie conversa; confira aviso experimental, tentativa de geração e ausência de travamento do jogo. Registre compreensibilidade, pertinência e erros, sem presumir qualidade. |
 | Cancelamento da IA | Envie conversa e use `/luma parar`, desligue a IA ou saia do mundo; confira ausência de respostas atrasadas após mudar a sessão. |
 | Remoção | Recupere os itens e use `/luma remover`; confirme que ela deixa o mundo e pode ser criada novamente conforme o limite do mod. |
 

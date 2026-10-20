@@ -1,0 +1,17 @@
+{
+  "purpose": "Neural generation from supplied training-only notes with varied question contexts",
+  "training_only_recombined_contexts": true,
+  "seed": 412,
+  "base_grounded_rows": 2040,
+  "unique_authored_answers": 537,
+  "training_rows": 8599,
+  "unknown_note_examples": 128,
+  "new_factual_knowledge_from_recombination": false,
+  "held_out_replies_used_in_training": false,
+  "sha256": {
+    "train.tsv": "3ec9f7dfd3b06a0b367f951dbf6b86e572f0ccf3f63d4566c0d0880217db601d",
+    "validation.tsv": "0c6f6892bb0585fffb00683ab4ef65ea9bcec1578acd5a6f15b943c94112e872",
+    "test.tsv": "a3ac944b5ebbd61c7f9079b7bc5b82162a0e8b7f529122ed2b0a17f086e4d6bd",
+    "knowledge.tsv": "93abde2380aa2c1081cf742e55a9d714452f9cb95db133be59007eb658fa79d3"
+  }
+}

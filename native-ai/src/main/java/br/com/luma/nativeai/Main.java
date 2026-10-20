@@ -5,14 +5,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-/** CPU research CLI. Training uses random initialization, authored data and no external AI service. */
+/** CPU research CLI. Training uses authored data, original checkpoints and no external AI service. */
 public final class Main {
     private Main() {}
     public static void main(String[] args) {
@@ -28,8 +28,11 @@ public final class Main {
                     IA generativa Luma — protótipo CPU, sem pesos de terceiros.
                     train <data-dir> <output-dir> [--steps 1000 --seconds 180 --context 128 --dim 32
                           --heads 4 --layers 1 --ff 64 --vocab 384 --batch 2 --seed 412 --lr 0.002]
-                    evaluate <model.luma> <data-dir> <report.jsonl> [--tokens 48 --temperature 0.7 --top-k 20]
+                          [--warmup 0 --schedule constant --save-every 0 --validation-every 100 --objective response]
+                          [--init <checkpoint próprio>; reutiliza pesos/tokenizador, com AdamW novo]
+                    evaluate <model.luma> <data-dir> <report.jsonl> [--split test --tokens 48 --temperature 0.7 --top-k 20]
                     samples <model.luma> <prompts.tsv> <report.jsonl> [--tokens 48 --temperature 0.7 --top-k 20]
+                    prepare-grounded <data-dir> <output-dir> [--threshold 0.25 --answer-weight 0]
                     chat <model.luma> <pergunta entre aspas>
                     Este laboratório não demonstra capacidade comparável a modelos grandes.
                     """);
@@ -39,6 +42,7 @@ public final class Main {
             case "train" -> train(args);
             case "evaluate" -> evaluate(args);
             case "samples" -> samples(args);
+            case "prepare-grounded" -> prepareGrounded(args);
             case "chat" -> {
                 if (args.length != 3) throw new IllegalArgumentException("Uso: chat <model.luma> <pergunta entre aspas>");
                 System.out.println(TextGenerator.generate(ModelBundle.load(Path.of(args[1])), args[2], 64, 0.7, 20, 412));
@@ -48,26 +52,58 @@ public final class Main {
     }
     private static void train(String[] args) throws Exception {
         if (args.length < 3) throw new IllegalArgumentException("Uso: train <data-dir> <output-dir> [opções]");
-        Map<String, String> options = options(args, 3, List.of("steps", "seconds", "context", "dim", "heads", "layers", "ff", "vocab", "batch", "seed", "lr", "decay", "clip"));
+        Map<String, String> options = options(args, 3, List.of("steps", "seconds", "context", "dim", "heads", "layers", "ff", "vocab", "batch", "seed", "lr", "decay", "clip", "warmup", "schedule", "save-every", "validation-every", "objective", "init"));
         int steps = integer(options, "steps", 1000, 1, 100_000);
         int seconds = integer(options, "seconds", 180, 1, 86_400);
-        int context = integer(options, "context", 128, 8, 512);
         int batch = integer(options, "batch", 2, 1, 32);
+        int warmup = integer(options, "warmup", 0, 0, steps);
+        int saveEvery = integer(options, "save-every", 0, 0, 100_000);
+        int validationEvery = integer(options, "validation-every", 100, 1, 100_000);
+        String schedule = options.getOrDefault("schedule", "constant");
+        if (!List.of("constant", "cosine").contains(schedule))
+            throw new IllegalArgumentException("Schedule deve ser constant ou cosine.");
+        if (schedule.equals("cosine") && warmup >= steps)
+            throw new IllegalArgumentException("Cosine exige warmup menor que steps.");
+        String objective = options.getOrDefault("objective", "response");
+        if (!List.of("response", "full").contains(objective))
+            throw new IllegalArgumentException("Objective deve ser response ou full.");
         long seed = Long.parseLong(options.getOrDefault("seed", "412"));
         Path data = Path.of(args[1]), output = Path.of(args[2]);
         List<DataSet.Example> train = DataSet.read(data.resolve("train.tsv"));
         List<DataSet.Example> validation = DataSet.read(data.resolve("validation.tsv"));
         List<DataSet.Example> test = DataSet.read(data.resolve("test.tsv"));
         DataSet.requireDisjoint(train, validation); DataSet.requireDisjoint(train, test); DataSet.requireDisjoint(validation, test);
-        ByteTokenizer tokenizer = ByteTokenizer.train(train.stream().map(DataSet.Example::text).toList(), integer(options, "vocab", 384, 259, 8192));
-        ModelConfig config = new ModelConfig(tokenizer.vocabSize(), context,
-                integer(options, "dim", 32, 8, 512), integer(options, "heads", 4, 1, 16),
-                integer(options, "layers", 1, 1, 8), integer(options, "ff", 64, 4, 2048));
-        Transformer model = new Transformer(config, seed);
+        ByteTokenizer tokenizer;
+        ModelConfig config;
+        Transformer model;
+        String initialCheckpointSha = null, inheritedTrainingSha = null;
+        if (options.containsKey("init")) {
+            Path initialPath = Path.of(options.get("init"));
+            ModelBundle initial = ModelBundle.load(initialPath);
+            tokenizer = initial.tokenizer(); config = initial.model().config(); model = initial.model();
+            requireCheckpointDimension(options, "context", config.contextLength());
+            requireCheckpointDimension(options, "dim", config.embeddingSize());
+            requireCheckpointDimension(options, "heads", config.heads());
+            requireCheckpointDimension(options, "layers", config.layers());
+            requireCheckpointDimension(options, "ff", config.feedForwardSize());
+            requireCheckpointDimension(options, "vocab", config.vocabSize());
+            initialCheckpointSha = sha256(initialPath);
+            inheritedTrainingSha = initial.trainingDataSha256();
+        } else {
+            int requestedContext = integer(options, "context", 128, 8, 512);
+            tokenizer = ByteTokenizer.train(train.stream().map(DataSet.Example::text).toList(), integer(options, "vocab", 384, 259, 8192));
+            config = new ModelConfig(tokenizer.vocabSize(), requestedContext,
+                    integer(options, "dim", 32, 8, 512), integer(options, "heads", 4, 1, 16),
+                    integer(options, "layers", 1, 1, 8), integer(options, "ff", 64, 4, 2048));
+            model = new Transformer(config, seed);
+        }
+        int context = config.contextLength();
         double learningRate = decimal(options, "lr", 0.002), decay = decimal(options, "decay", 0.01), clip = decimal(options, "clip", 1.0);
         AdamW optimizer = new AdamW(learningRate, decay, clip);
-        List<DataSet.Window> trainWindows = encode(train, tokenizer, context), valWindows = encode(validation, tokenizer, context);
-        Metric initialTrain = score(model, trainWindows), initialValidation = score(model, valWindows);
+        List<DataSet.Window> trainScoreWindows = encode(train, tokenizer, context), valWindows = encode(validation, tokenizer, context);
+        List<DataSet.Window> trainWindows = objective.equals("full")
+                ? train.stream().map(e -> e.encode(tokenizer).window(context, true)).toList() : trainScoreWindows;
+        Metric initialTrain = score(model, trainScoreWindows), initialValidation = score(model, valWindows);
         String sha = sha256(data.resolve("train.tsv"));
         Files.createDirectories(output);
         Path checkpoint = output.resolve("model.luma");
@@ -77,6 +113,8 @@ public final class Main {
         int bestStep = 0, completed = 0;
         List<String> history = new ArrayList<>();
         for (int step = 1; step <= steps; step++) {
+            double stepLearningRate = learningRateForStep(learningRate, step, steps, warmup, schedule);
+            optimizer.setLearningRate(stepLearningRate);
             int[][] inputs = new int[batch][], targets = new int[batch][];
             for (int i = 0; i < batch; i++) {
                 DataSet.Window window = trainWindows.get(random.nextInt(trainWindows.size()));
@@ -86,26 +124,48 @@ public final class Main {
             if (!Double.isFinite(loss)) throw new IOException("Loss não finita; o treinamento não foi validado.");
             completed = step;
             boolean timedOut = (System.nanoTime() - start) / 1e9 >= seconds;
-            if (step == 1 || step % 100 == 0 || step == steps || timedOut) {
+            String snapshot = null;
+            if (saveEvery > 0 && step % saveEvery == 0) {
+                snapshot = String.format(Locale.ROOT, "step-%06d.luma", step);
+                new ModelBundle(tokenizer, model, sha).save(output.resolve(snapshot));
+            }
+            boolean validate = step == 1 || step % validationEvery == 0 || step == steps || timedOut;
+            if (validate) {
                 Metric current = score(model, valWindows);
                 if (current.loss < bestLoss) {
                     bestLoss = current.loss; bestStep = step;
                     new ModelBundle(tokenizer, model, sha).save(checkpoint);
                 }
                 String log = "{\"step\":" + step + ",\"batch_loss\":" + loss + ",\"validation_loss\":" + current.loss
+                        + ",\"learning_rate\":" + stepLearningRate + ",\"best_validation_step\":" + bestStep
+                        + ",\"checkpoint\":" + (snapshot == null ? "null" : quote(snapshot))
                         + ",\"elapsed_seconds\":" + ((System.nanoTime() - start) / 1e9) + "}";
+                history.add(log); System.out.println(log);
+            } else if (snapshot != null) {
+                String log = "{\"type\":\"checkpoint\",\"step\":" + step + ",\"learning_rate\":" + stepLearningRate
+                        + ",\"checkpoint\":" + quote(snapshot) + ",\"elapsed_seconds\":" + ((System.nanoTime() - start) / 1e9) + "}";
                 history.add(log); System.out.println(log);
             }
             if (timedOut) break;
         }
+        new ModelBundle(tokenizer, model, sha).save(output.resolve("last.luma"));
         Files.write(output.resolve("history.jsonl"), history);
+        Metric lastTrain = score(model, trainScoreWindows), lastValidation = score(model, valWindows);
         ModelBundle selected = ModelBundle.load(checkpoint);
-        Metric trainedTrain = score(selected.model(), trainWindows), trainedValidation = score(selected.model(), valWindows);
+        Metric trainedTrain = score(selected.model(), trainScoreWindows), trainedValidation = score(selected.model(), valWindows);
         String report = "{\n  \"experimental\": true,\n  \"comparable_to_large_llm\": false,\n  \"backend\": \"original-java-cpu\",\n"
-                + "  \"gpu_used\": false,\n  \"seed\": " + seed + ",\n  \"parameters\": " + model.parameterCount()
+                + "  \"gpu_used\": false,\n  \"initialization\": " + quote(initialCheckpointSha == null ? "random" : "checkpoint")
+                + ",\n  \"initial_checkpoint_sha256\": " + (initialCheckpointSha == null ? "null" : quote(initialCheckpointSha))
+                + ",\n  \"inherited_training_data_sha256\": " + (inheritedTrainingSha == null ? "null" : quote(inheritedTrainingSha))
+                + ",\n  \"optimizer_state_restored\": false,\n  \"seed\": " + seed + ",\n  \"parameters\": " + model.parameterCount()
                 + ",\n  \"context\": " + context + ",\n  \"embedding\": " + config.embeddingSize() + ",\n  \"layers\": " + config.layers()
                 + ",\n  \"vocab\": " + config.vocabSize() + ",\n  \"heads\": " + config.heads() + ",\n  \"feed_forward\": " + config.feedForwardSize()
                 + ",\n  \"batch_size\": " + batch + ",\n  \"learning_rate\": " + learningRate + ",\n  \"weight_decay\": " + decay
+                + ",\n  \"schedule\": " + quote(schedule) + ",\n  \"warmup_steps\": " + warmup
+                + ",\n  \"final_learning_rate\": " + optimizer.learningRate()
+                + ",\n  \"snapshot_interval\": " + saveEvery + ",\n  \"validation_interval\": " + validationEvery
+                + ",\n  \"objective\": " + quote(objective)
+                + ",\n  \"training_target_tokens\": " + trainWindows.stream().mapToLong(DataSet.Window::scoredTokens).sum()
                 + ",\n  \"gradient_clip\": " + clip + ",\n  \"math_threads\": 1,\n  \"available_processors\": " + Runtime.getRuntime().availableProcessors()
                 + ",\n  \"steps_requested\": " + steps + ",\n  \"steps_completed\": " + completed
                 + ",\n  \"best_validation_step\": " + bestStep + ",\n  \"time_budget_seconds\": " + seconds
@@ -114,16 +174,33 @@ public final class Main {
                 + ",\n  \"test_data_sha256\": " + quote(sha256(data.resolve("test.tsv")))
                 + ",\n  \"initial_train\": " + initialTrain.json() + ",\n  \"initial_validation\": " + initialValidation.json()
                 + ",\n  \"selected_train\": " + trainedTrain.json() + ",\n  \"selected_validation\": " + trainedValidation.json()
+                + ",\n  \"last_train\": " + lastTrain.json() + ",\n  \"last_validation\": " + lastValidation.json()
                 + ",\n  \"test_evaluated\": false\n}\n";
         Files.writeString(output.resolve("training.json"), report);
         System.out.println("Checkpoint próprio salvo em " + checkpoint + "; relatório: " + output.resolve("training.json"));
     }
+    /** Explicit architecture flags can confirm a checkpoint, never silently reshape it. */
+    private static void requireCheckpointDimension(Map<String, String> options, String name, int actual) {
+        if (options.containsKey(name) && Integer.parseInt(options.get(name)) != actual)
+            throw new IllegalArgumentException("--" + name + " difere da configuração do checkpoint (" + actual + ").");
+    }
+    /** Warmup reaches the base rate; cosine then reaches 10% at the requested final step. */
+    static double learningRateForStep(double baseRate, int step, int totalSteps, int warmup, String schedule) {
+        if (warmup > 0 && step <= warmup) return baseRate * ((double) step / warmup);
+        if (schedule.equals("constant")) return baseRate;
+        int decayStart = Math.max(1, warmup);
+        double progress = totalSteps == decayStart ? 1 : (double) (step - decayStart) / (totalSteps - decayStart);
+        return baseRate * (0.1 + 0.9 * 0.5 * (1 + Math.cos(Math.PI * progress)));
+    }
     private static void evaluate(String[] args) throws Exception {
         if (args.length < 4) throw new IllegalArgumentException("Uso: evaluate <model.luma> <data-dir> <report.jsonl> [opções]");
-        Map<String, String> options = options(args, 4, List.of("tokens", "temperature", "top-k", "seed"));
+        Map<String, String> options = options(args, 4, List.of("tokens", "temperature", "top-k", "seed", "split"));
+        String split = options.getOrDefault("split", "test");
+        if (!List.of("test", "validation").contains(split))
+            throw new IllegalArgumentException("Split deve ser validation ou test.");
         ModelBundle bundle = ModelBundle.load(Path.of(args[1]));
         Path data = Path.of(args[2]), report = Path.of(args[3]);
-        List<DataSet.Example> train = DataSet.read(data.resolve("train.tsv")), test = DataSet.read(data.resolve("test.tsv"));
+        List<DataSet.Example> train = DataSet.read(data.resolve("train.tsv")), test = DataSet.read(data.resolve(split + ".tsv"));
         DataSet.requireDisjoint(train, test);
         String actualSha = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(data.resolve("train.tsv"))));
         if (!actualSha.equals(bundle.trainingDataSha256())) throw new IOException("Os dados de treino não correspondem à proveniência do checkpoint.");
@@ -131,7 +208,7 @@ public final class Main {
         double temperature = decimal(options, "temperature", 0.7);
         long seed = Long.parseLong(options.getOrDefault("seed", "2026"));
         List<String> lines = new ArrayList<>();
-        lines.add("{\"type\":\"metrics\",\"test\":" + score(bundle.model(), encode(test, bundle.tokenizer(), bundle.model().config().contextLength())).json()
+        lines.add("{\"type\":\"metrics\",\"split\":" + quote(split) + "," + quote(split) + ":" + score(bundle.model(), encode(test, bundle.tokenizer(), bundle.model().config().contextLength())).json()
                 + ",\"max_new_tokens\":" + tokens + ",\"temperature\":" + temperature + ",\"top_k\":" + topK + ",\"seed\":" + seed + "}");
         for (int i = 0; i < test.size(); i++) {
             DataSet.Example example = test.get(i);
@@ -140,10 +217,53 @@ public final class Main {
         }
         Path parent = report.toAbsolutePath().getParent(); if (parent != null) Files.createDirectories(parent);
         Files.write(report, lines);
-        System.out.println("Todas as " + test.size() + " gerações de teste foram registradas em " + report);
+        System.out.println("Todas as " + test.size() + " gerações de " + (split.equals("test") ? "teste" : "validação") + " foram registradas em " + report);
     }
     private static List<DataSet.Window> encode(List<DataSet.Example> examples, ByteTokenizer tokenizer, int context) {
         return examples.stream().map(e -> e.encode(tokenizer).window(context)).toList();
+    }
+    private static void prepareGrounded(String[] args) throws Exception {
+        if (args.length < 3) throw new IllegalArgumentException("Uso: prepare-grounded <data-dir> <output-dir> [--threshold 0.25 --answer-weight 0]");
+        Map<String, String> options = options(args, 3, List.of("threshold", "answer-weight"));
+        double threshold = decimal(options, "threshold", LocalMemory.DEFAULT_THRESHOLD);
+        double answerWeight = decimal(options, "answer-weight", 0);
+        Path input = Path.of(args[1]).toAbsolutePath().normalize(), output = Path.of(args[2]).toAbsolutePath().normalize();
+        if (input.equals(output) || (Files.exists(output) && Files.isSameFile(input, output)))
+            throw new IllegalArgumentException("Os dados originais e preparados precisam de pastas diferentes.");
+        List<DataSet.Example> train = DataSet.read(input.resolve("train.tsv"));
+        LocalMemory memory = LocalMemory.fromExamples(train, threshold, answerWeight);
+        List<DataSet.Example> validation = DataSet.read(input.resolve("validation.tsv"));
+        List<DataSet.Example> test = DataSet.read(input.resolve("test.tsv"));
+        DataSet.requireDisjoint(train, validation); DataSet.requireDisjoint(train, test); DataSet.requireDisjoint(validation, test);
+        Map<String, List<DataSet.Example>> splits = new LinkedHashMap<>();
+        splits.put("train", train); splits.put("validation", validation); splits.put("test", test);
+        Map<String, List<String>> prepared = new LinkedHashMap<>();
+        Map<String, Integer> matched = new LinkedHashMap<>();
+        for (var split : splits.entrySet()) {
+            List<String> rows = new ArrayList<>(); int found = 0;
+            for (DataSet.Example example : split.getValue()) {
+                LocalMemory.Match match = memory.lookup(example.prompt());
+                if (match.found()) found++;
+                // A held-out reply is copied only to the evaluation target column, never to the note.
+                String prompt = LocalMemory.format(example.prompt(), match.information());
+                rows.add(new DataSet.Example(prompt, example.reply()).prompt() + "\t" + example.reply());
+            }
+            prepared.put(split.getKey(), rows); matched.put(split.getKey(), found);
+        }
+        Files.createDirectories(output);
+        for (var split : prepared.entrySet()) Files.write(output.resolve(split.getKey() + ".tsv"), split.getValue());
+        Files.copy(input.resolve("train.tsv"), output.resolve("knowledge.tsv"), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        String manifest = "{\n  \"retrieval\": \"original lexical TF-IDF word/character cosine\",\n"
+                + "  \"index_source\": \"train.tsv only\",\n  \"held_out_replies_used_in_index_or_notes\": false,\n"
+                + "  \"neural_generation_required\": true,\n  \"threshold\": " + threshold
+                + ",\n  \"answer_weight\": " + answerWeight
+                + ",\n  \"knowledge_sha256\": " + quote(sha256(output.resolve("knowledge.tsv")))
+                + ",\n  \"prepared_train_sha256\": " + quote(sha256(output.resolve("train.tsv")))
+                + ",\n  \"train_examples\": " + train.size() + ",\n  \"validation_examples\": " + validation.size()
+                + ",\n  \"test_examples\": " + test.size() + ",\n  \"matched_train\": " + matched.get("train")
+                + ",\n  \"matched_validation\": " + matched.get("validation") + "\n}\n";
+        Files.writeString(output.resolve("grounding.json"), manifest);
+        System.out.println("Dados com notas recuperadas apenas do treino preparados em " + output);
     }
     private static void samples(String[] args) throws Exception {
         if (args.length < 4) throw new IllegalArgumentException("Uso: samples <model.luma> <prompts.tsv> <report.jsonl> [opções]");

@@ -1,5 +1,7 @@
 package br.com.luma.ai;
 
+import br.com.luma.nativeai.DataSet;
+import br.com.luma.nativeai.LocalMemory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
@@ -20,6 +22,8 @@ class NativeBrainTest {
     void bundledCheckpointGeneratesWithRealOriginalModelInsteadOfUnavailableFallback() throws Exception {
         assertNotNull(NativeBrain.class.getResource("/assets/luma/models/luma-native.luma"),
                 "The tested/installable mod must include its original model checkpoint");
+        assertNotNull(NativeBrain.class.getResource("/assets/luma/models/luma-knowledge.tsv"),
+                "The grounded model must include the matching local knowledge resource");
         try (var engine = new NativeBrain.Engine(); var brain = new NativeBrain(engine)) {
             Intent intent = brain.respond("Oi, como você está?", "").get(12, TimeUnit.SECONDS);
             assertEquals(Action.CHAT, intent.action());
@@ -30,15 +34,55 @@ class NativeBrainTest {
     }
 
     @Test
-    void explicitOrdersNegationsAndAmbiguityNeverInvokeLanguageModel() throws Exception {
+    void explicitOrdersIncludingNegatedFollowStillBypassTheLanguageModel() throws Exception {
         AtomicInteger calls = new AtomicInteger();
         try (var engine = engine(text -> { calls.incrementAndGet(); return "texto"; });
              var brain = new NativeBrain(engine)) {
             assertEquals(Action.FOLLOW, brain.respond("me siga", "").get().action());
             assertEquals(Action.STOP, brain.respond("não me siga", "").get().action());
-            assertEquals(Action.CHAT, brain.respond("não pare", "").get().action());
-            assertEquals(Action.CHAT, brain.respond("me siga ou construa", "").get().action());
+            assertEquals(Action.STAY, brain.respond("fique aqui", "").get().action());
+            assertEquals(Action.STOP, brain.respond("pare", "").get().action());
             assertEquals(0, calls.get());
+        }
+    }
+
+    @Test
+    void chatWithNegationChoicesAndUncertaintyReachesModelWithoutCreatingAnAction() throws Exception {
+        List<String> received = new ArrayList<>();
+        List<String> prompts = List.of("não sei por onde começar", "uso madeira ou pedra?",
+                "talvez a gente possa explorar", "não pare", "me siga ou construa");
+        try (var engine = engine(text -> { received.add(text); return "Resposta gerada."; });
+             var brain = new NativeBrain(engine)) {
+            for (String prompt : prompts) {
+                Intent intent = brain.respond(prompt, "").get(2, TimeUnit.SECONDS);
+                assertEquals(Action.CHAT, intent.action(), prompt);
+                assertEquals("IA experimental: Resposta gerada.", intent.reply(), prompt);
+            }
+            assertEquals(prompts, received, "Every conversation must reach the generator, unchanged and in order");
+        }
+    }
+
+    @Test
+    void retrievedAndUnknownNotesAreOnlyContextAndNeverReturnedInPlaceOfGeneratedText() throws Exception {
+        LocalMemory memory = LocalMemory.fromExamples(
+                List.of(new DataSet.Example("Qual cor você prefere?", "Gosto de azul.")), 0.25);
+        AtomicReference<String> received = new AtomicReference<>();
+        var generator = NativeBrain.withMemory(memory, prompt -> {
+            received.set(prompt);
+            return "Texto produzido pelo modelo.";
+        });
+        try (var engine = engine(generator); var brain = new NativeBrain(engine)) {
+            Intent known = brain.respond("Qual cor você prefere?", "").get(2, TimeUnit.SECONDS);
+            assertEquals(LocalMemory.format("Qual cor você prefere?", "Gosto de azul."), received.get());
+            assertEquals(Action.CHAT, known.action());
+            assertEquals("IA experimental: Texto produzido pelo modelo.", known.reply());
+            assertFalse(known.reply().contains("Gosto de azul."));
+
+            Intent unknown = brain.respond("zzzzzzzzzz", "").get(2, TimeUnit.SECONDS);
+            assertEquals(LocalMemory.format("zzzzzzzzzz", LocalMemory.UNKNOWN), received.get());
+            assertEquals(Action.CHAT, unknown.action());
+            assertEquals("IA experimental: Texto produzido pelo modelo.", unknown.reply());
+            assertFalse(unknown.reply().contains(LocalMemory.UNKNOWN));
         }
     }
 

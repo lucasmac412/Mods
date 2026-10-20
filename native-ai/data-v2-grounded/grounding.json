@@ -1,0 +1,14 @@
+{
+  "retrieval": "original lexical TF-IDF word/character cosine",
+  "index_source": "train.tsv only",
+  "held_out_replies_used_in_index_or_notes": false,
+  "neural_generation_required": true,
+  "threshold": 0.25,
+  "knowledge_sha256": "93abde2380aa2c1081cf742e55a9d714452f9cb95db133be59007eb658fa79d3",
+  "prepared_train_sha256": "f7aa286718e4f3326c5f3875d5b51c88d759bcf692599b023b60678cc5387827",
+  "train_examples": 2040,
+  "validation_examples": 40,
+  "test_examples": 40,
+  "matched_train": 2040,
+  "matched_validation": 39
+}

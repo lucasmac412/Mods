@@ -289,8 +289,8 @@ final class CompanionService implements AutoCloseable {
         NativeBrain previous = brains.remove(player.getUUID());
         if (previous != null) previous.close();
         if (enabled) brains.put(player.getUUID(), new NativeBrain(brainEngine));
-        tell(player, enabled ? "IA própria experimental ligada nesta sessão, sem serviço externo. "
-                + "O modelo é muito pequeno e pode produzir texto sem sentido; não conversa como modelos grandes. "
+        tell(player, enabled ? "IA própria com memória local ligada nesta sessão, sem serviço externo. "
+                + "Ela ainda é experimental e pode errar ou produzir frases confusas; não conversa como modelos grandes. "
                 + "As ações continuam por ordens simples. /luma ia desligar desativa." :
                 "IA própria desligada. As ordens e respostas locais continuam disponíveis.");
     }

@@ -2,7 +2,7 @@
 
 Luma é uma companheira humanoide para **Minecraft Java Edition 26.2 com Fabric**. Ela tem uma skin própria em roxo e ciano, acompanha o dono, recebe ordens em português do Brasil e pode responder em voz alta por um painel no navegador.
 
-**[Baixar Luma 0.2.0 experimental com IA própria](https://raw.githubusercontent.com/lucasmac412/Mods/v0.2.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-Experimental.zip)** — inclui Luma, Fabric API, o modelo próprio e o guia `COMECE-AQUI.txt`. A IA ainda pode produzir texto sem sentido; confira os limites abaixo.
+**[Baixar Luma 0.3.0 experimental com IA própria](https://raw.githubusercontent.com/lucasmac412/Mods/v0.3.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip)** — inclui Luma, Fabric API, modelo próprio, memória local e o guia `COMECE-AQUI.txt`. A IA ainda pode responder errado; confira os limites abaixo.
 
 **Comece pelo [passo a passo de instalação](docs/INSTALAR.md).** Ele explica onde colocar os arquivos mesmo para quem nunca instalou um mod. Se você recebeu um pacote de instalação com os JARs, use esses arquivos. O ZIP do código-fonte é diferente: ele precisa ser compilado para virar um mod.
 
@@ -16,7 +16,7 @@ Luma é uma companheira humanoide para **Minecraft Java Edition 26.2 com Fabric*
 - No modo autônomo, acompanha, enfrenta inimigos próximos e pode coletar até oito troncos por ativação, se tiver um machado.
 - Entende ordens simples pelo chat, inclusive `Luma, me siga`.
 - Oferece entrada pelo microfone e leitura de respostas em português por um painel local, em mundos de um jogador.
-- Inclui um modelo generativo próprio, treinado do zero, com ativação opcional. O texto é gerado por pesos aprendidos, mas ainda tem qualidade muito limitada. As ordens básicas funcionam com o modelo desligado.
+- Inclui um modelo generativo próprio, treinado pelo projeto, com ativação opcional e uma memória local autoral para orientar as falas. As ordens básicas funcionam com o modelo desligado.
 
 Ela é um NPC com comportamentos programados. Não joga como uma pessoa em todas as situações, não termina o Minecraft sozinha, não fabrica qualquer receita e não transforma pedidos livres em construções arbitrárias. A autonomia só funciona enquanto o mundo e a região da companheira estão sendo processados pelo jogo, com o dono conectado na mesma dimensão. As tarefas com blocos respeitam a regra `minecraft:mob_griefing`; não há integração genérica com proteção de terrenos de outros mods.
 
@@ -24,13 +24,17 @@ A voz usa síntese de fala do sistema ou navegador. A qualidade depende das voze
 
 ## IA própria experimental
 
-Esta versão inclui código original de tokenização BPE, Transformer causal, treinamento com AdamW e geração de texto em Java. Os pesos começam aleatórios e foram treinados com um microcorpus sintético escrito por Codex para este projeto. Não usamos pesos pré-treinados, Ollama, API paga ou bibliotecas de aprendizado de máquina. Java, Minecraft e Fabric continuam sendo dependências do mod.
+Esta versão inclui código original de tokenização BPE, Transformer causal, treinamento com AdamW e geração de texto em Java. O modelo tem 277.504 parâmetros e usa uma memória de exemplos sintéticos escritos por Codex para o projeto. A memória procura uma informação relacionada à pergunta e acrescenta essa nota ao contexto; o Transformer gera a resposta token por token. O código não devolve a nota diretamente como se fosse uma geração neural.
+
+O treinamento original começou com pesos aleatórios; o refinamento da versão 0.3 reutiliza apenas os nossos próprios pesos e tokenizador. Não usamos pesos pré-treinados de terceiros, Ollama, API paga ou bibliotecas de aprendizado de máquina. Java, Minecraft e Fabric continuam sendo dependências do mod.
 
 Para experimentar, use `/luma ia ligar` e `/luma falar Como podemos começar nossa aventura?`. Para desligar, use `/luma ia desligar`. A geração acontece no computador que executa o mundo/servidor e não envia a conversa a um serviço de IA. Esta escolha vale só para a sessão atual; o modelo começa desligado ao entrar novamente.
 
-**O resultado ainda não tem qualidade comparável aos grandes modelos usados com Ollama.** Nas 34 perguntas registradas, produziu principalmente fragmentos de palavras sem sentido. O modelo só gera falas: os comandos e as capacidades reais do NPC continuam controlando as ações. Não há memória de conversa nem aprendizagem automática enquanto você joga.
+**O resultado ainda não tem qualidade comparável aos grandes modelos usados com Ollama.** A memória pode escolher o assunto errado e a rede pode corromper frases ou inventar detalhes. O modelo só gera falas: os comandos e as capacidades reais do NPC continuam controlando as ações. Essa memória é um material de consulta incluído no mod; não guarda suas conversas nem aprende durante a partida.
 
-O motor atual usa CPU; não utiliza a RTX 4060. Nenhum recurso pago foi contratado. Reconhecimento de microfone e síntese de voz continuam dependendo do navegador/sistema e não são modelos próprios deste projeto. Leia [os resultados completos](native-ai/experiments/RESULTADOS.md), [a origem dos dados](native-ai/docs/PROVENANCE.md) e [o laboratório de treinamento](native-ai/README.md).
+No teste sintético separado de 40 perguntas, a versão escolhida teve **11 respostas úteis, contra zero na versão 0.2**, pela rubrica de Codex, sem revisão humana independente. Na validação usada para escolher o modelo, foram 22/40; o teste não foi usado para ajustar a versão. São números de um teste pequeno, sem indicar qualidade geral. A comparação completa e as falhas estão no relatório abaixo. Perguntas como “não sei por onde começar” e “uso madeira ou pedra?” agora podem chegar ao modelo; ordens reais continuam imediatas no parser.
+
+O motor atual usa CPU; não utiliza a RTX 4060. Nenhum recurso pago foi contratado. Reconhecimento de microfone e síntese de voz continuam dependendo do navegador/sistema e não são modelos próprios deste projeto. Leia [os resultados completos](native-ai/experiments-v2/RESULTADOS.md), [a origem dos dados](native-ai/data-v2/PROVENANCE.md) e [o laboratório de treinamento](native-ai/README.md).
 
 ## Compatibilidade
 
@@ -40,7 +44,7 @@ O motor atual usa CPU; não utiliza a RTX 4060. Nenhum recurso pago foi contrata
 | Carregador | Fabric Loader **0.19.5 ou superior**, compatível com 26.2 |
 | Dependência | Fabric API **0.161.0+26.2**, ou versão posterior para 26.2 |
 | Java para compilar e executar | **Java 25 ou superior compatível**; o projeto usa Java 25 |
-| Mod | Luma `0.2.0-experimental` |
+| Mod | Luma `0.3.0-experimental` |
 
 `26.2` é a versão do **Minecraft**, não o número do Fabric Loader. O mod não é para Bedrock, celular/PE, Forge ou NeoForge. Você precisa ter acesso oficial ao Minecraft Java Edition.
 
@@ -59,11 +63,11 @@ O último comando fornece um link local para o painel de voz. Abra o link comple
 
 ## Estado da validação
 
-O JAR foi gerado com `BUILD SUCCESSFUL` usando as dependências oficiais do Minecraft 26.2. Passaram **60 testes JUnit do mod**, **48 do laboratório de IA** e **sete cenários da Luma dentro de um servidor Minecraft real sem interface gráfica**; o teste interno do runner também passou. A integração gerou texto com o checkpoint incluído, com teste de cancelamento e timeout. A avaliação das respostas não demonstrou conversa útil. Aparência em tela, microfone, reprodução audível e desempenho no computador do jogador continuam sem teste. Consulte [TESTES.md](docs/TESTES.md) para a cobertura e as pendências.
+O JAR foi gerado com `BUILD SUCCESSFUL` usando as dependências oficiais do Minecraft 26.2. Passaram **62 testes JUnit do mod**, **66 do laboratório de IA** e **sete cenários da Luma dentro de um servidor Minecraft real sem interface gráfica**; o teste interno do runner também passou. A integração gerou texto com o modelo e a memória incluídos, com teste de cancelamento e timeout. Testes de engenharia e qualidade da conversa são medidos separadamente. Aparência em tela, microfone, reprodução audível e desempenho no computador do jogador continuam sem teste. Consulte [TESTES.md](docs/TESTES.md) para a cobertura e as pendências.
 
 ## Para desenvolver
 
-Com um JDK 25 instalado, execute `./gradlew build` no Linux/macOS ou `gradlew.bat build` no Windows. O Gradle baixa as dependências, compila e executa os testes automatizados, incluindo o servidor GameTest. O JAR instalável será gerado em `build/libs/luma-companion-0.2.0-experimental.jar`. O arquivo com sufixo `-sources.jar` contém fontes e não deve ser instalado como mod. O modelo já treinado acompanha o código em `native-ai/mod-resources`; você não precisa treiná-lo para compilar o mod.
+Com um JDK 25 instalado, execute `./gradlew build` no Linux/macOS ou `gradlew.bat build` no Windows. O Gradle baixa as dependências, compila e executa os testes automatizados, incluindo o servidor GameTest. O JAR instalável será gerado em `build/libs/luma-companion-0.3.0-experimental.jar`. O arquivo com sufixo `-sources.jar` contém fontes e não deve ser instalado como mod. O modelo e o índice já acompanham o código em `native-ai/mod-resources`; você não precisa treiná-los para compilar o mod.
 
 No ambiente de nuvem Linux x86_64, `bash scripts/setup-cloud.sh` instala o JDK verificado e configura o proxy/TLS do Gradle antes do build. Cada tarefa já é isolada: use o checkout existente, sem criar worktrees, salvo pedido explícito. `bash scripts/test-core.sh` permite diagnosticar apenas texto e HTTP sem baixar o Minecraft; não substitui os GameTests.
 

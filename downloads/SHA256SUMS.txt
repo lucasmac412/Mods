@@ -1,2 +1,3 @@
-00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067  Luma-Fabric-26.2.zip
 47d45ce8535a41c63498ee31b99fd2f73ee6c74c00113af2da8af46bb1ffdd38  Luma-Fabric-26.2-IA-Propria-Experimental.zip
+ec07ad9840b007b44926ab6f8ae2d75e5d118edfc4d85bb9395e0e36dc476fc9  Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip
+00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067  Luma-Fabric-26.2.zip

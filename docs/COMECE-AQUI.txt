@@ -1,16 +1,17 @@
-LUMA 0.2.0-experimental — COMPANHIA DE AVENTURA
+LUMA 0.3.0-experimental — COMPANHIA DE AVENTURA
 Minecraft Java Edition 26.2 | Fabric Loader 0.19.5 ou superior compatível
 
 Você não precisa programar nem compilar para usar este pacote.
 Não funciona no Minecraft Bedrock, celular, console, Forge ou NeoForge.
 É necessário ter acesso oficial ao Minecraft Java Edition.
-O pacote inclui uma IA própria de texto, pequena e experimental.
-Ela pode gerar respostas sem sentido; os comandos funcionam com ela desligada.
+O pacote inclui IA própria de texto com uma memória local de informações autorais.
+É uma opção experimental e começa desligada por padrão. A busca e o modelo
+podem errar; os comandos funcionam com a IA desligada.
 
 1. BAIXE E EXTRAIA O ZIP
-Pacote: Luma-Fabric-26.2-IA-Propria-Experimental.zip
+Pacote: Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip
 Download:
-https://raw.githubusercontent.com/lucasmac412/Mods/v0.2.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-Experimental.zip
+https://raw.githubusercontent.com/lucasmac412/Mods/v0.3.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip
 No Chrome, aperte Ctrl + J para ver o download e "Mostrar na pasta".
 Se o Codex disser que não pôde baixar o artefato, use esse link do GitHub.
 Clique com o botão direito no ZIP e escolha "Extrair tudo" ou equivalente.
@@ -48,10 +49,11 @@ Abra ou crie a subpasta "mods" nessa pasta de jogo.
 Se já houver uma versão antiga da Luma ou do Fabric API que será trocada,
 mova o JAR antigo para um backup FORA da pasta "mods".
 Copie para ela OS DOIS JARs da pasta "mods" deste pacote:
-- luma-companion-0.2.0-experimental.jar
+- luma-companion-0.3.0-experimental.jar
 - fabric-api-0.161.0+26.2.jar
 Não deixe duas versões do mesmo mod na pasta.
-O modelo de IA já está dentro do JAR da Luma. Não há outro modelo a instalar.
+O modelo e a memória local já estão dentro do JAR da Luma.
+Não há outro modelo ou arquivo de memória para instalar ou configurar.
 
 5. COMECE EM UM MUNDO NOVO
 Abra o perfil Fabric 26.2. Crie um mundo Criativo com comandos ativados.
@@ -72,13 +74,23 @@ Leia o aviso experimental e aguarde a resposta.
 Para desligar o modelo: /luma ia desligar
 Os comandos como /luma seguir e /luma construir continuam funcionando.
 
-O gerador é próprio do projeto e o modelo foi treinado do zero.
+O gerador e os pesos são do próprio projeto. Uma memória local procura uma
+nota relacionada à pergunta, e o modelo usa essa nota para gerar a fala.
+A busca pode escolher uma informação de outro assunto e a geração ainda erra.
 Você não precisa instalar Ollama, criar conta de IA, configurar API ou pagar.
 A geração de texto acontece no computador e pode funcionar offline após
 a instalação. Ainda é um modelo muito pequeno, distante da qualidade dos
 modelos grandes usados com Ollama. Pode escrever frases erradas ou sem sentido.
-Ele só gera falas. As ações do NPC continuam seguindo as ordens e regras já
-programadas; a IA não acrescenta construções novas nem joga uma campanha sozinha.
+Você pode experimentar perguntas como:
+/luma falar Não sei por onde começar
+/luma falar Uso madeira ou pedra?
+Palavras como "não", "ou" e "talvez" não bloqueiam a conversa por si só.
+Ainda não há garantia de uma resposta correta.
+
+O modelo só gera falas. As ações do NPC continuam seguindo as ordens e regras
+já programadas; a fala gerada não executa tarefas. Use /luma parar para
+interromper uma tarefa. A IA não acrescenta construções novas nem joga uma
+campanha sozinha. A memória não aprende automaticamente com suas conversas.
 
 Esta versão gera texto no processador (CPU), em Java, sem usar a RTX 4060.
 Ter 16 GB de RAM não garante qualidade de um modelo grande. Não compre
@@ -109,7 +121,7 @@ MAIS INSTRUÇÕES
 Leia docs/INSTALAR.md para os comandos, mineração, limites e IA opcional.
 Leia docs/TESTES.md para saber o que foi realmente testado nesta versão.
 Resultados reais do modelo próprio:
-https://github.com/lucasmac412/Mods/blob/v0.2.0-experimental/native-ai/experiments/RESULTADOS.md
+https://github.com/lucasmac412/Mods/blob/v0.3.0-experimental/native-ai/experiments-v2/RESULTADOS.md
 Luma não joga como uma pessoa em todas as situações nem termina o jogo
 sozinha. Mineração e construção dependem de materiais, ferramentas,
 acesso ao local e da regra minecraft:mob_griefing estar ativada.

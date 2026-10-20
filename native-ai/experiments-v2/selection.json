@@ -1,0 +1,29 @@
+{
+  "version": "0.3.0-experimental",
+  "selected_run": "v2-copy",
+  "selected_checkpoint": "step-010000.luma",
+  "parameters": 277504,
+  "context": 192,
+  "vocab": 1536,
+  "selection_split": "validation",
+  "criterion": "full 40-question usefulness rubric; 22/40 vs20/40 for6000 and0/40 baseline, Codex evaluation",
+  "model_sha256": "394201871af8a2c20aa0c71f04f7d822b58a9488c9da7a2cd4a5a50716b9a199",
+  "model_bytes": 2231312,
+  "knowledge_sha256": "93abde2380aa2c1081cf742e55a9d714452f9cb95db133be59007eb658fa79d3",
+  "training_data_sha256": "3ec9f7dfd3b06a0b367f951dbf6b86e572f0ccf3f63d4566c0d0880217db601d",
+  "memory_threshold": 0.15,
+  "memory_answer_weight": 0.7,
+  "generation": {
+    "max_new_tokens": 64,
+    "temperature": 0,
+    "top_k": 20,
+    "evaluation_seed": 2026,
+    "runtime_seed": 412,
+    "greedy_seed_independent": true
+  },
+  "test_evaluated_at_selection": false,
+  "frozen_before_held_out_test": true,
+  "post_test_tuning_allowed": false,
+  "knowledge_source": "authored training data only; no held-out references",
+  "neural_output_replaced_by_retrieval": false
+}

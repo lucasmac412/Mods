@@ -1,6 +1,7 @@
 package br.com.luma.ai;
 
 import br.com.luma.nativeai.ModelBundle;
+import br.com.luma.nativeai.LocalMemory;
 import br.com.luma.nativeai.TextGenerator;
 
 import java.io.IOException;
@@ -11,7 +12,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Set;
-import java.util.SplittableRandom;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,8 +33,9 @@ public final class NativeBrain implements AutoCloseable {
     public synchronized CompletableFuture<Intent> respond(String text, String unusedWorldContext) {
         cancelPending();
         Intent local = IntentParser.parse(text);
-        if (closed || text == null || text.isBlank() || local.action() != Action.CHAT
-                || IntentParser.hasNegation(text) || IntentParser.isAmbiguous(text)) {
+        // Negation/choices also occur in ordinary questions. The parser still owns every
+        // real order, while any generated answer below remains inert CHAT text.
+        if (closed || text == null || text.isBlank() || local.action() != Action.CHAT) {
             return CompletableFuture.completedFuture(local);
         }
         CompletableFuture<String> generation = engine.submit(limit(text, 500));
@@ -61,7 +62,7 @@ public final class NativeBrain implements AutoCloseable {
 
     private static Intent unavailable() {
         return new Intent(Action.CHAT, "A IA original está indisponível ou ocupada. "
-                + "O modelo incluído pode estar ausente ou inválido. As ordens básicas continuam funcionando.");
+                + "O modelo ou o arquivo de memória local pode estar ausente ou inválido. As ordens básicas continuam funcionando.");
     }
 
     private static String limit(String text, int maximum) {
@@ -72,6 +73,13 @@ public final class NativeBrain implements AutoCloseable {
     }
 
     @FunctionalInterface interface Generator { String generate(String text) throws Exception; }
+
+    /** Retrieval supplies context only: the generator remains responsible for every returned reply. */
+    static Generator withMemory(LocalMemory memory, Generator generator) {
+        Objects.requireNonNull(memory);
+        Objects.requireNonNull(generator);
+        return text -> generator.generate(LocalMemory.format(text, memory.lookup(text).information()));
+    }
 
     /** One bounded worker and one lazily loaded model per world; no network or credentials. */
     public static final class Engine implements AutoCloseable {
@@ -133,30 +141,44 @@ public final class NativeBrain implements AutoCloseable {
 
     private static final class BundledGenerator implements Generator {
         private static final int MAX_MODEL_BYTES = 16 * 1024 * 1024;
-        private final SplittableRandom sampling = new SplittableRandom();
-        private ModelBundle bundle;
+        private static final int MAX_MEMORY_BYTES = 6 * 1024 * 1024;
+        private static final double MEMORY_THRESHOLD = 0.15;
+        private static final double MEMORY_ANSWER_WEIGHT = 0.7;
+        private Generator grounded;
 
         @Override public String generate(String text) throws Exception {
-            if (bundle == null) bundle = loadBundled();
-            return TextGenerator.generate(bundle, text, 64, 0.7, 20, sampling.nextLong());
+            if (grounded == null) {
+                ModelBundle bundle = loadResource("/assets/luma/models/luma-native.luma", ".luma",
+                        MAX_MODEL_BYTES, ModelBundle::load);
+                LocalMemory memory = loadResource("/assets/luma/models/luma-knowledge.tsv", ".tsv",
+                        MAX_MEMORY_BYTES, path -> LocalMemory.load(path, MEMORY_THRESHOLD, MEMORY_ANSWER_WEIGHT));
+                // Cache the complete pair only after both resources have been parsed successfully.
+                grounded = withMemory(memory, prompt -> TextGenerator.generate(bundle, prompt, 64, 0, 20, 412));
+            }
+            return grounded.generate(text);
         }
 
-        private static ModelBundle loadBundled() throws IOException {
-            try (InputStream source = NativeBrain.class.getResourceAsStream("/assets/luma/models/luma-native.luma")) {
-                if (source == null) throw new IOException("Bundled model missing");
-                Path temporary = Files.createTempFile("luma-native-", ".luma");
+        @FunctionalInterface private interface ResourceReader<T> { T read(Path file) throws IOException; }
+
+        private static <T> T loadResource(String resource, String suffix, int maximumBytes,
+                                           ResourceReader<T> reader) throws IOException {
+            try (InputStream source = NativeBrain.class.getResourceAsStream(resource)) {
+                if (source == null) throw new IOException("Bundled AI resource missing");
+                Path temporary = Files.createTempFile("luma-native-", suffix);
                 try {
                     try (OutputStream output = Files.newOutputStream(temporary)) {
                         byte[] buffer = new byte[8192];
                         int count, total = 0;
                         while ((count = source.read(buffer)) != -1) {
+                            if (Thread.currentThread().isInterrupted())
+                                throw new java.util.concurrent.CancellationException("AI resource loading cancelled");
+                            if (count > maximumBytes - total) throw new IOException("Bundled AI resource exceeds size limit");
                             total += count;
-                            if (total > MAX_MODEL_BYTES) throw new IOException("Bundled model exceeds size limit");
                             output.write(buffer, 0, count);
                         }
                     }
-                    // Own format, checksum, tensor sizes and finite weights are checked before use.
-                    return ModelBundle.load(temporary);
+                    // Each reader validates its own format; no resource is used before parsing succeeds.
+                    return reader.read(temporary);
                 } finally {
                     Files.deleteIfExists(temporary);
                 }

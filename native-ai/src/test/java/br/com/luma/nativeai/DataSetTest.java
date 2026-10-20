@@ -82,6 +82,26 @@ class DataSetTest {
     }
 
     @Test
+    void fullDialogueObjectiveAddsPromptTargetsWithoutChangingTokenAlignmentOrTheDefaultMask() {
+        ByteTokenizer tokenizer = ByteTokenizer.train(List.of("Jogador: Olá!\nLuma: Vamos?\n"), 270);
+        DataSet.Encoded encoded = new DataSet.Example("Olá!", "Vamos?").encode(tokenizer);
+        DataSet.Window responseOnly = encoded.window(256), explicitResponse = encoded.window(256, false);
+        DataSet.Window fullDialogue = encoded.window(256, true);
+        assertArrayEquals(responseOnly.input(), fullDialogue.input());
+        assertArrayEquals(responseOnly.targets(), explicitResponse.targets());
+        assertEquals(encoded.tokens().length - 1, fullDialogue.scoredTokens());
+        assertTrue(fullDialogue.scoredTokens() > responseOnly.scoredTokens());
+        assertArrayEquals(Arrays.copyOfRange(encoded.tokens(), 1, encoded.tokens().length), fullDialogue.targets());
+        assertEquals(ByteTokenizer.EOS, fullDialogue.targets()[fullDialogue.targets().length - 1]);
+        assertEquals(-1, responseOnly.targets()[0], "Held-out scoring must still mask the prompt by default");
+
+        DataSet.Window truncated = encoded.window(8, true);
+        assertArrayEquals(Arrays.copyOfRange(encoded.tokens(), encoded.tokens().length - 8, encoded.tokens().length),
+                truncated.targets());
+        assertEquals(8, truncated.scoredTokens());
+    }
+
+    @Test
     void veryLongPromptsNeverBecomeScoredResponseTokens() {
         ByteTokenizer tokenizer = ByteTokenizer.train(List.of("a"), 259);
         DataSet.Encoded encoded = new DataSet.Example("a".repeat(80), "oi").encode(tokenizer);

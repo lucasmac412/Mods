@@ -1,0 +1,23 @@
+{
+  "authorship": "Synthetic texts written by Codex; no downloaded corpus or pretrained weights",
+  "source_rows": {
+    "data-v2/base.tsv": 300,
+    "data-v2/conversation.tsv": 180,
+    "data/train.tsv": 200
+  },
+  "distinct_base_pairs": 680,
+  "training_pairs": 2040,
+  "excluded_duplicate_or_held_out_prompts": 0,
+  "augmentation": [
+    "original",
+    "Luma, <original prompt>",
+    "Me ajuda: <original prompt>"
+  ],
+  "augmentation_is_new_knowledge": false,
+  "held_out_replies_used_for_training": false,
+  "sha256": {
+    "train.tsv": "93abde2380aa2c1081cf742e55a9d714452f9cb95db133be59007eb658fa79d3",
+    "validation.tsv": "e4a54f6000bb2a03c173f34f1a05ab6e78159a0c902dfa41361adafcbda15f9b",
+    "test.tsv": "13c2ae861ed7caadb2df305e513b8fbf0abc098a0df15c4682acf6b229c3d1b7"
+  }
+}

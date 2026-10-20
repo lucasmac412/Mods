@@ -7,8 +7,8 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.2.0-experimental"
-PACKAGE = "Luma-Fabric-26.2-IA-Propria-Experimental.zip"
+VERSION = "0.3.0-experimental"
+PACKAGE = "Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip"
 OLD_ZIP_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 # Checked against maven.fabricmc.net's official .jar.sha256 on 2026-10-20.
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
@@ -30,13 +30,15 @@ def main():
     if sha(fabric) != FABRIC_SHA:
         raise SystemExit("Checksum inválido do Fabric API.")
     mod = (ROOT / f"build/libs/luma-companion-{VERSION}.jar").read_bytes()
-    selection = json.loads((ROOT / "native-ai/experiments/selection.json").read_text())
+    selection = json.loads((ROOT / "native-ai/experiments-v2/selection.json").read_text())
     with zipfile.ZipFile(io.BytesIO(mod)) as archive:
         metadata = json.loads(archive.read("fabric.mod.json"))
         if metadata["id"] != "luma" or metadata["version"] != VERSION:
             raise SystemExit("JAR da Luma tem identificação/versão incorreta.")
         if sha(archive.read(MODEL_RESOURCE)) != selection["model_sha256"]:
             raise SystemExit("O modelo dentro do mod difere do checkpoint selecionado.")
+        if sha(archive.read("assets/luma/models/luma-knowledge.tsv")) != selection["knowledge_sha256"]:
+            raise SystemExit("A memória incluída difere do índice selecionado.")
         if any("gametest" in name.lower() for name in archive.namelist()):
             raise SystemExit("O mod instalável contém arquivos de GameTest.")
 
@@ -48,7 +50,7 @@ def main():
     }
     for name in ["INSTALAR.md", "TESTES.md"]:
         entries[f"docs/{name}"] = (ROOT / "docs" / name).read_bytes()
-    for directory in ["data", "docs", "experiments"]:
+    for directory in ["data", "data-v2", "data-v2-grounded", "data-v2-copy", "docs", "experiments", "experiments-v2"]:
         for path in sorted((ROOT / "native-ai" / directory).rglob("*")):
             if path.is_file():
                 entries[path.relative_to(ROOT).as_posix()] = path.read_bytes()
@@ -57,7 +59,7 @@ def main():
         f"Luma {VERSION} para Minecraft Java 26.2 / Fabric.\n"
         "Abra COMECE-AQUI.txt. Copie apenas os dois JARs de mods para a pasta mods do jogo.\n"
         "IA de texto original incluída, experimental e desligada por padrão.\n"
-        "Os testes ainda produziram texto sem sentido; não equivale a um modelo grande.\n"
+        "O gerador usa uma memória local autoral; ainda pode errar e não equivale a um modelo grande.\n"
         "Nenhum Ollama, modelo pronto, chave de API ou serviço pago é necessário.\n"
         "Voz e microfone continuam usando recursos do navegador/sistema.\n"
         "Os relatórios e dados acompanham o pacote para consulta. Comandos de desenvolvimento\n"
@@ -77,7 +79,7 @@ def main():
         if archive.testzip() is not None:
             raise SystemExit("Falha de CRC no pacote criado.")
     temporary.replace(target)
-    packages = [old_zip, target]
+    packages = sorted((ROOT / "downloads").glob("*.zip"))
     (ROOT / "downloads/SHA256SUMS.txt").write_text(
         "".join(f"{sha(path.read_bytes())}  {path.name}\n" for path in packages), encoding="utf-8")
     print(f"Pacote criado e verificado: {target.name} ({target.stat().st_size} bytes)")

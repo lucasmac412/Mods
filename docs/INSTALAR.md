@@ -1,12 +1,12 @@
-# Instalar e usar a Luma 0.2.0-experimental, do zero
+# Instalar e usar a Luma 0.3.0-experimental, do zero
 
 Este guia é para **Minecraft Java Edition 26.2 no computador**. Não serve para Minecraft de celular, console ou Bedrock Edition. Você precisará de uma conta com acesso ao Minecraft Java Edition.
 
-**[Baixar Luma-Fabric-26.2-IA-Propria-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/v0.2.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-Experimental.zip)**
+**[Baixar Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/v0.3.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip)**
 
 No Chrome, abra o link acima e aguarde o download. Aperte `Ctrl + J` para encontrar o ZIP baixado e clique em **Mostrar na pasta**. Clique com o botão direito no ZIP e escolha **Extrair tudo**. O pacote contém a Luma, o Fabric API e este guia: você não precisa programar, compilar ou treinar um modelo para instalá-lo.
 
-A Luma inclui uma **IA de texto própria, pequena e experimental**, que pode ser ativada no jogo. Ela ainda pode produzir respostas sem sentido e não tem a qualidade de modelos grandes. As ordens e as tarefas do NPC continuam disponíveis com essa IA desligada.
+A Luma inclui uma **IA de texto própria, pequena e experimental, orientada por uma memória local de informações autorais**. O modelo e a memória já vêm no JAR; basta ativar a opção no jogo. A memória pode escolher uma informação inadequada e o modelo ainda pode gerar texto errado ou sem sentido. A IA começa desligada por padrão. As ordens e as tarefas do NPC continuam disponíveis com ela desligada.
 
 Um ZIP com pastas como `src` e `gradle` é o **código-fonte**. Se você recebeu apenas esse projeto, veja a seção **Gerar o JAR a partir deste projeto** no fim do guia.
 
@@ -14,10 +14,10 @@ Um ZIP com pastas como `src` e `gradle` é o **código-fonte**. Se você recebeu
 
 Você precisa destes dois mods:
 
-1. **Luma**: `luma-companion-0.2.0-experimental.jar`. Use o JAR da pasta `mods` do pacote extraído. O modelo de texto já está dentro dele. Para quem compila, a saída original fica em `build/libs`.
+1. **Luma**: `luma-companion-0.3.0-experimental.jar`. Use o JAR da pasta `mods` do pacote extraído. O modelo de texto e a memória local já estão dentro dele. Para quem compila, a saída original fica em `build/libs`.
 2. **Fabric API para Minecraft 26.2**: versão `0.161.0+26.2` ou posterior compatível com 26.2. Use o arquivo incluído no pacote, se houver, ou baixe pela [página do Fabric API no Modrinth](https://modrinth.com/mod/fabric-api/versions), selecionando a versão correta do jogo.
 
-Consulte [o estado dos testes](TESTES.md) para saber o que já foi verificado. A qualidade do modelo de texto é registrada separadamente no [relatório de resultados](https://github.com/lucasmac412/Mods/blob/v0.2.0-experimental/native-ai/experiments/RESULTADOS.md).
+Consulte [o estado dos testes](TESTES.md) para saber o que já foi verificado. A qualidade do modelo de texto é registrada separadamente no [relatório de resultados](https://github.com/lucasmac412/Mods/blob/v0.3.0-experimental/native-ai/experiments-v2/RESULTADOS.md).
 
 Não abra o JAR da Luma com dois cliques para instalar. Ele será colocado em uma pasta específica no passo 4. Não instale o arquivo `-sources.jar`.
 
@@ -60,7 +60,7 @@ No Windows, aperte `Windows + R`, cole `%APPDATA%\.minecraft` e pressione Enter.
 1. Feche o Minecraft. Se já usa mods em um mundo importante, copie a pasta `saves` do jogo para outro local antes de atualizar.
 2. Entre na pasta do jogo e abra a subpasta **mods**. Crie a pasta `mods` se ela não existir.
 3. Se já houver um JAR antigo da Luma, mova-o para uma pasta de backup **fora de `mods`**. Faça o mesmo com um Fabric API antigo que será substituído. Não deixe duas versões do mesmo mod juntas.
-4. Abra a pasta **mods do ZIP extraído** e copie os dois JARs para a pasta **mods do jogo**: `luma-companion-0.2.0-experimental.jar` e o Fabric API para 26.2. Não copie o ZIP inteiro.
+4. Abra a pasta **mods do ZIP extraído** e copie os dois JARs para a pasta **mods do jogo**: `luma-companion-0.3.0-experimental.jar` e o Fabric API para 26.2. Não copie o ZIP inteiro.
 5. No Launcher, selecione o perfil **Fabric 26.2** e clique em **Jogar**.
 
 Não é necessário colocar o projeto inteiro dentro de `mods`, descompactar os JARs ou instalar outro mod de voz.
@@ -110,7 +110,7 @@ Você controla a sua própria companheira. No chat, comece a frase com o nome de
 | `/luma remover` | Remove sua companheira e devolve os itens; aproxime-se a até seis blocos. |
 | `/luma voz` | Abre o acesso ao painel local de voz. |
 | `/luma voz parar` | Desliga o painel de voz local. |
-| `/luma ia ligar` | Ativa as falas geradas pela IA própria experimental incluída no mod. |
+| `/luma ia ligar` | Ativa as falas geradas pela IA própria experimental com memória local incluída no mod. |
 | `/luma ia desligar` | Desativa as falas do modelo e mantém as respostas básicas e as ordens. |
 
 Exemplos de frases simples: `Luma, me proteja`, `Luma, fique aqui`, `Luma, minere`, `Luma, construa`, `Luma, parar` e `Luma, status`. O modo local reconhece um conjunto limitado de frases. Para interromper, use **parar**; frases negativas como “não construa” não iniciam uma nova tarefa.
@@ -179,7 +179,9 @@ Não compartilhe o link do painel. O código do link autoriza o controle da Luma
 
 ## 7. Experimentar a IA própria de texto — opcional
 
-O projeto usa um gerador próprio e um modelo de texto treinado do zero com um conjunto pequeno de exemplos. Ambos já estão incluídos no JAR da Luma. Você não precisa instalar Ollama, baixar outro modelo, criar conta de IA, configurar uma API ou pagar por conversas. Minecraft, Java e Fabric continuam sendo necessários para jogar.
+O projeto usa um gerador próprio, pesos treinados pelo próprio projeto e uma memória local de informações autorais. A memória procura uma nota relacionada à pergunta, e o modelo usa essa nota para gerar a fala. A busca pode escolher o assunto errado; não significa que a personagem saiba tudo sobre o jogo. O modelo e a memória já estão incluídos no JAR, sem arquivo extra ou configuração para você fazer.
+
+Você não precisa instalar Ollama, baixar outro modelo, criar conta de IA, configurar uma API ou pagar por conversas. Minecraft, Java e Fabric continuam sendo necessários para jogar. A IA começa desligada em cada sessão.
 
 1. Abra seu mundo de teste e crie a companheira com `/luma criar`, se ainda não a criou.
 2. No chat do jogo, digite `/luma ia ligar` e leia o aviso de qualidade experimental.
@@ -187,9 +189,13 @@ O projeto usa um gerador próprio e um modelo de texto treinado do zero com um c
 4. Para continuar, envie outra mensagem com `/luma falar` ou pelo painel de voz.
 5. Para desligar o modelo, digite `/luma ia desligar`. Você ainda poderá usar `/luma seguir`, `/luma construir` e os demais comandos.
 
-**A resposta pode ter palavras sem sentido, erros ou não responder à pergunta.** Este é um modelo muito pequeno, ainda distante de uma IA generativa comparável aos modelos grandes usados com Ollama. Não confie nas falas como instruções corretas sobre o jogo. Veja os resultados reais no [relatório do modelo](https://github.com/lucasmac412/Mods/blob/v0.2.0-experimental/native-ai/experiments/RESULTADOS.md).
+**A resposta pode ter palavras sem sentido, erros ou não responder à pergunta.** Este é um modelo muito pequeno, ainda distante de uma IA generativa comparável aos modelos grandes usados com Ollama. Não confie nas falas como instruções corretas sobre o jogo. Veja os resultados reais no [relatório do modelo](https://github.com/lucasmac412/Mods/blob/v0.3.0-experimental/native-ai/experiments-v2/RESULTADOS.md).
 
-O modelo **gera falas**. As ações da Luma continuam sendo escolhidas pelas regras que reconhecem ordens e pelos comportamentos já programados. Ativar o modelo não acrescenta novas construções, receitas, ferramentas ou capacidade de jogar sozinha. Para uma tarefa, use uma ordem clara como `/luma seguir`; para experimentar a conversa, use `/luma falar`.
+Perguntas como `/luma falar Não sei por onde começar` e `/luma falar Uso madeira ou pedra?` agora podem chegar ao modelo quando forem reconhecidas como conversa. Usar palavras como “não”, “ou” e “talvez” não bloqueia a conversa por si só. Isso não garante que a resposta esteja correta.
+
+O modelo **gera falas**. As ações da Luma continuam sendo escolhidas pelas regras que reconhecem ordens e pelos comportamentos já programados. Uma ordem clara, como `/luma seguir` ou `/luma parar`, continua imediata; a fala gerada não executa tarefas. Ativar o modelo não acrescenta novas construções, receitas, ferramentas ou capacidade de jogar sozinha. Para uma tarefa, use uma ordem clara; para experimentar a conversa, use `/luma falar`.
+
+A memória incluída contém informações do projeto; ela não registra automaticamente o que você conta, não aprende enquanto você joga e não dá ao modelo acesso à sua tela ou inventário.
 
 A geração de texto funciona no próprio computador, sem enviar a conversa a um serviço de IA, e pode funcionar **offline** depois da instalação. Microfone e leitura em voz alta continuam usando Chrome/Edge e o sistema operacional, podendo precisar de internet conforme explicado no passo 6.
 
@@ -200,7 +206,7 @@ Este gerador usa o **processador (CPU), em Java**. Ele não usa sua RTX 4060 par
 Esta etapa é necessária se você recebeu apenas o código-fonte. Você não precisa editar Java, mas precisa executar um comando para transformar os arquivos em um mod. A primeira compilação precisa de internet para baixar o Gradle, o Minecraft e as dependências do Fabric.
 
 1. Instale o **JDK 25** pelo [Eclipse Temurin](https://adoptium.net/temurin/releases/?version=25). Escolha JDK, versão 25, seu sistema e arquitetura. No Windows, habilite `PATH` e `JAVA_HOME` no instalador, se oferecidos.
-2. Baixe o [código-fonte da versão 0.2.0-experimental](https://github.com/lucasmac412/Mods/archive/refs/tags/v0.2.0-experimental.zip), ou use a cópia do projeto que recebeu. Extraia o ZIP para uma pasta simples, como `Documentos\Luma`.
+2. Baixe o [código-fonte da versão 0.3.0-experimental](https://github.com/lucasmac412/Mods/archive/refs/tags/v0.3.0-experimental.zip), ou use a cópia do projeto que recebeu. Extraia o ZIP para uma pasta simples, como `Documentos\Luma`.
 3. Abra a pasta que contém `gradlew.bat`, `gradlew` e `build.gradle`. Não abra uma pasta acima dela.
 4. No Windows, clique na barra de endereço do Explorador de Arquivos, digite `powershell` e pressione Enter. No Linux/macOS, abra um terminal nessa pasta.
 5. Confirme o Java:
@@ -225,7 +231,7 @@ Esta etapa é necessária se você recebeu apenas o código-fonte. Você não pr
    ```
 
 7. Aguarde o comando terminar. Só prossiga se aparecer **`BUILD SUCCESSFUL`**. O primeiro download pode levar vários minutos.
-8. Abra a pasta `build/libs` e copie **`luma-companion-0.2.0-experimental.jar`** para a pasta `mods`, conforme o passo 4 deste guia. Deixe o arquivo `-sources.jar` fora de `mods`.
+8. Abra a pasta `build/libs` e copie **`luma-companion-0.3.0-experimental.jar`** para a pasta `mods`, conforme o passo 4 deste guia. Deixe o arquivo `-sources.jar` fora de `mods`.
 
 Se aparecer **`BUILD FAILED`**, a compilação não foi concluída. Não renomeie um ZIP para `.jar` e não use um arquivo de uma tentativa anterior como se tivesse passado. Guarde a primeira mensagem de erro para identificar a causa; consulte [TESTES.md](TESTES.md) para o estado conhecido desta versão.
 
@@ -244,8 +250,8 @@ Se aparecer **`BUILD FAILED`**, a compilação não foi concluída. Não renomei
 | Erro `jdk.httpserver` ou `com.sun.net.httpserver` | Instale o JDK 25 completo e selecione seu executável Java nas opções do perfil Fabric. |
 | O botão de microfone não funciona | Use Chrome/Edge, confira a permissão de microfone, o dispositivo selecionado e a conexão exigida pelo reconhecimento. Você pode continuar por texto. |
 | Há texto, mas não há som | Ative a conexão, marque a leitura em voz alta, confira o volume da aba/sistema e escolha ou instale uma voz pt-BR. |
-| A IA responde sem sentido | É uma limitação do modelo próprio experimental. Use `/luma ia desligar` para continuar com respostas básicas e comandos. Instalar outro programa ou comprar hardware não corrige o treinamento deste modelo. |
-| A IA própria não inicia ou fica lenta | Confira se está usando o JAR `0.2.0-experimental` do pacote completo e leia a mensagem no chat. Use `/luma ia desligar` para continuar pelas ordens básicas e guarde o trecho relevante do log para relatar. |
+| A IA responde sem sentido ou muda de assunto | A memória local pode escolher uma nota inadequada e o modelo experimental ainda pode errar ao gerar. Use `/luma ia desligar` para continuar com respostas básicas e comandos. Instalar outro programa ou comprar hardware não corrige o treinamento deste modelo. |
+| A IA própria não inicia ou fica lenta | Confira se está usando o JAR `0.3.0-experimental` do pacote completo e leia a mensagem no chat. Use `/luma ia desligar` para continuar pelas ordens básicas e guarde o trecho relevante do log para relatar. |
 | A compilação falha ao baixar arquivos | Confira a internet e os domínios indicados no erro. Não desative certificados, assinaturas ou verificações de segurança para contornar o problema. |
 
 Para relatar um problema, informe as versões de Minecraft, Java, Fabric Loader e Fabric API; a ação realizada; o que aconteceu; e o trecho relevante de `logs/latest.log` na pasta do jogo. Remova links privados do painel de voz, chaves, tokens e dados pessoais antes de compartilhar.

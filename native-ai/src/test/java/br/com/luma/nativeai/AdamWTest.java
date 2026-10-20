@@ -9,6 +9,41 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AdamWTest {
     @Test
+    void changingLearningRatePreservesMomentsAndCounter() {
+        Transformer.Parameter parameter = new Transformer.Parameter("scheduled", 1, false);
+        AdamW optimizer = new AdamW(0.01, 0, 10);
+        parameter.gradient[0] = 1;
+        optimizer.update(List.of(parameter));
+        double afterFirst = parameter.value[0];
+        optimizer.setLearningRate(0.02);
+        assertEquals(1, optimizer.step());
+        assertEquals(0.02, optimizer.learningRate());
+        parameter.gradient[0] = -1;
+        optimizer.update(List.of(parameter));
+        double correctedFirstMoment = (0.9 * 0.1 - 0.1) / (1 - 0.9 * 0.9);
+        double expected = afterFirst - 0.02 * correctedFirstMoment / (1 + 1e-8);
+        assertEquals(expected, parameter.value[0], 1e-14);
+        assertEquals(2, optimizer.step());
+    }
+
+    @Test
+    void invalidLearningRatesLeaveExistingStateUntouched() {
+        Transformer.Parameter parameter = new Transformer.Parameter("validation", 1, false);
+        AdamW optimizer = new AdamW(0.01, 0, 10);
+        parameter.gradient[0] = 1;
+        optimizer.update(List.of(parameter));
+        double value = parameter.value[0];
+        for (double invalid : new double[]{0, -0.01, 1.01, Double.NaN, Double.POSITIVE_INFINITY}) {
+            assertThrows(IllegalArgumentException.class, () -> optimizer.setLearningRate(invalid));
+            assertEquals(0.01, optimizer.learningRate());
+            assertEquals(1, optimizer.step());
+            assertEquals(value, parameter.value[0]);
+        }
+        optimizer.update(List.of(parameter));
+        assertEquals(value - 0.01 / (1 + 1e-8), parameter.value[0], 1e-14);
+    }
+
+    @Test
     void overflowingGlobalNormNeverEnlargesIndividuallySafeGradients() {
         Transformer.Parameter parameter = new Transformer.Parameter("large-vector", 32, false);
         Arrays.fill(parameter.gradient, 3e153);

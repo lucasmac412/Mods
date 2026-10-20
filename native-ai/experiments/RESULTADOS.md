@@ -1,5 +1,7 @@
 # Resultado do primeiro modelo próprio
 
+Registro histórico da versão 0.2.0. Os arquivos e hashes deste relatório correspondem à [tag v0.2.0-experimental](https://github.com/lucasmac412/Mods/tree/v0.2.0-experimental). A versão atual tem outra avaliação em [experiments-v2](../experiments-v2/RESULTADOS.md).
+
 **Data: 20/10/2026. O motor generativo funciona, mas este modelo ainda não serve para conversar de forma útil.** Nas 24 perguntas reservadas e nas dez perguntas adicionais, ele produziu principalmente fragmentos de palavras sem sentido. Não atingimos a qualidade pedida de um modelo comparável aos modelos grandes executados pelo Ollama.
 
 O mod inclui esse checkpoint como uma experiência opcional, desligada por padrão. Digite `/luma ia ligar` somente se quiser observar o protótipo. `/luma ia desligar` volta às respostas locais. Os comandos do NPC continuam disponíveis nos dois modos. Nada neste relatório comprova uma voz original ou uma IA capaz de jogar Minecraft como uma pessoa.
