@@ -1,14 +1,18 @@
 # Instalar a Luma
 
-O pacote `Luma-Fabric-26.2.zip` já contém o mod compilado, o Fabric API compatível e o guia para iniciantes. Não é necessário programar ou compilar para instalá-lo.
+**[Baixar Luma 0.2.0 experimental com IA própria](https://raw.githubusercontent.com/lucasmac412/Mods/v0.2.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-Experimental.zip)**.
 
-Quando esta pasta estiver disponível no GitHub:
+O ZIP inclui o mod compilado, o Fabric API compatível e o passo a passo. O pequeno modelo próprio já está dentro do JAR. Não é necessário programar, compilar, instalar Ollama ou configurar uma API. A geração ainda produz principalmente texto sem sentido: é um experimento opcional, desligado por padrão, com [resultados registrados](../native-ai/experiments/RESULTADOS.md).
 
-1. Abra `Luma-Fabric-26.2.zip` na lista de arquivos.
-2. Clique em **Download raw file** (ícone de download) para salvar o ZIP no computador.
-3. Extraia o ZIP e abra `COMECE-AQUI.txt`.
-4. Siga o guia para instalar Fabric em Minecraft Java Edition 26.2 e copiar os dois JARs para a pasta `mods` do jogo.
+1. Clique no link acima. No Chrome, aperte **Ctrl + J** e use **Mostrar na pasta**.
+2. Extraia o ZIP e abra **COMECE-AQUI.txt**.
+3. Siga o guia para instalar Fabric em Minecraft Java Edition 26.2 e copiar apenas os dois JARs para a pasta `mods`.
+4. Se já tem a Luma antiga, mova o JAR antigo para fora de `mods`; mantenha só uma versão.
 
-O arquivo `SHA256SUMS.txt` registra a integridade do pacote. O guia completo também está em `../docs/INSTALAR.md` no projeto.
+O erro “não foi possível baixar o artefato” refere-se à entrega de arquivos da conversa. Este link baixa o arquivo pelo GitHub. Se estiver na lista de arquivos do repositório, abra o ZIP e clique em **Download raw file**. **Code → Download ZIP** baixa o código-fonte e não substitui este pacote de instalação.
 
-Esta pasta foi preparada no ambiente de desenvolvimento. Sua existência local não significa que os arquivos já foram enviados ao GitHub.
+`SHA256SUMS.txt` registra os checksums dos pacotes. O [guia completo](../docs/INSTALAR.md) e os [testes](../docs/TESTES.md) estão no projeto e no pacote. Voz/microfone continuam usando navegador/sistema, possivelmente com internet.
+
+`Luma-Fabric-26.2.zip` é o arquivo preservado da versão 0.1.0; ele não inclui o modelo próprio.
+
+Para reproduzir o pacote experimental após um build aprovado: `python3 scripts/package-installation.py`. O script verifica o mod, o checkpoint, o Fabric API e o CRC do ZIP antes de finalizar.

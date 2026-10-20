@@ -1,14 +1,22 @@
-LUMA — COMPANHIA DE AVENTURA
+LUMA 0.2.0-experimental — COMPANHIA DE AVENTURA
 Minecraft Java Edition 26.2 | Fabric Loader 0.19.5 ou superior compatível
 
 Você não precisa programar nem compilar para usar este pacote.
 Não funciona no Minecraft Bedrock, celular, console, Forge ou NeoForge.
 É necessário ter acesso oficial ao Minecraft Java Edition.
+O pacote inclui uma IA própria de texto, pequena e experimental.
+Ela pode gerar respostas sem sentido; os comandos funcionam com ela desligada.
 
-1. EXTRAIA O ZIP
+1. BAIXE E EXTRAIA O ZIP
+Pacote: Luma-Fabric-26.2-IA-Propria-Experimental.zip
+Download:
+https://raw.githubusercontent.com/lucasmac412/Mods/v0.2.0-experimental/downloads/Luma-Fabric-26.2-IA-Propria-Experimental.zip
+No Chrome, aperte Ctrl + J para ver o download e "Mostrar na pasta".
+Se o Codex disser que não pôde baixar o artefato, use esse link do GitHub.
 Clique com o botão direito no ZIP e escolha "Extrair tudo" ou equivalente.
 Dentro da pasta extraída, abra a pasta "mods": há dois arquivos .jar.
 Não descompacte esses JARs e não tente instalá-los com dois cliques.
+Um ZIP com "src" e "gradle" é o código-fonte, não o pacote pronto.
 
 2. PREPARE O MINECRAFT
 No Minecraft Launcher oficial, abra Java Edition, escolha a versão 26.2,
@@ -26,7 +34,9 @@ No perfil Fabric, em Editar > Mais opções > Executável Java, selecione
 o javaw.exe desse JDK no Windows, ou o java correspondente no Linux/macOS.
 
 4. COPIE OS DOIS MODS
-Feche o jogo. Abra a pasta de jogo usada pelo seu perfil Fabric.
+Feche o jogo. Se for atualizar, faça uma cópia da pasta "saves" para outro
+local antes de usar a nova versão em um mundo importante.
+Abra a pasta de jogo usada pelo seu perfil Fabric.
 No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
 Se o diretório estiver vazio, no Windows aperte Windows + R, digite
 %APPDATA%\.minecraft e pressione Enter.
@@ -35,10 +45,13 @@ Linux: ~/.minecraft
 Se usa outro Launcher, abra a pasta da instância selecionada.
 
 Abra ou crie a subpasta "mods" nessa pasta de jogo.
+Se já houver uma versão antiga da Luma ou do Fabric API que será trocada,
+mova o JAR antigo para um backup FORA da pasta "mods".
 Copie para ela OS DOIS JARs da pasta "mods" deste pacote:
-- luma-companion-0.1.0.jar
+- luma-companion-0.2.0-experimental.jar
 - fabric-api-0.161.0+26.2.jar
 Não deixe duas versões do mesmo mod na pasta.
+O modelo de IA já está dentro do JAR da Luma. Não há outro modelo a instalar.
 
 5. COMECE EM UM MUNDO NOVO
 Abra o perfil Fabric 26.2. Crie um mundo Criativo com comandos ativados.
@@ -51,16 +64,39 @@ Para fazê-la esperar: /luma ficar
 Para interromper uma tarefa: /luma parar
 Para ajuda: /luma ajuda
 
-6. VOZ EM PORTUGUÊS
+6. EXPERIMENTE A IA PRÓPRIA DE TEXTO — OPCIONAL
+No chat, digite uma linha de cada vez:
+/luma ia ligar
+/luma falar Como podemos começar nossa aventura?
+Leia o aviso experimental e aguarde a resposta.
+Para desligar o modelo: /luma ia desligar
+Os comandos como /luma seguir e /luma construir continuam funcionando.
+
+O gerador é próprio do projeto e o modelo foi treinado do zero.
+Você não precisa instalar Ollama, criar conta de IA, configurar API ou pagar.
+A geração de texto acontece no computador e pode funcionar offline após
+a instalação. Ainda é um modelo muito pequeno, distante da qualidade dos
+modelos grandes usados com Ollama. Pode escrever frases erradas ou sem sentido.
+Ele só gera falas. As ações do NPC continuam seguindo as ordens e regras já
+programadas; a IA não acrescenta construções novas nem joga uma campanha sozinha.
+
+Esta versão gera texto no processador (CPU), em Java, sem usar a RTX 4060.
+Ter 16 GB de RAM não garante qualidade de um modelo grande. Não compre
+hardware nem serviços para esta versão. Se ficar lento, desligue a IA.
+
+7. VOZ EM PORTUGUÊS
 Em um mundo de um jogador, digite: /luma voz
 Abra o link completo no Chrome ou Edge, no mesmo computador do jogo.
 Clique em "Ativar conexão e voz". Para falar, clique no botão de microfone
 e autorize seu uso. Você também pode digitar no painel.
 A voz usa as vozes do sistema/navegador, sem dublagem humana gravada.
 O reconhecimento pode enviar áudio ao fornecedor do navegador e exigir
-internet. Não compartilhe o link. Para desligar: /luma voz parar
+internet. A leitura em voz alta também depende da voz escolhida.
+Não criamos modelo próprio de voz ou reconhecimento do microfone.
+Selecione uma voz pt-BR no painel; pode ser preciso instalá-la no sistema.
+Não compartilhe o link. Para desligar: /luma voz parar
 
-7. PRIMEIRO ABRIGO
+8. PRIMEIRO ABRIGO
 Prepare terreno plano com área 5 x 5 livre e cinco blocos de altura vazios.
 Retire até capim e flores. Fique perto dessa área e da Luma.
 Segure 64 tábuas na mão e use /luma entregar.
@@ -72,7 +108,8 @@ As trocas de itens exigem distância máxima de seis blocos.
 MAIS INSTRUÇÕES
 Leia docs/INSTALAR.md para os comandos, mineração, limites e IA opcional.
 Leia docs/TESTES.md para saber o que foi realmente testado nesta versão.
-O modo básico funciona sem instalar Ollama nem criar uma conta de IA.
+Resultados reais do modelo próprio:
+https://github.com/lucasmac412/Mods/blob/v0.2.0-experimental/native-ai/experiments/RESULTADOS.md
 Luma não joga como uma pessoa em todas as situações nem termina o jogo
 sozinha. Mineração e construção dependem de materiais, ferramentas,
 acesso ao local e da regra minecraft:mob_griefing estar ativada.

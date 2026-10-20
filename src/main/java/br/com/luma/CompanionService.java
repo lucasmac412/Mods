@@ -3,7 +3,7 @@ package br.com.luma;
 import br.com.luma.ai.Action;
 import br.com.luma.ai.Intent;
 import br.com.luma.ai.IntentParser;
-import br.com.luma.ai.RemoteBrain;
+import br.com.luma.ai.NativeBrain;
 import br.com.luma.entity.CompanionEntity;
 import br.com.luma.voice.VoiceBridge;
 import com.mojang.brigadier.CommandDispatcher;
@@ -32,7 +32,8 @@ import net.minecraft.world.phys.Vec3;
 /** All Minecraft state is touched only on the server thread. */
 final class CompanionService implements AutoCloseable {
     private final MinecraftServer server;
-    private final Map<UUID, RemoteBrain> brains = new HashMap<>();
+    private final Map<UUID, NativeBrain> brains = new HashMap<>();
+    private final NativeBrain.Engine brainEngine = new NativeBrain.Engine();
     private final Map<UUID, Long> generations = new HashMap<>();
     private final Map<UUID, Long> lastMessage = new HashMap<>();
     private VoiceBridge voice;
@@ -243,11 +244,18 @@ final class CompanionService implements AutoCloseable {
             default -> "Certo.";
         });
     }
-    private long bump(UUID owner) { return generations.merge(owner, 1L, Long::sum); }
+    private long bump(UUID owner) {
+        long generation = generations.merge(owner, 1L, Long::sum);
+        NativeBrain brain = brains.get(owner);
+        if (brain != null) brain.cancelPending();
+        return generation;
+    }
 
     void talk(ServerPlayer player, String raw) {
         if (closed || raw == null || raw.isBlank()) return;
-        String text = raw.substring(0, Math.min(raw.length(), 500)).strip();
+        int textEnd = Math.min(raw.length(), 500);
+        if (textEnd < raw.length() && Character.isHighSurrogate(raw.charAt(textEnd - 1))) textEnd--;
+        String text = raw.substring(0, textEnd).strip();
         CompanionEntity entity = find(player.getUUID());
         if (entity == null) { missing(player); return; }
         Intent local = IntentParser.parse(text);
@@ -259,7 +267,7 @@ final class CompanionService implements AutoCloseable {
         lastMessage.put(player.getUUID(), now);
         if (local.action() != Action.CHAT) { order(player, local.action()); return; }
         long generation = bump(player.getUUID());
-        RemoteBrain brain = brains.get(player.getUUID());
+        NativeBrain brain = brains.get(player.getUUID());
         if (brain == null) { speak(entity, local.reply()); return; }
         UUID owner = player.getUUID(), entityId = entity.getUUID();
         brain.respond(text, entity.describe()).thenAccept(intent -> {
@@ -270,22 +278,21 @@ final class CompanionService implements AutoCloseable {
                 CompanionEntity currentEntity = find(owner);
                 if (current != player || !current.isAlive() || currentEntity == null
                         || !entityId.equals(currentEntity.getUUID())) return;
-                if (intent.action() == Action.BUILD || intent.action() == Action.MINE) {
-                    speak(currentEntity, intent.reply() + " Confirme a tarefa usando /luma construir ou /luma minerar.");
-                } else if (intent.action() == Action.STATUS) speak(currentEntity, currentEntity.describe());
-                else {
-                    if (intent.action() != Action.CHAT) currentEntity.command(intent.action());
-                    speak(currentEntity, intent.reply());
-                }
+                // Learned text is conversation only. Explicit parser/commands control world changes.
+                speak(currentEntity, intent.reply());
             });
         });
     }
     private void enableBrain(ServerPlayer player, boolean enabled) {
         if (closed) return;
         bump(player.getUUID());
-        if (enabled) brains.put(player.getUUID(), new RemoteBrain(true)); else brains.remove(player.getUUID());
-        tell(player, enabled ? "Conversa com IA habilitada nesta sessão. O padrão é Ollama local; textos e estado resumido serão enviados ao serviço configurado. /luma ia desligar desativa." :
-                "IA externa desligada. As ordens e respostas locais continuam disponíveis.");
+        NativeBrain previous = brains.remove(player.getUUID());
+        if (previous != null) previous.close();
+        if (enabled) brains.put(player.getUUID(), new NativeBrain(brainEngine));
+        tell(player, enabled ? "IA própria experimental ligada nesta sessão, sem serviço externo. "
+                + "O modelo é muito pequeno e pode produzir texto sem sentido; não conversa como modelos grandes. "
+                + "As ações continuam por ordens simples. /luma ia desligar desativa." :
+                "IA própria desligada. As ordens e respostas locais continuam disponíveis.");
     }
     private void startVoice(ServerPlayer player) {
         if (closed) return;
@@ -338,7 +345,8 @@ final class CompanionService implements AutoCloseable {
         if (closed) return;
         UUID owner = player.getUUID();
         bump(owner);
-        brains.remove(owner);
+        NativeBrain brain = brains.remove(owner);
+        if (brain != null) brain.close();
         lastMessage.remove(owner);
         if (owner.equals(voiceOwner)) endVoice();
     }
@@ -384,6 +392,8 @@ final class CompanionService implements AutoCloseable {
         if (closed) return;
         closed = true;
         endVoice();
+        brains.values().forEach(NativeBrain::close);
+        brainEngine.close();
         brains.clear(); generations.clear(); lastMessage.clear();
     }
 }

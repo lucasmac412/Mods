@@ -1,0 +1,8 @@
+{
+  "purpose": "reproducibility check only; not additional model selection",
+  "configuration": "pilot-32; same seed and all hyperparameters",
+  "selected_checkpoint_sha256": "c0912769c29be52590938af792d7440afef78664294b50342e6ca27abe66604c",
+  "retrained_checkpoint_sha256": "c0912769c29be52590938af792d7440afef78664294b50342e6ca27abe66604c",
+  "byte_identical": true,
+  "test_results_used": false
+}

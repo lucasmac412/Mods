@@ -24,9 +24,10 @@ PY
 task_jdk=${LUMA_JAVA_HOME:-${JAVA_HOME:-/workspace/.tools/jdk-25.0.4.1+1}}
 mkdir -p "$task_cache/classes"
 mapfile -t task_sources < <(find "$repo_root/src/main/java/br/com/luma/ai" "$repo_root/src/main/java/br/com/luma/voice" \
+    "$repo_root/native-ai/src/main/java" \
     "$repo_root/src/test/java/br/com/luma/ai" "$repo_root/src/test/java/br/com/luma/voice" -name '*.java' -type f | sort)
 "$task_jdk/bin/javac" --release 25 -encoding UTF-8 \
     -cp "$task_cache/gson.jar:$task_cache/junit.jar" -d "$task_cache/classes" "${task_sources[@]}"
 "$task_jdk/bin/java" -jar "$task_cache/junit.jar" execute \
-    --class-path "$task_cache/classes:$task_cache/gson.jar:$repo_root/src/main/resources" \
+    --class-path "$task_cache/classes:$task_cache/gson.jar:$repo_root/src/main/resources:$repo_root/native-ai/mod-resources" \
     --scan-class-path --fail-if-no-tests --disable-banner

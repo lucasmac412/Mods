@@ -48,3 +48,4 @@ export JAVA_HOME=/workspace/.tools/jdk-25.0.4.1+1
 export PATH="$JAVA_HOME/bin:$PATH"
 export GRADLE_USER_HOME=/workspace/.cache/gradle
 ./gradlew --no-daemon build
+./gradlew --no-daemon -p native-ai build

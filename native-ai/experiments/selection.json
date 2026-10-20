@@ -1,0 +1,9 @@
+{
+  "selected_run": "pilot-32",
+  "criterion": "lowest selected validation cross entropy; no test scoring or generations used",
+  "model_sha256": "c0912769c29be52590938af792d7440afef78664294b50342e6ca27abe66604c",
+  "model_bytes": 302982,
+  "model_path": "native-ai/mod-resources/assets/luma/models/luma-native.luma",
+  "test_evaluated_at_selection": false,
+  "training_corpus_sha256": "7d563ec942bfa7eef6e72698d25c0abbeb0b83569753e155d1caaa0b59c40022"
+}
