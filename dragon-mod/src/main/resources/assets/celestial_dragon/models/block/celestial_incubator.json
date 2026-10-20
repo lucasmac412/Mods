@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "celestial_dragon:block/celestial_incubator_side",
+    "down": "celestial_dragon:block/celestial_stone",
+    "up": "celestial_dragon:block/celestial_incubator_top",
+    "north": "celestial_dragon:block/celestial_incubator_front",
+    "south": "celestial_dragon:block/celestial_incubator_side",
+    "east": "celestial_dragon:block/celestial_incubator_side",
+    "west": "celestial_dragon:block/celestial_incubator_side"
+  }
+}

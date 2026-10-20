@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "part=0": {
+      "model": "celestial_dragon:block/celestial_egg_0"
+    },
+    "part=1": {
+      "model": "celestial_dragon:block/celestial_egg_1"
+    },
+    "part=2": {
+      "model": "celestial_dragon:block/celestial_egg_2"
+    }
+  }
+}

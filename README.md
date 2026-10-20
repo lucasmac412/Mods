@@ -1,5 +1,7 @@
 # Luma — Companhia de aventura
 
+**Novo mod independente: [Dragão Celestial — ouro e obsidiana](dragon-mod/README.md).** Dragão chinês montável, voo, mordida, raio de energia, bosque, ninhos e incubação. [Baixar o pacote pronto do dragão](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.1.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.1.0-Experimental.zip) · [Instalar passo a passo](docs/INSTALAR-DRAGAO.md).
+
 Luma é uma companheira humanoide para **Minecraft Java Edition 26.2 com Fabric**. Ela tem uma skin própria em roxo e ciano, acompanha o dono, recebe ordens em português do Brasil e pode conversar pelo Ollama e receber ordens por uma tecla de microfone dentro do jogo com o complemento **Luma Voz**.
 
 **[Baixar Luma 0.4.0 experimental com Ollama e voz](https://raw.githubusercontent.com/lucasmac412/Mods/v0.4.0-experimental/downloads/Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip)** — inclui Luma, Luma Voz, Fabric API, reconhecimento de voz offline em português e o guia `COMECE-AQUI.txt`. O Ollama e seu modelo de conversa são instalados separadamente pelo site oficial, conforme o guia.

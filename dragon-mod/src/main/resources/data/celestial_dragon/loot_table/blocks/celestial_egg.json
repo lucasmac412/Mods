@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "minecraft:block_state_property",
+          "block": "celestial_dragon:celestial_egg",
+          "properties": {
+            "part": "0"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "celestial_dragon:celestial_egg"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "celestial_dragon:blocks/celestial_egg"
+}

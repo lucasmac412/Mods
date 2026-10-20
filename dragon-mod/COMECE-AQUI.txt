@@ -1,0 +1,86 @@
+DRAGÃO CELESTIAL — OURO E OBSIDIANA
+Minecraft Java Edition 26.2 | Fabric | versão 0.1.0-experimental
+
+Você não precisa programar, instalar Ollama ou instalar a Luma para usar este mod.
+Não funciona no Bedrock, celular, console, Forge ou NeoForge.
+
+1. INSTALE O JOGO E O FABRIC
+Abra Minecraft Java 26.2 uma vez e feche o jogo.
+Instale Fabric Loader 0.19.5 ou superior compatível com 26.2:
+https://fabricmc.net/use/installer/
+O perfil do jogo precisa usar Java 25. Se necessário, instale o JDK 25:
+https://adoptium.net/temurin/releases/?version=25
+
+2. COPIE OS MODS
+Extraia este ZIP. Não abra nem extraia os JARs.
+Abra a pasta de jogo do seu perfil Fabric.
+No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
+Se o diretório estiver vazio, no Windows aperte Windows+R e abra:
+%APPDATA%\.minecraft
+Crie a pasta mods se ela não existir. Copie para ela os dois arquivos:
+- celestial-dragon-0.1.0-experimental.jar
+- fabric-api-0.161.0+26.2.jar
+Se já houver Fabric API ou este mod, mantenha somente uma versão de cada.
+O mod é independente da Luma. Se usar os dois, basta um Fabric API compatível.
+
+3. COMECE NUM MUNDO NOVO
+Faça backup dos mundos importantes antes de experimentar.
+Abra o perfil Fabric 26.2. Crie um mundo novo; comandos ajudam a localizar o bioma.
+A geração só aparece em regiões novas, não altera as que você já explorou.
+O dragão selvagem e outros animais são perigosos: comece em Criativo para aprender.
+
+4. ENCONTRE O NINHO
+Procure o Bosque Celestial, com solo, madeira e rochas diferentes.
+O ninho gigante está no centro desse bioma, com um dragão selvagem e um ovo.
+Com comandos ativados, use:
+/locate biome celestial_dragon:celestial_grove
+/locate structure celestial_dragon:dragon_nest
+O resultado mostra coordenadas. Use o teleporte sugerido pelo próprio jogo
+e confira uma altura segura antes de sair do modo Criativo.
+Não há aparecimento natural de dragões selvagens fora dos ninhos.
+
+5. RECOLHA O OVO E FAÇA A INCUBADORA
+O ovo mede três blocos de altura e cerca de dois de largura.
+Em Sobrevivência, quebre qualquer parte para obter um único ovo e recolocá-lo.
+Em Criativo não cai item: pegue o ovo na aba Dragão Celestial ou use:
+/give @s celestial_dragon:celestial_egg
+O dragão selvagem não fica domado ao clicar: seu dragão nasce da incubadora.
+Na bancada, coloque em qualquer posição:
+- 2 Pedras celestiais: gemas que caem do minério celestial.
+- 1 Madeira celestial: tronco de árvore do Bosque Celestial.
+- 1 Rocha celestial: bloco de pedra do terreno desse bioma.
+O minério é encontrado no Overworld, com parâmetros de geração da esmeralda,
+mas em todos os biomas. A quantidade encontrada varia com a altura do terreno.
+
+6. CHOQUE O OVO
+Coloque a Incubadora celestial numa área aberta.
+Segure o ovo e clique na incubadora com o botão direito.
+O dono será o jogador que colocar o ovo nela.
+Aguarde cerca de cinco minutos com o mundo rodando e a região carregada.
+Clique com a mão vazia para consultar o progresso.
+Se não houver espaço para o dragão nascer, o ovo aguardará dentro dela.
+Quebrar a incubadora devolve o ovo que ainda estiver dentro.
+
+7. MONTE E CONTROLE
+Com a mão vazia e sem Shift, clique no seu dragão domado para montar.
+WASD: mover; mouse: orientar.
+Espaço: subir; Ctrl/tecla de correr: descer.
+Shift/tecla de agachar: desmontar. Cuidado ao desmontar em grande altura!
+Botão esquerdo: mordida. Botão direito: raio de energia pela boca.
+Os ataques têm intervalo entre usos e respeitam paredes.
+O dragão domado preserva o dono, seus animais domados e seus dragões.
+Outras criaturas ficam agressivas perto dele, inclusive animais normalmente pacíficos.
+
+8. AJUSTE VIDA E DANOS
+Dentro do mundo, aperte ESC e clique em Dragão Celestial.
+O dono do mundo individual ou um administrador pode alterar:
+- Vida máxima: 1 a 1024 pontos. Dois pontos são um coração.
+- Dano da mordida e do raio: 0 a 1000.
+Clique em Salvar no servidor. A mudança vale para selvagens e domados.
+Aumentar a vida máxima não cura os dragões que já existem.
+Os valores ficam em config/celestial-dragon.json, na máquina do mundo/servidor.
+
+GUIA COMPLETO E LIMITES
+Leia docs/INSTALAR-DRAGAO.md e docs/TESTES-DRAGAO.md.
+O alcance de percepção é de 35 blocos, como o zumbi vanilla; mordida é curta.
+Este mod não é o mod da Luma e não acrescenta IA generativa ao dragão.

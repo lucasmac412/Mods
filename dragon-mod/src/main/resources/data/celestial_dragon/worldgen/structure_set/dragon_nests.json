@@ -1,0 +1,11 @@
+{
+  "placement": {
+    "type": "celestial_dragon:grove_center"
+  },
+  "structures": [
+    {
+      "structure": "celestial_dragon:dragon_nest",
+      "weight": 1
+    }
+  ]
+}

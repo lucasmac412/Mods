@@ -1,5 +1,7 @@
 # Instalar Luma com Ollama e voz
 
+Também disponível: **[Dragão Celestial 0.1.0 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.1.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.1.0-Experimental.zip)**, um mod independente, com dois JARs e instruções. Siga o [passo a passo do dragão](../docs/INSTALAR-DRAGAO.md). Não precisa de Luma ou Ollama. Para reconstruir esse pacote após compilar `dragon-mod`, execute `python3 scripts/package-dragon.py`.
+
 **[Baixar o pacote pronto 0.4.0 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/v0.4.0-experimental/downloads/Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip)**.
 
 O ZIP inclui os três JARs de Luma, Luma Voz e Fabric API, o modelo offline de reconhecimento de português e o passo a passo. Você não precisa programar ou compilar. O Ollama e seu modelo de conversa são instalados separadamente; o [guia](../docs/OLLAMA-E-VOZ.md) mostra como fazer isso sem assinatura ou chave de API.

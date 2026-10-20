@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "celestial_dragon",
+  "version": "${version}",
+  "name": "Dragão Celestial — Ouro e Obsidiana",
+  "description": "Dragão chinês montável, bioma celestial, ninhos gigantes, ovos e incubação.",
+  "authors": ["lucasmac412"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["br.com.celestialdragon.CelestialDragonMod"],
+    "client": ["br.com.celestialdragon.client.CelestialDragonClient"]
+  },
+  "mixins": [
+    "celestial_dragon.world.mixins.json",
+    {"config": "celestial_dragon.client.mixins.json", "environment": "client"}
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": ">=0.161.0"
+  }
+}

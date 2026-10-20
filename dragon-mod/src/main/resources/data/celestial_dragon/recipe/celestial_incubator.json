@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "celestial_dragon:celestial_gem",
+    "celestial_dragon:celestial_gem",
+    "celestial_dragon:celestial_log",
+    "celestial_dragon:celestial_stone"
+  ],
+  "result": {
+    "id": "celestial_dragon:celestial_incubator",
+    "count": 1
+  }
+}

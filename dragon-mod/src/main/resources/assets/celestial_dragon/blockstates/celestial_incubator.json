@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "occupied=false": {
+      "model": "celestial_dragon:block/celestial_incubator"
+    },
+    "occupied=true": {
+      "model": "celestial_dragon:block/celestial_incubator_occupied"
+    }
+  }
+}

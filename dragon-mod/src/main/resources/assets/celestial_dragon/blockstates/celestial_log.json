@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "celestial_dragon:block/celestial_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "celestial_dragon:block/celestial_log"
+    },
+    "axis=z": {
+      "model": "celestial_dragon:block/celestial_log_horizontal",
+      "x": 90
+    }
+  }
+}

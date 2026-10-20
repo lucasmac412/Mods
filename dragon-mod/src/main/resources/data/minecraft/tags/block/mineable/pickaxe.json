@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "celestial_dragon:celestial_stone",
+    "celestial_dragon:celestial_ore",
+    "celestial_dragon:deepslate_celestial_ore",
+    "celestial_dragon:celestial_incubator",
+    "celestial_dragon:celestial_egg"
+  ]
+}

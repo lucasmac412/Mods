@@ -1,0 +1,21 @@
+{
+  "seed": 1,
+  "generator": "normal_noise",
+  "center": [712, 79, 616],
+  "eggHeightBlocks": 3,
+  "nestWidthBlocks": 41,
+  "nestFoundationBlocks": 1042,
+  "sampledPeripheralChunks": 16,
+  "soilBlocks": 12217,
+  "stoneBlocks": 10446,
+  "treeLogBlocks": 627,
+  "leafBlocks": 6176,
+  "aboveGroundRockBlocks": 173,
+  "detachedRockComponents": 0,
+  "oreBlocks": 41,
+  "guardianCountBeforeAndAfterReload": 1,
+  "guardianIsWild": true,
+  "guardianUuid": "25b7015b-2ac1-33a9-927f-4a51664fc138",
+  "locateStructurePassed": true,
+  "saveAndReloadPassed": true
+}

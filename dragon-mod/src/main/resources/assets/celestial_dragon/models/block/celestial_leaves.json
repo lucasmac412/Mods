@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "celestial_dragon:block/celestial_leaves"
+  }
+}

@@ -50,3 +50,4 @@ export GRADLE_USER_HOME=/workspace/.cache/gradle
 ./gradlew --no-daemon build
 ./gradlew --no-daemon -p native-ai build
 ./gradlew --no-daemon -p voice-input build
+./gradlew --no-daemon -p dragon-mod build
