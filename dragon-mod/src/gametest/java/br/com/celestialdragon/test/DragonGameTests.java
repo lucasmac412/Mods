@@ -125,6 +125,18 @@ public final class DragonGameTests {
         helper.assertTrue(level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(DragonWorld.DRAGON_NEST).isPresent(), "The nest is registered as a locatable structure");
         helper.assertTrue(level.getServer().getRecipeManager().byKey(ResourceKey.create(Registries.RECIPE, CelestialDragonMod.id("celestial_incubator"))).isPresent(),
                 "The survival incubator crafting recipe must load");
+        // Exercise actual biome sampling: the old rare layout covers only about 5% of this grid.
+        int celestialSamples = 0;
+        int totalSamples = 0;
+        for (int x = -4096; x < 4096; x += 32) {
+            for (int z = -4096; z < 4096; z += 32) {
+                totalSamples++;
+                if (overworld.getNoiseBiome(x >> 2, 20, z >> 2, sampler).is(DragonWorld.CELESTIAL_GROVE)) celestialSamples++;
+            }
+        }
+        double coverage = (double)celestialSamples / totalSamples;
+        helper.assertTrue(coverage > 0.98, "Testing worlds must make the celestial biome extremely common; coverage=" + coverage);
+        System.out.println("Celestial testing coverage: " + celestialSamples + "/" + totalSamples + " = " + coverage);
         helper.succeed();
     }
 }

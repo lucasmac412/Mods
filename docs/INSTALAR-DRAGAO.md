@@ -2,7 +2,9 @@
 
 Este guia é para **Minecraft Java Edition no computador**, versão **26.2**. O Dragão Celestial é um mod Fabric independente da Luma.
 
-**[Baixar Dragao-Celestial-Fabric-26.2-v0.1.0-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.1.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.1.0-Experimental.zip)**
+**[Baixar Dragao-Celestial-Fabric-26.2-v0.1.1-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.1.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.1.1-Experimental.zip)**
+
+**Novidade da 0.1.1:** enquanto desenvolvemos e testamos o mod, o Bosque Celestial está muito comum: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São **36 vezes mais centros por área** do que na 0.1.0, e bosques vizinhos podem se unir. Essa frequência é temporária para facilitar os testes.
 
 ## 1. Baixe e extraia o pacote
 
@@ -10,10 +12,10 @@ Abra o link acima. No navegador, `Ctrl + J` mostra os downloads. Localize o ZIP 
 
 | Arquivo | Função |
 | --- | --- |
-| `celestial-dragon-0.1.0-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
+| `celestial-dragon-0.1.1-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
 | `fabric-api-0.161.0+26.2.jar` | Dependência usada pelo mod. |
 
-Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.1.0-experimental/dragon-mod/README.md).
+Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.1.1-experimental/dragon-mod/README.md).
 
 ## 2. Abra o Minecraft Java 26.2 uma vez
 
@@ -52,12 +54,14 @@ No Windows, pressione `Windows + R`, cole `%APPDATA%\.minecraft` e aperte Enter 
 4. Se já houver outra versão do Dragão Celestial ou do Fabric API, guarde a versão substituída fora de `mods`. Deixe uma única versão de cada mod.
 5. Abra o Launcher, selecione **Fabric 26.2** e clique em **Jogar**.
 
+**Se você já usa a versão 0.1.0:** feche o jogo, mova `celestial-dragon-0.1.0-experimental.jar` para fora de `mods` e coloque `celestial-dragon-0.1.1-experimental.jar` no lugar. Nunca deixe as duas versões juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
+
 O resultado deve ser parecido com:
 
 ```text
 .minecraft/
   mods/
-    celestial-dragon-0.1.0-experimental.jar
+    celestial-dragon-0.1.1-experimental.jar
     fabric-api-0.161.0+26.2.jar
 ```
 
@@ -65,7 +69,9 @@ Não coloque o ZIP inteiro ou o arquivo `-sources.jar` em `mods`. A Luma não é
 
 ## 5. Encontre um ninho
 
-Para o primeiro teste, crie um **mundo novo em Criativo, com comandos ativados**. O Bosque Celestial aparece no Overworld, com árvores, solo, rochas e minério próprios. Cada bosque contém um ninho gigante com um dragão selvagem e um ovo. Os dragões selvagens surgem nesses ninhos.
+Para o primeiro teste, crie um **mundo novo em Criativo, com comandos ativados**. O Bosque Celestial aparece com muita frequência no Overworld, com árvores, solo, rochas e minério próprios. Cada centro de geração contém um ninho gigante com um dragão selvagem e um ovo. Como bosques vizinhos podem se unir, uma área celestial extensa pode conter vários ninhos. Os dragões selvagens surgem nesses ninhos.
+
+O aumento da frequência não modifica áreas já exploradas. Se atualizar um mundo antigo, viaje para regiões ainda não geradas; criar um mundo novo é a forma mais simples de experimentar esta versão.
 
 Abra o chat com `T`, digite uma linha e pressione Enter:
 

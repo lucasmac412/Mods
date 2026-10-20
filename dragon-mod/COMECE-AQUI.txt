@@ -1,5 +1,11 @@
 DRAGÃO CELESTIAL — OURO E OBSIDIANA
-Minecraft Java Edition 26.2 | Fabric | versão 0.1.0-experimental
+Minecraft Java Edition 26.2 | Fabric | versão 0.1.1-experimental
+
+VERSÃO DE TESTES: BOSQUE CELESTIAL MUITO COMUM
+Agora há um centro de bosque e ninho por região de 256 x 256 blocos,
+36 vezes mais centros por área do que na versão 0.1.0.
+Cada bosque mantém raio de 192 blocos e pode se unir aos bosques vizinhos.
+Essa frequência é temporária para facilitar nossos testes.
 
 Você não precisa programar, instalar Ollama ou instalar a Luma para usar este mod.
 Não funciona no Bedrock, celular, console, Forge ou NeoForge.
@@ -18,20 +24,24 @@ No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
 Se o diretório estiver vazio, no Windows aperte Windows+R e abra:
 %APPDATA%\.minecraft
 Crie a pasta mods se ela não existir. Copie para ela os dois arquivos:
-- celestial-dragon-0.1.0-experimental.jar
+- celestial-dragon-0.1.1-experimental.jar
 - fabric-api-0.161.0+26.2.jar
 Se já houver Fabric API ou este mod, mantenha somente uma versão de cada.
+Se estiver atualizando, retire o JAR antigo do dragão da pasta mods e coloque
+celestial-dragon-0.1.1-experimental.jar. O Fabric API continua o mesmo.
 O mod é independente da Luma. Se usar os dois, basta um Fabric API compatível.
 
 3. COMECE NUM MUNDO NOVO
 Faça backup dos mundos importantes antes de experimentar.
 Abra o perfil Fabric 26.2. Crie um mundo novo; comandos ajudam a localizar o bioma.
 A geração só aparece em regiões novas, não altera as que você já explorou.
+O aumento da frequência também só vale em regiões novas; prefira um mundo novo.
 O dragão selvagem e outros animais são perigosos: comece em Criativo para aprender.
 
 4. ENCONTRE O NINHO
 Procure o Bosque Celestial, com solo, madeira e rochas diferentes.
-O ninho gigante está no centro desse bioma, com um dragão selvagem e um ovo.
+Cada centro de geração tem um ninho gigante, com um dragão selvagem e um ovo.
+Como os bosques agora podem se unir, uma área celestial extensa pode ter vários ninhos.
 Com comandos ativados, use:
 /locate biome celestial_dragon:celestial_grove
 /locate structure celestial_dragon:dragon_nest

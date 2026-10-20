@@ -7,8 +7,8 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.1.0-experimental"
-NAME = "Dragao-Celestial-Fabric-26.2-v0.1.0-Experimental.zip"
+VERSION = "0.1.1-experimental"
+NAME = "Dragao-Celestial-Fabric-26.2-v0.1.1-Experimental.zip"
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
 OLD_PACKAGE_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 

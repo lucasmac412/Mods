@@ -1,10 +1,14 @@
 # Dragão Celestial — Ouro e Obsidiana
 
-Mod independente para **Minecraft Java Edition 26.2 + Fabric**, versão **0.1.0-experimental**. Adiciona um dragão chinês negro e dourado, voo montado, mordida, raio de energia, o Bosque Celestial, ninhos gigantes, ovos coletáveis e uma incubadora. Pode ser instalado sem a Luma.
+Mod independente para **Minecraft Java Edition 26.2 + Fabric**, versão **0.1.1-experimental**. Adiciona um dragão chinês negro e dourado, voo montado, mordida, raio de energia, o Bosque Celestial, ninhos gigantes, ovos coletáveis e uma incubadora. Pode ser instalado sem a Luma.
 
-**[Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.1.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.1.0-Experimental.zip)** · **[Instalação passo a passo](https://github.com/lucasmac412/Mods/blob/dragao-v0.1.0-experimental/docs/INSTALAR-DRAGAO.md)**
+**[Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.1.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.1.1-Experimental.zip)** · **[Instalação passo a passo](https://github.com/lucasmac412/Mods/blob/dragao-v0.1.1-experimental/docs/INSTALAR-DRAGAO.md)**
 
 O ZIP contém o JAR do dragão e o Fabric API compatível. Instale Minecraft 26.2, Fabric Loader 0.19.5 ou superior compatível e Java 25. Copie os dois JARs para a pasta `mods` do perfil Fabric. No multiplayer, instale os mesmos arquivos no servidor e nos clientes. Esta é uma versão experimental; faça uma cópia do mundo antes de usá-la e prefira um mundo novo para explorar a geração.
+
+**Atualização 0.1.1 para testes:** o Bosque Celestial agora é muito comum. Há um centro de bosque e ninho por região de **256 × 256 blocos**, em vez de 1.536 × 1.536 na 0.1.0: **36 vezes mais centros por área**. O raio continua em 192 blocos, então bosques vizinhos podem se unir em áreas extensas. Essa frequência é temporária durante o desenvolvimento; o equilíbrio final será definido depois.
+
+Para atualizar, feche o jogo e substitua o JAR antigo por `celestial-dragon-0.1.1-experimental.jar`; mantenha apenas uma versão do dragão na pasta `mods`. O Fabric API continua o mesmo. Para ver a geração mais comum, crie um mundo novo ou explore regiões ainda não geradas: áreas já exploradas não são refeitas.
 
 ## Encontrar e criar seu dragão
 
@@ -62,6 +66,6 @@ Com JDK 25 instalado, execute a partir da raiz deste repositório:
 ./gradlew -p dragon-mod runGameTest
 ```
 
-No Windows, use `gradlew.bat -p dragon-mod build`. O mod instalável fica em `dragon-mod/build/libs/celestial-dragon-0.1.0-experimental.jar`; o arquivo `-sources.jar` contém o código-fonte e não deve ser instalado como mod.
+No Windows, use `gradlew.bat -p dragon-mod build`. O mod instalável fica em `dragon-mod/build/libs/celestial-dragon-0.1.1-experimental.jar`; o arquivo `-sources.jar` contém o código-fonte e não deve ser instalado como mod.
 
-Validação do servidor: **quatro testes JUnit e 17 cenários do mod mais um controle Fabric aprovados**. O teste gráfico separado verifica modelo, menu, controles montados e geração em mundo Normal com recarga. Veja os [resultados, capturas reais e limites](https://github.com/lucasmac412/Mods/blob/dragao-v0.1.0-experimental/docs/TESTES-DRAGAO.md). A nuvem não tem saída de áudio; a reprodução dos sons precisa ser conferida no computador do jogador.
+A suíte do servidor verifica configuração, ovos, incubação, combate e proteção de aliados. O teste gráfico separado verifica modelo, menu, controles montados e geração em mundo Normal com recarga. Veja os [resultados, capturas reais e limites](https://github.com/lucasmac412/Mods/blob/dragao-v0.1.1-experimental/docs/TESTES-DRAGAO.md). A nuvem não tem saída de áudio; a reprodução dos sons precisa ser conferida no computador do jogador.

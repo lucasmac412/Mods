@@ -6,13 +6,15 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStruct
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 
-/** Fixed macro regions keep the biome and its nest exactly aligned on every reload. */
+/** Fixed regions keep biome and nest aligned; this development build makes groves abundant. */
 public final class CelestialNestPlacement extends RandomSpreadStructurePlacement {
-    public static final int SPACING = 96;
+    // Temporary testing density: 256x256 blocks per nest, instead of the original 1536x1536.
+    public static final int SPACING = 16;
+    public static final int SEPARATION = 8;
     public static final int SALT = 87542109;
     public static final MapCodec<CelestialNestPlacement> CODEC = MapCodec.unit(CelestialNestPlacement::new);
 
-    public CelestialNestPlacement() { super(SPACING, 48, RandomSpreadType.LINEAR, SALT); }
+    public CelestialNestPlacement() { super(SPACING, SEPARATION, RandomSpreadType.LINEAR, SALT); }
     @Override public ChunkPos getPotentialStructureChunk(long seed, int x, int z) {
         return super.getPotentialStructureChunk(0L, x, z);
     }

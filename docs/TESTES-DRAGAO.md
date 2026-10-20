@@ -1,17 +1,21 @@
-# Validação do Dragão Celestial 0.1.0 experimental
+# Validação do Dragão Celestial 0.1.1 experimental
 
 Ambiente de desenvolvimento Linux x86_64, JDK 25, Minecraft Java 26.2, Fabric Loader 0.19.5 e Fabric API 0.161.0+26.2. O mod é independente da Luma e do Ollama.
+
+A versão **0.1.1** usa frequência aumentada temporária para facilitar o desenvolvimento: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São 36 vezes mais centros por área do que na 0.1.0; bosques vizinhos podem se unir. Essa mudança só aparece em regiões novas do Overworld. Prefira um mundo novo para testar.
 
 ## Servidor e configuração
 
 Em 20/10/2026, `./gradlew --no-daemon -p dragon-mod build` terminou com `BUILD SUCCESSFUL`: **quatro testes JUnit e 18 GameTests passaram**, sem falhas. Dos GameTests, **17 são cenários do mod e um é o controle interno do Fabric**.
+
+A amostragem real da fonte de biomas encontrou o Bosque Celestial em **65.216 de 65.536 posições (99,51%)**, numa grade de 8.192 × 8.192 blocos, de −4.096 até 4.064 em cada eixo, com passo de 32 blocos. A verificação exige mais de 98% de cobertura e falharia na frequência antiga. Essa porcentagem descreve a amostra; não significa que cada bloco de qualquer mundo seja celestial.
 
 Os cenários verificam:
 
 - Quebrar cada seção do ovo em Sobrevivência solta um único item; perder o suporte ou sofrer uma explosão também não duplica ovos. Quebrar no Criativo não solta item.
 - Incubação conserva dono e progresso ao salvar, gera um único dragão domado e espera quando o nascimento está bloqueado. Quebrar a incubadora ocupada devolve seu ovo.
 - O ninho gigante contém um ovo completo e um guardião selvagem, sem duplicação ao reprocessar a mesma estrutura.
-- O bioma é registrado no Overworld e preserva a seleção do Nether.
+- O bioma é registrado no Overworld, cobre mais de 98% da grade de amostragem na frequência de testes e preserva a seleção do Nether.
 - Dono, animais domados, dragões do mesmo dono e membros da equipe do dono ficam protegidos da mordida e do raio.
 - Paredes interrompem o raio; o ataque não destrói blocos, não passa de 35 blocos e causa um único acerto por alvo em cada disparo.
 - Os intervalos de mordida e raio são respeitados. Uma vaca consegue reagir e causar dano mesmo sem atributo de ataque vanilla.
@@ -28,7 +32,7 @@ Relatórios reproduzíveis: `dragon-mod/build/test-results/test/TEST-*.xml` e `d
 1. **Modelo, configuração e montaria:** renderiza os dragões selvagem e domado; abre o botão do Esc; rejeita NaN na tela e no servidor; salva vida 240, mordida 14 e raio 35, confirmando os valores no servidor. Monta com o dono, usa as entradas reais W/Espaço/Ctrl, aciona o raio pelo botão direito e desmonta com Shift. A configuração original é restaurada no final.
 2. **Geração natural e persistência:** cria um mundo **Normal, semente 1**, usando o gerador real de terreno, sem montar um ninho por comando. Verifica bosque, fundação do ninho com 41 blocos de largura, ovo de três partes, árvores, folhas, solo, afloramentos de rocha, minério e localização da estrutura. Confirma um guardião selvagem; fecha e reabre o mundo e exige o mesmo UUID, sem duplicação. Uma verificação de conexão das rochas ao solo detecta o erro visual de rochas flutuantes encontrado e corrigido durante o desenvolvimento.
 
-**Os dois cenários passaram em 20/10/2026**, com `BUILD SUCCESSFUL` e saída 0. Na amostra de 16 chunks periféricos foram contados 627 blocos de tronco, 6.176 de folhas, 41 de minério e **zero grupos de rochas sem apoio**. O mesmo guardião selvagem permaneceu após reabrir o mundo. Esses números descrevem esta amostra, não uma garantia de densidade para qualquer semente.
+**Os dois cenários gráficos passaram em 20/10/2026**, com `BUILD SUCCESSFUL` e saída 0. Na amostra de 16 chunks periféricos foram contados **563 blocos de tronco, 5.905 de folhas, 25 de minério e zero grupos de rochas sem apoio**. O mesmo guardião selvagem permaneceu após reabrir o mundo. As contagens estão no [relatório de geração natural](dragao/natural-generation.json); descrevem esta amostra, não uma garantia de densidade para qualquer semente.
 
 As capturas são do jogo, e não das imagens de conceito:
 
@@ -48,7 +52,7 @@ Os sons foram gerados proceduralmente pelo projeto; não são gravações de out
 
 ## Limites desta versão
 
-É uma primeira versão experimental. As verificações cobrem cenários definidos; não comprovam compatibilidade com todos os mods, biomas de terceiros ou todas as sementes. A reação acrescentada às criaturas usa a IA de objetivos do Minecraft; chefes e criaturas de outros mods que usam sistemas próprios podem se comportar de outra maneira. Itens, blocos e entidades sem comportamento de criatura não passam a atacar.
+É uma versão experimental com frequência de bioma aumentada para testes. As verificações cobrem cenários definidos; não comprovam compatibilidade com todos os mods, biomas de terceiros ou todas as sementes. A reação acrescentada às criaturas usa a IA de objetivos do Minecraft; chefes e criaturas de outros mods que usam sistemas próprios podem se comportar de outra maneira. Itens, blocos e entidades sem comportamento de criatura não passam a atacar.
 
 Não houve teste de desempenho na RTX 4060 do jogador, de instalação no Windows nem de uma sessão multiplayer entre computadores reais. O teste gráfico utiliza renderização por software na nuvem. Os ataques e as configurações são decididos pelo servidor; isso também é exercitado pelos testes, mas não substitui uma partida multiplayer real.
 
