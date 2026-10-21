@@ -99,6 +99,12 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     private int spiritCooldown;
     private float boostAmount;
     private boolean sanctuarySupportsChecked;
+    private float flightPhase, previousFlightPhase, flightEffort, previousFlightEffort;
+    private float sleepPose, previousSleepPose;
+
+    public float flightPhase(float partial) { return Mth.lerp(partial, previousFlightPhase, flightPhase); }
+    public float flightEffort(float partial) { return Mth.lerp(partial, previousFlightEffort, flightEffort); }
+    public float sleepPose(float partial) { return Mth.lerp(partial, previousSleepPose, sleepPose); }
     private final ServerBossEvent boss = new ServerBossEvent(UUID.randomUUID(),
             Component.literal("Dragão Celestial — Guardião do Ninho"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS);
 
@@ -365,9 +371,15 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
 
     @Override
     public void tick() {
+        previousFlightPhase = flightPhase; previousFlightEffort = flightEffort; previousSleepPose = sleepPose;
+        flightEffort = Mth.lerp(0.12F, flightEffort, (float)Math.min(1, getDeltaMovement().length() * 1.5));
+        flightPhase += 0.035F + flightEffort * 0.040F;
+        sleepPose = Mth.clamp(sleepPose + (isDormant() ? .06F : -.06F), 0, 1);
         boostAmount = Mth.clamp(boostAmount + (isBoosting() ? 0.08F : -0.12F), 0, 1);
         super.tick();
         if (!(level() instanceof ServerLevel server)) return;
+        if (isAlive() && tickCount % 160 == 0) playSound(DragonSounds.BREATH, isDormant() ? .18F : .45F, 1.0F);
+        if (isBoosting() && tickCount % 24 == 0) playSound(DragonSounds.FLIGHT, .55F, 1.0F);
         if (tickCount == 1 && isAlive() && !isDormant()) playSound(DragonSounds.ROAR, 1.8F, 0.85F);
         if (!sanctuarySupportsChecked && !isTamed() && nest != null && tickCount % 40 == 0)
             sanctuarySupportsChecked = NestGenerator.repairSanctuarySupports(server, nest);
@@ -469,7 +481,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         if (!server.addFreshEntity(orb)) return false;
         spiritCooldown = SPIRIT_COOLDOWN;
         entityData.set(SPIRIT, SPIRIT_CHARGE_TICKS);
-        playSound(DragonSounds.BEAM, 2.0F, 0.45F);
+        playSound(DragonSounds.SPIRIT_CHARGE, 1.0F, 1.0F);
         return true;
     }
 
@@ -530,6 +542,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
                 || isDormant() || spiritTicks() > 0 || beamTicks() > 0 || biteTicks() > 0) return false;
         beamCooldown = BEAM_COOLDOWN;
         entityData.set(BEAM, BEAM_DURATION);
+        playSound(DragonSounds.BEAM_CHARGE, .9F, 1.0F);
         LivingEntity rider = getControllingPassenger();
         beamDirection = (rider == null ? getLookAngle() : rider.getLookAngle()).normalize();
         beamHits.clear();

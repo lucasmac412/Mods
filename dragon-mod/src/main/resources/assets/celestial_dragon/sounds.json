@@ -7,6 +7,12 @@
         "volume": 0.85,
         "attenuation_distance": 64,
         "preload": true
+      },
+      {
+        "name": "celestial_dragon:roar_2",
+        "volume": 0.85,
+        "attenuation_distance": 64,
+        "preload": true
       }
     ]
   },
@@ -15,6 +21,12 @@
     "sounds": [
       {
         "name": "celestial_dragon:bite",
+        "volume": 0.8,
+        "attenuation_distance": 48,
+        "preload": true
+      },
+      {
+        "name": "celestial_dragon:bite_2",
         "volume": 0.8,
         "attenuation_distance": 48,
         "preload": true
@@ -40,6 +52,12 @@
         "volume": 0.85,
         "attenuation_distance": 48,
         "preload": true
+      },
+      {
+        "name": "celestial_dragon:hurt_2",
+        "volume": 0.85,
+        "attenuation_distance": 48,
+        "preload": true
       }
     ]
   },
@@ -61,6 +79,72 @@
         "name": "celestial_dragon:ambience",
         "volume": 0.65,
         "attenuation_distance": 24,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.breath": {
+    "subtitle": "subtitles.celestial_dragon.breath",
+    "sounds": [
+      {
+        "name": "celestial_dragon:breath",
+        "volume": 0.8,
+        "attenuation_distance": 48,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.flight": {
+    "subtitle": "subtitles.celestial_dragon.flight",
+    "sounds": [
+      {
+        "name": "celestial_dragon:flight",
+        "volume": 0.8,
+        "attenuation_distance": 48,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.beam_charge": {
+    "subtitle": "subtitles.celestial_dragon.beam_charge",
+    "sounds": [
+      {
+        "name": "celestial_dragon:beam_charge",
+        "volume": 0.8,
+        "attenuation_distance": 64,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.spirit_charge": {
+    "subtitle": "subtitles.celestial_dragon.spirit_charge",
+    "sounds": [
+      {
+        "name": "celestial_dragon:spirit_charge",
+        "volume": 0.8,
+        "attenuation_distance": 192,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.spirit_launch": {
+    "subtitle": "subtitles.celestial_dragon.spirit_launch",
+    "sounds": [
+      {
+        "name": "celestial_dragon:spirit_launch",
+        "volume": 0.8,
+        "attenuation_distance": 192,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.spirit_impact": {
+    "subtitle": "subtitles.celestial_dragon.spirit_impact",
+    "sounds": [
+      {
+        "name": "celestial_dragon:spirit_impact",
+        "volume": 0.8,
+        "attenuation_distance": 192,
         "preload": true
       }
     ]

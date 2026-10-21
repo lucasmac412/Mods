@@ -63,6 +63,30 @@ public final class DragonAudioClientGameTest implements FabricClientGameTest {
                 dragon.hurtServer(world.getConnection().getServerLevel(),dragon.damageSources().generic(),10000);
             });
             context.waitFor(client -> heard.containsKey("dragon.death"));
+            UUID spiritId=server.computeOnServer(ignored -> {
+                var level=world.getConnection().getServerLevel();var player=world.getConnection().getServerPlayer();
+                var dragon=CelestialDragonMod.DRAGON.create(level,EntitySpawnReason.COMMAND);
+                dragon.tame(player.getUUID());dragon.setNoAi(true);dragon.snapTo(0,140,0,0,0);level.addFreshEntity(dragon);
+                player.teleportTo(level,0,145,0,Set.of(),0,0,false);player.startRiding(dragon);return dragon.getUUID();
+            });
+            world.getConnection().waitForClientboundEntityUpdates(CelestialDragonMod.DRAGON);
+            context.waitTicks(3);
+            server.runOnServer(ignored -> {
+                var level=world.getConnection().getServerLevel();var dragon=(CelestialDragonEntity)level.getEntity(spiritId);
+                dragon.tickCount=159;level.tickNonPassenger(dragon);
+                dragon.tickCount=23;dragon.setRiderBoostInput(true);level.tickNonPassenger(dragon);
+            });
+            context.waitFor(client -> heard.containsKey("dragon.breath")&&heard.containsKey("dragon.flight"));
+            server.runOnServer(ignored -> ((CelestialDragonEntity)world.getConnection().getServerLevel().getEntity(spiritId)).trySpiritBomb());
+            context.waitFor(client -> heard.containsKey("dragon.spirit_charge"));
+            context.waitFor(client -> heard.containsKey("dragon.spirit_launch"));
+            server.runOnServer(ignored -> {
+                var level=world.getConnection().getServerLevel();
+                var orb=level.getEntities(CelestialDragonMod.SPIRIT_ORB,o->spiritId.equals(o.dragonId())).getFirst();
+                level.setBlock(net.minecraft.core.BlockPos.containing(orb.position().add(0,-30,0)),net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(),3);
+            });
+            context.waitFor(client -> heard.containsKey("dragon.spirit_impact"));
+            if(!heard.containsKey("dragon.beam_charge"))throw new AssertionError("Beam charge needs its own sound");
             Path report=Path.of("../../reports/client-audio/sound-events.txt").toAbsolutePath().normalize();
             try { Files.createDirectories(report.getParent()); Files.writeString(report,"OpenAL engine received server-driven dragon events at 26 blocks: "+heard+"\n"); }
             catch(java.io.IOException e) { throw new RuntimeException(e); }

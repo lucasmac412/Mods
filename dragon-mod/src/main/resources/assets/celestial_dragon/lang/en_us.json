@@ -46,5 +46,11 @@
   "block.celestial_dragon.celestial_runestone": "Celestial Runestone",
   "block.celestial_dragon.celestial_lantern": "Sanctuary Lantern",
   "key.celestial_dragon.spirit": "Dragon Spirit Bomb",
-  "entity.celestial_dragon.spirit_orb": "Celestial Spirit Bomb"
+  "entity.celestial_dragon.spirit_orb": "Celestial Spirit Bomb",
+  "subtitles.celestial_dragon.breath": "Dragon breathes",
+  "subtitles.celestial_dragon.flight": "Dragon rushes through air",
+  "subtitles.celestial_dragon.beam_charge": "Dragon charges energy",
+  "subtitles.celestial_dragon.spirit_charge": "Spirit sphere forms",
+  "subtitles.celestial_dragon.spirit_launch": "Spirit sphere launches",
+  "subtitles.celestial_dragon.spirit_impact": "Spirit sphere explodes"
 }

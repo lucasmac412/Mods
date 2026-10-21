@@ -33,7 +33,7 @@ public final class CelestialDragonMod implements ModInitializer {
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, id("celestial_dragon"))));
     public static final EntityType<CelestialOrbEntity> SPIRIT_ORB = Registry.register(BuiltInRegistries.ENTITY_TYPE,
             id("spirit_orb"), EntityType.Builder.<CelestialOrbEntity>of(CelestialOrbEntity::new, MobCategory.MISC)
-                    .sized(20, 20).clientTrackingRange(16).updateInterval(1)
+                    .sized(60, 60).clientTrackingRange(16).updateInterval(1)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, id("spirit_orb"))));
 
     @Override public void onInitialize() {

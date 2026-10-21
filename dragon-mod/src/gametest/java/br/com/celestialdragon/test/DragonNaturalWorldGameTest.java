@@ -83,6 +83,15 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
             context.waitTicks(10);
             context.takeScreenshot(TestScreenshotOptions.of("23-sanctuary-solid-pillars-night").disableCounterPrefix().withSize(1280,720).withDestinationDir(REPORTS));
             world.getServer().runCommand("time set noon");
+            world.getServer().runOnServer(ignored -> world.getConnection().getServerPlayer().teleportTo(
+                    world.getConnection().getServerLevel(), observed.egg().getX()+10,observed.egg().getY()+14,
+                    observed.egg().getZ()-20,Set.of(),0,0,false));
+            world.getConnection().waitForClientboundPackets();
+            context.runOnClient(client -> client.options.fov().set(55));
+            context.getInput().lookAt(observed.egg().offset(2,4,-23));
+            context.waitTicks(8);
+            world.getConnection().waitForChunksRender();
+            context.takeScreenshot(TestScreenshotOptions.of("24-nested-coils-close").disableCounterPrefix().withSize(1280,720).withDestinationDir(REPORTS));
         }
 
         // Reopen the saved generated world, rather than rerunning the procedural command helper.

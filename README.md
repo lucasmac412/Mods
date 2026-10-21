@@ -1,8 +1,8 @@
 # Luma — Companhia de aventura
 
-**Novo mod independente: [Dragão Celestial — ouro e obsidiana](dragon-mod/README.md).** Dragão chinês montável, voo, mordida, raio de energia, bosque, ninhos e incubação. [Baixar o pacote pronto do dragão](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.1-Experimental.zip) · [Instalar passo a passo](docs/INSTALAR-DRAGAO.md).
+**Novo mod independente: [Dragão Celestial — ouro e obsidiana](dragon-mod/README.md).** Dragão chinês montável, voo, mordida, raio de energia, bosque, ninhos e incubação. [Baixar o pacote pronto do dragão](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.2-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.2-Experimental.zip) · [Instalar passo a passo](docs/INSTALAR-DRAGAO.md).
 
-A versão **0.3.1 do dragão** corrige apoios dos pilares, modelos decorativos que piscavam, alcance dos sons e cliques dos ovos interceptados pelo dragão. Mantém câmera de montaria afastada, aceleração com raios, Genki Dama gigante, raio com aura, patas dianteiras alongadas sem patas traseiras e arena de chefe com 113 blocos. O guardião dorme em um santuário e desperta com barra de vida quando um jogador em Sobrevivência entra na arena. O Bosque Celestial continua extremamente comum para testes. [Instalação e controles](docs/INSTALAR-DRAGAO.md).
+A versão **0.3.2 do dragão** refaz os sons, triplica a Genki Dama para 60 blocos, corrige o impacto no terreno sob as árvores e melhora a postura de sono e a ondulação do voo. Mantém câmera afastada, arena de chefe e as correções dos pilares e ovos. [Instalação e controles](docs/INSTALAR-DRAGAO.md).
 
 Luma é uma companheira humanoide para **Minecraft Java Edition 26.2 com Fabric**. Ela tem uma skin própria em roxo e ciano, acompanha o dono, recebe ordens em português do Brasil e pode conversar pelo Ollama e receber ordens por uma tecla de microfone dentro do jogo com o complemento **Luma Voz**.
 

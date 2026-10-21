@@ -308,33 +308,33 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
         super.setupAnim(state);
         float time = state.ageInTicks;
         float movement = Mth.clamp(state.movementAmount, 0, 1);
+        float rest = DragonAnimation.smooth(state.sleepAmount);
+        float phaseTime = state.flightPhase;
         var attack = DragonAnimation.pose(state.biteTicks, state.beamTicks, time);
         saddle.visible = state.tamed;
         if (!state.ridden) body.y += Mth.sin(time * 0.07F) * 0.5F;
-        if (state.dormant) {
-            body.y += 36;
-            body.y += Mth.sin(time * 0.035F) * 0.15F;
-        }
-        head.getChild("eyes").visible = !state.dormant;
-        head.getChild("pupils").visible = !state.dormant;
-        float amplitude = (0.55F + movement * 0.50F) * (1 - attack.waveDamping());
+        body.y += rest * (32 + Mth.sin(time * .03F) * .12F);
+        head.getChild("eyes").visible = rest < .85F;
+        head.getChild("pupils").visible = rest < .85F;
+        float amplitude = (0.12F + movement * 0.46F) * (1 - attack.waveDamping());
         float previousYaw = 0;
         float previousPitch = 0;
         for (int i = 0; i < SEGMENT_COUNT; i++) {
             float envelope = DragonAnimation.smooth(Math.min(1, i / 5.0F));
-            float phase = time * 0.12F - i * 0.52F;
+            float phase = phaseTime - i * 0.34F;
             float yaw = Mth.sin(phase) * amplitude * envelope;
-            float pitch = Mth.sin(phase * 0.82F + 1.1F) * 0.035F * envelope;
+            float pitch = Mth.sin(phase + .6F) * .018F * envelope * movement;
             // Differences of global tangents form an S instead of accumulating rotations into a coil.
             segments[i].yRot = yaw - previousYaw;
             segments[i].xRot = pitch - previousPitch;
-            segments[i].zRot = Mth.sin(phase) * 0.014F * envelope;
+            segments[i].zRot = Mth.cos(phase) * .006F * envelope * movement;
             // Reserve clear space around the rider's seat; the wild version has the full crest.
             segments[i].getChild("point_spine").visible = !state.tamed || i > 1;
-            if (state.dormant) {
-                segments[i].yRot = i == 0 ? 0 : 0.23F;
-                segments[i].xRot = segments[i].zRot = 0;
-            }
+            // Tightening spiral: broad outer coil, smaller raised inner coil and fine tail.
+            float coil = i == 0 ? -.15F : 1.0F / (3.25F - i * .075F);
+            segments[i].yRot = Mth.lerp(rest, segments[i].yRot, coil);
+            segments[i].xRot *= 1-rest; segments[i].zRot *= 1-rest;
+            if (i > 11) segments[i].y -= .80F * rest;
             previousYaw = yaw;
             previousPitch = pitch;
         }
@@ -345,12 +345,14 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                 * (state.beamTicks > 0 ? 0.08F : 1);
         head.xRot = attack.headPitch() + Mth.sin(time * 0.065F) * 0.012F * (1 - attack.brace());
         jaw.xRot = attack.jawOpening();
-        if (state.dormant) { neck.xRot = 0.025F; head.xRot = 0.025F; head.yRot = 0; jaw.xRot = 0.02F; }
+        neck.xRot = Mth.lerp(rest, neck.xRot, -.48F); neck.z += 18 * rest;
+        head.xRot = Mth.lerp(rest, head.xRot, .18F); head.yRot *= 1-rest;
+        jaw.xRot = Mth.lerp(rest, jaw.xRot, .015F);
         for (int i = 0; i < arms.length; i++) {
             float side = i % 2 == 0 ? 1 : -1;
             arms[i].xRot += Mth.sin(time * 0.075F - i * 0.9F) * 0.12F - attack.brace() * 0.20F;
             arms[i].zRot += side * (Mth.sin(time * 0.065F - i * 0.7F) * 0.07F - attack.brace() * 0.13F);
-            if (state.dormant) arms[i].xRot += 0.85F;
+            arms[i].xRot += .85F * rest;
             if (state.spiritTicks > 0) arms[i].xRot -= 1.25F;
             hands[i].xRot += Mth.sin(time * 0.09F - i) * 0.08F - attack.brace() * 0.12F;
         }
@@ -364,7 +366,7 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
         whiskers[0].yRot += Mth.sin(time * 0.07F) * 0.08F;
         whiskers[1].yRot -= Mth.sin(time * 0.07F + 0.8F) * 0.08F;
         beard.xRot += Mth.sin(time * 0.1F) * 0.1F - attack.brace() * 0.1F;
-        tail.yRot += Mth.sin(time * 0.12F - 12) * 0.11F;
+        tail.yRot += Mth.sin(phaseTime - 8.2F) * .06F * (1-rest);
         energy.visible = attack.energyScale() > 0.001F;
         energy.xScale = energy.yScale = energy.zScale = attack.energyScale();
         energy.xRot = time * 0.07F;

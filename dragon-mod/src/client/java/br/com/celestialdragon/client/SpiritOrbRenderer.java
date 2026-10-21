@@ -18,7 +18,7 @@ public final class SpiritOrbRenderer extends EntityRenderer<CelestialOrbEntity, 
     @Override public void extractRenderState(CelestialOrbEntity orb, State state, float partial) {
         super.extractRenderState(orb, state, partial); state.radius = orb.radius(partial);
     }
-    @Override protected AABB getBoundingBoxForCulling(CelestialOrbEntity entity) { return entity.getBoundingBox().inflate(14); }
+    @Override protected AABB getBoundingBoxForCulling(CelestialOrbEntity entity) { return new AABB(entity.position().subtract(34,34,34), entity.position().add(34,34,34)); }
     @Override public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
         double radius = state.radius; float age = state.ageInTicks;
         collector.submitCustomGeometry(pose, RenderTypes.lightning(), (matrix, vertices) -> {

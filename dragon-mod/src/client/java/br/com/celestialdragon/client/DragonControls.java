@@ -73,7 +73,7 @@ public final class DragonControls {
             minecraft.options.setCameraType(CameraType.THIRD_PERSON_BACK);
             minecraft.player.sendOverlayMessage(net.minecraft.network.chat.Component.literal("Dragão: Shift acelera • Ctrl desce • 2× Ctrl desmonta • Espaço sobe • R Genki Dama"));
         }
-        if (dragon.spiritTicks() > 0) spiritCameraTicks = 180;
+        if (dragon.spiritTicks() > 0) spiritCameraTicks = 360;
         else if (spiritCameraTicks > 0) spiritCameraTicks--;
         boolean playing = minecraft.gui.screen() == null && minecraft.gui.overlay() == null && !minecraft.isPaused();
         if (!playing) ctrlTapTick = Long.MIN_VALUE;

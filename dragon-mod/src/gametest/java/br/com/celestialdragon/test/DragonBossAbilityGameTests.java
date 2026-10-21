@@ -32,8 +32,8 @@ public final class DragonBossAbilityGameTests {
             var orb = level.getEntities(CelestialDragonMod.SPIRIT_ORB, o -> dragon.getUUID().equals(o.dragonId())).getFirst();
             Vec3 origin = orb.position();
             for (int i=0;i<40;i++) level.tickNonPassenger(orb);
-            helper.assertTrue(orb.position().distanceToSqr(origin)<0.001 && orb.radius(0)==10,
-                    "The full twenty-block sphere forms for two seconds without travelling");
+            helper.assertTrue(orb.position().distanceToSqr(origin)<0.001 && orb.radius(0)==30,
+                    "The full sixty-block sphere forms for two seconds without travelling");
             helper.assertFalse(dragon.tryBeam() || dragon.tryBite(), "Other attacks cannot interrupt the spirit charge");
             level.tickNonPassenger(orb);
             helper.assertTrue(Math.abs(orb.position().distanceTo(origin)-CelestialOrbEntity.SPEED)<0.001,
@@ -90,6 +90,43 @@ public final class DragonBossAbilityGameTests {
         helper.assertTrue(restored.isDormant()&&restored.isNoAi(),"Sleeping state survives reload");
         restored.wakeFromNest(); helper.assertFalse(restored.isDormant()||restored.isNoAi(),"Wake restores normal dragon AI");
         dragon.discard(); helper.succeed();
+    }
+
+    @GameTest(structure = ARENA, skyAccess = true, maxTicks = 80)
+    public void canopyImpactExcavatesRealGroundBelowLeaves(GameTestHelper helper) {
+        var level=helper.getLevel();BlockPos center=helper.absolutePos(new BlockPos(6144,10,6144));
+        for(int x=-10;x<10;x++)for(int z=-12;z<12;z++) {
+            for(int y=-7;y<=0;y++)level.setBlock(center.offset(x,y,z),Blocks.STONE.defaultBlockState(),2);
+            level.setBlock(center.offset(x,12,z),Blocks.OAK_LEAVES.defaultBlockState(),2);
+        }
+        var player=helper.makeMockServerPlayerInLevel();var dragon=CelestialDragonMod.DRAGON.create(level,EntitySpawnReason.COMMAND);
+        dragon.snapTo(center.getX()+.5,center.getY()+25,center.getZ()+.5,0,0);dragon.tame(player.getUUID());dragon.setNoAi(true);level.addFreshEntity(dragon);
+        try {
+            player.snapTo(dragon.getX(),dragon.getY()+5,dragon.getZ(),0,90);player.startRiding(dragon);dragon.trySpiritBomb();
+            var orb=level.getEntities(CelestialDragonMod.SPIRIT_ORB,o->dragon.getUUID().equals(o.dragonId())).getFirst();
+            for(int i=0;i<300&&!orb.isRemoved();i++)level.tickNonPassenger(orb);
+            helper.assertTrue(orb.isRemoved(),"Canopy must trigger the impact");
+            helper.assertTrue(level.getBlockState(center).isAir()&&level.getBlockState(center.below(5)).isAir(),"Explosion must dig below real soil, not merely remove the tree canopy");
+            helper.assertTrue(level.getBlockState(center.below(6)).is(Blocks.STONE),"Ground depth remains six");
+        } finally {player.stopRiding();player.discard();dragon.discard();}
+        helper.succeed();
+    }
+
+    @GameTest(structure = ARENA, skyAccess = true, maxTicks = 80)
+    public void horizontalAimHitsLoadedGroundDespiteUnloadedSphereCorners(GameTestHelper helper) {
+        var level=helper.getLevel();BlockPos center=helper.absolutePos(new BlockPos(8192,10,8192));
+        for(int x=-10;x<=10;x++)for(int z=-12;z<=80;z++)level.setBlock(center.offset(x,0,z),Blocks.STONE.defaultBlockState(),2);
+        level.getChunk(center.getX()>>4,(center.getZ()+96)>>4);
+        var player=helper.makeMockServerPlayerInLevel();var dragon=CelestialDragonMod.DRAGON.create(level,EntitySpawnReason.COMMAND);
+        dragon.snapTo(center.getX()+.5,center.getY()+25,center.getZ()+.5,0,0);dragon.tame(player.getUUID());dragon.setNoAi(true);level.addFreshEntity(dragon);
+        try {
+            player.snapTo(dragon.getX(),dragon.getY()+5,dragon.getZ(),0,0);player.startRiding(dragon);dragon.trySpiritBomb();
+            var orb=level.getEntities(CelestialDragonMod.SPIRIT_ORB,o->dragon.getUUID().equals(o.dragonId())).getFirst();
+            for(int i=0;i<500&&!orb.isRemoved();i++)level.tickNonPassenger(orb);
+            int removed=0;for(int x=-10;x<=10;x++)for(int z=-12;z<=80;z++)if(level.getBlockState(center.offset(x,0,z)).isAir())removed++;
+            helper.assertTrue(orb.isRemoved()&&removed>200,"A horizontal real cast must destroy loaded terrain, not disappear when an outer corner is unloaded; removed="+removed);
+        } finally {player.stopRiding();player.discard();dragon.discard();}
+        helper.succeed();
     }
 
     @GameTest(structure = ARENA, skyAccess = true, maxTicks = 60)

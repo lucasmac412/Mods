@@ -13,6 +13,12 @@ public final class DragonSounds {
     public static final SoundEvent HURT = create("dragon.hurt", 48.0F);
     public static final SoundEvent DEATH = create("dragon.death", 64.0F);
     public static final SoundEvent AMBIENCE = create("biome.ambience", 24.0F);
+    public static final SoundEvent BREATH = create("dragon.breath", 48.0F);
+    public static final SoundEvent FLIGHT = create("dragon.flight", 48.0F);
+    public static final SoundEvent BEAM_CHARGE = create("dragon.beam_charge", 64.0F);
+    public static final SoundEvent SPIRIT_CHARGE = create("dragon.spirit_charge", 192.0F);
+    public static final SoundEvent SPIRIT_LAUNCH = create("dragon.spirit_launch", 192.0F);
+    public static final SoundEvent SPIRIT_IMPACT = create("dragon.spirit_impact", 192.0F);
 
     private DragonSounds() {
     }

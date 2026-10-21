@@ -5,7 +5,8 @@
   "client": [
     "DragonInputMixin",
     "DragonCameraMixin",
-    "DragonRiderPoseMixin"
+    "DragonRiderPoseMixin",
+    "DragonEnergyFogMixin"
   ],
   "injectors": {
     "defaultRequire": 1

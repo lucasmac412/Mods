@@ -7,8 +7,8 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.3.1-experimental"
-NAME = "Dragao-Celestial-Fabric-26.2-v0.3.1-Experimental.zip"
+VERSION = "0.3.2-experimental"
+NAME = "Dragao-Celestial-Fabric-26.2-v0.3.2-Experimental.zip"
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
 OLD_PACKAGE_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 
@@ -38,6 +38,7 @@ def main():
                     "br/com/celestialdragon/entity/CelestialOrbEntity.class",
                     "br/com/celestialdragon/client/SpiritOrbRenderer.class",
                     "br/com/celestialdragon/client/DragonEnergyGeometry.class",
+                    "br/com/celestialdragon/mixin/client/DragonEnergyFogMixin.class",
                     "br/com/celestialdragon/mixin/client/DragonCameraMixin.class",
                     "br/com/celestialdragon/mixin/world/DragonRidingMixin.class",
                     "br/com/celestialdragon/entity/DragonAttackAnimation.class",
@@ -64,7 +65,7 @@ def main():
             if path not in archive.namelist():
                 raise SystemExit("Recurso obrigatório ausente: " + path)
         sounds = json.loads(archive.read("assets/celestial_dragon/sounds.json"))
-        for key in ["dragon.roar", "dragon.bite", "dragon.beam", "dragon.hurt", "dragon.death", "biome.ambience"]:
+        for key in ["dragon.roar", "dragon.bite", "dragon.beam", "dragon.hurt", "dragon.death", "biome.ambience", "dragon.breath", "dragon.flight", "dragon.beam_charge", "dragon.spirit_charge", "dragon.spirit_launch", "dragon.spirit_impact"]:
             if key not in sounds:
                 raise SystemExit("Som obrigatório ausente: " + key)
             for sound in sounds[key]["sounds"]:
@@ -96,6 +97,9 @@ def main():
             "O Fabric Loader e o Minecraft são instalados separadamente. Minecraft não está incluído.\n"
         ).encode("utf-8"),
     }
+    entries["OUVIR-SONS.html"] = (ROOT / "dragon-mod/preview-sounds.html").read_bytes()
+    for sound in sorted((ROOT / "dragon-mod/src/main/resources/assets/celestial_dragon/sounds").glob("*.ogg")):
+        entries["sons/" + sound.name] = sound.read_bytes()
     for path in sorted((ROOT / "docs/dragao").glob("*")):
         if path.is_file():
             entries["docs/dragao/" + path.name] = path.read_bytes()

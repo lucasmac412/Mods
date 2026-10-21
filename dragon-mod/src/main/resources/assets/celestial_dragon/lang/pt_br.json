@@ -46,5 +46,11 @@
   "block.celestial_dragon.celestial_runestone": "Pedra r\u00fanica celestial",
   "block.celestial_dragon.celestial_lantern": "Lanterna do santu\u00e1rio",
   "key.celestial_dragon.spirit": "Genki Dama do drag\u00e3o",
-  "entity.celestial_dragon.spirit_orb": "Genki Dama Celestial"
+  "entity.celestial_dragon.spirit_orb": "Genki Dama Celestial",
+  "subtitles.celestial_dragon.breath": "Drag\u00e3o respira",
+  "subtitles.celestial_dragon.flight": "Drag\u00e3o corta o vento",
+  "subtitles.celestial_dragon.beam_charge": "Drag\u00e3o concentra energia",
+  "subtitles.celestial_dragon.spirit_charge": "Esfera celestial se forma",
+  "subtitles.celestial_dragon.spirit_launch": "Esfera celestial \u00e9 lan\u00e7ada",
+  "subtitles.celestial_dragon.spirit_impact": "Esfera celestial explode"
 }

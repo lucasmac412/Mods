@@ -1,24 +1,25 @@
 DRAGÃO CELESTIAL — OURO E OBSIDIANA
-Minecraft Java Edition 26.2 | Fabric | versão 0.3.1-experimental
+Minecraft Java Edition 26.2 | Fabric | versão 0.3.2-experimental
 
-CORREÇÕES NA 0.3.1
-Pilares agora apoiados no piso, inclusive reparo dos apoios em arenas antigas com guardião.
-Blocos decorativos simplificados: sem faces sobrepostas que piscavam.
-Sons com maior alcance, incluindo a câmera da montaria. Volume: Criaturas hostis.
-O corpo do dragão não intercepta mais o clique de ovos normais que alcança o chão.
-Para reparar os apoios antigos, aproxime-se da arena com o guardião e espere a região carregar.
-O reparo não substitui blocos sólidos colocados por você. Não exige um mundo novo.
+NOVO NA 0.3.2
+Todos os efeitos sonoros refeitos: 15 sons originais, com variações e efeitos separados de energia.
+Abra OUVIR-SONS.html no Chrome para ouvir os sons do pacote.
+Genki Dama com 60 blocos de diâmetro: três vezes o tamanho anterior.
+O impacto remove folhas/troncos e abre uma faixa de 20 x 24 no terreno, até 6 de profundidade.
+Mira horizontal procura terreno à frente; bordas fora da área carregada não cancelam o impacto.
+Sono em espiral de voltas sobrepostas, como uma cobra aninhada; voo com ondulação mais suave.
+Permanecem as correções dos apoios de pilares, blocos piscando e ovos interceptados pelo dragão.
 
 RECURSOS DA MONTARIA
 Patas dianteiras mais longas; patas traseiras removidas.
 Raio mais grosso com aura. Câmera automática afastada e elevada ao montar.
 Shift acelera com raios; Ctrl desce; 2 toques rápidos em Ctrl desmontam.
 Espaço sobe; mouse esquerdo morde e direito dispara com as duas mãos vazias.
-R: Genki Dama de 20 blocos de diâmetro, 2 segundos de formação e viagem lenta.
+R: Genki Dama de 60 blocos de diâmetro, 2 segundos de formação e viagem lenta.
 A explosão destrói de verdade 20 x 24 blocos de chão, com até 6 de profundidade.
 Bedrock e blocos indestrutíveis são preservados. Recarga: 30 segundos.
 Arena nova de 113 blocos, 8 torres e 5 blocos decorativos novos.
-O guardião dorme no santuário. Entre em Sobrevivência para acordá-lo e ver a barra de chefe.
+O guardião dorme enrolado no santuário, respirando baixinho. Entre em Sobrevivência para acordá-lo e ver a barra de chefe.
 A aba do Criativo reúne todos os 17 itens e os dois ovos de criação.
 Para ver a arena nova, use um mundo novo ou regiões ainda não geradas.
 
@@ -45,11 +46,11 @@ No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
 Se o diretório estiver vazio, no Windows aperte Windows+R e abra:
 %APPDATA%\.minecraft
 Crie a pasta mods se ela não existir. Copie para ela os dois arquivos:
-- celestial-dragon-0.3.1-experimental.jar
+- celestial-dragon-0.3.2-experimental.jar
 - fabric-api-0.161.0+26.2.jar
 Se já houver Fabric API ou este mod, mantenha somente uma versão de cada.
-Se estiver atualizando da 0.3.0 ou de qualquer versão anterior, retire o JAR antigo do dragão da pasta mods e coloque
-celestial-dragon-0.3.1-experimental.jar. O Fabric API continua o mesmo.
+Se estiver atualizando da 0.3.1 ou de qualquer versão anterior, retire o JAR antigo do dragão da pasta mods e coloque
+celestial-dragon-0.3.2-experimental.jar. O Fabric API continua o mesmo.
 O mod é independente da Luma. Se usar os dois, basta um Fabric API compatível.
 
 3. COMECE NUM MUNDO NOVO

@@ -1,13 +1,19 @@
 {
-  "version": "0.3.1-experimental",
+  "version": "0.3.2-experimental",
   "date": "2026-10-21",
   "engine": "Minecraft OpenAL Soft Wave File Writer",
-  "serverDrivenEventsAt26Blocks": {
-    "dragon.roar": 97.92,
+  "serverDrivenEvents": {
+    "dragon.breath": 48.0,
+    "dragon.death": 64.0,
+    "dragon.spirit_impact": 276.47998,
     "dragon.bite": 48.0,
-    "dragon.beam": 64.0,
+    "dragon.beam_charge": 64.0,
+    "dragon.spirit_launch": 192.0,
+    "dragon.flight": 48.0,
     "dragon.hurt": 48.0,
-    "dragon.death": 64.0
+    "dragon.spirit_charge": 192.0,
+    "dragon.beam": 64.0,
+    "dragon.roar": 64.0
   },
   "outputFormat": {
     "programs": [],
@@ -20,12 +26,12 @@
       }
     ],
     "format": {
-      "duration": "119.151927"
+      "duration": "122.573016"
     }
   },
-  "outputMeanDb": -24.9,
+  "outputMeanDb": -25.8,
   "outputPeakDb": -0.0,
   "outputHasNonzeroAudio": true,
   "physicalPlaybackOnWindowsTested": false,
-  "captureNotDistributed": "The full test mix contains Minecraft audio and is retained only as local test output."
+  "captureNotDistributed": "Full test mix includes Minecraft audio and is retained only as local test output."
 }

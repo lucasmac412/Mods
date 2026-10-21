@@ -40,7 +40,9 @@ public final class DragonRenderer extends MobRenderer<CelestialDragonEntity, Dra
         state.beamEnd = entity.beamEnd().subtract(entity.position());
         // Vanilla interpolates this speed between ticks, keeping the travelling wave smooth
         // when flight starts, stops or receives a network movement update.
-        state.movementAmount = Math.clamp(state.walkAnimationSpeed, 0.0F, 1.0F);
+        state.movementAmount = entity.flightEffort(partialTick);
+        state.flightPhase = entity.flightPhase(partialTick);
+        state.sleepAmount = entity.sleepPose(partialTick);
     }
 
     @Override public void submit(DragonRenderState state, com.mojang.blaze3d.vertex.PoseStack pose,

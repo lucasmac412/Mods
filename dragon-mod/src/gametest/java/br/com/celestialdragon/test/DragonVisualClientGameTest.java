@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 
 /** Actual game views of the mane, hooked claws, pointed scales and combat poses. */
 public final class DragonVisualClientGameTest implements FabricClientGameTest {
-    private static final Path SHOTS = Path.of("../../reports/client-visual-v5").toAbsolutePath().normalize();
+    private static final Path SHOTS = Path.of("../../reports/client-visual-v6").toAbsolutePath().normalize();
 
     @Override
     public void runTest(ClientGameTestContext context) {
@@ -157,6 +157,7 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
         state.tamed = true;
         state.movementAmount = 1;
         state.ageInTicks = 24;
+        state.flightPhase = 2.4F;
         model.setupAnim(state);
         ModelPart segment = model.root().getChild("body");
         float yaw = 0, minimum = 0, maximum = 0;
@@ -171,17 +172,24 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
             throw new AssertionError("The spine must form a bounded lateral S, not remain rigid or curl indefinitely");
         float[] original = transforms(model);
         state.ageInTicks = 48;
+        state.flightPhase = 4.8F;
         model.setupAnim(state);
         float[] later = transforms(model);
         boolean changed = false;
         for (int i = 0; i < original.length; i++) changed |= Math.abs(original[i] - later[i]) > 0.01F;
         if (!changed) throw new AssertionError("The serpent wave must move over time");
         state.ageInTicks = 24;
+        state.flightPhase = 2.4F;
         model.setupAnim(state);
         float[] repeated = transforms(model);
         for (int i = 0; i < original.length; i++)
             if (Math.abs(original[i] - repeated[i]) > 0.00001F)
                 throw new AssertionError("Repeating the same pose must not accumulate transforms");
+        state.dormant=true;state.sleepAmount=1;model.setupAnim(state);
+        ModelPart coil=model.root().getChild("body");float turns=0;
+        for(int i=0;i<DragonModel.SEGMENT_COUNT;i++) {coil=coil.getChild("segment_"+i);turns+=coil.yRot;}
+        if(turns<8 || turns>12)throw new AssertionError("Sleeping serpent must form nested coils, not a single open C");
+        state.dormant=false;state.sleepAmount=0;
         ModelPart jaw = model.root().getChild("body").getChild("neck").getChild("head").getChild("jaw");
         state.biteTicks = CelestialDragonEntity.BITE_DURATION - 4;
         model.setupAnim(state);

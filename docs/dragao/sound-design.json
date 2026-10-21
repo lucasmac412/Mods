@@ -1,0 +1,111 @@
+{
+  "version": "0.3.2-experimental",
+  "provenance": "Original deterministic synthesis; no recordings or third-party samples.",
+  "assets": [
+    {
+      "name": "ambience.ogg",
+      "seconds": 10.0,
+      "meanDb": -23.6,
+      "peakDb": -8.3,
+      "sha256": "ef236e1487453b0bbd405b48a304b632a995cb8d50f1e6299bd7839458aa2ca1"
+    },
+    {
+      "name": "beam.ogg",
+      "seconds": 1.6,
+      "meanDb": -13.2,
+      "peakDb": -2.7,
+      "sha256": "baa90010bf2c62822e2dab28d8af2e3bfb54ca42ac315a96f3a8b15ba95ad1b7"
+    },
+    {
+      "name": "beam_charge.ogg",
+      "seconds": 0.5,
+      "meanDb": -16.4,
+      "peakDb": -3.5,
+      "sha256": "165453aadfb09e5176b997e209af0755a05b39eac9ddff15d2298fc22bbf3e19"
+    },
+    {
+      "name": "bite.ogg",
+      "seconds": 0.65,
+      "meanDb": -22.2,
+      "peakDb": -3.2,
+      "sha256": "2f861e9d4bbefed21a73ab5774512795cec8e20f26a2712420ba798aac8992dc"
+    },
+    {
+      "name": "bite_2.ogg",
+      "seconds": 0.7,
+      "meanDb": -23.3,
+      "peakDb": -3.7,
+      "sha256": "559f09c07d8aaf96e0b9c3b54876b58838ea05f1f42fcb573bc7108d5dbfcfa3"
+    },
+    {
+      "name": "breath.ogg",
+      "seconds": 2.2,
+      "meanDb": -23.1,
+      "peakDb": -7.8,
+      "sha256": "a9732155fc7350c15ed10c20e1f6a2d3e3c6e44093a097e08534e7b912ef5d6e"
+    },
+    {
+      "name": "death.ogg",
+      "seconds": 5.1,
+      "meanDb": -14.1,
+      "peakDb": -3.1,
+      "sha256": "f84da61c67fb1a1f48d1f1c01f42a5d2e69afa91de6b6ffd02b3c1dceb2855c8"
+    },
+    {
+      "name": "flight.ogg",
+      "seconds": 1.2,
+      "meanDb": -19.2,
+      "peakDb": -8.1,
+      "sha256": "f374477e5ee83d708adecdc0397a98e016518cc8890395d579826b60db6d029f"
+    },
+    {
+      "name": "hurt.ogg",
+      "seconds": 1.15,
+      "meanDb": -13.6,
+      "peakDb": -3.4,
+      "sha256": "6f01221b7fede04e4113272a2a2df9da0629416f54272bfc69b2e4b2a1765efe"
+    },
+    {
+      "name": "hurt_2.ogg",
+      "seconds": 1.3,
+      "meanDb": -13.5,
+      "peakDb": -3.3,
+      "sha256": "1f43eb62c3672b5e111ae418724631d0bf261c3a03ecac5c5424504a7b39fa0f"
+    },
+    {
+      "name": "roar.ogg",
+      "seconds": 3.8,
+      "meanDb": -14.0,
+      "peakDb": -3.1,
+      "sha256": "1b1827eb780e453977df09db163fddafe4f07e1c6f65f78cd9a66d472a9d1423"
+    },
+    {
+      "name": "roar_2.ogg",
+      "seconds": 3.3,
+      "meanDb": -14.1,
+      "peakDb": -3.0,
+      "sha256": "df4034f7831c1eaff1dfdbccbcc8172bef54c37eff0141c2e88c7392b6312c8f"
+    },
+    {
+      "name": "spirit_charge.ogg",
+      "seconds": 2.0,
+      "meanDb": -16.8,
+      "peakDb": -3.6,
+      "sha256": "55ab34ddb9223ea03d7ca252d362b4950999f08a20bc926f0db6cb8fda432107"
+    },
+    {
+      "name": "spirit_impact.ogg",
+      "seconds": 3.8,
+      "meanDb": -19.3,
+      "peakDb": -3.0,
+      "sha256": "fafac2363a61a5799c4a318af1893f54853f73cc33b706830df16421adac4404"
+    },
+    {
+      "name": "spirit_launch.ogg",
+      "seconds": 1.8,
+      "meanDb": -13.5,
+      "peakDb": -3.2,
+      "sha256": "53e4c547a8d2ecfe80cc6c8e2228f541cd92bb8bb1adcfb10750f5c5c1a6d193"
+    }
+  ]
+}

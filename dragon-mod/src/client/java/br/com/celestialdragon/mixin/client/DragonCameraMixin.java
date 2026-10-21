@@ -18,11 +18,11 @@ public abstract class DragonCameraMixin {
     @ModifyArg(method = "alignWithEntity", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/client/Camera;getMaxZoom(F)F"), index = 0)
     private float celestialDragon$chaseDistance(float original) {
-        return entity == Minecraft.getInstance().player && DragonControls.isControllingDragon(Minecraft.getInstance()) ? (DragonControls.isWideCamera() ? 38.0F : 26.0F) : original;
+        return entity == Minecraft.getInstance().player && DragonControls.isControllingDragon(Minecraft.getInstance()) ? (DragonControls.isWideCamera() ? 104.0F + 32.0F * (float)Math.abs(Math.sin(entity.getXRot() * Math.PI / 180)) : 26.0F) : original;
     }
 
     @Inject(method = "getMaxZoom", at = @At("HEAD"))
     private void celestialDragon$raiseBeforeCollision(float distance, CallbackInfoReturnable<Float> callback) {
-        if (entity == Minecraft.getInstance().player && DragonControls.isControllingDragon(Minecraft.getInstance())) move(0, DragonControls.isWideCamera() ? 12.0F : 3.5F, 0);
+        if (entity == Minecraft.getInstance().player && DragonControls.isControllingDragon(Minecraft.getInstance())) move(0, DragonControls.isWideCamera() ? 16.0F : 3.5F, 0);
     }
 }
