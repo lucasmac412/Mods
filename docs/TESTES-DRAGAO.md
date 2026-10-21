@@ -1,16 +1,18 @@
-# Validação do Dragão Celestial 0.2.1 experimental
+# Validação do Dragão Celestial 0.2.2 experimental
 
 Ambiente de desenvolvimento Linux x86_64, JDK 25, Minecraft Java 26.2, Fabric Loader 0.19.5 e Fabric API 0.161.0+26.2. O mod é independente da Luma e do Ollama.
 
-A versão **0.2.1** refaz o modelo com juba volumosa, focinho alongado e mandíbula marcada, sem patas e com corpo mais fino e definido. Mantém a ondulação lateral, os dois ovos de criação e a aba do Criativo. O raio continua exigindo as duas mãos vazias, para permitir o uso normal dos itens enquanto montado.
+A versão **0.2.2** refaz o modelo com juba volumosa e focinho alongado, membros curtos com garras curvas e escamas maiores e pontudas nas costas e no corpo. Mantém a ondulação lateral, os dois ovos de criação e a aba do Criativo. O raio continua exigindo as duas mãos vazias, para permitir o uso normal dos itens enquanto montado.
 
 A frequência de testes da 0.1.1 foi preservada: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São 36 vezes mais centros por área do que na 0.1.0; bosques vizinhos podem se unir. Essa geração só aparece em regiões novas do Overworld. Prefira um mundo novo para testar.
 
 ## Resultados desta versão
 
-Em 21/10/2026, `./gradlew --no-daemon -p dragon-mod build` terminou com `BUILD SUCCESSFUL`: **quatro testes JUnit e 24 GameTests passaram**, sem falhas. Dos GameTests, **23 são cenários do mod e um é o controle interno do Fabric**.
+Em 21/10/2026, `./gradlew --no-daemon -p dragon-mod build runClientGameTest` terminou com `BUILD SUCCESSFUL`: **quatro testes JUnit, 24 GameTests e os quatro cenários gráficos passaram**, sem falhas. Dos GameTests, **23 são cenários do mod e um é o controle interno do Fabric**.
 
-Na mesma data, `./gradlew --no-daemon -p dragon-mod runClientGameTest` terminou com `BUILD SUCCESSFUL`: **os quatro cenários gráficos passaram** no cliente real do Minecraft. A execução conferiu o modelo sem patas, a ondulação e as fases dos golpes, além de menu, montaria, inventário, ovos vanilla e geração natural com recarga. As capturas e a animação abaixo vêm dessa execução da 0.2.1. Os closes mostram a nova juba e o focinho em três ângulos, permitindo avaliar o visual diretamente.
+A execução gráfica conferiu vértices e normais de iluminação finitos na nova geometria pontuda, ondulação, repetição de poses sem acumulação e fases de mordida e raio. Também exercitou menu, montaria, inventário, ovos vanilla e geração natural com recarga. As capturas e o GIF abaixo vêm dessa execução da 0.2.2. Duas tomadas extras mostram as garras curvas e as escamas maiores em detalhe.
+
+As escamas e unhas têm pontas triangulares na malha do modelo. As normais são recalculadas ao criar o modelo, sem um renderizador adicional. As garras acompanham os movimentos e a preparação dos ataques; os controles de combate continuam sendo mordida e raio. Na versão domada, as duas primeiras pontas das costas ficam ocultas para dar espaço à sela.
 
 ## Servidor e configuração
 
@@ -39,7 +41,7 @@ Relatórios reproduzíveis: `dragon-mod/build/test-results/test/TEST-*.xml` e `d
 1. **Modelo, configuração e montaria:** renderiza os dragões selvagem e domado; abre o botão do Esc; rejeita NaN na tela e no servidor; salva vida 240, mordida 14 e raio 35, confirmando os valores no servidor. Monta com o dono, usa as entradas reais W/Espaço/Ctrl, aciona o raio pelo botão direito e desmonta com Shift. A configuração original é restaurada no final.
 2. **Geração natural e persistência:** cria um mundo **Normal, semente 1**, usando o gerador real de terreno, sem montar um ninho por comando. Verifica bosque, fundação do ninho com 41 blocos de largura, ovo de três partes, árvores, folhas, solo, afloramentos de rocha, minério e localização da estrutura. Confirma um guardião selvagem; fecha e reabre o mundo e exige o mesmo UUID, sem duplicação. Uma verificação de conexão das rochas ao solo detecta o erro visual de rochas flutuantes encontrado e corrigido durante o desenvolvimento.
 3. **Criativo e ovos do Minecraft:** abre o inventário e o atalho da aba Dragão Celestial. Usa cliques reais para criar criaturas com ovos normais em pé, durante a montaria com as mãos principal e secundária e após desmontar. Confere que os ovos não acionam o raio e que ele continua disponível com as duas mãos vazias. O cenário isola o combate e usa dificuldade que permite monstros, para distinguir falha do item de uma criatura morta pelo dragão ou removida pelo modo Pacífico.
-4. **Visual e animações:** apresenta o corpo serpentino sem patas e tomadas próximas da juba e do focinho em três quartos, perfil e frente, além das fases de preparação e impacto da mordida, carga e disparo do raio. Confere poses finitas, ondulação lateral, repetição sem acumular transformações e ausência das quatro pernas anteriores. As capturas permitem avaliar forma, tamanho e postura; valores de estado sozinhos não comprovam qualidade visual.
+4. **Visual e animações:** apresenta o corpo serpentino com membros curtos e garras curvas e tomadas próximas da juba e do focinho em três quartos, perfil e frente, além das fases de preparação e impacto da mordida, carga e disparo do raio. Confere poses finitas, ondulação lateral, repetição sem acumular transformações e malha com vértices finitos e iluminação válida nas pontas. As capturas permitem avaliar forma, tamanho e postura; valores de estado sozinhos não comprovam qualidade visual.
 
 Na amostra de geração natural desta execução, o teste encontrou 563 blocos de tronco, 5.905 de folhas e 25 de minério, sem componentes de rocha separados do solo. O guardião continuou sendo o mesmo após salvar e reabrir. As [contagens completas](dragao/natural-generation.json) descrevem essa amostra; não garantem a mesma densidade para qualquer semente.
 
@@ -57,9 +59,11 @@ As capturas são do jogo, e não das imagens de conceito:
 - [Cabeça e juba em três quartos](dragao/11-cabeca-tres-quartos.png).
 - [Perfil do focinho e mandíbula](dragao/12-perfil-cabeca.png).
 - [Juba vista de frente](dragao/13-juba-frontal.png).
+- [Garras curvas em detalhe](dragao/14-garras-ombro.png).
+- [Escamas pontudas das costas e do corpo](dragao/15-escamas-costas.png).
 - [Contagens do mundo e resultado da recarga](dragao/natural-generation.json).
 
-Os arquivos originais de cada execução ficam em `dragon-mod/build/reports/`, nas pastas de cada cenário: `client-smoke`, `client-natural`, `client-eggs` e `client-visual-v3`.
+Os arquivos originais de cada execução ficam em `dragon-mod/build/reports/`, nas pastas de cada cenário: `client-smoke`, `client-natural`, `client-eggs` e `client-visual-v4`.
 
 ## Recursos e distribuição
 

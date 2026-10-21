@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-/** A limbless celestial long: lean coiled muscle, a leonine mane and an angular dragon's face. */
+/** A celestial long: flowing mane, hooked talons and a spine of large pointed scales. */
 public final class DragonModel extends EntityModel<DragonRenderState> {
     public static final ModelLayerLocation MODEL_LAYER = new ModelLayerLocation(
             CelestialDragonMod.id("celestial_dragon"), "main");
@@ -27,9 +27,11 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
     private final ModelPart[] segments = new ModelPart[SEGMENT_COUNT];
     private final ModelPart[] whiskers = new ModelPart[2];
     private final ModelPart[] mane = new ModelPart[34];
+    private final ModelPart[] arms = new ModelPart[4];
+    private final ModelPart[] hands = new ModelPart[4];
 
     public DragonModel(ModelPart root) {
-        super(root);
+        super(DragonGeometry.finish(root));
         body = root.getChild("body");
         neck = body.getChild("neck");
         head = neck.getChild("head");
@@ -46,6 +48,10 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
         whiskers[0] = head.getChild("whisker_left");
         whiskers[1] = head.getChild("whisker_right");
         for (int i = 0; i < mane.length; i++) mane[i] = head.getChild("mane_lock_" + i);
+        for (int i = 0; i < arms.length; i++) {
+            arms[i] = segments[i < 2 ? 2 : 12].getChild(i % 2 == 0 ? "talon_arm_left" : "talon_arm_right");
+            hands[i] = arms[i].getChild("forearm").getChild("hand");
+        }
     }
 
     private static CubeListBuilder obsidian() { return CubeListBuilder.create().texOffs(0, 0); }
@@ -77,9 +83,10 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                         .addBox(-width * 0.29F, height / 2 + 0.3F, -7 + rib * 6.3F,
                                 width * 0.58F, 0.35F, 0.8F), PartPose.ZERO);
             }
-            float crest = i < 12 ? 6.2F - i * 0.12F : 4.8F - (i - 12) * 0.25F;
-            segment.addOrReplaceChild("crest", gold().addBox(-1.1F, -crest, -3, 2.2F, crest + 1, 9),
-                    PartPose.offsetAndRotation(0, -height / 2, 0, -0.55F, 0, 0));
+            float crest = i < 12 ? 18 - i * 0.35F : 13.8F - (i - 12) * 0.8F;
+            segment.addOrReplaceChild("point_spine", gold()
+                            .addBox(-2.6F, -crest, -7, 5.2F, crest, 14),
+                    PartPose.offset(0, -height / 2 + 0.4F, 0));
             for (int side : new int[]{-1, 1}) {
                 // Swept, dark flank volumes suggest muscle under the scales; gold is an
                 // accent along the upper edge, rather than a thick band around every joint.
@@ -88,10 +95,23 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                                         width * 0.22F, height * 0.50F, 17),
                         PartPose.offsetAndRotation(side * width * 0.43F, 0, 0,
                                 0.08F, side * -0.14F, side * -0.24F));
-                segment.addOrReplaceChild("scale_" + side, gold()
-                                .addBox(-0.55F, -1.5F, -4, 1.1F, 3, 10),
-                        PartPose.offsetAndRotation(side * width * 0.40F, -height * 0.37F, 0,
-                                -0.12F, side * -0.12F, side * -0.4F));
+                float plateWidth = Math.min(9.5F, width * 0.48F);
+                float plateLength = 12 + width * 0.28F;
+                for (int row = 0; row < 2; row++) {
+                    PartDefinition plate = segment.addOrReplaceChild("point_scale_" + side + "_" + row,
+                            gold().addBox(-plateWidth / 2, -2.6F, -plateLength / 2,
+                                    plateWidth, 3, plateLength),
+                            PartPose.offsetAndRotation(side * width * (row == 0 ? 0.31F : 0.47F),
+                                    -height * (row == 0 ? 0.42F : 0.10F), row == 0 ? -2 : 4,
+                                    -0.18F, side * -0.16F, side * (row == 0 ? 0.58F : 1.18F)));
+                    plate.addOrReplaceChild("point_scale_inlay", obsidian()
+                            .addBox(-plateWidth * 0.34F, -3.2F, -plateLength / 2 + 0.9F,
+                                    plateWidth * 0.68F, 1.2F, plateLength - 3.6F), PartPose.ZERO);
+                }
+            }
+            if (i == 2 || i == 12) {
+                addTalonArm(segment, 1, width, i == 12);
+                addTalonArm(segment, -1, width, i == 12);
             }
             previous = segment;
         }
@@ -113,8 +133,8 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
         neck.addOrReplaceChild("neck_belly", gold()
                 .addBox(-6, 7, -35, 12, 2, 21).addBox(-7, 9, -19, 14, 2, 20), PartPose.ZERO);
         for (int j = 0; j < 4; j++) {
-            neck.addOrReplaceChild("neck_crest_" + j, gold().addBox(-1.2F, -6, -2, 2.4F, 7, 7),
-                    PartPose.offsetAndRotation(0, -11, -4 - j * 8, -0.55F, 0, 0));
+            neck.addOrReplaceChild("point_spine_neck_" + j, gold().addBox(-1.7F, -10, -4, 3.4F, 10, 8),
+                    PartPose.offset(0, -11, -4 - j * 8));
         }
         PartDefinition head = neck.addOrReplaceChild("head", obsidian()
                         .addBox(-12.5F, -18, -15, 25, 24, 26)
@@ -217,6 +237,40 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
         return LayerDefinition.create(mesh, 512, 256);
     }
 
+    private static void addTalonArm(PartDefinition segment, int side, float width, boolean rear) {
+        // Small floating arms with long grasping fingers, rather than feet for walking.
+        PartDefinition arm = segment.addOrReplaceChild(side > 0 ? "talon_arm_left" : "talon_arm_right",
+                obsidian().addBox(-3, -2, -3.5F, 6, 12, 7),
+                PartPose.offsetAndRotation(side * (width / 2 - 1), 1, rear ? 3 : 0,
+                        rear ? 0.25F : -0.25F, side * 0.12F, side * -0.90F));
+        arm.addOrReplaceChild("point_scale_arm", gold().addBox(-2.3F, -3, -4, 4.6F, 2, 12),
+                PartPose.offsetAndRotation(0, 3, 0, -Mth.HALF_PI, 0, 0));
+        PartDefinition forearm = arm.addOrReplaceChild("forearm", obsidian()
+                        .addBox(-2.3F, -1, -2.5F, 4.6F, 10, 5),
+                PartPose.offsetAndRotation(0, 9, 0, 0.95F, 0, side * 0.32F));
+        forearm.addOrReplaceChild("bracelet", gold().addBox(-2.6F, 5.5F, -2.8F, 5.2F, 1.5F, 5.6F), PartPose.ZERO);
+        PartDefinition hand = forearm.addOrReplaceChild("hand", obsidian()
+                        .addBox(-4.2F, -1, -4, 8.4F, 3.8F, 7),
+                PartPose.offsetAndRotation(0, 8, -0.5F, -0.45F, 0, side * -0.15F));
+        for (int finger = -1; finger <= 1; finger++) {
+            PartDefinition digit = hand.addOrReplaceChild("finger_" + finger,
+                    obsidian().addBox(-1.2F, -1, -7, 2.4F, 2.4F, 8),
+                    PartPose.offsetAndRotation(finger * 3.1F, 0.8F, -2.4F,
+                            -0.08F, -finger * 0.30F, 0));
+            PartDefinition hook = digit.addOrReplaceChild("hook", ivory()
+                            .addBox(-1.05F, -1, -5, 2.1F, 2.2F, 6),
+                    PartPose.offsetAndRotation(0, 0, -6.5F, 0.50F, 0, 0));
+            hook.addOrReplaceChild("point_talon", ivory().addBox(-0.85F, -0.9F, -6, 1.7F, 2.4F, 7),
+                    PartPose.offsetAndRotation(0, 0, -4.4F, 0.65F, 0, 0));
+        }
+        PartDefinition thumb = hand.addOrReplaceChild("thumb", obsidian()
+                        .addBox(-1.3F, -1.2F, -6, 2.6F, 2.6F, 7),
+                PartPose.offsetAndRotation(side * 3.6F, 0.5F, 0.5F, -0.1F, side * -1.15F, 0));
+        thumb.addOrReplaceChild("point_talon_thumb", ivory()
+                        .addBox(-1, -1, -7, 2, 2.6F, 8),
+                PartPose.offsetAndRotation(0, 0, -5, 0.80F, 0, 0));
+    }
+
     private static void addMane(PartDefinition head) {
         // A dense two-layer collar of thick, tapered locks, not a few thin spikes. The dark
         // undercoat fills the roots; golden locks flare radially and sweep back over the neck.
@@ -269,6 +323,8 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
             segments[i].yRot = yaw - previousYaw;
             segments[i].xRot = pitch - previousPitch;
             segments[i].zRot = Mth.sin(phase) * 0.014F * envelope;
+            // Reserve clear space around the rider's seat; the wild version has the full crest.
+            segments[i].getChild("point_spine").visible = !state.tamed || i > 1;
             previousYaw = yaw;
             previousPitch = pitch;
         }
@@ -279,6 +335,12 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                 * (state.beamTicks > 0 ? 0.08F : 1);
         head.xRot = attack.headPitch() + Mth.sin(time * 0.065F) * 0.012F * (1 - attack.brace());
         jaw.xRot = attack.jawOpening();
+        for (int i = 0; i < arms.length; i++) {
+            float side = i % 2 == 0 ? 1 : -1;
+            arms[i].xRot += Mth.sin(time * 0.075F - i * 0.9F) * 0.12F - attack.brace() * 0.20F;
+            arms[i].zRot += side * (Mth.sin(time * 0.065F - i * 0.7F) * 0.07F - attack.brace() * 0.13F);
+            hands[i].xRot += Mth.sin(time * 0.09F - i) * 0.08F - attack.brace() * 0.12F;
+        }
         for (int i = 0; i < mane.length; i++) {
             // Very small, phase-offset movement reads as flowing hair rather than rigid antlers.
             mane[i].xRot += Mth.sin(time * 0.075F - i * 0.65F) * 0.035F;

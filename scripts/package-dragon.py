@@ -7,8 +7,8 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.2.1-experimental"
-NAME = "Dragao-Celestial-Fabric-26.2-v0.2.1-Experimental.zip"
+VERSION = "0.2.2-experimental"
+NAME = "Dragao-Celestial-Fabric-26.2-v0.2.2-Experimental.zip"
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
 OLD_PACKAGE_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 
@@ -37,6 +37,7 @@ def main():
         required = ["br/com/celestialdragon/entity/CelestialDragonEntity.class",
                     "br/com/celestialdragon/entity/DragonAttackAnimation.class",
                     "br/com/celestialdragon/client/DragonModel.class",
+                    "br/com/celestialdragon/client/DragonGeometry.class",
                     "br/com/celestialdragon/client/DragonAnimation.class",
                     "br/com/celestialdragon/client/DragonSettingsScreen.class",
                     "br/com/celestialdragon/content/DragonCreativeTab.class",

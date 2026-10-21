@@ -4,6 +4,7 @@ import br.com.celestialdragon.CelestialDragonMod;
 import br.com.celestialdragon.client.DragonModel;
 import br.com.celestialdragon.client.DragonRenderState;
 import br.com.celestialdragon.entity.CelestialDragonEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
 import java.nio.file.Path;
 import java.util.Set;
 import java.util.UUID;
@@ -19,9 +20,9 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
-/** Readable full-body and close-up game views of the limbless, maned serpent. */
+/** Actual game views of the mane, hooked claws, pointed scales and combat poses. */
 public final class DragonVisualClientGameTest implements FabricClientGameTest {
-    private static final Path SHOTS = Path.of("../../reports/client-visual-v3").toAbsolutePath().normalize();
+    private static final Path SHOTS = Path.of("../../reports/client-visual-v4").toAbsolutePath().normalize();
 
     @Override
     public void runTest(ClientGameTestContext context) {
@@ -59,6 +60,10 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
             screenshot(context, "13-perfil-cabeca");
             view(context, world, 0, 147, 13, new BlockPos(0, 144, 2), 45);
             screenshot(context, "14-juba-frontal");
+            view(context, world, 8, 145.5, -2, new BlockPos(0, 143, -2), 40);
+            screenshot(context, "15-garras-ombro");
+            view(context, world, 8, 149, -9, new BlockPos(0, 144, -9), 45);
+            screenshot(context, "16-escamas-costas");
             // The profile makes the jaw opening and the forward snap directly readable.
             view(context, world, 10, 147, 3, new BlockPos(0, 144, 3), 50);
             server.runOnServer(ignored -> {
@@ -136,6 +141,18 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
 
     private static void assertAnimationPoses() {
         DragonModel model = new DragonModel(DragonModel.createBodyLayer().bakeRoot());
+        model.root().visit(new PoseStack(), (pose, path, index, cube) -> {
+            for (var polygon : cube.polygons) {
+                float length = polygon.normal().lengthSquared();
+                if (!Float.isFinite(length) || Math.abs(length - 1) > 0.001F)
+                    throw new AssertionError("Pointed model faces must retain finite unit lighting normals: " + path);
+                for (var vertex : polygon.vertices()) {
+                    if (!Float.isFinite(vertex.x()) || !Float.isFinite(vertex.y()) || !Float.isFinite(vertex.z())
+                            || !Float.isFinite(vertex.u()) || !Float.isFinite(vertex.v()))
+                        throw new AssertionError("Pointed model mesh must have finite vertices and UVs: " + path);
+                }
+            }
+        });
         DragonRenderState state = new DragonRenderState();
         state.tamed = true;
         state.movementAmount = 1;
@@ -145,9 +162,6 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
         float yaw = 0, minimum = 0, maximum = 0;
         for (int i = 0; i < DragonModel.SEGMENT_COUNT; i++) {
             segment = segment.getChild("segment_" + i);
-            if (segment.hasChild("left_foreleg") || segment.hasChild("right_foreleg")
-                    || segment.hasChild("left_hindleg") || segment.hasChild("right_hindleg"))
-                throw new AssertionError("The serpent body must not retain the previous four legs");
             yaw += segment.yRot;
             minimum = Math.min(minimum, yaw);
             maximum = Math.max(maximum, yaw);
