@@ -1,0 +1,123 @@
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -9,10 +9,10 @@
+ # check these on https://fabricmc.net/develop
+ minecraft_version=26.2
+ loader_version=0.19.5
+-loom_version=1.17-SNAPSHOT
++loom_version=1.18.4
+ 
+ # Mod Properties
+-mod_version=1.2.1
++mod_version=1.2.1+createport.1
+ maven_group=net.george.milk
+ archives_base_name=milk-lib
+ 
+--- a/src/main/java/net/george/milk/MilkLib.java
++++ b/src/main/java/net/george/milk/MilkLib.java
+@@ -1,7 +1,6 @@
+ package net.george.milk;
+ 
+ import net.fabricmc.api.ModInitializer;
+-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+ import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+ import net.fabricmc.fabric.api.registry.FabricPotionBrewingBuilder;
+@@ -152,15 +151,7 @@
+ 		});
+ 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT).register(entries ->
+ 				entries.accept(MILK_ARROW));
+-		ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, tooltipType, list) -> {
+-			if (itemStack.is(MILK_BOTTLE)) {
+-				list.add(Component.translatable("item.milk-lib.milk_bottle.tooltip").withStyle(ChatFormatting.GRAY));
+-			} else if (itemStack.is(SPLASH_MILK_BOTTLE)) {
+-				list.add(Component.translatable("item.milk-lib.splash_milk_bottle.tooltip").withStyle(ChatFormatting.GRAY));
+-			} else if (itemStack.is(LINGERING_MILK_BOTTLE)) {
+-				list.add(Component.translatable("item.milk-lib.lingering_milk_bottle.tooltip").withStyle(ChatFormatting.GRAY));
+-			}
+-		});
++
+ 
+ 		/* recipe */
+ 		FabricPotionBrewingBuilder.BUILD.register(builder -> {
+--- a/src/main/java/net/george/milk/MilkLibClient.java
++++ b/src/main/java/net/george/milk/MilkLibClient.java
+@@ -1,4 +1,8 @@
+ package net.george.milk;
++
++import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
++import net.minecraft.ChatFormatting;
++import net.minecraft.network.chat.Component;
+ 
+ import net.fabricmc.api.ClientModInitializer;
+ import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderingRegistry;
+@@ -14,6 +18,15 @@
+ public class MilkLibClient implements ClientModInitializer {
+     @Override
+     public void onInitializeClient() {
++		ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, tooltipType, list) -> {
++			if (itemStack.is(MilkLib.MILK_BOTTLE)) {
++				list.add(Component.translatable("item.milk-lib.milk_bottle.tooltip").withStyle(ChatFormatting.GRAY));
++			} else if (itemStack.is(MilkLib.SPLASH_MILK_BOTTLE)) {
++				list.add(Component.translatable("item.milk-lib.splash_milk_bottle.tooltip").withStyle(ChatFormatting.GRAY));
++			} else if (itemStack.is(MilkLib.LINGERING_MILK_BOTTLE)) {
++				list.add(Component.translatable("item.milk-lib.lingering_milk_bottle.tooltip").withStyle(ChatFormatting.GRAY));
++			}
++		});
+         DrippableFluidManager.registerClient(MilkLib.STILL_MILK_PARTICLES, MilkLib.STILL_MILK);
+         DrippableFluidManager.registerClient(MilkLib.FLOWING_MILK_PARTICLES, MilkLib.FLOWING_MILK);
+ 
+--- /dev/null
++++ b/src/main/java/net/george/milk/api/DrippableFluidClient.java
+@@ -0,0 +1,23 @@
++package net.george.milk.api;
++
++import net.fabricmc.api.EnvType;
++import net.fabricmc.api.Environment;
++import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
++
++/** Client factories and their generated lambda methods must stay out of common classes. */
++@Environment(EnvType.CLIENT)
++final class DrippableFluidClient {
++    private DrippableFluidClient() { }
++    static void register(ParticleTypeSet particles, DrippableFluid fluid) {
++        ParticleProviderRegistry registry = ParticleProviderRegistry.getInstance();
++        registry.register(particles.hang(), provider ->
++                new ParticleFactories.DrippingDripstoneFluidFactory(fluid, provider)
++        );
++        registry.register(particles.fall(), provider ->
++                new ParticleFactories.FallingDripstoneFluidFactory(fluid, provider)
++        );
++        registry.register(particles.splash(), provider ->
++                new ParticleFactories.DripstoneFluidSplashFactory(provider, fluid)
++        );
++    }
++}
+--- a/src/main/java/net/george/milk/api/DrippableFluidManager.java
++++ b/src/main/java/net/george/milk/api/DrippableFluidManager.java
+@@ -3,7 +3,6 @@
+ import com.google.common.collect.ImmutableList;
+ import net.fabricmc.api.EnvType;
+ import net.fabricmc.api.Environment;
+-import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
+ import net.george.milk.MilkLib;
+ import net.minecraft.data.DataProvider;
+ import net.minecraft.data.PackOutput;
+@@ -27,16 +26,7 @@
+ 
+     @Environment(EnvType.CLIENT)
+     static void registerClient(ParticleTypeSet particles, DrippableFluid fluid) {
+-        ParticleProviderRegistry registry = ParticleProviderRegistry.getInstance();
+-        registry.register(particles.hang(), provider ->
+-                new ParticleFactories.DrippingDripstoneFluidFactory(fluid, provider)
+-        );
+-        registry.register(particles.fall(), provider ->
+-                new ParticleFactories.FallingDripstoneFluidFactory(fluid, provider)
+-        );
+-        registry.register(particles.splash(), provider ->
+-                new ParticleFactories.DripstoneFluidSplashFactory(provider, fluid)
+-        );
++        DrippableFluidClient.register(particles, fluid);
+     }
+ 
+     ParticleTypeSet getSet(DrippableFluid fluid);

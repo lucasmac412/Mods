@@ -1,0 +1,2 @@
+# Preserve whitespace from the upstream Java context so the patches still apply.
+*.patch -whitespace

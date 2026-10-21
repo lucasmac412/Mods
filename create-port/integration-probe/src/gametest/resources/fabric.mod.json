@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "create_dependency_tests",
+  "version": "0.1.0-dev",
+  "name": "Create prerequisite tests",
+  "environment": "*",
+  "license": "MIT",
+  "entrypoints": {
+    "fabric-gametest": ["br.com.mods.createport.DependencyGameTests"],
+    "fabric-client-gametest": ["br.com.mods.createport.DependencyClientGameTest"]
+  },
+  "depends": {"create_dependency_probe": "*", "fabric-gametest-api-v1": "*"}
+}

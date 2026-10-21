@@ -1,0 +1,185 @@
+{
+  "before": {
+    "result": "FAILED",
+    "probeIncludesOnlyMinecraftAndFabricClasspath": true,
+    "thirdPartyCreateDependenciesNotInstalled": true,
+    "compilerDiagnosticCap": 10000,
+    "capturedErrorHeadersBeforeGradleRepeatsOutput": 10000,
+    "topDiagnosticKinds": [
+      [
+        "cannot find symbol",
+        5701
+      ],
+      [
+        "package net.createmod.catnip.data does not exist",
+        377
+      ],
+      [
+        "package net.createmod.catnip.math does not exist",
+        324
+      ],
+      [
+        "package javax.annotation does not exist",
+        242
+      ],
+      [
+        "package net.createmod.ponder.api.scene does not exist",
+        154
+      ],
+      [
+        "package net.createmod.catnip.animation does not exist",
+        141
+      ],
+      [
+        "package net.createmod.catnip.platform does not exist",
+        141
+      ],
+      [
+        "package net.createmod.ponder.api.element does not exist",
+        140
+      ]
+    ],
+    "missingMinecraftImportExamples": [
+      "net.minecraft.MethodsReturnNonnullByDefault",
+      "net.minecraft.Util",
+      "net.minecraft.advancements.Criterion",
+      "net.minecraft.advancements.CriterionTrigger",
+      "net.minecraft.advancements.critereon.ContextAwarePredicate",
+      "net.minecraft.advancements.critereon.EntityPredicate",
+      "net.minecraft.advancements.critereon.InventoryChangeTrigger",
+      "net.minecraft.advancements.critereon.ItemPredicate",
+      "net.minecraft.advancements.critereon.ItemUsedOnLocationTrigger",
+      "net.minecraft.advancements.critereon.SimpleCriterionTrigger",
+      "net.minecraft.advancements.critereon.StatePropertiesPredicate",
+      "net.minecraft.client.GraphicsStatus",
+      "net.minecraft.client.color.block.BlockColor",
+      "net.minecraft.client.color.item.ItemColor",
+      "net.minecraft.client.gui.GuiGraphics",
+      "net.minecraft.client.gui.LayeredDraw"
+    ],
+    "resourceLocationMentionsInErrors": 184,
+    "logSha256": "540146b4d3f5811f25b40493f7669f7c5b13c70d14df8e76a596c0efa3b3d06d"
+  },
+  "afterNamesMigration": {
+    "result": "FAILED",
+    "probeIncludesOnlyMinecraftAndFabricClasspath": true,
+    "thirdPartyCreateDependenciesNotInstalled": true,
+    "compilerDiagnosticCap": 10000,
+    "capturedErrorHeadersBeforeGradleRepeatsOutput": 10000,
+    "topDiagnosticKinds": [
+      [
+        "cannot find symbol",
+        5248
+      ],
+      [
+        "package net.createmod.catnip.data does not exist",
+        400
+      ],
+      [
+        "package net.createmod.catnip.math does not exist",
+        379
+      ],
+      [
+        "package javax.annotation does not exist",
+        253
+      ],
+      [
+        "package net.createmod.catnip.render does not exist",
+        190
+      ],
+      [
+        "package net.createmod.catnip.animation does not exist",
+        159
+      ],
+      [
+        "package net.createmod.ponder.api.scene does not exist",
+        154
+      ],
+      [
+        "package net.createmod.catnip.platform does not exist",
+        150
+      ]
+    ],
+    "missingMinecraftImportExamples": [
+      "net.minecraft.MethodsReturnNonnullByDefault",
+      "net.minecraft.client.GraphicsStatus",
+      "net.minecraft.client.color.block.BlockColor",
+      "net.minecraft.client.color.item.ItemColor",
+      "net.minecraft.client.data.models.ItemModelGenerators.TrimModelData",
+      "net.minecraft.client.gui.GuiGraphics",
+      "net.minecraft.client.gui.LayeredDraw",
+      "net.minecraft.client.model.AgeableListModel",
+      "net.minecraft.client.model.HierarchicalModel",
+      "net.minecraft.client.particle.ParticleEngine.SpriteParticleRegistration",
+      "net.minecraft.client.particle.TextureSheetParticle",
+      "net.minecraft.client.renderer.ItemBlockRenderTypes",
+      "net.minecraft.client.renderer.LightTexture",
+      "net.minecraft.client.renderer.MultiBufferSource",
+      "net.minecraft.client.renderer.MultiBufferSource.BufferSource",
+      "net.minecraft.client.renderer.PanoramaRenderer"
+    ],
+    "resourceLocationMentionsInErrors": 0,
+    "logSha256": "e2ccf4f8f99f532275585db8d70293d5ab0b7b2c91ede904159629853e6e8475"
+  },
+  "interpretation": "The first two probes omit all Create-specific dependencies. The final probe includes two target libraries, their configuration dependencies and the tested Milk adapter; remaining core dependencies still have no Fabric 26.2 artifacts in the repositories checked. Capped totals are not independent bug counts or evidence of runtime compatibility.",
+  "validation": {
+    "sourceRewriteSafetyTests": 3,
+    "sourceRewriteSafetyResult": "PASSED",
+    "minecraftMetadataVersionVerified": "26.2",
+    "runtimeGameTestPerformed": false,
+    "installableCreateJarProduced": false
+  },
+  "afterTargetPrerequisites": {
+    "result": "FAILED",
+    "targetDependenciesProvided": [
+      "Fabric API 0.161.0+26.2",
+      "Forge Config API Port 26.2.1",
+      "Milk Lib 1.2.1+createport.1 (source-fixed)",
+      "Night Config 3.8.4",
+      "JSR305 3.0.2"
+    ],
+    "missingCoreDependencyPorts": [
+      "Flywheel",
+      "Ponder/Catnip",
+      "Registrate Fabric",
+      "Porting Lib"
+    ],
+    "compilerDiagnosticCap": 10000,
+    "capturedErrorHeadersBeforeGradleRepeatsOutput": 10000,
+    "topDiagnosticKinds": [
+      [
+        "cannot find symbol",
+        5441
+      ],
+      [
+        "package net.createmod.catnip.data does not exist",
+        401
+      ],
+      [
+        "package net.createmod.catnip.math does not exist",
+        380
+      ],
+      [
+        "package net.createmod.catnip.render does not exist",
+        194
+      ],
+      [
+        "package net.createmod.catnip.animation does not exist",
+        159
+      ],
+      [
+        "package net.createmod.ponder.api.scene does not exist",
+        154
+      ],
+      [
+        "package net.createmod.catnip.platform does not exist",
+        150
+      ],
+      [
+        "package net.createmod.ponder.api.element does not exist",
+        140
+      ]
+    ],
+    "logSha256": "d4f7f4159417e8281d03c554a8b7200d62300c9a03c9961ff4f3cbd818dfbc43"
+  }
+}

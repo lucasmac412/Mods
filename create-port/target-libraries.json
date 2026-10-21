@@ -1,0 +1,46 @@
+[
+  {
+    "project": "forge-config-api-port",
+    "versionId": "rSd3GiG8",
+    "version": "26.2.1",
+    "minecraft": [
+      "26.2"
+    ],
+    "loader": "fabric",
+    "file": "ForgeConfigAPIPort-v26.2.1-mc26.2.x-Fabric.jar",
+    "url": "https://cdn.modrinth.com/data/ohNO6lps/versions/rSd3GiG8/ForgeConfigAPIPort-v26.2.1-mc26.2.x-Fabric.jar",
+    "sha512": "948b8d83de61a11aad2fc0bb0744a8b4848c9b2f0663c9aa015389d9560b3fa78518e609c44ec90278de0e159a92ebd721ccbdebb453aa455c353e5cd19413bf",
+    "nestedJars": [
+      "core-3.8.4.jar",
+      "toml-3.8.4.jar"
+    ],
+    "modId": "forgeconfigapiport",
+    "license": "MPL-2.0",
+    "depends": {
+      "minecraft": "~26.2-",
+      "fabricloader": ">=0.19.0",
+      "fabric-api": ">=0.152.0"
+    }
+  },
+  {
+    "project": "milk-lib",
+    "versionId": "UmqYe5DA",
+    "version": "1.2.1+26.2",
+    "minecraft": [
+      "26.2"
+    ],
+    "loader": "fabric",
+    "file": "milk-lib-1.2.1.jar",
+    "url": "https://cdn.modrinth.com/data/Tu5LjQoE/versions/UmqYe5DA/milk-lib-1.2.1.jar",
+    "sha512": "5d410e1b89dbf49cba8a2587c27c7733ad0dbdc04b6ade9720a7d8a2650c917b51a66555a3ad7be3810d50601d343aab48f36bcfd74c508b53d4cadea11f706e",
+    "nestedJars": [],
+    "modId": "milk-lib",
+    "license": "MIT License",
+    "depends": {
+      "fabricloader": ">=0.18.6",
+      "minecraft": "26.2",
+      "java": ">=25",
+      "fabric-api": "*"
+    }
+  }
+]

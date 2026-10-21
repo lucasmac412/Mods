@@ -92,3 +92,5 @@ No ambiente de nuvem Linux x86_64, `bash scripts/setup-cloud.sh` instala o JDK v
 Para desenvolver o motor próprio separadamente, execute `./gradlew -p native-ai build`. Os comandos de treino, avaliação e conversa estão no [laboratório](native-ai/README.md). Para compilar Luma Voz, execute `./gradlew -p voice-input build`; o JAR fica em `voice-input/build/libs`. O adaptador legado `RemoteBrain` permanece para referência/testes; a integração atual usa `OllamaBrain`, sem variáveis `LUMA_AI_*`. O arquivo de reconhecimento Vosk é distribuído com avisos/licenças de terceiros; o modelo de conversa do Ollama é baixado pelo próprio usuário.
 
 Código, modelos e texturas do projeto: [MIT](LICENSE). Os sons do Dragão Celestial a partir da 0.3.3 estão sob **CC BY-SA 3.0**; consulte os [créditos e as fontes](third-party/dragon-audio/CREDITS.txt).
+
+Trabalho em desenvolvimento: [migração do Create para Fabric 26.2](create-port/README.md). Há ferramentas, patches e testes de pré-requisitos; **ainda não há Create instalável para essa versão**.

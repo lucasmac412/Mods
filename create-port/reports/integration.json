@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-21",
+  "minecraft": "26.2",
+  "loader": "fabric",
+  "sourceTransformationTestsPassed": 3,
+  "serverTests": [
+    "create_dependency_tests:dependency_game_tests_transfer_of_milk_commits_and_rolls_back",
+    "create_dependency_tests:dependency_game_tests_config_loads_and_corrects_invalid_kinetic_speed",
+    "create_dependency_tests:dependency_game_tests_milk_uses_real_registered_fluids_and_reloaded_tags",
+    "minecraft:always_pass"
+  ],
+  "serverFailed": 0,
+  "clientScenariosPassed": 1,
+  "clientParticleFactoriesValidated": 6,
+  "screenshotSha256": "3dffdceb94ce52eb73f866462d1aac0250de7cbf9c5ced587cc6495d831ba394",
+  "isCreateGameplayTest": false,
+  "createModPlayable": false,
+  "logs": {
+    "integration-initial.log": "d0ec694b8ca4156be588d07fbd95ea5c1ee12b884b5565e5b02c1fdb65de15ac",
+    "integration-server-final.log": "450037e5095d5e897ac979320b83b03756545cb33f20e04584f43cf65ceb8af7",
+    "integration-client-final.log": "ea76f72ae7f9029d487f4f4a1c2a861c61776dde2c7dbb4105d2a32c581e1f95",
+    "milk-patched-build.log": "a66f94cc0bf19bc2c47fcbdc122a3bb9476491d6ae1f81ec778ed88859d089dc"
+  }
+}

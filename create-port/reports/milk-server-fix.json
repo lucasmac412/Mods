@@ -1,0 +1,27 @@
+{
+  "version": "1.2.1+createport.1",
+  "minecraft": "26.2",
+  "sourceRepository": "https://github.com/Mr-George-star/Milk-Lib",
+  "sourceCommit": "5b1a83c22df485ad724f86bd755f724bac2ddc5c",
+  "sourceArchiveSha256": "dc037131a58ed046ec36ab28f4841994259c1446fd91ad59e10b27dc4099716c",
+  "license": "MIT",
+  "changes": [
+    "Client particle factory lambdas moved from a common interface into a client-only class.",
+    "Client tooltip callback moved from common initialization to the client initializer.",
+    "Common particle registrations and IDs remain unchanged."
+  ],
+  "serverRegressionBefore": "Cannot load class net.minecraft.client.particle.SpriteSet in environment type SERVER",
+  "serverRegressionAfter": {
+    "modTestsPassed": 3,
+    "fabricControlPassed": 1
+  },
+  "patchedJarSha256": "2641b93a459625837df99d8f0b563c866b65069b0c580a8c453cd7a4edd4ef28",
+  "patchedJarRedistributed": false,
+  "notCreateMod": true,
+  "clientRegressionAfter": {
+    "scenarioPassed": true,
+    "particleFactoriesCreated": 6,
+    "fluidScreenshotInspected": true,
+    "softwareRendering": true
+  }
+}
