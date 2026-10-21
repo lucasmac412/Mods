@@ -2,11 +2,11 @@
 
 Este guia é para **Minecraft Java Edition no computador**, versão **26.2**. O Dragão Celestial é um mod Fabric independente da Luma.
 
-**[Baixar Dragao-Celestial-Fabric-26.2-v0.2.0-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.2.0-Experimental.zip)**
+**[Baixar Dragao-Celestial-Fabric-26.2-v0.2.1-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.2.1-Experimental.zip)**
 
 **Bioma comum para testes:** como na versão 0.1.1, enquanto desenvolvemos e testamos o mod, o Bosque Celestial está muito comum: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São **36 vezes mais centros por área** do que na 0.1.0, e bosques vizinhos podem se unir. Essa frequência é temporária para facilitar os testes.
 
-**Novidade da 0.2.0:** dragão maior, corpo longo com ondulação lateral, cabeça redesenhada e golpes com preparação e recuperação. O Criativo oferece os 12 itens do mod e ovos separados para criar as versões selvagem e domada.
+**Novidade da 0.2.1:** visual refeito com juba volumosa, focinho alongado e mandíbula marcada; as patas foram removidas, e o corpo está mais fino e definido. A ondulação lateral e os golpes com preparação e recuperação continuam presentes. O Criativo oferece os 12 itens do mod e ovos separados para criar as versões selvagem e domada.
 
 ## 1. Baixe e extraia o pacote
 
@@ -14,10 +14,10 @@ Abra o link acima. No navegador, `Ctrl + J` mostra os downloads. Localize o ZIP 
 
 | Arquivo | Função |
 | --- | --- |
-| `celestial-dragon-0.2.0-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
+| `celestial-dragon-0.2.1-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
 | `fabric-api-0.161.0+26.2.jar` | Dependência usada pelo mod. |
 
-Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.2.0-experimental/dragon-mod/README.md).
+Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.2.1-experimental/dragon-mod/README.md).
 
 ## 2. Abra o Minecraft Java 26.2 uma vez
 
@@ -56,14 +56,14 @@ No Windows, pressione `Windows + R`, cole `%APPDATA%\.minecraft` e aperte Enter 
 4. Se já houver outra versão do Dragão Celestial ou do Fabric API, guarde a versão substituída fora de `mods`. Deixe uma única versão de cada mod.
 5. Abra o Launcher, selecione **Fabric 26.2** e clique em **Jogar**.
 
-**Se você já usa uma versão 0.1.0 ou 0.1.1:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.2.0-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
+**Se você já usa a 0.2.0 ou uma versão 0.1.x:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.2.1-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
 
 O resultado deve ser parecido com:
 
 ```text
 .minecraft/
   mods/
-    celestial-dragon-0.2.0-experimental.jar
+    celestial-dragon-0.2.1-experimental.jar
     fabric-api-0.161.0+26.2.jar
 ```
 
@@ -127,7 +127,7 @@ Fabrique uma **Incubadora celestial** na bancada usando os quatro ingredientes a
 | 1 | **Madeira celestial**: tronco das árvores do bosque. |
 | 1 | **Rocha celestial**: o bloco rochoso do terreno, obtido com picareta. |
 
-1. Coloque a incubadora em uma área bem aberta. O dragão cresceu nesta versão e precisa de mais espaço livre para nascer.
+1. Coloque a incubadora em uma área bem aberta, com espaço livre acima e ao redor para o dragão nascer.
 2. Segure o ovo e clique com o botão direito na incubadora. Ela recebe um ovo por vez.
 3. Aguarde **cinco minutos de mundo em processamento**, equivalentes a 6.000 ticks. Fique perto para a região continuar carregada. Em servidores lentos, os cinco minutos de ticks podem levar mais tempo no relógio.
 4. Clique na incubadora para consultar a porcentagem. Se o aviso pedir espaço, desobstrua a área acima e ao redor; o ovo permanece seguro aguardando.

@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 
-/** An imperial Chinese long: a flowing serpent, crowned head and small grasping limbs. */
+/** A limbless celestial long: lean coiled muscle, a leonine mane and an angular dragon's face. */
 public final class DragonModel extends EntityModel<DragonRenderState> {
     public static final ModelLayerLocation MODEL_LAYER = new ModelLayerLocation(
             CelestialDragonMod.id("celestial_dragon"), "main");
@@ -25,8 +25,8 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
     private final ModelPart beard;
     private final ModelPart tail;
     private final ModelPart[] segments = new ModelPart[SEGMENT_COUNT];
-    private final ModelPart[] legs = new ModelPart[4];
     private final ModelPart[] whiskers = new ModelPart[2];
+    private final ModelPart[] mane = new ModelPart[34];
 
     public DragonModel(ModelPart root) {
         super(root);
@@ -43,12 +43,9 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
             previous = segments[i];
         }
         tail = previous.getChild("tail_tuft");
-        legs[0] = segments[2].getChild("left_foreleg");
-        legs[1] = segments[2].getChild("right_foreleg");
-        legs[2] = segments[12].getChild("left_hindleg");
-        legs[3] = segments[12].getChild("right_hindleg");
         whiskers[0] = head.getChild("whisker_left");
         whiskers[1] = head.getChild("whisker_right");
+        for (int i = 0; i < mane.length; i++) mane[i] = head.getChild("mane_lock_" + i);
     }
 
     private static CubeListBuilder obsidian() { return CubeListBuilder.create().texOffs(0, 0); }
@@ -63,70 +60,104 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                 PartPose.offset(0, -24, 0));
         PartDefinition previous = body;
         for (int i = 0; i < SEGMENT_COUNT; i++) {
-            float width = i <= 12 ? 32 - i * 0.55F : 25.4F - (i - 12) * 2.05F;
-            float height = width * 0.84F;
+            // Broad shoulders taper into a narrow waist and a long, fine tail. Overlapping
+            // octagonal sections keep the silhouette continuous while the spine bends.
+            float width = i <= 4 ? 24 - i * 0.9F
+                    : i <= 14 ? 20.4F - (i - 4) * 0.42F : 16.2F - (i - 14) * 1.35F;
+            float height = width * 0.87F;
             PartDefinition segment = previous.addOrReplaceChild("segment_" + i,
-                    obsidian().addBox(-width / 2, -height / 2, -8, width, height, 21),
+                    obsidian()
+                            .addBox(-width * 0.34F, -height / 2, -8, width * 0.68F, height, 21)
+                            .addBox(-width / 2, -height * 0.30F, -8, width, height * 0.60F, 21),
                     PartPose.offset(0, 0, i == 0 ? 0 : 16));
             segment.addOrReplaceChild("belly", gold()
-                    .addBox(-width * 0.43F, height / 2 - 2, -8.4F, width * 0.86F, 3, 19), PartPose.ZERO);
+                    .addBox(-width * 0.29F, height / 2 - 1.6F, -8.4F, width * 0.58F, 2.1F, 19), PartPose.ZERO);
             for (int rib = 0; rib < 3; rib++) {
                 segment.addOrReplaceChild("ventral_rib_" + rib, obsidian()
-                        .addBox(-width * 0.4F, height / 2 + 0.6F, -7 + rib * 6.3F,
-                                width * 0.8F, 0.6F, 0.8F), PartPose.ZERO);
+                        .addBox(-width * 0.29F, height / 2 + 0.3F, -7 + rib * 6.3F,
+                                width * 0.58F, 0.35F, 0.8F), PartPose.ZERO);
             }
-            float crest = i < 12 ? 12 - i * 0.2F : 9.5F - (i - 12) * 0.48F;
-            segment.addOrReplaceChild("crest", gold().addBox(-1.7F, -crest, -3, 3.4F, crest + 1, 9),
-                    PartPose.offsetAndRotation(0, -height / 2, 0, -0.38F, 0, 0));
+            float crest = i < 12 ? 6.2F - i * 0.12F : 4.8F - (i - 12) * 0.25F;
+            segment.addOrReplaceChild("crest", gold().addBox(-1.1F, -crest, -3, 2.2F, crest + 1, 9),
+                    PartPose.offsetAndRotation(0, -height / 2, 0, -0.55F, 0, 0));
             for (int side : new int[]{-1, 1}) {
-                segment.addOrReplaceChild("scale_" + side, gold().addBox(-1, -3.6F, -5, 2, 7.2F, 13),
-                        PartPose.offsetAndRotation(side * (width / 2 - 0.1F), -height * 0.22F, 0,
-                                -0.12F, side * -0.12F, side * -0.24F));
-            }
-            if (i == 2 || i == 12) {
-                addLeg(segment, i == 2 ? "left_foreleg" : "left_hindleg", 1, width);
-                addLeg(segment, i == 2 ? "right_foreleg" : "right_hindleg", -1, width);
+                // Swept, dark flank volumes suggest muscle under the scales; gold is an
+                // accent along the upper edge, rather than a thick band around every joint.
+                segment.addOrReplaceChild("flank_" + side, obsidian()
+                                .addBox(-width * 0.11F, -height * 0.25F, -7,
+                                        width * 0.22F, height * 0.50F, 17),
+                        PartPose.offsetAndRotation(side * width * 0.43F, 0, 0,
+                                0.08F, side * -0.14F, side * -0.24F));
+                segment.addOrReplaceChild("scale_" + side, gold()
+                                .addBox(-0.55F, -1.5F, -4, 1.1F, 3, 10),
+                        PartPose.offsetAndRotation(side * width * 0.40F, -height * 0.37F, 0,
+                                -0.12F, side * -0.12F, side * -0.4F));
             }
             previous = segment;
         }
         PartDefinition tail = previous.addOrReplaceChild("tail_tuft", CubeListBuilder.create(), PartPose.offset(0, 0, 9));
-        for (int j = -3; j <= 3; j++) {
-            tail.addOrReplaceChild("plume_" + j, gold().addBox(-1.4F, -2.5F, -1, 2.8F, 5, 32 - Math.abs(j) * 4),
-                    PartPose.offsetAndRotation(j * 1.5F, -Math.abs(j) * 1.3F, 0,
-                            -0.2F - Math.abs(j) * 0.06F, j * 0.17F, 0));
+        for (int j = -2; j <= 2; j++) {
+            PartDefinition plume = tail.addOrReplaceChild("plume_" + j,
+                    gold().addBox(-1.4F, -2, -1, 2.8F, 4, 17 - Math.abs(j) * 2),
+                    PartPose.offsetAndRotation(j * 1.2F, -Math.abs(j) * 0.8F, 0,
+                            -0.12F - Math.abs(j) * 0.05F, j * 0.12F, 0));
+            plume.addOrReplaceChild("tip", gold().addBox(-0.7F, -1, -1, 1.4F, 2, 13),
+                    PartPose.offsetAndRotation(0, 0, 15 - Math.abs(j) * 2, 0.18F, 0, 0));
         }
 
         // Pivot at the server mouth height: aiming up rotates the whole neck, not only the nose.
         PartDefinition neck = body.addOrReplaceChild("neck", obsidian()
-                        .addBox(-15, -14, -20, 30, 27, 22)
-                        .addBox(-14, -15, -36, 28, 26, 20),
+                        .addBox(-10, -10.5F, -20, 20, 21, 22)
+                        .addBox(-9, -12, -36, 18, 20, 20),
                 PartPose.offset(0, 3.2F, 0));
         neck.addOrReplaceChild("neck_belly", gold()
-                .addBox(-12, 10, -35, 24, 3, 21).addBox(-13, 12, -19, 26, 3, 20), PartPose.ZERO);
+                .addBox(-6, 7, -35, 12, 2, 21).addBox(-7, 9, -19, 14, 2, 20), PartPose.ZERO);
         for (int j = 0; j < 4; j++) {
-            neck.addOrReplaceChild("neck_crest_" + j, gold().addBox(-1.8F, -12, -2, 3.6F, 13, 7),
-                    PartPose.offsetAndRotation(0, -14, -4 - j * 8, -0.45F, 0, 0));
+            neck.addOrReplaceChild("neck_crest_" + j, gold().addBox(-1.2F, -6, -2, 2.4F, 7, 7),
+                    PartPose.offsetAndRotation(0, -11, -4 - j * 8, -0.55F, 0, 0));
         }
         PartDefinition head = neck.addOrReplaceChild("head", obsidian()
-                        .addBox(-17, -18, -19, 34, 28, 29)
-                        .addBox(-14, -1, -42, 28, 11, 27),
+                        .addBox(-12.5F, -18, -15, 25, 24, 26)
+                        .addBox(-10, -21, -11, 20, 8, 17)
+                        .addBox(-11, -4, -24, 22, 12, 17)
+                        .addBox(-9, -3, -37, 18, 11, 18)
+                        .addBox(-7.5F, -4, -43, 15, 12, 9),
                 PartPose.offset(0, -10, -34));
-        head.addOrReplaceChild("muzzle_trim", gold().addBox(-14.5F, 7.5F, -42.5F, 29, 3, 28), PartPose.ZERO);
-        head.addOrReplaceChild("nose", obsidian().addBox(-14.3F, -3, -43, 28.6F, 10, 7), PartPose.ZERO);
+        // The raised bridge, tapering nose, cheek blades and overhanging brow distinguish
+        // the face from a flat rectangular reptile muzzle, without moving the beam origin.
+        head.addOrReplaceChild("nasal_bridge", obsidian()
+                .addBox(-5.5F, -11, -23, 11, 9, 15)
+                .addBox(-4, -8, -36, 8, 7, 16), PartPose.ZERO);
+        head.addOrReplaceChild("nose_ridge", gold().addBox(-1.3F, -8.5F, -35, 2.6F, 1.3F, 14), PartPose.ZERO);
+        head.addOrReplaceChild("muzzle_trim", gold()
+                .addBox(-8, 7.5F, -42.5F, 16, 2, 24)
+                .addBox(-10.5F, 7.5F, -23, 21, 2, 10), PartPose.ZERO);
+        head.addOrReplaceChild("nose", obsidian().addBox(-8.2F, -5.5F, -43.4F, 16.4F, 7, 6), PartPose.ZERO);
         head.addOrReplaceChild("nostrils", gold()
-                .addBox(-10.5F, -3.6F, -43.3F, 5, 2.2F, 5)
-                .addBox(5.5F, -3.6F, -43.3F, 5, 2.2F, 5), PartPose.ZERO);
+                .addBox(-6.8F, -5.8F, -43.7F, 3.8F, 2.2F, 3.6F)
+                .addBox(3, -5.8F, -43.7F, 3.8F, 2.2F, 3.6F), PartPose.ZERO);
+        head.addOrReplaceChild("nostril_centers", obsidian()
+                .addBox(-6, -5.9F, -43.8F, 2.3F, 1.2F, 2.7F)
+                .addBox(3.7F, -5.9F, -43.8F, 2.3F, 1.2F, 2.7F), PartPose.ZERO);
         head.addOrReplaceChild("eyes", cyan()
-                .addBox(-17.6F, -8.5F, -22, 2.6F, 6.5F, 10)
-                .addBox(15, -8.5F, -22, 2.6F, 6.5F, 10), PartPose.ZERO);
-        head.addOrReplaceChild("forehead_mask", gold().addBox(-4.5F, -18.7F, -17, 9, 2.2F, 18), PartPose.ZERO);
+                .addBox(-13.1F, -10.5F, -18, 2, 4, 8)
+                .addBox(11.1F, -10.5F, -18, 2, 4, 8), PartPose.ZERO);
+        head.addOrReplaceChild("pupils", obsidian()
+                .addBox(-13.25F, -10.4F, -15, 0.3F, 3.8F, 1.2F)
+                .addBox(12.95F, -10.4F, -15, 0.3F, 3.8F, 1.2F), PartPose.ZERO);
+        head.addOrReplaceChild("forehead_mask", gold().addBox(-2, -21.7F, -10, 4, 1.2F, 14), PartPose.ZERO);
+        addMane(head);
         for (int side : new int[]{-1, 1}) {
-            head.addOrReplaceChild("brow_" + side, gold().addBox(-2.2F, -2, -9, 5, 4, 18),
-                    PartPose.offsetAndRotation(side * 15.8F, -9.6F, -17,
-                            -0.1F, side * -0.13F, side * -0.3F));
+            head.addOrReplaceChild("cheek_" + side, obsidian().addBox(-3.5F, -6, -6, 7, 14, 15),
+                    PartPose.offsetAndRotation(side * 10.5F, -3, -5, -0.12F, side * 0.3F, side * -0.18F));
+            head.addOrReplaceChild("cheek_blade_" + side, gold().addBox(-0.8F, -1.8F, -4, 1.6F, 3.6F, 15),
+                    PartPose.offsetAndRotation(side * 14, 0, -9, -0.1F, side * 0.28F, side * -0.2F));
+            head.addOrReplaceChild("brow_" + side, gold().addBox(-2, -1.8F, -8, 4, 3.6F, 15),
+                    PartPose.offsetAndRotation(side * 12, -11.5F, -14,
+                            -0.16F, side * -0.15F, side * -0.32F));
             PartDefinition horn = head.addOrReplaceChild("antler_" + side, gold()
-                            .addBox(-2.8F, -20, -2.8F, 5.6F, 21, 5.6F),
-                    PartPose.offsetAndRotation(side * 12, -17, 3, -0.4F, side * 0.2F, side * 0.34F));
+                            .addBox(-2.6F, -20, -2.6F, 5.2F, 21, 5.2F),
+                    PartPose.offsetAndRotation(side * 9.5F, -20, 1, -0.4F, side * 0.2F, side * 0.34F));
             PartDefinition tip = horn.addOrReplaceChild("tip", gold().addBox(-2, -18, -2, 4, 19, 4),
                     PartPose.offsetAndRotation(0, -19, 0, -0.45F, 0, side * 0.26F));
             tip.addOrReplaceChild("crown", gold().addBox(-1.1F, -12, -1.1F, 2.2F, 13, 2.2F),
@@ -135,15 +166,9 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                     PartPose.offsetAndRotation(0, -9, -1, 0.8F, 0, side * 0.42F));
             tip.addOrReplaceChild("prong", gold().addBox(-1.1F, -13, -1.1F, 2.2F, 14, 2.2F),
                     PartPose.offsetAndRotation(0, -8, 0, -0.6F, 0, side * 0.55F));
-            for (int j = 0; j < 8; j++) {
-                head.addOrReplaceChild("mane_" + side + "_" + j,
-                        gold().addBox(-2.2F, -3, -1, 4.4F, 6, 24 - Math.abs(j - 3) * 1.6F),
-                        PartPose.offsetAndRotation(side * (12.5F + (j % 2) * 2.2F), -16 + j * 3.4F,
-                                -3 + j * 0.7F, -0.4F + j * 0.1F, side * (0.45F + j * 0.045F), side * 0.1F));
-            }
             PartDefinition whisker = head.addOrReplaceChild(side == 1 ? "whisker_left" : "whisker_right",
                     gold().addBox(side > 0 ? 0 : -12, -0.8F, -0.8F, 12, 1.6F, 1.6F),
-                    PartPose.offsetAndRotation(side * 12, 7, -34, 0, side * 0.35F, side * -0.2F));
+                    PartPose.offsetAndRotation(side * 7.5F, 6, -36, 0, side * 0.35F, side * -0.2F));
             for (int j = 0; j < 4; j++) {
                 whisker = whisker.addOrReplaceChild("curl_" + j,
                         gold().addBox(side > 0 ? 0 : -10, -0.6F, -0.6F, 10, 1.2F, 1.2F),
@@ -151,21 +176,23 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                                 0, side * (j < 2 ? -0.35F : 0.28F), side * -0.25F));
             }
         }
-        head.addOrReplaceChild("forehead_crest", gold().addBox(-2, -12, -7, 4, 13, 13),
-                PartPose.offsetAndRotation(0, -18, -5, -0.25F, 0, 0));
+        head.addOrReplaceChild("forehead_crest", gold().addBox(-1.3F, -7, -4, 2.6F, 8, 10),
+                PartPose.offsetAndRotation(0, -21, -3, -0.4F, 0, 0));
         PartDefinition jaw = head.addOrReplaceChild("jaw", obsidian()
-                .addBox(-13, 0, -36, 26, 7, 36), PartPose.offset(0, 10, -6));
-        jaw.addOrReplaceChild("jaw_gold", gold().addBox(-13.4F, 5, -36.3F, 26.8F, 3.2F, 36.5F), PartPose.ZERO);
+                .addBox(-9.5F, 0, -17, 19, 7, 20)
+                .addBox(-7.7F, 0, -36, 15.4F, 6, 23), PartPose.offset(0, 10, -6));
+        jaw.addOrReplaceChild("jaw_gold", gold().addBox(-8, 4.8F, -36.3F, 16, 2.2F, 24)
+                .addBox(-10, 5.8F, -16, 20, 2.2F, 18), PartPose.ZERO);
         jaw.addOrReplaceChild("tongue", CubeListBuilder.create().texOffs(320, 0)
-                .addBox(-7, -0.7F, -32, 14, 1.5F, 17), PartPose.ZERO);
+                .addBox(-4.5F, -0.7F, -32, 9, 1.5F, 17), PartPose.ZERO);
         for (int side : new int[]{-1, 1}) {
             for (int j = 0; j < 5; j++) {
                 head.addOrReplaceChild("fang_" + side + "_" + j,
-                        ivory().addBox(-1.3F, 0, -1.2F, 2.6F, j == 0 ? 9 : 5, 2.4F),
-                        PartPose.offset(side * 11.8F, 9.5F, -38 + j * 5));
+                        ivory().addBox(-1.1F, 0, -1.2F, 2.2F, j == 0 ? 9 : 4.5F, 2.4F),
+                        PartPose.offset(side * (j < 3 ? 7 : 8.8F), 9.5F, -38 + j * 5));
                 jaw.addOrReplaceChild("tooth_" + side + "_" + j,
                         ivory().addBox(-1.1F, -5.5F, -1.2F, 2.2F, 5.5F, 2.4F),
-                        PartPose.offset(side * 11.5F, 0, -32 + j * 5));
+                        PartPose.offset(side * (j < 3 ? 6.6F : 8.3F), 0, -32 + j * 5));
             }
         }
         PartDefinition beard = jaw.addOrReplaceChild("beard", CubeListBuilder.create(),
@@ -183,32 +210,43 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                 PartPose.rotation(0, 0, Mth.PI / 4));
 
         PartDefinition saddle = body.addOrReplaceChild("saddle", CubeListBuilder.create().texOffs(0, 128)
-                .addBox(-15, -14, -9, 30, 4, 25).addBox(-14, -24, 12, 28, 11, 5), PartPose.ZERO);
+                .addBox(-11, -14, -9, 22, 4, 25).addBox(-10, -23, 12, 20, 10, 4), PartPose.ZERO);
         saddle.addOrReplaceChild("trim", gold()
-                .addBox(-16, -15, -10, 2, 5, 28).addBox(14, -15, -10, 2, 5, 28)
-                .addBox(-16, -15, -10, 32, 2, 2).addBox(-15, -25, 12, 30, 2, 6), PartPose.ZERO);
-        for (int side : new int[]{-1, 1}) {
-            saddle.addOrReplaceChild("stirrup_" + side, gold()
-                    .addBox(side * 17 - 0.7F, -11, -3, 1.4F, 21, 1.4F)
-                    .addBox(side * 17 - 2.6F, 8, -5, 5.2F, 1.8F, 5), PartPose.ZERO);
-        }
+                .addBox(-12, -15, -10, 1.5F, 5, 28).addBox(10.5F, -15, -10, 1.5F, 5, 28)
+                .addBox(-12, -15, -10, 24, 1.5F, 2).addBox(-11, -24, 12, 22, 1.5F, 5), PartPose.ZERO);
         return LayerDefinition.create(mesh, 512, 256);
     }
 
-    private static void addLeg(PartDefinition parent, String name, int side, float width) {
-        // Grasping limbs stay secondary to the serpent silhouette instead of acting like a lizard's legs.
-        PartDefinition leg = parent.addOrReplaceChild(name, obsidian().addBox(-3, -2, -3.5F, 6, 10, 7),
-                PartPose.offsetAndRotation(side * (width / 2 - 1), 3, 0, -0.55F, side * 0.08F, side * -0.95F));
-        leg.addOrReplaceChild("cuff", gold().addBox(-3.6F, 4.5F, -4, 7.2F, 3.2F, 8), PartPose.ZERO);
-        PartDefinition ankle = leg.addOrReplaceChild("ankle", obsidian().addBox(-2.6F, -1, -3, 5.2F, 9, 6),
-                PartPose.offsetAndRotation(side * 1.4F, 7, 0, 0.9F, 0, side * 0.35F));
-        ankle.addOrReplaceChild("palm", obsidian().addBox(-4.1F, 5, -6, 8.2F, 3.2F, 8), PartPose.ZERO);
-        for (int toe = -1; toe <= 1; toe++) {
-            ankle.addOrReplaceChild("claw_" + toe, ivory().addBox(-1.1F, -1, -7.5F, 2.2F, 2.4F, 8),
-                    PartPose.offsetAndRotation(toe * 3, 7, -4, 0.45F, toe * -0.18F, 0));
+    private static void addMane(PartDefinition head) {
+        // A dense two-layer collar of thick, tapered locks, not a few thin spikes. The dark
+        // undercoat fills the roots; golden locks flare radially and sweep back over the neck.
+        head.addOrReplaceChild("mane_undercoat", obsidian()
+                .addBox(-16, -24, 4, 32, 35, 16)
+                .addBox(-20, -17, 5, 40, 22, 14), PartPose.ZERO);
+        int index = 0;
+        for (int layer = 0; layer < 2; layer++) {
+            int count = layer == 0 ? 18 : 16;
+            for (int i = 0; i < count; i++) {
+                float angle = (i + layer * 0.5F) * Mth.TWO_PI / count;
+                float radialX = Mth.cos(angle);
+                float radialY = Mth.sin(angle);
+                float radiusX = layer == 0 ? 16.8F : 20.5F;
+                float radiusY = layer == 0 ? 18.8F : 22.5F;
+                float length = 13 + (i % 3) * 1.4F;
+                float width = layer == 0 ? 8 : 8.6F;
+                float flare = layer == 0 ? 0.52F : 0.42F;
+                PartDefinition lock = head.addOrReplaceChild("mane_lock_" + index++,
+                        gold().addBox(-width / 2, -3.8F, -2, width, 7.6F, length),
+                        PartPose.offsetAndRotation(radialX * radiusX, -6 + radialY * radiusY,
+                                layer == 0 ? 4 : 14, -radialY * flare, radialX * flare, angle * 0.12F));
+                PartDefinition middle = lock.addOrReplaceChild("flow", gold()
+                                .addBox(-width * 0.35F, -2.8F, -1, width * 0.7F, 5.6F, 10),
+                        PartPose.offsetAndRotation(0, 0, length - 2,
+                                radialY * 0.20F, -radialX * 0.18F, 0));
+                middle.addOrReplaceChild("tip", gold().addBox(-1.6F, -1.6F, -1, 3.2F, 3.2F, 9),
+                        PartPose.offsetAndRotation(0, 0, 8, -radialY * 0.12F, radialX * 0.10F, 0));
+            }
         }
-        ankle.addOrReplaceChild("thumb", ivory().addBox(-1, -1, -6, 2, 2.5F, 6.5F),
-                PartPose.offsetAndRotation(side * 4, 6, -1, 0.25F, side * 0.9F, 0));
     }
 
     @Override
@@ -241,8 +279,10 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                 * (state.beamTicks > 0 ? 0.08F : 1);
         head.xRot = attack.headPitch() + Mth.sin(time * 0.065F) * 0.012F * (1 - attack.brace());
         jaw.xRot = attack.jawOpening();
-        for (int i = 0; i < legs.length; i++) {
-            legs[i].xRot += Mth.sin(time * 0.12F - i * 0.8F) * 0.09F - attack.brace() * (i < 2 ? 0.35F : 0.1F);
+        for (int i = 0; i < mane.length; i++) {
+            // Very small, phase-offset movement reads as flowing hair rather than rigid antlers.
+            mane[i].xRot += Mth.sin(time * 0.075F - i * 0.65F) * 0.035F;
+            mane[i].yRot += Mth.sin(time * 0.065F - i * 0.48F) * 0.025F;
         }
         whiskers[0].zRot += Mth.sin(time * 0.09F) * 0.13F;
         whiskers[1].zRot -= Mth.sin(time * 0.09F + 0.6F) * 0.13F;

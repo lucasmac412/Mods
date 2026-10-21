@@ -19,9 +19,9 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
-/** Actual game views of the larger serpent and its distinct attack phases. */
+/** Readable full-body and close-up game views of the limbless, maned serpent. */
 public final class DragonVisualClientGameTest implements FabricClientGameTest {
-    private static final Path SHOTS = Path.of("../../reports/client-visual-v2").toAbsolutePath().normalize();
+    private static final Path SHOTS = Path.of("../../reports/client-visual-v3").toAbsolutePath().normalize();
 
     @Override
     public void runTest(ClientGameTestContext context) {
@@ -30,7 +30,7 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
             client.options.setCameraType(CameraType.FIRST_PERSON);
             client.options.renderDistance().set(5);
             client.options.simulationDistance().set(5);
-            client.options.fov().set(75);
+            client.options.fov().set(50);
             client.options.pauseOnLostFocus = false;
             if (!client.gui.hud.isHidden()) client.gui.hud.toggle();
             assertAnimationPoses();
@@ -53,6 +53,14 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
                 context.waitTicks(2);
                 screenshot(context, String.format("onda-%02d", i));
             }
+            view(context, world, 6.5, 147, 9, new BlockPos(0, 144, 3), 45);
+            screenshot(context, "12-cabeca-tres-quartos");
+            view(context, world, 10, 147, 3, new BlockPos(0, 144, 3), 45);
+            screenshot(context, "13-perfil-cabeca");
+            view(context, world, 0, 147, 13, new BlockPos(0, 144, 2), 45);
+            screenshot(context, "14-juba-frontal");
+            // The profile makes the jaw opening and the forward snap directly readable.
+            view(context, world, 10, 147, 3, new BlockPos(0, 144, 3), 50);
             server.runOnServer(ignored -> {
                 if (!dragon(world, id).tryBite()) throw new AssertionError("Bite must start for the visual check");
             });
@@ -61,11 +69,19 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
             context.waitTicks(3);
             screenshot(context, "09-mordida-impacto");
             server.waitFor(ignored -> dragon(world, id).biteTicks() == 0);
+            view(context, world, 6.5, 147, 9, new BlockPos(0, 144, 3), 50);
             server.runOnServer(ignored -> {
                 if (!dragon(world, id).tryBeam()) throw new AssertionError("Beam must start after the bite recovery");
             });
             context.waitTicks(4);
             screenshot(context, "10-carga-raio");
+            server.waitFor(ignored -> dragon(world, id).beamTicks() == 0);
+            // A separate cast avoids teleport/render latency consuming the active beam phase.
+            view(context, world, 38, 166, 7, new BlockPos(0, 144, 7), 60);
+            context.waitTicks(CelestialDragonEntity.BEAM_COOLDOWN);
+            server.runOnServer(ignored -> {
+                if (!dragon(world, id).tryBeam()) throw new AssertionError("Beam cooldown must have elapsed");
+            });
             server.waitFor(ignored -> dragon(world, id).beamTicks() <=
                     CelestialDragonEntity.BEAM_DURATION - CelestialDragonEntity.BEAM_CHARGE_TICKS - 2);
             screenshot(context, "11-raio-disparado");
@@ -89,8 +105,22 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
         var player = world.getConnection().getServerPlayer();
         player.getAbilities().flying = true;
         player.onUpdateAbilities();
-        player.teleportTo(level, 24, 164, -10, Set.of(), 90, 10, false);
+        player.teleportTo(level, 20, 154, -10, Set.of(), 90, 10, false);
         return dragon.getUUID();
+    }
+
+    private static void view(ClientGameTestContext context, TestSingleplayerContext world,
+                             double x, double y, double z, BlockPos target, int fov) {
+        world.getServer().runOnServer(ignored -> {
+            var player = world.getConnection().getServerPlayer();
+            player.teleportTo(world.getConnection().getServerLevel(), x, y, z, Set.of(), 0, 0, false);
+        });
+        context.runOnClient(client -> client.options.fov().set(fov));
+        context.waitTicks(4);
+        world.getConnection().waitForChunksDownload();
+        context.getInput().lookAt(target);
+        world.getConnection().waitForChunksRender();
+        context.waitTicks(4);
     }
 
     private static CelestialDragonEntity dragon(TestSingleplayerContext world, UUID id) {
@@ -115,6 +145,9 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
         float yaw = 0, minimum = 0, maximum = 0;
         for (int i = 0; i < DragonModel.SEGMENT_COUNT; i++) {
             segment = segment.getChild("segment_" + i);
+            if (segment.hasChild("left_foreleg") || segment.hasChild("right_foreleg")
+                    || segment.hasChild("left_hindleg") || segment.hasChild("right_hindleg"))
+                throw new AssertionError("The serpent body must not retain the previous four legs");
             yaw += segment.yRot;
             minimum = Math.min(minimum, yaw);
             maximum = Math.max(maximum, yaw);

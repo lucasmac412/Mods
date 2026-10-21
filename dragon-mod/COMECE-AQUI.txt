@@ -1,8 +1,9 @@
 DRAGÃO CELESTIAL — OURO E OBSIDIANA
-Minecraft Java Edition 26.2 | Fabric | versão 0.2.0-experimental
+Minecraft Java Edition 26.2 | Fabric | versão 0.2.1-experimental
 
-NOVO NA 0.2.0
-Dragão maior, corpo longo ondulando de lado, cabeça redesenhada e golpes com preparação.
+NOVO NA 0.2.1
+Visual refeito: juba volumosa, focinho alongado, sem patas e corpo mais fino e definido.
+Mantém a ondulação lateral e os golpes com preparação.
 Aba Dragão Celestial com todos os itens e dois ovos de criação para o Criativo.
 
 VERSÃO DE TESTES: BOSQUE CELESTIAL MUITO COMUM
@@ -28,11 +29,11 @@ No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
 Se o diretório estiver vazio, no Windows aperte Windows+R e abra:
 %APPDATA%\.minecraft
 Crie a pasta mods se ela não existir. Copie para ela os dois arquivos:
-- celestial-dragon-0.2.0-experimental.jar
+- celestial-dragon-0.2.1-experimental.jar
 - fabric-api-0.161.0+26.2.jar
 Se já houver Fabric API ou este mod, mantenha somente uma versão de cada.
-Se estiver atualizando da 0.1.0 ou 0.1.1, retire o JAR antigo do dragão da pasta mods e coloque
-celestial-dragon-0.2.0-experimental.jar. O Fabric API continua o mesmo.
+Se estiver atualizando da 0.2.0 ou de uma versão 0.1.x, retire o JAR antigo do dragão da pasta mods e coloque
+celestial-dragon-0.2.1-experimental.jar. O Fabric API continua o mesmo.
 O mod é independente da Luma. Se usar os dois, basta um Fabric API compatível.
 
 3. COMECE NUM MUNDO NOVO
@@ -81,7 +82,7 @@ O minério é encontrado no Overworld, com parâmetros de geração da esmeralda
 mas em todos os biomas. A quantidade encontrada varia com a altura do terreno.
 
 6. CHOQUE O OVO
-Coloque a Incubadora celestial numa área bem aberta: o dragão agora é maior.
+Coloque a Incubadora celestial numa área bem aberta para o dragão nascer.
 Segure o ovo e clique na incubadora com o botão direito.
 O dono será o jogador que colocar o ovo nela.
 Aguarde cerca de cinco minutos com o mundo rodando e a região carregada.

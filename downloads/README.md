@@ -1,10 +1,10 @@
 # Instalar Luma com Ollama e voz
 
-Também disponível: **[Dragão Celestial 0.2.0 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.2.0-Experimental.zip)**, um mod independente, com dois JARs e instruções. Siga o [passo a passo do dragão](../docs/INSTALAR-DRAGAO.md). Não precisa de Luma ou Ollama. Para reconstruir esse pacote após compilar `dragon-mod`, execute `python3 scripts/package-dragon.py`.
+Também disponível: **[Dragão Celestial 0.2.1 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.2.1-Experimental.zip)**, um mod independente, com dois JARs e instruções. Siga o [passo a passo do dragão](../docs/INSTALAR-DRAGAO.md). Não precisa de Luma ou Ollama. Para reconstruir esse pacote após compilar `dragon-mod`, execute `python3 scripts/package-dragon.py`.
 
-A 0.2.0 redesenha o dragão com corpo maior e ondulação lateral, melhora os golpes e oferece os dois ovos de criação na aba Dragão Celestial. Montado, use o raio com as duas mãos vazias; com item em qualquer mão, o clique direito usa o item normalmente, inclusive ovos do Minecraft.
+A 0.2.1 refaz o visual do dragão: juba volumosa, focinho alongado, corpo mais fino com volumes de musculatura e sem patas. Mantém a ondulação lateral, os golpes e os dois ovos de criação na aba Dragão Celestial. Montado, use o raio com as duas mãos vazias; com item em qualquer mão, o clique direito usa o item normalmente, inclusive ovos do Minecraft.
 
-Nesta versão de testes, o Bosque Celestial continua muito comum: um centro de bosque e ninho por região de 256 × 256 blocos, 36 vezes mais centros por área do que na 0.1.0. Os bosques mantêm raio de 192 blocos e podem se unir. A frequência aumentada é temporária e aparece somente em regiões novas; prefira um mundo novo. Ao atualizar, substitua o JAR antigo por `celestial-dragon-0.2.0-experimental.jar`, sem deixar duas versões em `mods`; o Fabric API não mudou.
+Nesta versão de testes, o Bosque Celestial continua muito comum: um centro de bosque e ninho por região de 256 × 256 blocos, 36 vezes mais centros por área do que na 0.1.0. Os bosques mantêm raio de 192 blocos e podem se unir. A frequência aumentada é temporária e aparece somente em regiões novas; prefira um mundo novo. Ao atualizar, substitua o JAR antigo por `celestial-dragon-0.2.1-experimental.jar`, sem deixar duas versões em `mods`; o Fabric API não mudou.
 
 **[Baixar o pacote pronto 0.4.0 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/v0.4.0-experimental/downloads/Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip)**.
 
