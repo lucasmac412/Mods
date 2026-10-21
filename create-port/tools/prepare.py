@@ -51,6 +51,8 @@ def main():
     parser.add_argument('--cache', type=Path, required=True)
     parser.add_argument('--minecraft-jar', type=Path, required=True,
                         help='Actual Minecraft 26.2 merged development JAR from Loom')
+    parser.add_argument('--library-jar', type=Path, action='append', default=[],
+                        help='Locally ported 26.2 Flywheel, Catnip or Ponder JAR; repeat per library')
     args = parser.parse_args()
     args.cache.mkdir(parents=True, exist_ok=True)
     archive = args.cache / 'create-fabric-1.21.1-source.tar.gz'
@@ -69,6 +71,19 @@ def main():
     if 'net.minecraft.resources.Identifier' not in classes or 'net.minecraft.resources.ResourceLocation' in classes:
         raise SystemExit('This migration requires the actual Minecraft 26.2 development API.')
 
+    library_sources = []
+    for library in args.library_jar:
+        with zipfile.ZipFile(library) as jar:
+            metadata = json.loads(jar.read('fabric.mod.json'))
+            if metadata['id'] not in {'flywheel', 'catnip', 'ponder'} or metadata['depends']['minecraft'] != '26.2':
+                raise SystemExit('Library must be a local Flywheel/Catnip/Ponder port for exactly 26.2')
+            classes.update(n.removesuffix('.class').replace('/', '.') for n in jar.namelist()
+                           if n.endswith('.class') and '$' not in n and n.startswith(
+                               ('net/createmod/', 'dev/engine_room/flywheel/')))
+            entries.update(jar.namelist())
+            library_sources.append({'id': metadata['id'], 'version': metadata['version'],
+                                    'sha256': hashlib.sha256(library.read_bytes()).hexdigest()})
+
     by_simple_name = {}
     for name in classes:
         by_simple_name.setdefault(name.rsplit('.', 1)[-1], []).append(name)
@@ -85,13 +100,17 @@ def main():
     mappings = {'net.minecraft.resources.ResourceLocation': 'net.minecraft.resources.Identifier',
                 'ResourceLocation': 'Identifier'}
     for text in original.values():
-        for imported in re.findall(r'^import (?:static )?(net\.minecraft\.[\w.]+);', text, re.M):
+        for imported in re.findall(r'^import (?:static )?((?:net\.minecraft|net\.createmod|dev\.engine_room\.flywheel)\.[\w.]+);', text, re.M):
             old = imported
-            while old.startswith('net.minecraft.'):
+            namespace = next((root for root in ('net.minecraft.', 'net.createmod.catnip.',
+                              'net.createmod.ponder.', 'dev.engine_room.flywheel.') if old.startswith(root)), None)
+            if namespace is None:
+                continue
+            while old.startswith(namespace):
                 if class_exists(old, entries):
                     break
                 simple = old.rsplit('.', 1)[-1]
-                candidates = by_simple_name.get(simple, [])
+                candidates = [name for name in by_simple_name.get(simple, []) if name.startswith(namespace)]
                 if len(candidates) == 1:
                     mappings[old] = candidates[0]
                     break
@@ -121,18 +140,21 @@ def main():
     adapter_target.parent.mkdir(parents=True, exist_ok=True)
     adapter_target.write_text(adapter.read_text())
     (output / 'LICENSE-UPSTREAM.txt').write_text((ROOT / 'LICENSE-UPSTREAM.txt').read_text())
-    (args.cache / 'minecraft-26.2-names.patch').write_text(''.join(patch))
+    patch_name = 'minecraft-and-render-library-names.patch' if library_sources else 'minecraft-26.2-names.patch'
+    report_name = 'names-with-render-libraries.json' if library_sources else 'names-migration.json'
+    (args.cache / patch_name).write_text(''.join(patch))
     report = {'status': 'NOT_PLAYABLE', 'sourceCommit': '7f1f67b6ecbbde512e8d35404f3621a6875ce838',
               'sourceCreateVersion': '6.0.0.0-dev', 'requestedCreateVersion': '6.0.10',
               'minecraftTarget': '26.2', 'sourceJavaFiles': len(original),
               'changedFiles': len(modified), 'renames': mappings,
               'output': str(output), 'assetsExtracted': False,
               'milkAdapterIncluded': True,
+              'localRenderLibraries': library_sources,
               'limitations': ['Package/name migration only; method contracts are unverified.',
-                              'Core dependency ports are unavailable in the repositories checked.',
+                              'Registrate and Porting Lib still need migration; local render ports do not constitute Create.',
                               'Merge of 6.0.10 changes is still required.',
                               'Access wideners, mixins, save formats and rendering are not migrated.']}
-    (args.cache / 'names-migration.json').write_text(json.dumps(report, indent=2) + '\n')
+    (args.cache / report_name).write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report, indent=2))
 
 

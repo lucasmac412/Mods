@@ -1,0 +1,82 @@
+{
+  "status": "NOT_PLAYABLE",
+  "minecraft": "26.2",
+  "requestedCreate": "6.0.10",
+  "sourceCreate": "6.0.0.0-dev",
+  "localRenderLibrariesIncluded": [
+    {
+      "id": "flywheel",
+      "version": "1.0.6+mc26.2.createport.1",
+      "sha256": "586ff66905ffbc0c8ff99e51d045d806caa5d0c0dc0ca1aec39260ce5860f0b5"
+    },
+    {
+      "id": "catnip",
+      "version": "1.0.0+mc26.2.createport.1",
+      "sha256": "5142f446bd591f2793594f421a8836ef8d16ca52020741a5705a19e43f2b042f"
+    },
+    {
+      "id": "ponder",
+      "version": "1.0.0+mc26.2.createport.1",
+      "sha256": "aab4c128ecb2a13696823433bfde840c8adaf2d5824843bf542b58f9a520c0a4"
+    }
+  ],
+  "sourceFilesWithNameChanges": 1083,
+  "nameMappings": 157,
+  "compilation": "FAILED",
+  "compilerDiagnosticCap": 10000,
+  "capturedErrorHeadersBeforeGradleRepeatsOutput": 10000,
+  "topDiagnosticKinds": [
+    [
+      "cannot find symbol",
+      6291
+    ],
+    [
+      "method does not override or implement a method from a supertype",
+      446
+    ],
+    [
+      "isClientSide has private access in Level",
+      312
+    ],
+    [
+      "package net.createmod.catnip.platform does not exist",
+      150
+    ],
+    [
+      "incompatible types: Optional<Integer> cannot be converted to int",
+      150
+    ],
+    [
+      "package CatnipServices does not exist",
+      124
+    ],
+    [
+      "method getList in class CompoundTag cannot be applied to given types;",
+      111
+    ],
+    [
+      "incompatible types: Optional<Boolean> cannot be converted to boolean",
+      103
+    ],
+    [
+      "package com.tterrag.registrate.providers does not exist",
+      99
+    ],
+    [
+      "incompatible types: Optional<CompoundTag> cannot be converted to CompoundTag",
+      91
+    ],
+    [
+      "package io.github.fabricators_of_create.porting_lib.util does not exist",
+      87
+    ],
+    [
+      "package net.createmod.catnip.net.base does not exist",
+      86
+    ]
+  ],
+  "logSha256": "cecf76c40990bcc079de475b0f7cb2d22b5ce18bf9ebf4c1d1e8148c1e26dd09",
+  "createRuntimeStarted": false,
+  "createJarPublished": false,
+  "note": "Missing Registrate/Porting Lib and changed game APIs cause cascades; the cap is not an independent bug count."
+}

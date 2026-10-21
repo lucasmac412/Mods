@@ -13,6 +13,13 @@ dependencies {
     implementation files("${targetLibraries}/core-3.8.4.jar", "${targetLibraries}/toml-3.8.4.jar")
     implementation files(providers.gradleProperty('createMilkJar')
             .getOrElse("${targetLibraries}/milk-lib-1.2.1.jar"))
+    for (property in ['createFlywheelJar', 'createCatnipJar', 'createPonderJar']) {
+        if (providers.gradleProperty(property).isPresent()) {
+            def library = file(providers.gradleProperty(property).get())
+            if (!library.isFile()) throw new GradleException("Missing local library: ${property}")
+            implementation files(library)
+        }
+    }
 }
 sourceSets.main.resources.srcDirs = []
 java { sourceCompatibility = JavaVersion.VERSION_25; targetCompatibility = JavaVersion.VERSION_25 }

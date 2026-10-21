@@ -14,6 +14,8 @@ O jogador confirmou que quer **somente Fabric 26.2**. Não foi preparada uma ins
 - Adaptador dos quatro usos antigos da API de leite do Create para os objetos reais de Milk Lib 26.2.
 - Correção de um crash real da Milk Lib 26.2 em servidor: fábricas de partículas e o callback de tooltip foram separados do código comum. Os registros e identificadores das partículas continuam comuns a cliente e servidor.
 - Testes reais das duas dependências disponíveis: fluidos, tags e transações de leite, configuração de rotação e fábricas de partículas no cliente.
+- **Ports locais de Flywheel e Ponder/Catnip para Fabric 26.2**, a partir dos fontes Fabric 26.1.2, com patches reproduzíveis. O cliente testou instâncias animadas sólidas e transparentes nos backends `indirect` e `instancing`, remoção das instâncias, um item sobreposto ao mundo e quatro cenas do Ponder. Isso ainda não é o Create funcionando.
+- Correções reais nas bibliotecas: ordem de renderização/profundidade invertida do 26.2, upload da textura de ruído, armazenamento das configurações, sincronização dos argumentos de comandos, identificação das entidades virtuais e execução das partículas antes da limpeza dos dados. Uma checagem das capturas impede considerar um teste de animação suficiente quando o objeto desaparece da imagem.
 
 A referência Fabric encontrada é um desenvolvimento de **Create 6.0.0 para 1.21.1**, não uma conversão já pronta do 6.0.10 enviado. Ainda será necessário integrar as mudanças do 6.0.10, além de portar as dependências e as APIs do jogo.
 
@@ -24,8 +26,8 @@ A referência Fabric encontrada é um desenvolvimento de **Create 6.0.0 para 1.2
 | Fabric Loader / Fabric API | 0.19.5 / 0.161.0+26.2, usados nos testes. |
 | Forge Config API Port | 26.2.1: configuração carregada e validação de faixa testadas no servidor. O registro usa a API v5. |
 | Milk Lib | 1.2.1+26.2 disponível, mas com API/ID diferentes e crash de servidor. A correção local `1.2.1+createport.1` e o adaptador passaram nos testes abaixo. |
-| Flywheel | Não foi encontrado artefato Fabric 26.2 no Maven oficial nem no histórico consultado do Modrinth. |
-| Ponder / Catnip | Não foi encontrado artefato Fabric 26.2 no Maven oficial nem no histórico consultado do Modrinth. |
+| Flywheel | Sem publicação oficial 26.2 nas fontes consultadas. Port local de desenvolvimento compila e passou no cenário gráfico dos dois backends. |
+| Ponder / Catnip | Sem publicação oficial 26.2 nas fontes consultadas. Ports locais compilam; cenas, configuração e integração cliente/servidor foram testadas. Ainda não integrados ao Create completo. |
 | Registrate Fabric | O Maven consultado lista versões até Minecraft 1.21.1; nenhuma para 26.2. |
 | Porting Lib | Nenhuma versão 26.2 encontrada no histórico do Modrinth consultado. A referência Fabric ainda importa esses módulos. |
 
@@ -41,13 +43,17 @@ Não encontrar uma publicação nessas fontes não prova que inexiste um fork pr
 - Três GameTests em um servidor real Minecraft 26.2, mais um controle interno do Fabric: registro/tag dos fluidos, inserção/extração com commit e rollback e carregamento/correção da configuração de rotação.
 - Um cenário em cliente real Minecraft 26.2: mundo com leite renderizado e criação de partículas pelas seis fábricas de cliente, sem remover os registros comuns. Renderização por software na nuvem; não é teste de FPS no computador do jogador.
 
+**Nova etapa de renderização:** cinco testes Python; seis GameTests de servidor (cinco nossos e um controle do Fabric); um cenário gráfico com dois backends do Flywheel, sobreposição de item e quatro cenas reais do Ponder. As capturas e verificações de pixels mostram geometria e partículas presentes, além de verificar a execução do código. Os fontes foram reconstruídos em diretórios novos usando os patches salvos. Detalhes, limitações e reprodução em [RENDERIZACAO.md](RENDERIZACAO.md) e [reports/render-ports.json](reports/render-ports.json).
+
+Incluindo esses ports e a migração dos pacotes das bibliotecas em 1.083 arquivos Java do Create, **a compilação do Create continua falhando no limite de 10.000 diagnósticos**. Não houve inicialização do Create completo nem teste de suas máquinas. O limite continua sem representar uma quantidade de defeitos independentes. Veja [reports/render-create-compilation.json](reports/render-create-compilation.json).
+
 Antes da correção, a Milk publicada encerrava o servidor com `Cannot load class net.minecraft.client.particle.SpriteSet in environment type SERVER`. A correção mantém as lambdas que recebem `SpriteSet` numa classe exclusiva do cliente; anotar só o método original não removia os métodos sintéticos gerados por Java.
 
 Relatórios: [correção da Milk](reports/milk-server-fix.json), [integração](reports/integration.json) e [captura real do pré-requisito](reports/milk-26.2-client.png). A captura mostra Milk Lib, **não o Create funcionando**.
 
 ## O que falta para haver um mod instalável
 
-É necessário portar ou substituir corretamente Flywheel, Registrate, Ponder/Catnip e os módulos usados de Porting Lib; integrar as mudanças do Create 6.0.10; adaptar registro de blocos/itens, dados salvos, receitas, rede, mixins, permissões de acesso e renderização ao 26.2. Depois disso, testar máquinas, redes de rotação e esforço, contraptions, fluidos, logística e trens, além de persistência e cliente/servidor.
+É necessário portar Registrate e os módulos usados de Porting Lib; integrar os ports de renderização ao Create e as mudanças do Create 6.0.10; adaptar registro de blocos/itens, dados salvos, receitas, rede, mixins, permissões de acesso e renderização das próprias máquinas ao 26.2. Depois disso, testar máquinas, redes de rotação e esforço, contraptions, fluidos, logística e trens, além de persistência e cliente/servidor.
 
 Os patches atuais não resolvem essas etapas. Não há pacote `Create-Fabric-26.2.zip`, instalador nem JAR do Create para copiar à pasta `mods`.
 
@@ -80,6 +86,6 @@ O último comando atualmente **falha**. Sua falha deve continuar visível, não 
 
 ## Origem e licenças
 
-O código da referência Fabric é MIT, com o aviso preservado em [LICENSE-UPSTREAM.txt](LICENSE-UPSTREAM.txt). O código da Milk é MIT, em [licenses/milk-MIT.txt](licenses/milk-MIT.txt). As bibliotecas oficiais baixadas permanecem apenas no cache de desenvolvimento; seus hashes e licenças constam em [target-libraries.json](target-libraries.json).
+O código da referência Fabric é MIT, com o aviso preservado em [LICENSE-UPSTREAM.txt](LICENSE-UPSTREAM.txt). Os avisos da Milk, Flywheel e Ponder/Catnip estão em [licenses](licenses). As bibliotecas baixadas e os JARs locais de desenvolvimento permanecem no cache; versões, origens e checksums constam em [target-libraries.json](target-libraries.json) e [library-sources.json](library-sources.json).
 
 O Create 6.0.10 enviado licencia seu código como MIT e seus recursos em `assets/` como **All Rights Reserved**. O JAR enviado, seus modelos, texturas e sons não foram republicados. O patch de nomes contém apenas contexto de código Java MIT; a ferramenta extrai apenas Java da referência Fabric. O patch da Milk contém alterações no código e na configuração do build. Este trabalho não é uma distribuição oficial dos autores do Create.

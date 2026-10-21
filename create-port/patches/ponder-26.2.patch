@@ -1,0 +1,1514 @@
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/gui/ConfirmationScreen.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/gui/ConfirmationScreen.java
+@@ -101,7 +101,7 @@
+ 		this.source = source;
+ 		Minecraft client = ModClientHooksHelper.INSTANCE.getMinecraftFromScreen(source);
+ 		this.init(client.getWindow().getGuiScaledWidth(), client.getWindow().getGuiScaledHeight());
+-		this.minecraft.screen = this;
++		this.minecraft.gui.setScreen(this);
+ 	}
+ 
+ 	@Override
+@@ -180,7 +180,7 @@
+ 	}
+ 
+ 	private void accept(Response success) {
+-		minecraft.screen = source;
++		minecraft.gui.setScreen(source);
+ 		action.accept(success);
+ 	}
+ 
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/gui/ILightingSettings.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/gui/ILightingSettings.java
+@@ -19,6 +19,6 @@
+ 	}
+ 
+ 	static ILightingSettings setupFor(Entry entry) {
+-		return () -> Minecraft.getInstance().gameRenderer.getLighting().setupFor(entry);
++		return () -> Minecraft.getInstance().gameRenderer.lighting().setupFor(entry);
+ 	}
+ }
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/gui/ScreenOpener.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/gui/ScreenOpener.java
+@@ -17,7 +17,7 @@
+ 	private static Screen backSteppedFrom = null;
+ 
+ 	public static void open(@Nullable Screen screen) {
+-		open(Minecraft.getInstance().screen, screen);
++		open(Minecraft.getInstance().gui.screen(), screen);
+ 	}
+ 
+ 	public static void open(@Nullable Screen current, @Nullable Screen toOpen) {
+@@ -73,7 +73,7 @@
+ 		if (!screen.isEquivalentTo((NavigatableSimiScreen) previouslyRenderedScreen))
+ 			return false;
+ 
+-		openPreviousScreen(Minecraft.getInstance().screen, screen);
++		openPreviousScreen(Minecraft.getInstance().gui.screen(), screen);
+ 		return true;
+ 	}
+ 
+@@ -98,7 +98,7 @@
+ 	private static void openScreen(@Nullable Screen screen) {
+ 		Minecraft.getInstance().schedule(() -> {
+ 			Minecraft.getInstance()
+-				.setScreen(screen);
++				.gui.setScreen(screen);
+ 			Screen previouslyRenderedScreen = getPreviouslyRenderedScreen();
+ 			if (previouslyRenderedScreen != null && screen instanceof NavigatableSimiScreen)
+ 				previouslyRenderedScreen.init(screen.width, screen.height);
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/gui/element/GuiGameElement.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/gui/element/GuiGameElement.java
+@@ -197,7 +197,7 @@
+ 
+ 			BlockState stateBefore = blockEntity.getBlockState();
+ 			blockEntity.setBlockState(this.blockState);
+-			net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState blockEntityRenderState = Minecraft.getInstance().getBlockEntityRenderDispatcher().tryExtractRenderState(blockEntity, Minecraft.getInstance().getDeltaTracker().getRealtimeDeltaTicks(), null);
++			net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState blockEntityRenderState = Minecraft.getInstance().getBlockEntityRenderDispatcher().tryExtractRenderState(blockEntity, Minecraft.getInstance().getDeltaTracker().getRealtimeDeltaTicks(), null, false);
+ 			graphics.guiRenderState.addPicturesInPictureState(new GuiBlockEntityRenderState(blockEntityRenderState, new Matrix3x2f(graphics.pose()), 0, 0, 16, 16, 1, null, null));
+ 			blockEntity.setBlockState(stateBefore);
+         }
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/level/wrapper/WrappedClientLevel.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/level/wrapper/WrappedClientLevel.java
+@@ -36,7 +36,7 @@
+ 
+ 		super(
+ 			connection, mc.level.getLevelData(), level.dimension(), level.dimensionTypeRegistration(),
+-			chunkRadius, simDistance, mc.levelRenderer, level.isDebug(), seed, level.getSeaLevel()
++			chunkRadius, simDistance, mc.levelExtractor, level.isDebug(), seed, level.getSeaLevel()
+ 		);
+ 
+ 		this.level = level;
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/outliner/ItemOutline.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/outliner/ItemOutline.java
+@@ -38,19 +38,7 @@
+ 			.updateForTopItem(renderState, stack, ItemDisplayContext.FIXED, null, null, 0);
+ 		renderState.submit(ms, queue, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
+ 
+-		for (SubmitNodeCollection collection : queue.getSubmitsPerOrder().values()) {
+-			for (SubmitNodeStorage.ItemSubmit itemSubmit : collection.getItemSubmits()) {
+-				ms.pushPose();
+-				ms.last().set(itemSubmit.pose());
+-				// TODO: FIXME
+-//				ItemRenderer.renderItem(
+-//					itemSubmit.displayContext(), ms, buffer,
+-//					itemSubmit.lightCoords(), itemSubmit.overlayCoords(),
+-//					itemSubmit.tintLayers(), itemSubmit.quads(), itemSubmit.foilType()
+-//				);
+-				ms.popPose();
+-			}
+-		}
++        net.createmod.catnip.api.client.render.IsolatedFeatureRenderer.render(queue);
+ 
+ 		ms.popPose();
+ 	}
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/platform/ModClientHooksHelper.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/platform/ModClientHooksHelper.java
+@@ -21,8 +21,8 @@
+ import net.minecraft.client.gui.screens.Screen;
+ import net.minecraft.client.multiplayer.ClientLevel;
+ import net.minecraft.client.particle.Particle;
+-import net.minecraft.client.renderer.MultiBufferSource;
+-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource.Immediate;
+ import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
+ import net.minecraft.client.renderer.block.BlockAndTintGetter;
+ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+@@ -45,13 +45,13 @@
+ 	// note: implementations don't use isDown since we need this to work inside screens
+ 	boolean isKeyPressed(KeyMapping mapping);
+ 
+-	void registerPictureInPictureRenderer(Class<?> stateClass,Function<BufferSource, PictureInPictureRenderer<?>> factory);
++	void registerPictureInPictureRenderer(Class<?> stateClass,java.util.function.Supplier<PictureInPictureRenderer<?>> factory);
+ 
+ 	RenderPipeline.Builder useDrawModeInGui(RenderPipeline.Builder builder);
+ 
+ 	void submitFullFluidState(PoseStack ms, OrderedSubmitNodeCollector buffer, FluidState fluid);
+ 
+-	void renderFullFluidState(PoseStack ms, MultiBufferSource.BufferSource buffer, FluidState fluid);
++	void renderFullFluidState(PoseStack ms, RenderBufferSource.Immediate buffer, FluidState fluid);
+ 
+ 	@ApiStatus.Internal
+ 	void submitModel(BlockStateModel model, BlockPos pos, BlockState state, @Nullable PoseStack poseStack, ShadeSeparatedBufferSource bufferSource, OrderedSubmitNodeCollector submitNodeCollector);
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/render/CatnipRenderPipelines.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/CatnipRenderPipelines.java
+@@ -6,7 +6,7 @@
+ import com.mojang.blaze3d.pipeline.RenderPipeline.Builder;
+ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+ import com.mojang.blaze3d.vertex.VertexFormat;
+-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
++import com.mojang.blaze3d.PrimitiveTopology;
+ 
+ import net.createmod.catnip.api.Catnip;
+ import net.createmod.catnip.api.client.platform.ModClientHooksHelper;
+@@ -21,20 +21,20 @@
+ 
+ 	public static final RenderPipeline GUI_TRIANGLES = register(
+ 		"gui_triangles",
+-		builder -> builder.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, Mode.TRIANGLES)
++		builder -> builder.withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR).withPrimitiveTopology(PrimitiveTopology.TRIANGLES)
+ 			.withCull(false), // TODO: this is set to false specifically for breadcrumb arrows, should this be its own pipeline?
+ 		RenderPipelines.GUI_SNIPPET, USE_DRAW_MODE_IN_GUI_SNIPPET
+ 	),
+ 
+ 	POSITION_COLOR_STRIP = register(
+ 		"position_color_strip",
+-		builder -> builder.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, Mode.TRIANGLE_STRIP),
++		builder -> builder.withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR).withPrimitiveTopology(PrimitiveTopology.TRIANGLE_STRIP),
+ 		RenderPipelines.DEBUG_FILLED_SNIPPET
+ 	),
+ 
+ 	TRIANGLE_FAN = register(
+ 		"triangle_fan",
+-		builder -> builder.withVertexFormat(DefaultVertexFormat.POSITION_COLOR, Mode.TRIANGLE_FAN),
++		builder -> builder.withVertexBinding(0, DefaultVertexFormat.POSITION_COLOR).withPrimitiveTopology(PrimitiveTopology.TRIANGLE_FAN),
+ 		RenderPipelines.DEBUG_FILLED_SNIPPET
+ 	);
+ 
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/render/DefaultSuperRenderTypeBuffer.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/DefaultSuperRenderTypeBuffer.java
+@@ -6,7 +6,7 @@
+ import com.mojang.blaze3d.vertex.VertexConsumer;
+ 
+ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.SectionBufferBuilderPack;
+ import net.minecraft.client.renderer.Sheets;
+ import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+@@ -60,33 +60,13 @@
+ 		lateBuffer.bufferSource.endBatch(type);
+ 	}
+ 
+-	public static class SuperRenderTypeBufferPhase {
+-		// Visible clones from RenderBuffers
+-		private final SectionBufferBuilderPack fixedBufferPack = new SectionBufferBuilderPack();
+-		private final SortedMap<RenderType, ByteBufferBuilder> fixedBuffers = Util.make(new Object2ObjectLinkedOpenHashMap<>(), map -> {
+-			// map.put(Sheets.solidBlockSheet(), fixedBufferPack.buffer(ChunkSectionLayer.SOLID));
+-			map.put(Sheets.cutoutBlockSheet(), fixedBufferPack.buffer(ChunkSectionLayer.CUTOUT));
+-			map.put(Sheets.translucentItemSheet(), fixedBufferPack.buffer(ChunkSectionLayer.TRANSLUCENT));
+-			put(map, Sheets.translucentBlockItemSheet());
+-			// put(map, Sheets.shieldSheet());
+-			// put(map, Sheets.bedSheet());
+-			// put(map, Sheets.shulkerBoxSheet());
+-			// put(map, Sheets.signSheet());
+-			// put(map, Sheets.hangingSignSheet());
+-			// map.put(Sheets.chestSheet(), new ByteBufferBuilder(RenderType.SMALL_BUFFER_SIZE));
+-			put(map, RenderTypes.armorEntityGlint());
+-			put(map, RenderTypes.glint());
+-			put(map, RenderTypes.glintTranslucent());
+-			put(map, RenderTypes.entityGlint());
+-			put(map, RenderTypes.waterMask());
++    public void close() {
++        earlyBuffer.bufferSource.close();
++        defaultBuffer.bufferSource.close();
++        lateBuffer.bufferSource.close();
++    }
+ 
+-			//extras
+-			put(map, PonderRenderTypes.outlineSolid());
+-		});
+-		private final BufferSource bufferSource = MultiBufferSource.immediateWithBuffers(fixedBuffers, new ByteBufferBuilder(256));
+-
+-		private static void put(Object2ObjectLinkedOpenHashMap<RenderType, ByteBufferBuilder> map, RenderType type) {
+-			map.put(type, new ByteBufferBuilder(type.bufferSize()));
+-		}
+-	}
++    public static class SuperRenderTypeBufferPhase {
++        private final RenderBufferSource.Immediate bufferSource = new RenderBufferSource.Immediate();
++    }
+ }
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/render/FluidRenderHelper.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/FluidRenderHelper.java
+@@ -7,7 +7,7 @@
+ import net.createmod.catnip.api.client.platform.ClientFluidHelper;
+ import net.createmod.catnip.api.data.Iterate;
+ import net.createmod.catnip.api.platform.services.ModFluidHelper;
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
+ import net.minecraft.client.renderer.rendertype.RenderTypes;
+ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+@@ -46,7 +46,7 @@
+ 	}
+ 
+ 	public static void renderFluidBox(FluidState fluid, float xMin, float yMin, float zMin, float xMax, float yMax, float zMax,
+-									  MultiBufferSource buffer, PoseStack ms, int light, boolean renderBottom, boolean invertGasses) {
++									  RenderBufferSource buffer, PoseStack ms, int light, boolean renderBottom, boolean invertGasses) {
+ 		renderFluidBox(fluid, xMin, yMin, zMin, xMax, yMax, zMax, getFluidBuilder(buffer), ms, light, renderBottom, invertGasses);
+ 	}
+ 
+@@ -56,7 +56,7 @@
+ 	}
+ 
+ 	public static void renderFluidBox(TypedInstance<Fluid> fluid, float xMin, float yMin, float zMin, float xMax,
+-									  float yMax, float zMax, MultiBufferSource buffer, PoseStack ms, int light, boolean renderBottom, boolean invertGasses) {
++									  float yMax, float zMax, RenderBufferSource buffer, PoseStack ms, int light, boolean renderBottom, boolean invertGasses) {
+ 		renderFluidBox(fluid, xMin, yMin, zMin, xMax, yMax, zMax, getFluidBuilder(buffer), ms, light, renderBottom, invertGasses);
+ 	}
+ 
+@@ -105,7 +105,7 @@
+ 		}
+ 	}
+ 
+-	public static VertexConsumer getFluidBuilder(MultiBufferSource buffer) {
++	public static VertexConsumer getFluidBuilder(RenderBufferSource buffer) {
+ 		return buffer.getBuffer(RenderTypes.translucentMovingBlock());
+ 	}
+ 
+--- /dev/null
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/IsolatedFeatureRenderer.java
+@@ -0,0 +1,32 @@
++package net.createmod.catnip.api.client.render;
++
++import net.minecraft.client.Minecraft;
++import net.minecraft.client.renderer.RenderBuffers;
++import net.minecraft.client.renderer.SubmitNodeStorage;
++import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
++
++/** A separate frame/buffer owner for immediate overlays during an active world frame. */
++public final class IsolatedFeatureRenderer {
++    private static RenderBuffers buffers;
++    private static FeatureRenderDispatcher renderer;
++    private IsolatedFeatureRenderer() { }
++    public static void render(SubmitNodeStorage queue) {
++        if (renderer == null) {
++            var client = Minecraft.getInstance();
++            buffers = new RenderBuffers(0);
++            renderer = new FeatureRenderDispatcher(buffers, client.getModelManager(), client.getAtlasManager(),
++                    client.font, client.gameRenderer.gameRenderState());
++        }
++        try { renderer.renderAllFeatures(queue); }
++        finally { buffers.endFrame(); }
++    }
++    public static void close() {
++        if (renderer != null) {
++            renderer.close();
++            buffers.fixedBufferPack().close();
++            buffers.close();
++            renderer = null;
++            buffers = null;
++        }
++    }
++}
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/render/PonderRenderTypes.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/PonderRenderTypes.java
+@@ -16,14 +16,12 @@
+ 	private static final RenderType GUI = RenderTypeAccessor.catnip$create(
+ 		createLayerName("gui"),
+ 		RenderSetup.builder(RenderPipelines.GUI)
+-			.bufferSize(RenderType.SMALL_BUFFER_SIZE)
+ 			.createRenderSetup()
+ 	);
+ 
+ 	private static final RenderType OUTLINE_SOLID = RenderTypeAccessor.catnip$create(
+ 		createLayerName("outline_solid"),
+ 		RenderSetup.builder(RenderPipelines.ENTITY_SOLID)
+-			.bufferSize(256)
+ 			.withTexture("Sampler0", CatnipSpecialTextures.BLANK.getId())
+ 			.useLightmap()
+ 			.useOverlay()
+@@ -34,7 +32,6 @@
+ 		RenderTypeAccessor.catnip$create(
+ 			createLayerName("outline_translucent" + (cull ? "_cull" : "")),
+ 			RenderSetup.builder(cull ? RenderPipelines.ENTITY_TRANSLUCENT_CULL : RenderPipelines.ENTITY_TRANSLUCENT)
+-				.bufferSize(256)
+ 				.withTexture("Sampler0", texture)
+ 				.sortOnUpload()
+ 				.useLightmap()
+--- /dev/null
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/RenderBufferSource.java
+@@ -0,0 +1,53 @@
++package net.createmod.catnip.api.client.render;
++
++import java.util.LinkedHashMap;
++import java.util.Map;
++import com.mojang.blaze3d.systems.RenderSystem;
++import com.mojang.blaze3d.vertex.VertexConsumer;
++import net.minecraft.client.renderer.StagedVertexBuffer;
++import net.minecraft.client.renderer.rendertype.RenderType;
++
++/** Immediate geometry backed by 26.2's native GPU staging and prepared render types. */
++@FunctionalInterface
++public interface RenderBufferSource {
++    VertexConsumer getBuffer(RenderType type);
++
++    final class Immediate implements RenderBufferSource, AutoCloseable {
++        private final Map<RenderType, Batch> batches = new LinkedHashMap<>();
++        @Override public VertexConsumer getBuffer(RenderType type) {
++            Batch batch = batches.computeIfAbsent(type, Batch::new);
++            if (batch.draw == null) {
++                batch.draw = batch.staging.appendDraw(type.format(), type.primitiveTopology(),
++                        type.sortOnUpload() ? RenderSystem.getProjectionType().vertexSorting() : null);
++            }
++            return batch.staging.getVertexBuilder(batch.draw);
++        }
++        public void endBatch() { batches.forEach(this::flush); }
++        public void endBatch(RenderType type) {
++            Batch batch = batches.get(type);
++            if (batch != null) flush(type, batch);
++        }
++        private void flush(RenderType type, Batch batch) {
++            if (batch.draw == null) return;
++            try {
++                batch.staging.upload();
++                var info = batch.staging.getExecuteInfo(batch.draw);
++                if (info != null) type.prepare().drawFromBuffer(info);
++            } finally {
++                batch.draw = null;
++                batch.staging.endFrame();
++            }
++        }
++        @Override public void close() {
++            batches.values().forEach(batch -> batch.staging.close());
++            batches.clear();
++        }
++        private static final class Batch {
++            final StagedVertexBuffer staging;
++            StagedVertexBuffer.Draw draw;
++            Batch(RenderType type) {
++                staging = new StagedVertexBuffer(() -> "Catnip " + type, RenderType.SMALL_BUFFER_SIZE);
++            }
++        }
++    }
++}
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/render/ShadeSeparatingSuperByteBuffer.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/ShadeSeparatingSuperByteBuffer.java
+@@ -272,6 +272,6 @@
+ 
+ 	private static int getLight(BlockAndTintGetter world, Vector4f lightPos) {
+ 		BlockPos pos = BlockPos.containing(lightPos.x(), lightPos.y(), lightPos.z());
+-		return WORLD_LIGHT_CACHE.computeIfAbsent(pos.asLong(), $ -> LevelRenderer.getLightCoords(world, pos));
++		return WORLD_LIGHT_CACHE.computeIfAbsent(pos.asLong(), $ -> net.minecraft.util.LightCoordsUtil.getLightCoords(world, pos));
+ 	}
+ }
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/render/ShadedBlockSbbBuilder.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/ShadedBlockSbbBuilder.java
+@@ -33,7 +33,7 @@
+ 	}
+ 
+ 	public void begin() {
+-		bufferBuilder = new BufferBuilder(BYTE_BUFFER_BUILDER, VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
++		bufferBuilder = new BufferBuilder(BYTE_BUFFER_BUILDER, com.mojang.blaze3d.PrimitiveTopology.QUADS, DefaultVertexFormat.BLOCK);
+ 		shadeSwapVertices.clear();
+ 		currentShade = true;
+ 	}
+--- a/catnip/common/src/client/java/net/createmod/catnip/api/client/render/SuperRenderTypeBuffer.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/api/client/render/SuperRenderTypeBuffer.java
+@@ -2,11 +2,11 @@
+ 
+ import com.mojang.blaze3d.vertex.VertexConsumer;
+ 
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+ import net.minecraft.client.renderer.rendertype.RenderType;
+ 
+-public interface SuperRenderTypeBuffer extends MultiBufferSource {
++public interface SuperRenderTypeBuffer extends RenderBufferSource {
+ 	VertexConsumer getEarlyBuffer(RenderType type);
+ 
+ 	VertexConsumer getBuffer(RenderType type);
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/CatnipClient.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/CatnipClient.java
+@@ -71,12 +71,13 @@
+ 	}
+ 
+ 	private static void onRendererReload() {
++        net.createmod.catnip.api.client.render.IsolatedFeatureRenderer.close();
+ 		AnimationTickHolder.reset();
+ 		SuperByteBufferCache.getInstance().invalidate();
+ 	}
+ 
+ 	public static void onLevelRender(LevelRenderer renderer, LevelRenderState state, PoseStack transforms) {
+-		Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
++		Vec3 cameraPos = Minecraft.getInstance().gameRenderer.mainCamera().position();
+ 		float partialTicks = AnimationTickHolder.getPartialTicks();
+ 
+ 		transforms.pushPose();
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/CatnipClientPayloadHandlers.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/CatnipClientPayloadHandlers.java
+@@ -35,17 +35,17 @@
+ 
+ 	private static void openConfigScreen(OpenConfigScreenPacket packet, LocalPlayer player) {
+ 		Minecraft mc = Minecraft.getInstance();
+-		Screen currentScreen = mc.screen;
++		Screen currentScreen = mc.gui.screen();
+ 
+ 		switch (packet.target()) {
+ 			case Mod(String id) -> RootConfigScreen.forMod(id, currentScreen).ifPresentOrElse(
+-				mc::setScreen, () -> logger.warn("Failed to open RootConfigScreen for mod {}", id)
++				mc.gui::setScreen, () -> logger.warn("Failed to open RootConfigScreen for mod {}", id)
+ 			);
+ 			case Config(ConfigId id) -> ConfigScreen.find(id).ifPresentOrElse(
+-				mc::setScreen, () -> logger.warn("Failed to open ConfigScreen for config {}", id)
++				mc.gui::setScreen, () -> logger.warn("Failed to open ConfigScreen for config {}", id)
+ 			);
+ 			case Value(ConfigValueId id) -> ConfigScreen.find(id).ifPresentOrElse(
+-				mc::setScreen, () -> logger.warn("Failed to open ConfigScreen for value {}", id)
++				mc.gui::setScreen, () -> logger.warn("Failed to open ConfigScreen for value {}", id)
+ 			);
+ 		}
+ 	}
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/gui/element/pip/GuiBlockEntityRenderer.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/gui/element/pip/GuiBlockEntityRenderer.java
+@@ -5,12 +5,12 @@
+ import net.createmod.catnip.api.client.gui.render.pip.GuiBlockEntityRenderState;
+ import net.minecraft.client.Minecraft;
+ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
+-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource.Immediate;
+ import net.minecraft.client.renderer.state.level.CameraRenderState;
+ 
+ public class GuiBlockEntityRenderer extends PictureInPictureRenderer<GuiBlockEntityRenderState> {
+-	public GuiBlockEntityRenderer(BufferSource bufferSource) {
+-		super(bufferSource);
++	public GuiBlockEntityRenderer() {
++		super();
+ 	}
+ 
+ 	@Override
+@@ -19,12 +19,12 @@
+ 	}
+ 
+ 	@Override
+-	protected void renderToTexture(GuiBlockEntityRenderState renderState, PoseStack poseStack) {
++	protected void renderToTexture(GuiBlockEntityRenderState renderState, PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector submitNodeCollector) {
+ 		CameraRenderState cameraRenderState = new CameraRenderState();
+ 
+ 		Minecraft.getInstance().getBlockEntityRenderDispatcher()
+ 			.getRenderer(renderState.blockEntityRenderState())
+-			.submit(renderState.blockEntityRenderState(), poseStack, Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher().getSubmitNodeStorage(),
++			.submit(renderState.blockEntityRenderState(), poseStack, submitNodeCollector,
+ 				cameraRenderState
+ 			);
+ 	}
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/gui/element/pip/GuiBlockModelRenderer.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/gui/element/pip/GuiBlockModelRenderer.java
+@@ -8,7 +8,7 @@
+ import net.createmod.catnip.impl.client.render.ColoringVertexConsumer;
+ import net.minecraft.client.Minecraft;
+ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
+-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource.Immediate;
+ import net.minecraft.client.renderer.Sheets;
+ import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+ import net.minecraft.client.renderer.rendertype.RenderType;
+@@ -16,8 +16,8 @@
+ import net.minecraft.util.ARGB;
+ 
+ public class GuiBlockModelRenderer extends PictureInPictureRenderer<GuiBlockModelRenderState> {
+-	public GuiBlockModelRenderer(BufferSource bufferSource) {
+-		super(bufferSource);
++	public GuiBlockModelRenderer() {
++		super();
+ 	}
+ 
+ 	@Override
+@@ -26,28 +26,23 @@
+ 	}
+ 
+ 	@Override
+-	protected void renderToTexture(GuiBlockModelRenderState renderState, PoseStack poseStack) {
++	protected void renderToTexture(GuiBlockModelRenderState renderState, PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector submitNodeCollector) {
+ 		SinglePosVirtualBlockGetter level = SinglePosVirtualBlockGetter.createFullBright();
+ 		level.blockState(renderState.state());
+ 		level.blockEntity(renderState.blockEntity());
+ 
+-		int color = renderState.color();
+-		BakedModelBufferer.bufferModel(Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(renderState.state()), BlockPos.ZERO, level, renderState.state(),
+-			poseStack, (layer, shade) -> {
+-				RenderType type = layer == ChunkSectionLayer.TRANSLUCENT
+-					? Sheets.translucentBlockItemSheet()
+-					: Sheets.cutoutBlockSheet();
++        var model = Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(renderState.state());
++        int color = renderState.color();
++        var renderType = model.hasMaterialFlag(net.minecraft.client.resources.model.geometry.BakedQuad.FLAG_TRANSLUCENT)
++                ? Sheets.translucentBlockItemSheet() : Sheets.cutoutBlockItemSheet();
++        submitNodeCollector.submitCustomGeometry(poseStack, renderType, (pose, consumer) -> {
++            PoseStack modelPose = new PoseStack();
++            modelPose.last().set(pose);
++            BakedModelBufferer.bufferModel(model, BlockPos.ZERO, level, renderState.state(), modelPose,
++                (layer, shade) -> new ColoringVertexConsumer(consumer,
++                    ARGB.red(color) / 255f, ARGB.green(color) / 255f, ARGB.blue(color) / 255f, ARGB.alpha(color) / 255f));
++        });
+ 
+-				return new ColoringVertexConsumer(
+-					bufferSource.getBuffer(type),
+-					ARGB.red(color) / 255f,
+-					ARGB.green(color) / 255f,
+-					ARGB.blue(color) / 255f,
+-					1);
+-			}
+-		);
+-
+-		bufferSource.endBatch();
+ 	}
+ 
+ 	@Override
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/gui/element/pip/GuiFluidStateRenderer.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/gui/element/pip/GuiFluidStateRenderer.java
+@@ -5,11 +5,11 @@
+ import net.createmod.catnip.api.client.gui.render.pip.GuiFluidStateRenderState;
+ import net.createmod.catnip.api.client.platform.ModClientHooksHelper;
+ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
+-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource.Immediate;
+ 
+ public class GuiFluidStateRenderer extends PictureInPictureRenderer<GuiFluidStateRenderState> {
+-	public GuiFluidStateRenderer(BufferSource bufferSource) {
+-		super(bufferSource);
++	public GuiFluidStateRenderer() {
++		super();
+ 	}
+ 
+ 	@Override
+@@ -18,8 +18,8 @@
+ 	}
+ 
+ 	@Override
+-	protected void renderToTexture(GuiFluidStateRenderState renderState, PoseStack poseStack) {
+-		ModClientHooksHelper.INSTANCE.renderFullFluidState(poseStack, this.bufferSource, renderState.fluidState());
++	protected void renderToTexture(GuiFluidStateRenderState renderState, PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector submitNodeCollector) {
++		ModClientHooksHelper.INSTANCE.submitFullFluidState(poseStack, submitNodeCollector, renderState.fluidState());
+ 	}
+ 
+ 	@Override
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/mixin/LightingAccessor.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/mixin/LightingAccessor.java
+@@ -1,6 +1,6 @@
+ package net.createmod.catnip.impl.client.mixin;
+ 
+-import org.joml.Vector3f;
++import org.joml.Vector3fc;
+ import org.spongepowered.asm.mixin.Mixin;
+ import org.spongepowered.asm.mixin.gen.Invoker;
+ 
+@@ -9,5 +9,5 @@
+ @Mixin(Lighting.class)
+ public interface LightingAccessor {
+ 	@Invoker
+-	void callUpdateBuffer(Lighting.Entry entry, Vector3f light0, Vector3f light1);
++	void callUpdateBuffer(Lighting.Entry entry, Vector3fc light0, Vector3fc light1);
+ }
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/mixin/MinecraftMixin.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/mixin/MinecraftMixin.java
+@@ -4,7 +4,7 @@
+ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+ 
+ import net.createmod.catnip.api.client.gui.TickableGuiEventListener;
+-import net.minecraft.client.Minecraft;
++import net.minecraft.client.gui.Gui;
+ 
+ import net.minecraft.client.gui.components.events.ContainerEventHandler;
+ import net.minecraft.client.gui.components.events.GuiEventListener;
+@@ -14,7 +14,7 @@
+ import org.spongepowered.asm.mixin.Unique;
+ import org.spongepowered.asm.mixin.injection.At;
+ 
+-@Mixin(Minecraft.class)
++@Mixin(Gui.class)
+ public class MinecraftMixin {
+ 	@WrapOperation(
+ 		method = "tick",
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/placement/PlacementClient.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/placement/PlacementClient.java
+@@ -252,7 +252,7 @@
+ 		 * Result is (dist right of center screen, dist up from center screen, if < 0,
+ 		 * then in front of view plane)
+ 		 */
+-		Camera ari = Minecraft.getInstance().gameRenderer.getMainCamera();
++		Camera ari = Minecraft.getInstance().gameRenderer.mainCamera();
+ 		Vec3 cameraPos = ari.position();
+ 		Quaternionf cameraRotationConj = new Quaternionf(ari.rotation());
+ 		cameraRotationConj.conjugate();
+--- a/catnip/common/src/client/java/net/createmod/catnip/impl/client/render/model/MeshEmitter.java
++++ b/catnip/common/src/client/java/net/createmod/catnip/impl/client/render/model/MeshEmitter.java
+@@ -45,10 +45,10 @@
+ 
+ 	private void prepareForGeometry(boolean shade) {
+ 		if (bufferBuilder == null) {
+-			bufferBuilder = new BufferBuilder(byteBufferBuilder, VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
++			bufferBuilder = new BufferBuilder(byteBufferBuilder, com.mojang.blaze3d.PrimitiveTopology.QUADS, DefaultVertexFormat.BLOCK);
+ 		} else if (shade != currentShade) {
+ 			emit();
+-			bufferBuilder = new BufferBuilder(byteBufferBuilder, VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
++			bufferBuilder = new BufferBuilder(byteBufferBuilder, com.mojang.blaze3d.PrimitiveTopology.QUADS, DefaultVertexFormat.BLOCK);
+ 		}
+ 
+ 		currentShade = shade;
+--- a/catnip/common/src/client/resources/catnip-common-client.mixins.json
++++ b/catnip/common/src/client/resources/catnip-common-client.mixins.json
+@@ -10,17 +10,15 @@
+     "ParticleEngineAccessor",
+     "RenderTypeAccessor",
+     "ScreenAccessor",
+-    "TimerAccessor"
++    "TimerAccessor",
++    "GuiGraphicsExtractorAccessor",
++    "MinecraftMixin",
++    "ScreenMixin"
+   ],
+   "injectors": {
+     "defaultRequire": 1
+   },
+   "overwrites": {
+     "requireAnnotations": true
+-  },
+-  "mixins": [
+-    "GuiGraphicsExtractorAccessor",
+-    "MinecraftMixin",
+-    "ScreenMixin"
+-  ]
++  }
+ }
+--- a/catnip/common/src/main/java/net/createmod/catnip/api/config/ConfigPath.java
++++ b/catnip/common/src/main/java/net/createmod/catnip/api/config/ConfigPath.java
+@@ -73,6 +73,7 @@
+ 
+ 	/// @return true if the given string is a valid path component
+ 	public static boolean isValidComponent(String component) {
++        if (component.isEmpty()) return false;
+ 		for (int i = 0; i < component.length(); i++) {
+ 			if (!isAllowedInComponent(component.charAt(i))) {
+ 				return false;
+--- a/catnip/common/src/main/java/net/createmod/catnip/api/config/definition/ConfigValue.java
++++ b/catnip/common/src/main/java/net/createmod/catnip/api/config/definition/ConfigValue.java
+@@ -80,6 +80,15 @@
+ 		return Optional.empty();
+ 	}
+ 
++    /// Initialize from a validated storage value, or apply a subsequent reload.
++    /// Platform registries call this before exposing the configuration to the game.
++    public void load(T loaded) {
++        Optional<String> error = validate(loaded);
++        if (error.isPresent()) throw new IllegalArgumentException("Invalid stored value: " + error.get());
++        if (value == null) value = loaded;
++        else set(loaded);
++    }
++
+ 	/// Register a new [ChangeCallback] to this value, which will be invoked whenever it changes.
+ 	public void registerChangeCallback(ChangeCallback<T> callback) {
+ 		this.changeCallbacks.add(callback);
+--- a/catnip/common/src/main/java/net/createmod/catnip/api/level/wrapper/SchematicLevel.java
++++ b/catnip/common/src/main/java/net/createmod/catnip/api/level/wrapper/SchematicLevel.java
+@@ -79,6 +79,7 @@
+ 
+ 	@Override
+ 	public boolean addFreshEntity(Entity entityIn) {
++        VirtualEntityIds.assign(entityIn);
+ 		if (entityIn instanceof ItemFrame itemFrame)
+ 			itemFrame.setItem(ComponentProcessors.withUnsafeComponentsDiscarded(itemFrame.getItem()));
+ 		if (entityIn instanceof ArmorStand armorStand)
+--- /dev/null
++++ b/catnip/common/src/main/java/net/createmod/catnip/api/level/wrapper/VirtualEntityIds.java
+@@ -0,0 +1,13 @@
++package net.createmod.catnip.api.level.wrapper;
++
++import java.util.concurrent.atomic.AtomicInteger;
++import net.minecraft.world.entity.Entity;
++
++/** Virtual entities never join the live world's ID allocator in 26.2. */
++public final class VirtualEntityIds {
++    private static final AtomicInteger NEXT = new AtomicInteger(-2);
++    private VirtualEntityIds() { }
++    public static void assign(Entity entity) {
++        entity.setId(NEXT.getAndUpdate(id -> id == Integer.MIN_VALUE ? -2 : id - 1));
++    }
++}
+--- a/catnip/common/src/main/java/net/createmod/catnip/api/placement/PlacementOffset.java
++++ b/catnip/common/src/main/java/net/createmod/catnip/api/placement/PlacementOffset.java
+@@ -5,7 +5,7 @@
+ import org.jspecify.annotations.Nullable;
+ 
+ import net.createmod.catnip.api.platform.services.ModHooksHelper;
+-import net.minecraft.advancements.CriteriaTriggers;
++import net.minecraft.advancements.triggers.CriteriaTriggers;
+ import net.minecraft.core.BlockPos;
+ import net.minecraft.core.Vec3i;
+ import net.minecraft.server.level.ServerPlayer;
+--- a/catnip/common/src/main/java/net/createmod/catnip/impl/command/argument/ConfigIdArgument.java
++++ b/catnip/common/src/main/java/net/createmod/catnip/impl/command/argument/ConfigIdArgument.java
+@@ -28,12 +28,27 @@
+ 
+ 	@Override
+ 	public ConfigId parse(StringReader reader) throws CommandSyntaxException {
+-		return null;
++		int start = reader.getCursor();
++        while (reader.canRead() && !Character.isWhitespace(reader.peek())) reader.skip();
++        String text = reader.getString().substring(start, reader.getCursor());
++        try {
++            String[] parts = text.split(":", -1);
++            if (parts.length != 2 || parts[0].isEmpty() || parts[1].isEmpty()) throw new IllegalArgumentException();
++            return new ConfigId(parts[0], net.createmod.catnip.api.config.ConfigSide.valueOf(parts[1].toUpperCase(java.util.Locale.ROOT)));
++        } catch (IllegalArgumentException error) {
++            reader.setCursor(start);
++            throw new com.mojang.brigadier.exceptions.SimpleCommandExceptionType(
++                net.minecraft.network.chat.Component.literal("Expected mod:client, mod:common or mod:server")).createWithContext(reader);
++        }
+ 	}
+ 
+ 	@Override
+ 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+-		return ArgumentType.super.listSuggestions(context, builder);
++		java.util.List<String> candidates = new java.util.ArrayList<>();
++        for (String mod : net.createmod.catnip.api.platform.services.PlatformHelper.INSTANCE.getLoadedModIds()) {
++            for (var side : net.createmod.catnip.api.config.ConfigSide.values()) candidates.add(mod + ":" + side);
++        }
++        return net.minecraft.commands.SharedSuggestionProvider.suggest(candidates, builder);
+ 	}
+ 
+ 	@Override
+--- a/catnip/common/src/main/java/net/createmod/catnip/impl/command/argument/ConfigPathArgument.java
++++ b/catnip/common/src/main/java/net/createmod/catnip/impl/command/argument/ConfigPathArgument.java
+@@ -70,19 +70,13 @@
+ 
+ 	@Override
+ 	public ConfigPath parse(StringReader reader) throws CommandSyntaxException {
+-		int i = reader.getCursor();
+-
+-		while (reader.canRead() && Identifier.isAllowedInIdentifier(Character.toLowerCase(reader.peek()))) {
+-			reader.skip();
+-		}
+-
+-		String path = reader.getString().substring(i, reader.getCursor());
+-
+-//		try {
+-//			return ConfigPath.parse(path);
+-//		} catch (NullPointerException e) {
+-			reader.setCursor(i);
+-			throw PARSE_ERROR.createWithContext(reader);
+-//		}
+-	}
++        int start = reader.getCursor();
++        while (reader.canRead() && !Character.isWhitespace(reader.peek())) reader.skip();
++        String text = reader.getString().substring(start, reader.getCursor());
++        try { return new ConfigPath(java.util.List.of(text.split("\\.", -1))); }
++        catch (IllegalArgumentException error) {
++            reader.setCursor(start);
++            throw PARSE_ERROR.createWithContext(reader);
++        }
++    }
+ }
+--- a/catnip/fabric/src/client/java/net/createmod/catnip/impl/fabric/client/CatnipFabricClient.java
++++ b/catnip/fabric/src/client/java/net/createmod/catnip/impl/fabric/client/CatnipFabricClient.java
+@@ -15,6 +15,11 @@
+ 	@Override
+ 	public void onInitializeClient() {
+ 		CatnipClient.init();
++        net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents.CLIENT_STOPPING.register(client ->
++            {
++                net.createmod.catnip.api.client.render.DefaultSuperRenderTypeBuffer.getInstance().close();
++                net.createmod.catnip.api.client.render.IsolatedFeatureRenderer.close();
++            });
+ 
+ 		// event registration
+ 		ClientTickEvents.START_CLIENT_TICK.register(_ -> ClientTickCallback.EVENT.pre().invoker().onTick());
+--- a/catnip/fabric/src/client/java/net/createmod/catnip/impl/fabric/client/render/BakedModelBuffererImpl.java
++++ b/catnip/fabric/src/client/java/net/createmod/catnip/impl/fabric/client/render/BakedModelBuffererImpl.java
+@@ -59,7 +59,7 @@
+ 		universalEmitter.prepare(bufferSource, model.hasMaterialFlag(BakedQuad.FLAG_TRANSLUCENT) ? ChunkSectionLayer.TRANSLUCENT : ChunkSectionLayer.CUTOUT);
+ 		model = universalEmitter.wrapModel(model);
+ 
+-		RenderType layer = model.hasMaterialFlag(BakedQuad.FLAG_TRANSLUCENT) ? Sheets.translucentBlockSheet() : Sheets.cutoutBlockSheet();
++		RenderType layer = model.hasMaterialFlag(BakedQuad.FLAG_TRANSLUCENT) ? Sheets.translucentBlockItemSheet() : Sheets.cutoutBlockItemSheet();
+ 		List<BlockStateModelPart> parts = new ArrayList<>();
+ 
+ 		model.collectParts(RandomSource.create(seed), parts);
+@@ -96,7 +96,7 @@
+ 		VertexConsumer buffer = bufferSource.getBuffer(defaultLayer, false);
+ 
+ 		QuadInstance instance = new QuadInstance();
+-		boolean useAo = Minecraft.getInstance().gameRenderer.getGameRenderState().optionsRenderState.ambientOcclusion;
++		boolean useAo = Minecraft.getInstance().gameRenderer.gameRenderState().optionsRenderState.ambientOcclusion;
+ 		int light = LightCoordsUtil.pack(level.getBrightness(LightLayer.BLOCK, pos), level.getBrightness(LightLayer.SKY, pos));
+ 
+ 		instance.setOverlayCoords(OverlayTexture.NO_OVERLAY);
+@@ -187,8 +187,8 @@
+ 				model.collectParts(RandomSource.create(seed), parts);
+ 
+ 				QuadInstance instance = new QuadInstance();
+-				boolean useAo = Minecraft.getInstance().gameRenderer.getGameRenderState().optionsRenderState.ambientOcclusion;
+-				int light = LevelRenderer.getLightCoords(level, pos);
++				boolean useAo = Minecraft.getInstance().gameRenderer.gameRenderState().optionsRenderState.ambientOcclusion;
++				int light = net.minecraft.util.LightCoordsUtil.getLightCoords(level, pos);
+ 
+ 				instance.setOverlayCoords(OverlayTexture.NO_OVERLAY);
+ 
+--- a/catnip/fabric/src/client/java/net/createmod/catnip/impl/fabric/client/service/FabricClientFluidHelper.java
++++ b/catnip/fabric/src/client/java/net/createmod/catnip/impl/fabric/client/service/FabricClientFluidHelper.java
+@@ -22,7 +22,8 @@
+ 	@Override
+ 	@Nullable
+ 	public TextureAtlasSprite getStillTexture(TypedInstance<Fluid> fluid) {
+-		throw new NotImplementedException(); // TODO
+-		//return FluidVariantRendering.getSprite((FluidVariant) fluid);
++        var state = fluid.typeHolder().value().defaultFluidState();
++        return net.minecraft.client.Minecraft.getInstance().getModelManager()
++                .getFluidStateModelSet().get(state).stillMaterial().sprite();
+ 	}
+ }
+--- a/catnip/fabric/src/client/java/net/createmod/catnip/impl/fabric/client/service/FabricClientHooksHelper.java
++++ b/catnip/fabric/src/client/java/net/createmod/catnip/impl/fabric/client/service/FabricClientHooksHelper.java
+@@ -26,8 +26,8 @@
+ import net.minecraft.client.gui.screens.Screen;
+ import net.minecraft.client.multiplayer.ClientLevel;
+ import net.minecraft.client.particle.Particle;
+-import net.minecraft.client.renderer.MultiBufferSource;
+-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource.Immediate;
+ import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
+ import net.minecraft.client.renderer.block.BlockAndTintGetter;
+ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+@@ -65,8 +65,8 @@
+ 	}
+ 
+ 	@Override
+-	public void registerPictureInPictureRenderer(Class<?> stateClass, Function<BufferSource, PictureInPictureRenderer<?>> factory) {
+-		PictureInPictureRendererRegistry.register(ctx -> factory.apply(ctx.bufferSource()));
++	public void registerPictureInPictureRenderer(Class<?> stateClass, java.util.function.Supplier<PictureInPictureRenderer<?>> factory) {
++		PictureInPictureRendererRegistry.register(ctx -> factory.get());
+ 	}
+ 
+ 	@Override
+@@ -80,7 +80,7 @@
+ 	}
+ 
+ 	@Override
+-	public void renderFullFluidState(PoseStack ms, MultiBufferSource.BufferSource buffer, FluidState fluid) {
++	public void renderFullFluidState(PoseStack ms, RenderBufferSource.Immediate buffer, FluidState fluid) {
+ 		FluidRenderHelper.renderFluidBox(fluid, 0, 0, 0, 1, 1, 1, buffer, ms, LightCoordsUtil.FULL_BRIGHT, false, true);
+ 	}
+ 
+--- a/catnip/fabric/src/main/java/net/createmod/catnip/impl/fabric/CatnipFabric.java
++++ b/catnip/fabric/src/main/java/net/createmod/catnip/impl/fabric/CatnipFabric.java
+@@ -8,7 +8,16 @@
+ public final class CatnipFabric implements ModInitializer {
+ 	@Override
+ 	public void onInitialize() {
+-		Catnip.init();
++		net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(
++            Catnip.id("config_id"), net.createmod.catnip.impl.command.argument.ConfigIdArgument.class,
++            net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(net.createmod.catnip.impl.command.argument.ConfigIdArgument::new));
++        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(
++            Catnip.id("config_path"), net.createmod.catnip.impl.command.argument.ConfigPathArgument.class,
++            net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(net.createmod.catnip.impl.command.argument.ConfigPathArgument::new));
++        net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry.registerArgumentType(
++            Catnip.id("mod_id"), net.createmod.catnip.impl.command.argument.ModIdArgument.class,
++            net.minecraft.commands.synchronization.SingletonArgumentInfo.contextFree(net.createmod.catnip.impl.command.argument.ModIdArgument::new));
++        Catnip.init();
+ 		CommandRegistrationCallback.EVENT.register(ServerCommandRegistrationCallback.EVENT.invoker()::register);
+ 	}
+ }
+--- a/catnip/fabric/src/main/java/net/createmod/catnip/impl/fabric/service/FabricCatnipConfigRegistry.java
++++ b/catnip/fabric/src/main/java/net/createmod/catnip/impl/fabric/service/FabricCatnipConfigRegistry.java
+@@ -1,19 +1,91 @@
+ package net.createmod.catnip.impl.fabric.service;
+ 
++import java.util.ArrayList;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
+ import java.util.Optional;
+-
++import java.util.concurrent.atomic.AtomicBoolean;
++import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
++import fuzs.forgeconfigapiport.fabric.api.v5.ModConfigEvents;
+ import net.createmod.catnip.api.config.CatnipConfigRegistry;
+ import net.createmod.catnip.api.config.ConfigId;
+ import net.createmod.catnip.api.config.definition.CatnipConfig;
++import net.createmod.catnip.api.config.definition.ConfigValue;
++import net.neoforged.fml.config.ModConfig;
++import net.neoforged.neoforge.common.ModConfigSpec;
+ 
++/** Real TOML storage and lifecycle integration using Forge Config API Port v5. */
+ public final class FabricCatnipConfigRegistry implements CatnipConfigRegistry {
+-	@Override
+-	public void register(ConfigId id, CatnipConfig.Root config) {
+-		throw new RuntimeException("NYI");
+-	}
+-
+-	@Override
+-	public Optional<CatnipConfig.Root> get(ConfigId id) {
+-		return Optional.empty();
+-	}
++    private final Map<ConfigId, CatnipConfig.Root> configs = new HashMap<>();
++    @Override public void register(ConfigId id, CatnipConfig.Root config) {
++        if (configs.putIfAbsent(id, config) != null)
++            throw new IllegalArgumentException("Duplicate config " + id);
++        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
++        List<Runnable> syncers = new ArrayList<>();
++        AtomicBoolean loading = new AtomicBoolean();
++        walk(builder, config, syncers, loading);
++        ModConfigSpec spec = builder.build();
++        Runnable sync = () -> {
++            loading.set(true);
++            try { syncers.forEach(Runnable::run); }
++            finally { loading.set(false); }
++        };
++        ModConfigEvents.loading(id.modId()).register(event -> {
++            if (event.getSpec() == spec) { sync.run(); config.onLoad(); }
++        });
++        ModConfigEvents.reloading(id.modId()).register(event -> {
++            if (event.getSpec() == spec) { sync.run(); config.onReload(); }
++        });
++        ModConfig.Type type = switch (id.side()) {
++            case CLIENT -> ModConfig.Type.CLIENT;
++            case COMMON -> ModConfig.Type.COMMON;
++            case SERVER -> ModConfig.Type.SERVER;
++        };
++        ConfigRegistry.INSTANCE.register(id.modId(), type, spec);
++    }
++    @Override public Optional<CatnipConfig.Root> get(ConfigId id) {
++        return Optional.ofNullable(configs.get(id));
++    }
++    private static void walk(ModConfigSpec.Builder builder, CatnipConfig config,
++            List<Runnable> syncers, AtomicBoolean loading) {
++        config.values().forEach(value -> syncers.add(define(builder, value, loading)));
++        config.nested().sequencedValues().forEach(nested -> walk(builder, nested, syncers, loading));
++    }
++    private static <T> Runnable define(ModConfigSpec.Builder builder, ConfigValue<T> value, AtomicBoolean loading) {
++        if (value.comment() != null && !value.comment().isBlank()) builder.comment(value.comment());
++        Object defaultStorage = encode(value.defaultValue);
++        ModConfigSpec.ConfigValue<Object> stored = builder.define(value.path.components,
++                () -> defaultStorage, candidate -> {
++                    try { return value.validate(decode(value.defaultValue, candidate)).isEmpty(); }
++                    catch (RuntimeException invalid) { return false; }
++                }, Object.class);
++        value.registerChangeCallback((oldValue, newValue) -> {
++            if (!loading.get()) { stored.set(encode(newValue)); stored.save(); }
++        });
++        return () -> value.load(decode(value.defaultValue, stored.get()));
++    }
++    private static Object encode(Object value) {
++        if (value instanceof Enum<?> e) return e.name();
++        if (value instanceof Float f) return f.doubleValue();
++        return value;
++    }
++    @SuppressWarnings({"unchecked", "rawtypes"})
++    private static <T> T decode(T defaultValue, Object stored) {
++        if (defaultValue instanceof Enum<?> e && stored instanceof String text)
++            return (T) Enum.valueOf((Class) e.getDeclaringClass(), text);
++        if (defaultValue instanceof Integer && stored instanceof Number n) {
++            double d = n.doubleValue();
++            if (!Double.isFinite(d) || d != Math.rint(d) || d < Integer.MIN_VALUE || d > Integer.MAX_VALUE)
++                throw new IllegalArgumentException("Invalid integer " + n);
++            return (T) Integer.valueOf((int)d);
++        }
++        if (defaultValue instanceof Float && stored instanceof Number n) {
++            float f = n.floatValue();
++            if (!Float.isFinite(f)) throw new IllegalArgumentException("Invalid float " + n);
++            return (T) Float.valueOf(f);
++        }
++        if (defaultValue.getClass().isInstance(stored)) return (T) stored;
++        throw new IllegalArgumentException("Wrong stored type for " + defaultValue);
++    }
+ }
+--- a/catnip/fabric/src/main/resources/fabric.mod.json
++++ b/catnip/fabric/src/main/resources/fabric.mod.json
+@@ -34,6 +34,7 @@
+   "depends": {
+     "fabricloader": ">=${fabric_loader_version}",
+     "fabric-api": ">=${fabric_api_version}",
+-    "minecraft": "${minecraft_version}"
++    "minecraft": "${minecraft_version}",
++    "forgeconfigapiport": ">=26.2.1"
+   }
+ }
+--- a/common/src/client/java/net/createmod/ponder/api/client/element/ParrotPose.java
++++ b/common/src/client/java/net/createmod/ponder/api/client/element/ParrotPose.java
+@@ -27,7 +27,8 @@
+ 	public abstract void tick(PonderScene scene, Parrot entity, Vec3 location);
+ 
+ 	public Parrot create(PonderLevel world) {
+-		Parrot entity = new Parrot(EntityType.PARROT, world);
++		Parrot entity = new Parrot(net.minecraft.world.entity.EntityTypes.PARROT, world);
++		net.createmod.catnip.api.level.wrapper.VirtualEntityIds.assign(entity);
+ 		int nextInt = Ponder.RANDOM.nextInt(VARIANTS.length);
+ 		((ParrotAccessor) entity).ponder$setVariant(VARIANTS[nextInt]);
+ 		return entity;
+--- a/common/src/client/java/net/createmod/ponder/api/client/element/PonderSceneElement.java
++++ b/common/src/client/java/net/createmod/ponder/api/client/element/PonderSceneElement.java
+@@ -4,18 +4,18 @@
+ 
+ import net.createmod.ponder.api.client.level.PonderLevel;
+ import net.minecraft.client.Camera;
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.SubmitNodeCollector;
+ import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+ import net.minecraft.client.renderer.state.level.CameraRenderState;
+ 
+ public interface PonderSceneElement extends PonderElement {
+-	void renderFirst(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	void renderFirst(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 					 CameraRenderState cameraRenderState, PoseStack poseStack, float pt);
+ 
+-	void renderLayer(PonderLevel world, MultiBufferSource buffer, ChunkSectionLayer layer, SubmitNodeCollector queue,
++	void renderLayer(PonderLevel world, RenderBufferSource buffer, ChunkSectionLayer layer, SubmitNodeCollector queue,
+ 	                 Camera camera, CameraRenderState cameraRenderState, PoseStack poseStack, float pt);
+ 
+-	void renderLast(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	void renderLast(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 					CameraRenderState cameraRenderState, PoseStack poseStack, float pt);
+ }
+--- a/common/src/client/java/net/createmod/ponder/api/client/level/PonderLevel.java
++++ b/common/src/client/java/net/createmod/ponder/api/client/level/PonderLevel.java
+@@ -97,7 +97,10 @@
+ 				TagValueOutput output = TagValueOutput.createWithContext(reporter, registryAccess());
+ 				e.save(output);
+ 				ValueInput input = TagValueInput.create(reporter, registryAccess(), output.buildResult());
+-				EntityType.create(input, this, EntitySpawnReason.LOAD).ifPresent(originalEntities::add);
++				EntityType.create(input, this, new net.minecraft.world.entity.EntitySpawnRequest(EntitySpawnReason.LOAD, false)).ifPresent(copy -> {
++                    net.createmod.catnip.api.level.wrapper.VirtualEntityIds.assign(copy);
++                    originalEntities.add(copy);
++                });
+ 			}
+ 		});
+ 	}
+@@ -120,7 +123,7 @@
+ 				TagValueOutput output = TagValueOutput.createWithContext(reporter, registryAccess());
+ 				e.save(output);
+ 				ValueInput input = TagValueInput.create(reporter, registryAccess(), output.buildResult());
+-				EntityType.create(input, this, EntitySpawnReason.LOAD).ifPresent(originalEntities::add);
++				EntityType.create(input, this, new net.minecraft.world.entity.EntitySpawnRequest(EntitySpawnReason.LOAD, false)).ifPresent(this::addFreshEntity);
+ 			}
+ 		});
+ 		particles.clearEffects();
+--- a/common/src/client/java/net/createmod/ponder/impl/client/element/AnimatedSceneElementBase.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/element/AnimatedSceneElementBase.java
+@@ -10,7 +10,7 @@
+ import net.createmod.ponder.api.client.element.AnimatedSceneElement;
+ import net.createmod.ponder.api.client.level.PonderLevel;
+ import net.minecraft.client.Camera;
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.SubmitNodeCollector;
+ import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+ import net.minecraft.util.LightCoordsUtil;
+@@ -42,7 +42,7 @@
+ 	}
+ 
+ 	@Override
+-	public final void renderLayer(PonderLevel world, MultiBufferSource buffer, ChunkSectionLayer layer,
++	public final void renderLayer(PonderLevel world, RenderBufferSource buffer, ChunkSectionLayer layer,
+ 								  SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState,
+ 								  PoseStack poseStack, float pt) {
+ 		poseStack.pushPose();
+@@ -52,7 +52,7 @@
+ 	}
+ 
+ 	@Override
+-	public final void renderFirst(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue,
++	public final void renderFirst(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue,
+ 								  Camera camera, CameraRenderState cameraRenderState, PoseStack poseStack, float pt) {
+ 		poseStack.pushPose();
+ 		float currentFade = applyFade(poseStack, pt);
+@@ -61,7 +61,7 @@
+ 	}
+ 
+ 	@Override
+-	public final void renderLast(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	public final void renderLast(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 								 CameraRenderState cameraRenderState, PoseStack poseStack, float pt) {
+ 		poseStack.pushPose();
+ 		float currentFade = applyFade(poseStack, pt);
+@@ -79,16 +79,16 @@
+ 		return currentFade;
+ 	}
+ 
+-	protected void renderLayer(PonderLevel world, MultiBufferSource buffer, ChunkSectionLayer layer,
++	protected void renderLayer(PonderLevel world, RenderBufferSource buffer, ChunkSectionLayer layer,
+ 							   SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState,
+ 							   PoseStack poseStack, float fade, float pt) {
+ 	}
+ 
+-	protected void renderFirst(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	protected void renderFirst(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 							   CameraRenderState cameraRenderState, PoseStack poseStack, float fade, float pt) {
+ 	}
+ 
+-	protected void renderLast(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	protected void renderLast(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 							  CameraRenderState cameraRenderState, PoseStack poseStack, float fade, float pt) {
+ 	}
+ 
+--- a/common/src/client/java/net/createmod/ponder/impl/client/element/MinecartElementImpl.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/element/MinecartElementImpl.java
+@@ -13,7 +13,7 @@
+ import net.createmod.ponder.api.client.scene.PonderScene;
+ import net.minecraft.client.Camera;
+ import net.minecraft.client.Minecraft;
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.SubmitNodeCollector;
+ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+ import net.minecraft.client.renderer.entity.state.EntityRenderState;
+@@ -99,7 +99,7 @@
+ 	}
+ 
+ 	@Override
+-	protected void renderLast(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	protected void renderLast(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 	                          CameraRenderState cameraRenderState, PoseStack poseStack, float fade, float pt) {
+ 		EntityRenderDispatcher dispatcher = Minecraft.getInstance()
+ 			.getEntityRenderDispatcher();
+--- a/common/src/client/java/net/createmod/ponder/impl/client/element/ParrotElementImpl.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/element/ParrotElementImpl.java
+@@ -16,7 +16,7 @@
+ import net.createmod.ponder.api.client.scene.PonderScene;
+ import net.minecraft.client.Camera;
+ import net.minecraft.client.Minecraft;
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.SubmitNodeCollector;
+ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+ import net.minecraft.client.renderer.entity.state.EntityRenderState;
+@@ -118,7 +118,7 @@
+ 	}
+ 
+ 	@Override
+-	protected void renderLast(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	protected void renderLast(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 	                          CameraRenderState cameraRenderState, PoseStack poseStack, float fade, float pt) {
+ 		EntityRenderDispatcher dispatcher = Minecraft.getInstance()
+ 			.getEntityRenderDispatcher();
+--- a/common/src/client/java/net/createmod/ponder/impl/client/element/TrackedElementBase.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/element/TrackedElementBase.java
+@@ -8,7 +8,7 @@
+ import net.createmod.ponder.api.client.element.TrackedElement;
+ import net.createmod.ponder.api.client.level.PonderLevel;
+ import net.minecraft.client.Camera;
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.SubmitNodeCollector;
+ import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+ import net.minecraft.client.renderer.state.level.CameraRenderState;
+@@ -29,14 +29,14 @@
+ 	}
+ 
+ 	@Override
+-	public void renderFirst(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState, PoseStack poseStack, float pt) {
++	public void renderFirst(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState, PoseStack poseStack, float pt) {
+ 	}
+ 
+ 	@Override
+-	public void renderLayer(PonderLevel world, MultiBufferSource buffer, ChunkSectionLayer layer, SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState, PoseStack poseStack, float pt) {
++	public void renderLayer(PonderLevel world, RenderBufferSource buffer, ChunkSectionLayer layer, SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState, PoseStack poseStack, float pt) {
+ 	}
+ 
+ 	@Override
+-	public void renderLast(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState, PoseStack poseStack, float pt) {
++	public void renderLast(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState, PoseStack poseStack, float pt) {
+ 	}
+ }
+--- a/common/src/client/java/net/createmod/ponder/impl/client/element/WorldSectionElementImpl.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/element/WorldSectionElementImpl.java
+@@ -34,7 +34,7 @@
+ import net.createmod.ponder.api.client.scene.Selection;
+ import net.minecraft.client.Camera;
+ import net.minecraft.client.Minecraft;
+-import net.minecraft.client.renderer.MultiBufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource;
+ import net.minecraft.client.renderer.SubmitNodeCollector;
+ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+@@ -317,7 +317,7 @@
+ 	}
+ 
+ 	@Override
+-	protected void renderFirst(PonderLevel level, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	protected void renderFirst(PonderLevel level, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 	                           CameraRenderState cameraRenderState, PoseStack poseStack, float fade, float pt) {
+ 		int light = -1;
+ 		if (fade != 1)
+@@ -355,7 +355,9 @@
+ 			poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
+ 			BlockState state = level.getBlockState(pos);
+ 			BlockStateModel model = Minecraft.getInstance().getModelManager().getBlockStateModelSet().get(state);
+-			queue.submitBreakingBlockModel(poseStack, model, state.getSeed(pos), progress);
++			java.util.List<net.minecraft.client.renderer.block.dispatch.BlockStateModelPart> parts = new java.util.ArrayList<>();
++            model.collectParts(net.minecraft.util.RandomSource.create(state.getSeed(pos)), parts);
++            queue.submitBreakingBlockModel(poseStack, parts, progress);
+ 			poseStack.popPose();
+ 		}
+ 
+@@ -363,7 +365,7 @@
+ 	}
+ 
+ 	@Override
+-	protected void renderLayer(PonderLevel world, MultiBufferSource buffer, ChunkSectionLayer layer,
++	protected void renderLayer(PonderLevel world, RenderBufferSource buffer, ChunkSectionLayer layer,
+ 							   SubmitNodeCollector queue, Camera camera, CameraRenderState cameraRenderState,
+ 							   PoseStack poseStack, float fade, float pt) {
+ 		SuperByteBufferCache bufferCache = SuperByteBufferCache.getInstance();
+@@ -388,7 +390,7 @@
+ 	}
+ 
+ 	@Override
+-	protected void renderLast(PonderLevel world, MultiBufferSource buffer, SubmitNodeCollector queue, Camera camera,
++	protected void renderLast(PonderLevel world, RenderBufferSource buffer, SubmitNodeCollector queue, Camera camera,
+ 							  CameraRenderState cameraRenderState, PoseStack poseStack, float fade, float pt) {
+ 		redraw = false;
+ 		if (selectedBlock == null)
+--- a/common/src/client/java/net/createmod/ponder/impl/client/gui/PonderSceneRenderer.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/gui/PonderSceneRenderer.java
+@@ -16,30 +16,35 @@
+ import net.minecraft.client.Minecraft;
+ import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
+ import net.minecraft.client.renderer.GameRenderer;
+-import net.minecraft.client.renderer.MultiBufferSource.BufferSource;
++import net.createmod.catnip.api.client.render.RenderBufferSource.Immediate;
+ import net.minecraft.client.renderer.SubmitNodeStorage;
+ import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+ 
+ public class PonderSceneRenderer extends PictureInPictureRenderer<PonderSceneRenderState> {
+-	public PonderSceneRenderer(BufferSource bufferSource) {
+-		super(bufferSource);
++	private final Immediate bufferSource = new Immediate();
++
++	public PonderSceneRenderer() {
++		super();
+ 	}
+ 
+ 	@Override
+-	protected void renderToTexture(PonderSceneRenderState state, PoseStack poseStack) {
++	protected void renderToTexture(PonderSceneRenderState state, PoseStack poseStack, net.minecraft.client.renderer.SubmitNodeCollector collector) {
+ 		Minecraft mc = Minecraft.getInstance();
+ 		GameRenderer gameRenderer = mc.gameRenderer;
+-		FeatureRenderDispatcher renderDispatcher = gameRenderer.getFeatureRenderDispatcher();
++		FeatureRenderDispatcher renderDispatcher = gameRenderer.featureRenderDispatcher();
+ 
+-		SubmitNodeStorage queue = renderDispatcher.getSubmitNodeStorage();
++		SubmitNodeStorage queue = new SubmitNodeStorage();
+ 		poseStack.pushPose();
+ 		poseStack.setIdentity();
+ 
+ 		renderScene(state, poseStack, queue);
+-		renderDispatcher.renderAllFeatures();
++		renderDispatcher.renderAllFeatures(queue);
+ 
++        bufferSource.endBatch();
+ 		poseStack.popPose();
+ 	}
++
++	@Override public void close() { bufferSource.close(); super.close(); }
+ 
+ 	private void renderScene(PonderSceneRenderState state, PoseStack poseStack, SubmitNodeStorage queue) {
+ 		float partialTicks = state.partialTicks();
+--- a/common/src/client/java/net/createmod/ponder/impl/client/gui/PonderUI.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/gui/PonderUI.java
+@@ -618,7 +618,7 @@
+ 			slide,
+ 			finishingFlash,
+ 			partialTicks,
+-			Minecraft.getInstance().gameRenderer.getGameRenderState().windowRenderState
++			Minecraft.getInstance().gameRenderer.gameRenderState().windowRenderState
+ 		));
+ 
+ 		RenderSystem.restoreProjectionMatrix();
+@@ -1060,7 +1060,7 @@
+ 	public static float getPartialTicks() {
+ 		float renderPartialTicks = AnimationTickHolder.getGuiPartialTicks();
+ 
+-		if (Minecraft.getInstance().screen instanceof PonderUI ui) {
++		if (Minecraft.getInstance().gui.screen() instanceof PonderUI ui) {
+ 			if (ui.identifyMode)
+ 				return ponderPartialTicksPaused;
+ 
+--- a/common/src/client/java/net/createmod/ponder/impl/client/plugin/DebugScenes.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/plugin/DebugScenes.java
+@@ -87,7 +87,7 @@
+ 			.text("Blocks can be modified");
+ 		scene.idle(20);
+ 		scene.world().replaceBlocks(util.select().fromTo(1, 1, 3, 2, 2, 4),
+-			Blocks.WHITE_CONCRETE.defaultBlockState(), true);
++			Blocks.CONCRETE.pick(net.minecraft.world.item.DyeColor.WHITE).defaultBlockState(), true);
+ 		scene.idle(10);
+ 		scene.addKeyframe();
+ 		scene.world().replaceBlocks(util.select().position(3, 1, 1), Blocks.REDSTONE_WIRE.defaultBlockState().setValue(RedStoneWireBlock.POWER, 15), true);
+@@ -367,7 +367,7 @@
+ 
+ 		scene.world().hideSection(hiddenReplaceArea, Direction.UP);
+ 		scene.idle(20);
+-		scene.world().setBlocks(hiddenReplaceArea, Blocks.BLACK_CONCRETE.defaultBlockState(), false);
++		scene.world().setBlocks(hiddenReplaceArea, Blocks.CONCRETE.pick(net.minecraft.world.item.DyeColor.BLACK).defaultBlockState(), false);
+ 		scene.world().showSection(hiddenReplaceArea, Direction.DOWN);
+ 		scene.idle(20);
+ 		scene.overlay().showOutlineWithText(hiddenReplaceArea, 30)
+--- a/common/src/client/java/net/createmod/ponder/impl/client/scene/PonderWorldParticles.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/scene/PonderWorldParticles.java
+@@ -30,11 +30,8 @@
+ import net.minecraft.client.particle.ParticleGroup;
+ import net.minecraft.client.particle.ParticleRenderType;
+ import net.minecraft.client.renderer.SubmitNodeCollection;
+-import net.minecraft.client.renderer.SubmitNodeCollector.ParticleGroupRenderer;
+ import net.minecraft.client.renderer.SubmitNodeStorage;
+ import net.minecraft.client.renderer.culling.Frustum;
+-import net.minecraft.client.renderer.feature.ParticleFeatureRenderer;
+-import net.minecraft.client.renderer.feature.ParticleFeatureRenderer.ParticleBufferCache;
+ import net.minecraft.client.renderer.state.level.CameraRenderState;
+ import net.minecraft.client.renderer.state.level.ParticlesRenderState;
+ import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
+@@ -47,7 +44,6 @@
+ 	private final Queue<Particle> particlesToAdd = Queues.newArrayDeque();
+ 	private final Object2IntOpenHashMap<ParticleLimit> trackedParticleCounts = new Object2IntOpenHashMap<>();
+ 	private final ParticleEngine particleEngine = Minecraft.getInstance().particleEngine;
+-	private final ParticleFeatureRenderer.ParticleBufferCache particleBufferCache = new ParticleFeatureRenderer.ParticleBufferCache();
+ 
+ 	PonderLevel world;
+ 
+@@ -91,58 +87,17 @@
+ 			}
+ 		}
+ 
+-		particleState.submit(queue, cameraRenderState);
+-
+-		for (SubmitNodeCollection collection : queue.getSubmitsPerOrder().values()) {
+-			this.render(collection, false);
+-			this.render(collection, true);
+-		}
++		// Submit and execute before resetting the mutable particle state and
++        // before popping the Ponder scene's model-view transform.
++        SubmitNodeStorage particleQueue = new SubmitNodeStorage();
++        particleState.submit(particleQueue, cameraRenderState);
++        net.createmod.catnip.api.client.render.IsolatedFeatureRenderer.render(particleQueue);
+ 
+ 		particleState.reset();
+ 
+ 		stack.popMatrix();
+ 	}
+ 
+-	private void render(SubmitNodeCollection nodeCollection, boolean translucent) {
+-		List<ParticleGroupRenderer> renderers = nodeCollection.getParticleGroupRenderers();
+-		if (renderers.isEmpty())
+-			return;
+-
+-		GpuDevice device = RenderSystem.getDevice();
+-		Minecraft minecraft = Minecraft.getInstance();
+-		TextureManager textureManager = minecraft.getTextureManager();
+-		RenderTarget mainTarget = minecraft.getMainRenderTarget();
+-		RenderTarget particleTarget = minecraft.levelRenderer.getParticlesTarget();
+-		GpuTextureView overrideColorView = RenderSystem.outputColorTextureOverride;
+-		GpuTextureView overrideDepthView = RenderSystem.outputDepthTextureOverride;
+-
+-		for (ParticleGroupRenderer renderer : renderers) {
+-			if (renderer.isEmpty())
+-				continue;
+-
+-			ParticleBufferCache buffer = new ParticleBufferCache();
+-			QuadParticleRenderState.PreparedBuffers prepared = renderer.prepare(buffer, translucent);
+-			if (prepared == null)
+-				continue;
+-
+-			boolean useParticleTarget = particleTarget != null && translucent;
+-			GpuTextureView colorTextureView = overrideColorView != null ? overrideColorView : useParticleTarget ? particleTarget.getColorTextureView() : mainTarget.getColorTextureView();
+-			GpuTextureView depthTextureView = overrideDepthView != null ? overrideDepthView : useParticleTarget ? particleTarget.getDepthTextureView() : mainTarget.getDepthTextureView();
+-
+-			try (RenderPass renderPass = createRenderPass(device, colorTextureView, depthTextureView, translucent)) {
+-				this.prepareRenderPass(renderPass);
+-				renderer.render(prepared, buffer, renderPass, textureManager);
+-			}
+-		}
+-	}
+-
+-	private void prepareRenderPass(RenderPass renderPass) {
+-		renderPass.setUniform("Projection", RenderSystem.getProjectionMatrixBuffer());
+-		renderPass.setUniform("Fog", RenderSystem.getShaderFog());
+-		renderPass.bindTexture(
+-			"Sampler2", Minecraft.getInstance().gameRenderer.lightmap(), RenderSystem.getSamplerCache().getClampToEdge(FilterMode.LINEAR)
+-		);
+-	}
+ 
+ 	protected void updateCount(ParticleLimit limit, int count) {
+ 		this.trackedParticleCounts.addTo(limit, count);
+@@ -158,12 +113,6 @@
+ 		this.trackedParticleCounts.clear();
+ 	}
+ 
+-	private static RenderPass createRenderPass(GpuDevice device, GpuTextureView color, GpuTextureView depth, boolean translucent) {
+-		return device.createCommandEncoder().createRenderPass(
+-			() -> "Ponder Particles - " + (translucent ? "Translucent" : "Solid"), color, OptionalInt.empty(), depth, OptionalDouble.empty()
+-		);
+-	}
+-
+ 	public static class ParticlesFrustum extends Frustum {
+ 		public static final Frustum INSTANCE = new ParticlesFrustum();
+ 
+--- a/common/src/client/java/net/createmod/ponder/impl/client/tooltip/ContainerScreenHoveredItemProvider.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/tooltip/ContainerScreenHoveredItemProvider.java
+@@ -12,7 +12,7 @@
+ 
+ 	@Override
+ 	public Item determineHoveredItem() {
+-		if (!(Minecraft.getInstance().screen instanceof AbstractContainerScreenAccessor screen))
++		if (!(Minecraft.getInstance().gui.screen() instanceof AbstractContainerScreenAccessor screen))
+ 			return Items.AIR;
+ 
+ 		Slot slot = screen.getHoveredSlot();
+--- a/common/src/client/java/net/createmod/ponder/impl/client/tooltip/PonderTooltipHandler.java
++++ b/common/src/client/java/net/createmod/ponder/impl/client/tooltip/PonderTooltipHandler.java
+@@ -73,7 +73,7 @@
+ 	}
+ 
+ 	private static void openPonder(Item item) {
+-		Screen currentScreen = Minecraft.getInstance().screen;
++		Screen currentScreen = Minecraft.getInstance().gui.screen();
+ 		if (currentScreen instanceof NavigatableSimiScreen simiScreen) {
+ 			simiScreen.centerScalingOnMouse();
+ 		}
+@@ -139,7 +139,7 @@
+ 	}
+ 
+ 	private static Item determineHoveredItem() {
+-		if (Minecraft.getInstance().screen == null)
++		if (Minecraft.getInstance().gui.screen() == null)
+ 			return Items.AIR;
+ 
+ 		for (HoveredItemProvider provider : hoveredItemProviders) {
+@@ -170,7 +170,7 @@
+ 	// when the hovered block is the current subject, we don't want to do this, since that would just
+ 	// open the same scene again. instead, replace it with a 'Subject of this scene' message.
+ 	private static boolean isCurrentPonderSubject(Item item) {
+-		if (Minecraft.getInstance().screen instanceof PonderUI ponder) {
++		if (Minecraft.getInstance().gui.screen() instanceof PonderUI ponder) {
+ 			return ponder.getSubject().getItem() == item;
+ 		}
+ 
+--- a/common/src/client/resources/ponder-common-client.mixins.json
++++ b/common/src/client/resources/ponder-common-client.mixins.json
+@@ -3,15 +3,15 @@
+   "minVersion": "0.8",
+   "package": "net.createmod.ponder.impl.client.mixin",
+   "compatibilityLevel": "JAVA_25",
+-  "mixins": [
+-    "AbstractContainerScreenAccessor",
+-    "GuiGraphicsExtractorAccessor",
+-    "TooltipRenderUtilMixin"
+-  ],
+   "injectors": {
+     "defaultRequire": 1
+   },
+   "overwrites": {
+     "requireAnnotations": true
+-  }
++  },
++  "client": [
++    "AbstractContainerScreenAccessor",
++    "GuiGraphicsExtractorAccessor",
++    "TooltipRenderUtilMixin"
++  ]
+ }
+--- a/fabric/src/main/resources/fabric.mod.json
++++ b/fabric/src/main/resources/fabric.mod.json
+@@ -32,6 +32,7 @@
+   "depends": {
+     "fabricloader": ">=${fabric_loader_version}",
+     "fabric-api": ">=${fabric_api_version}",
+-    "minecraft": "${minecraft_version}"
++    "minecraft": "${minecraft_version}",
++    "catnip": ">=1.0.0"
+   }
+ }

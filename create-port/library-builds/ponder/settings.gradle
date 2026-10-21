@@ -1,0 +1,5 @@
+pluginManagement { repositories { maven { url = 'https://maven.fabricmc.net/' }; gradlePluginPortal() } }
+rootProject.name = 'ponder-26.2-port'
+include 'catnip', 'ponder'
+project(':catnip').projectDir = file('catnip')
+project(':ponder').projectDir = file('fabric')

@@ -1,0 +1,108 @@
+{
+  "dateUtc": "2026-10-21T23:52:42.130537+00:00",
+  "status": "LIBRARY_SCENARIOS_PASSED_CREATE_NOT_PLAYABLE",
+  "minecraft": "26.2",
+  "fabricLoader": "0.19.5",
+  "fabricApi": "0.161.0+26.2",
+  "java": 25,
+  "artifacts": [
+    {
+      "id": "flywheel",
+      "version": "1.0.6+mc26.2.createport.1",
+      "bytes": 877614,
+      "sha256": "586ff66905ffbc0c8ff99e51d045d806caa5d0c0dc0ca1aec39260ce5860f0b5",
+      "licenseEntries": [
+        "LICENSE.md"
+      ],
+      "published": false
+    },
+    {
+      "id": "catnip",
+      "version": "1.0.0+mc26.2.createport.1",
+      "bytes": 614785,
+      "sha256": "5142f446bd591f2793594f421a8836ef8d16ca52020741a5705a19e43f2b042f",
+      "licenseEntries": [
+        "LICENSE"
+      ],
+      "published": false
+    },
+    {
+      "id": "ponder",
+      "version": "1.0.0+mc26.2.createport.1",
+      "bytes": 337948,
+      "sha256": "aab4c128ecb2a13696823433bfde840c8adaf2d5824843bf542b58f9a520c0a4",
+      "licenseEntries": [
+        "LICENSE"
+      ],
+      "published": false
+    }
+  ],
+  "sourceManifest": "../library-sources.json",
+  "sourceChangedFileCounts": {
+    "flywheel": 36,
+    "ponder": 56
+  },
+  "reproduction": {
+    "freshSourceDirectories": true,
+    "script": "tools/prepare_render_libraries.py",
+    "existingSourceHashVerificationPassed": true,
+    "flywheelBuildLogSha256": "4ca705f600ee15ca45a278dcde6b9590e9fb9079c0a259bd3e22b2e91ec3a091",
+    "ponderBuildLogSha256": "d94faee1f5bc887da86cd4c5c03bce6d6c4c8db323759a2b331ff495051b9ef4"
+  },
+  "validation": {
+    "pythonSafetyTests": 5,
+    "serverGameTests": {
+      "passed": 6,
+      "own": 5,
+      "fabricControl": 1,
+      "logSha256": "417e1c8847dc4a1e380fb24bbb40bf7d5b0b6a94fb796941b7412f8e7fd2736f",
+      "xmlSha256": "c30c51cc01a73f87269f3d38286716add822dbecf7098ef0872ec8016bfcd337"
+    },
+    "client": {
+      "scenarios": 1,
+      "flywheelBackends": [
+        "indirect",
+        "instancing"
+      ],
+      "opaqueAndTransparentInstances": true,
+      "createdAnimatedRebuiltDeleted": true,
+      "realItemWorldOverlay": true,
+      "ponderScenes": [
+        "coordinates",
+        "fluids",
+        "particles",
+        "parrot"
+      ],
+      "configSavedToToml": true,
+      "logSha256": "d774d07957d3c870c3bbd2cb93b3f5500437b5191e542b364747983e50df8d70",
+      "audioChecked": false,
+      "renderer": "OpenGL 4.5, Mesa llvmpipe (software)"
+    },
+    "captureChecks": {
+      "status": "PASSED",
+      "fixedFixture": "1280x720",
+      "pixelCounts": {
+        "indirectGoldPixels": 1486,
+        "instancingGoldPixels": 2724,
+        "ponderLavaPixels": 65
+      },
+      "scope": "Library rendering only, not Create gameplay, performance or exhaustive image equivalence"
+    }
+  },
+  "captures": {
+    "flywheel-indirect-26.2.png": "2eb6a9ab518a3ba11b80b384103cce8546ea119e405ec7f4f4bc0bfa08d68603",
+    "flywheel-instancing-26.2.png": "af4b41e7ee9d5cc6c91208e82f187aee936f51f7269f2f6b8d5877fe58153ff1",
+    "catnip-item-overlay.png": "e5d9256c7eea4ba9fe3b9d9531488c30be921a5c26bd54afd5f9b011343729ff",
+    "ponder-scene-1.png": "097c8434f6286ea393a2f8dc5a608a079b2feedce7698a975b5fb3bf141c2f07",
+    "ponder-scene-3.png": "ea8669401a3c6ba1e058d266c0497884a33dca91f06312b9f33aab3af118e608",
+    "ponder-scene-5.png": "80a11755c199c478df0e60975badbb1897abbc3d83c1a9dc742f356805725ce5",
+    "ponder-scene-7.png": "0bf1d46cf8f163100d718eba993fa079b5e7822107d809f4ed4c0b2151be1721"
+  },
+  "limitations": [
+    "No full Create startup or machine/train/contraption gameplay test.",
+    "Registrate, Porting Lib, 6.0.10 merge and Create game API migration remain.",
+    "Library scenarios are representative, not exhaustive certification.",
+    "No Windows/RTX 4060, physical microphone/audio, shader/Sodium/Iris or performance validation.",
+    "Built-in debug Ponder scenes may display localization keys."
+  ]
+}

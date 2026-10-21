@@ -1,0 +1,36 @@
+plugins { id 'net.fabricmc.fabric-loom' version '1.18.4' }
+version = '1.0.6+mc26.2.createport.1'
+base.archivesName = 'flywheel-fabric'
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.caffeinemc.net/releases' }
+    maven { url = 'https://api.modrinth.com/maven' }
+}
+dependencies {
+    minecraft 'com.mojang:minecraft:26.2'
+    implementation 'net.fabricmc:fabric-loader:0.19.5'
+    implementation 'net.fabricmc.fabric-api:fabric-api:0.161.0+26.2'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'net.caffeinemc:sodium-fabric-api:0.9.1+mc26.1.2'
+    compileOnly 'maven.modrinth:iris:1.11.2+26.1-fabric'
+}
+sourceSets.main.java.srcDirs = ['common','fabric'].collectMany { p -> ['api','lib','backend','main'].collect { s -> "${p}/src/${s}/java" } }
+sourceSets.main.resources.srcDirs = ['common','fabric'].collectMany { p -> ['api','lib','backend','main'].collect { s -> "${p}/src/${s}/resources" } }
+loom { accessWidenerPath = file('fabric/src/main/resources/flywheel.accesswidener') }
+java { sourceCompatibility = JavaVersion.VERSION_25; targetCompatibility = JavaVersion.VERSION_25 }
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-proc:none','-Xmaxerrs','2000']
+}
+def modVersion = version.toString()
+processResources {
+    filesMatching('fabric.mod.json') {
+        expand(mod_id:'flywheel',mod_name:'Flywheel',mod_version:modVersion,
+          mod_description:'Flywheel source port to Fabric 26.2',mod_authors_json:'Jozufozu, PepperCode1',
+          mod_homepage:'https://github.com/Engine-Room/Flywheel',mod_sources:'https://github.com/Engine-Room/Flywheel',
+          mod_issues:'https://github.com/Engine-Room/Flywheel/issues',mod_license:'MIT',minecraft_version:'26.2',
+          fabric_loader_version:'0.19.5',fabric_api_version:'0.161.0+26.2',java_version:'25')
+    }
+}
+jar { from('LICENSE.md') }

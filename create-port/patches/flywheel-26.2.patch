@@ -1,0 +1,972 @@
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/LayoutAttributes.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/LayoutAttributes.java
+@@ -80,31 +80,31 @@
+ 		}
+ 	}
+ 
+-	private static VertexFormatElement.Type toGlType(IntegerRepr repr) {
++	private static dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType toGlType(IntegerRepr repr) {
+ 		return switch (repr) {
+-			case BYTE -> VertexFormatElement.Type.BYTE;
+-			case SHORT -> VertexFormatElement.Type.SHORT;
+-			case INT -> VertexFormatElement.Type.INT;
++			case BYTE -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.BYTE;
++			case SHORT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.SHORT;
++			case INT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.INT;
+ 		};
+ 	}
+ 
+-	private static VertexFormatElement.Type toGlType(UnsignedIntegerRepr repr) {
++	private static dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType toGlType(UnsignedIntegerRepr repr) {
+ 		return switch (repr) {
+-			case UNSIGNED_BYTE -> VertexFormatElement.Type.UBYTE;
+-			case UNSIGNED_SHORT -> VertexFormatElement.Type.USHORT;
+-			case UNSIGNED_INT -> VertexFormatElement.Type.UINT;
++			case UNSIGNED_BYTE -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.UBYTE;
++			case UNSIGNED_SHORT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.USHORT;
++			case UNSIGNED_INT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.UINT;
+ 		};
+ 	}
+ 
+-	private static VertexFormatElement.Type toGlType(FloatRepr repr) {
++	private static dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType toGlType(FloatRepr repr) {
+ 		return switch (repr) {
+-			case BYTE, NORMALIZED_BYTE -> VertexFormatElement.Type.BYTE;
+-			case UNSIGNED_BYTE, NORMALIZED_UNSIGNED_BYTE -> VertexFormatElement.Type.UBYTE;
+-			case SHORT, NORMALIZED_SHORT -> VertexFormatElement.Type.SHORT;
+-			case UNSIGNED_SHORT, NORMALIZED_UNSIGNED_SHORT -> VertexFormatElement.Type.USHORT;
+-			case INT, NORMALIZED_INT -> VertexFormatElement.Type.INT;
+-			case UNSIGNED_INT, NORMALIZED_UNSIGNED_INT -> VertexFormatElement.Type.UINT;
+-			case FLOAT -> VertexFormatElement.Type.FLOAT;
++			case BYTE, NORMALIZED_BYTE -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.BYTE;
++			case UNSIGNED_BYTE, NORMALIZED_UNSIGNED_BYTE -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.UBYTE;
++			case SHORT, NORMALIZED_SHORT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.SHORT;
++			case UNSIGNED_SHORT, NORMALIZED_UNSIGNED_SHORT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.USHORT;
++			case INT, NORMALIZED_INT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.INT;
++			case UNSIGNED_INT, NORMALIZED_UNSIGNED_INT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.UINT;
++			case FLOAT -> dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType.FLOAT;
+ 		};
+ 	}
+ 
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/NoiseTextures.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/NoiseTextures.java
+@@ -34,7 +34,7 @@
+ 
+ 		try (var is = optional.get()
+ 				.open()) {
+-			var image = NativeImage.read(NativeImage.Format.LUMINANCE, is);
++			var image = NativeImage.read(NativeImage.Format.RGBA, is);
+ 
+ 			// TODO 1.21.11: maybe we should not use DynamicTexture here and do gen/upload manually
+ 			BLUE_NOISE = new DynamicTexture(() -> "Flywheel Blue Noise", image);
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/MaterialRenderState.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/MaterialRenderState.java
+@@ -73,7 +73,7 @@
+ 
+ 	private static void setupPolygonOffset(boolean polygonOffset) {
+ 		if (polygonOffset) {
+-			GlStateManager._polygonOffset(-1.0F, -10.0F);
++			GlStateManager._polygonOffset(1.0F, 10.0F);
+ 			GlStateManager._enablePolygonOffset();
+ 		} else {
+ 			GlStateManager._polygonOffset(0.0F, 0.0F);
+@@ -92,27 +92,27 @@
+ 		}
+ 		case LESS -> {
+ 			GlStateManager._enableDepthTest();
++			GlStateManager._depthFunc(GlConst.GL_GREATER);
++		}
++		case EQUAL -> {
++			GlStateManager._enableDepthTest();
++			GlStateManager._depthFunc(GlConst.GL_EQUAL);
++		}
++		case LEQUAL -> {
++			GlStateManager._enableDepthTest();
++			GlStateManager._depthFunc(GlConst.GL_GEQUAL);
++		}
++		case GREATER -> {
++			GlStateManager._enableDepthTest();
+ 			GlStateManager._depthFunc(GlConst.GL_LESS);
+ 		}
+-		case EQUAL -> {
+-			GlStateManager._enableDepthTest();
+-			GlStateManager._depthFunc(GlConst.GL_EQUAL);
+-		}
+-		case LEQUAL -> {
++		case NOTEQUAL -> {
++			GlStateManager._enableDepthTest();
++			GlStateManager._depthFunc(GL11.GL_NOTEQUAL);
++		}
++		case GEQUAL -> {
+ 			GlStateManager._enableDepthTest();
+ 			GlStateManager._depthFunc(GlConst.GL_LEQUAL);
+-		}
+-		case GREATER -> {
+-			GlStateManager._enableDepthTest();
+-			GlStateManager._depthFunc(GlConst.GL_GREATER);
+-		}
+-		case NOTEQUAL -> {
+-			GlStateManager._enableDepthTest();
+-			GlStateManager._depthFunc(GL11.GL_NOTEQUAL);
+-		}
+-		case GEQUAL -> {
+-			GlStateManager._enableDepthTest();
+-			GlStateManager._depthFunc(GlConst.GL_GEQUAL);
+ 		}
+ 		case ALWAYS -> {
+ 			GlStateManager._enableDepthTest();
+@@ -124,26 +124,26 @@
+ 	private static void setupTransparency(Transparency transparency) {
+ 		switch (transparency) {
+ 		case OPAQUE -> {
+-			GlStateManager._disableBlend();
++			dev.engine_room.flywheel.backend.gl.BlendState.disable();
+ 		}
+ 		case ADDITIVE -> {
+-			GlStateManager._enableBlend();
++			dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 			GlStateManager._blendFuncSeparate(GlConst.GL_ONE, GlConst.GL_ONE, GlConst.GL_ONE, GlConst.GL_ONE);
+ 		}
+ 		case LIGHTNING -> {
+-			GlStateManager._enableBlend();
++			dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 			GlStateManager._blendFuncSeparate(GlConst.GL_SRC_ALPHA, GlConst.GL_ONE, GlConst.GL_SRC_ALPHA, GlConst.GL_ONE);
+ 		}
+ 		case GLINT -> {
+-			GlStateManager._enableBlend();
++			dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 			GlStateManager._blendFuncSeparate(GlConst.GL_SRC_COLOR, GlConst.GL_ONE, GlConst.GL_ZERO, GlConst.GL_ONE);
+ 		}
+ 		case CRUMBLING -> {
+-			GlStateManager._enableBlend();
++			dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 			GlStateManager._blendFuncSeparate(GlConst.GL_DST_COLOR, GlConst.GL_SRC_COLOR, GlConst.GL_ONE, GlConst.GL_ZERO);
+ 		}
+ 		case TRANSLUCENT -> {
+-			GlStateManager._enableBlend();
++			dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 			GlStateManager._blendFuncSeparate(GlConst.GL_SRC_ALPHA, GlConst.GL_ONE_MINUS_SRC_ALPHA, GlConst.GL_ONE, GlConst.GL_ONE_MINUS_SRC_ALPHA);
+ 		}
+ 		}
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/MeshPool.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/MeshPool.java
+@@ -183,9 +183,9 @@
+ 
+ 		public void draw(int instanceCount) {
+ 			if (instanceCount > 1) {
+-				GL32.glDrawElementsInstancedBaseVertex(GlConst.toGl(VertexFormat.Mode.TRIANGLES), mesh.indexCount(), GlConst.GL_UNSIGNED_INT, firstIndexByteOffset(), instanceCount, baseVertex);
++				GL32.glDrawElementsInstancedBaseVertex(GlConst.toGl(com.mojang.blaze3d.PrimitiveTopology.TRIANGLES), mesh.indexCount(), GlConst.GL_UNSIGNED_INT, firstIndexByteOffset(), instanceCount, baseVertex);
+ 			} else {
+-				GL32.glDrawElementsBaseVertex(GlConst.toGl(VertexFormat.Mode.TRIANGLES), mesh.indexCount(), GlConst.GL_UNSIGNED_INT, firstIndexByteOffset(), baseVertex);
++				GL32.glDrawElementsBaseVertex(GlConst.toGl(com.mojang.blaze3d.PrimitiveTopology.TRIANGLES), mesh.indexCount(), GlConst.GL_UNSIGNED_INT, firstIndexByteOffset(), baseVertex);
+ 			}
+ 		}
+ 
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/TextureBinder.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/TextureBinder.java
+@@ -61,9 +61,10 @@
+ 
+ 	public static void bindRenderTarget(RenderTarget target) {
+ 		GlTexture colorTexture = (GlTexture) target.getColorTexture();
+-		int i = colorTexture.getFbo(
++		int i = GlUtil.getGlDevice().frameBufferCache().getFbo(
+ 				GlUtil.getGlDevice().directStateAccess(),
+-				target.getDepthTexture()
++				java.util.List.of(colorTexture),
++				(com.mojang.blaze3d.opengl.GlTexture) target.getDepthTexture()
+ 		);
+ 		GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, i);
+ 	}
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/indirect/DepthPyramid.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/indirect/DepthPyramid.java
+@@ -27,7 +27,7 @@
+ 
+ 	public void generate() {
+ 		var mainRenderTarget = Minecraft.getInstance()
+-				.getMainRenderTarget();
++				.gameRenderer.mainRenderTarget();
+ 
+ 		int width = mip0Size(mainRenderTarget.width);
+ 		int height = mip0Size(mainRenderTarget.height);
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/indirect/IndirectDrawManager.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/indirect/IndirectDrawManager.java
+@@ -151,7 +151,7 @@
+ 		lightBuffers.bind();
+ 		matrixBuffer.bind();
+ 		Uniforms.bindAll();
+-		TextureBinder.bindRenderTarget(Minecraft.getInstance().getMainRenderTarget());
++		TextureBinder.bindRenderTarget(Minecraft.getInstance().gameRenderer.mainRenderTarget());
+ 
+ 		for (var group : cullingGroups.values()) {
+ 			group.submitSolid();
+@@ -245,7 +245,7 @@
+ 		// Set up the crumbling program buffers. Nothing changes here between draws.
+ 		GlBufferType.DRAW_INDIRECT_BUFFER.bind(crumblingDrawBuffer.handle());
+ 		GL30.glBindBufferRange(GL43.GL_SHADER_STORAGE_BUFFER, BufferBindings.DRAW, crumblingDrawBuffer.handle(), 0, IndirectBuffers.DRAW_COMMAND_STRIDE);
+-		TextureBinder.bindRenderTarget(Minecraft.getInstance().getMainRenderTarget());
++		TextureBinder.bindRenderTarget(Minecraft.getInstance().gameRenderer.mainRenderTarget());
+ 
+ 		for (var groupEntry : byType.entrySet()) {
+ 			var byProgress = groupEntry.getValue();
+@@ -292,7 +292,7 @@
+ 	@Override
+ 	public void triggerFallback() {
+ 		IndirectPrograms.kill();
+-		Minecraft.getInstance().levelRenderer.allChanged();
++		Minecraft.getInstance().levelExtractor.allChanged();
+ 	}
+ 
+ 	@Override
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/indirect/OitFramebuffer.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/indirect/OitFramebuffer.java
+@@ -50,14 +50,14 @@
+ 	public void prepare() {
+ 		RenderTarget renderTarget;
+ 
+-		if (Minecraft.useShaderTransparency()) {
+-			renderTarget = Minecraft.getInstance().levelRenderer.getItemEntityTarget();
++		if (Minecraft.getInstance().options.improvedTransparency().get()) {
++			renderTarget = Minecraft.getInstance().levelRenderer.itemEntityTarget();
+ 
+ 			renderTarget.copyDepthFrom(Minecraft.getInstance()
+-					.getMainRenderTarget());
++					.gameRenderer.mainRenderTarget());
+ 		} else {
+ 			renderTarget = Minecraft.getInstance()
+-					.getMainRenderTarget();
++					.gameRenderer.mainRenderTarget();
+ 		}
+ 
+ 		maybeResizeFBO(renderTarget.width, renderTarget.height);
+@@ -85,11 +85,11 @@
+ 		// No depth writes, but we'll still use the depth test.
+ 		GlStateManager._depthMask(false);
+ 		GlStateManager._colorMask(ColorTargetState.WRITE_ALL);
+-		GlStateManager._enableBlend();
++		dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 		GlStateManager._blendFuncSeparate(GlConst.GL_ONE, GlConst.GL_ONE, GlConst.GL_ONE, GlConst.GL_ONE);
+-		GL32.glBlendEquation(GlConst.GL_MAX);
+-
+-		float far = Minecraft.getInstance().gameRenderer.getGameRenderState().levelRenderState.cameraRenderState.depthFar;
++		GlStateManager._blendEquationSeparate(GlConst.GL_MAX, GlConst.GL_MAX);
++
++		float far = Minecraft.getInstance().gameRenderer.gameRenderState().levelRenderState.cameraRenderState.depthFar;
+ 
+ 		if (GlCompat.SUPPORTS_DSA) {
+ 			GL46.glNamedFramebufferDrawBuffers(fbo, DEPTH_RANGE_DRAW_BUFFERS);
+@@ -108,9 +108,9 @@
+ 		// No depth writes, but we'll still use the depth test
+ 		GlStateManager._depthMask(false);
+ 		GlStateManager._colorMask(ColorTargetState.WRITE_ALL);
+-		GlStateManager._enableBlend();
++		dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 		GlStateManager._blendFuncSeparate(GlConst.GL_ONE, GlConst.GL_ONE, GlConst.GL_ONE, GlConst.GL_ONE);
+-		GL32.glBlendEquation(GlConst.GL_FUNC_ADD);
++		GlStateManager._blendEquationSeparate(GlConst.GL_FUNC_ADD, GlConst.GL_FUNC_ADD);
+ 
+ 		if (GlCompat.SUPPORTS_DSA) {
+ 			GL46.glNamedFramebufferDrawBuffers(fbo, RENDER_TRANSMITTANCE_DRAW_BUFFERS);
+@@ -134,7 +134,7 @@
+ 		// Only write to depth, not color.
+ 		GlStateManager._depthMask(true);
+ 		GlStateManager._colorMask(ColorTargetState.WRITE_NONE);
+-		GlStateManager._disableBlend();
++		dev.engine_room.flywheel.backend.gl.BlendState.disable();
+ 		GlStateManager._depthFunc(GlConst.GL_ALWAYS);
+ 
+ 		if (GlCompat.SUPPORTS_DSA) {
+@@ -156,9 +156,9 @@
+ 		// No depth writes, but we'll still use the depth test
+ 		GlStateManager._depthMask(false);
+ 		GlStateManager._colorMask(ColorTargetState.WRITE_ALL);
+-		GlStateManager._enableBlend();
++		dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 		GlStateManager._blendFuncSeparate(GlConst.GL_ONE, GlConst.GL_ONE, GlConst.GL_ONE, GlConst.GL_ONE);
+-		GL32.glBlendEquation(GlConst.GL_FUNC_ADD);
++		GlStateManager._blendEquationSeparate(GlConst.GL_FUNC_ADD, GlConst.GL_FUNC_ADD);
+ 
+ 		if (GlCompat.SUPPORTS_DSA) {
+ 			GL46.glNamedFramebufferDrawBuffers(fbo, ACCUMULATE_DRAW_BUFFERS);
+@@ -175,10 +175,10 @@
+ 	 * Composite the accumulated luminance onto the main framebuffer.
+ 	 */
+ 	public void composite() {
+-		if (Minecraft.useShaderTransparency()) {
+-			bindRenderTarget(Minecraft.getInstance().levelRenderer.getItemEntityTarget());
+-		} else {
+-			bindRenderTarget(Minecraft.getInstance().getMainRenderTarget());
++		if (Minecraft.getInstance().options.improvedTransparency().get()) {
++			bindRenderTarget(Minecraft.getInstance().levelRenderer.itemEntityTarget());
++		} else {
++			bindRenderTarget(Minecraft.getInstance().gameRenderer.mainRenderTarget());
+ 		}
+ 
+ 		// The composite shader writes out the closest depth to gl_FragDepth.
+@@ -187,7 +187,7 @@
+ 		// If Neo gets wavelet OIT we can use their hooks to be correct with everything.
+ 		GlStateManager._depthMask(true);
+ 		GlStateManager._colorMask(ColorTargetState.WRITE_ALL);
+-		GlStateManager._enableBlend();
++		dev.engine_room.flywheel.backend.gl.BlendState.enable();
+ 
+ 		// We rely on the blend func to achieve:
+ 		// final color = (1 - transmittance_total) * sum(color_f * alpha_f * transmittance_f) / sum(alpha_f * transmittance_f)
+@@ -196,7 +196,7 @@
+ 		// Though note that the alpha value we emit in the fragment shader is actually (1. - transmittance_total).
+ 		// The extra inversion step is so we can have a sane alpha value written out for the fabulous blit shader to consume.
+ 		GlStateManager._blendFuncSeparate(GlConst.GL_SRC_ALPHA, GlConst.GL_ONE_MINUS_SRC_ALPHA, GlConst.GL_ONE, GlConst.GL_ONE_MINUS_SRC_ALPHA);
+-		GL32.glBlendEquation(GlConst.GL_FUNC_ADD);
++		GlStateManager._blendEquationSeparate(GlConst.GL_FUNC_ADD, GlConst.GL_FUNC_ADD);
+ 		GlStateManager._depthFunc(GlConst.GL_ALWAYS);
+ 
+ 		GlTextureUnit.T0.makeActive();
+@@ -207,14 +207,15 @@
+ 
+ 		drawFullscreenQuad();
+ 
+-		bindRenderTarget(Minecraft.getInstance().getMainRenderTarget());
++		bindRenderTarget(Minecraft.getInstance().gameRenderer.mainRenderTarget());
+ 	}
+ 
+ 	private static void bindRenderTarget(RenderTarget target) {
+ 		GlTexture colorTexture = (GlTexture) target.getColorTexture();
+-		int i = colorTexture.getFbo(
++		int i = GlUtil.getGlDevice().frameBufferCache().getFbo(
+ 				GlUtil.getGlDevice().directStateAccess(),
+-				target.getDepthTexture()
++				java.util.List.of(colorTexture),
++				(com.mojang.blaze3d.opengl.GlTexture) target.getDepthTexture()
+ 		);
+ 		GlStateManager._glBindFramebuffer(GlConst.GL_FRAMEBUFFER, i);
+ 		GlStateManager._viewport(0, 0, colorTexture.getWidth(0), colorTexture.getHeight(0));
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/instancing/InstancedDrawManager.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/instancing/InstancedDrawManager.java
+@@ -123,7 +123,7 @@
+ 		TextureBinder.bindLightAndOverlay();
+ 		light.bind();
+ 
+-		TextureBinder.bindRenderTarget(Minecraft.getInstance().getMainRenderTarget());
++		TextureBinder.bindRenderTarget(Minecraft.getInstance().gameRenderer.mainRenderTarget());
+ 
+ 
+ 		submitDraws();
+@@ -269,7 +269,7 @@
+ 		vao.bindForDraw();
+ 
+ 		TextureBinder.bindLightAndOverlay();
+-		TextureBinder.bindRenderTarget(Minecraft.getInstance().getMainRenderTarget());
++		TextureBinder.bindRenderTarget(Minecraft.getInstance().gameRenderer.mainRenderTarget());
+ 
+ 		for (var groupEntry : byType.entrySet()) {
+ 			var byProgress = groupEntry.getValue();
+@@ -306,7 +306,7 @@
+ 	@Override
+ 	public void triggerFallback() {
+ 		InstancingPrograms.kill();
+-		Minecraft.getInstance().levelRenderer.allChanged();
++		Minecraft.getInstance().levelExtractor.allChanged();
+ 	}
+ 
+ 	@Override
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/uniform/FrameUniforms.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/uniform/FrameUniforms.java
+@@ -10,7 +10,6 @@
+ import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+ import dev.engine_room.flywheel.backend.engine.indirect.DepthPyramid;
+ import dev.engine_room.flywheel.backend.extension.CameraRenderStateExtension;
+-import dev.engine_room.flywheel.backend.mixin.LevelRendererAccessor;
+ import net.minecraft.client.Camera;
+ import net.minecraft.client.Minecraft;
+ import net.minecraft.client.renderer.state.level.CameraRenderState;
+@@ -163,7 +162,7 @@
+ 	}
+ 
+ 	private static long writeTime(long ptr, RenderContext context) {
+-		int ticks = ((LevelRendererAccessor) context.renderer()).flywheel$getTicks();
++		int ticks = (int) context.levelRenderState().gameTime;
+ 		float partialTick = context.partialTick();
+ 		float renderTicks = ticks + partialTick;
+ 		float renderSeconds = renderTicks / 20f;
+@@ -194,7 +193,7 @@
+ 
+ 	private static long writeCullData(long ptr, CameraRenderState cameraRenderState) {
+ 		var mc = Minecraft.getInstance();
+-		var mainRenderTarget = mc.getMainRenderTarget();
++		var mainRenderTarget = mc.gameRenderer.mainRenderTarget();
+ 
+ 		int pyramidWidth = DepthPyramid.mip0Size(mainRenderTarget.width);
+ 		int pyramidHeight = DepthPyramid.mip0Size(mainRenderTarget.height);
+@@ -280,10 +279,11 @@
+ 		pyZ *= invl;
+ 		pyW *= invl;
+ 
+-		nzX = m.m03() + m.m02();
+-		nzY = m.m13() + m.m12();
+-		nzZ = m.m23() + m.m22();
+-		nzW = m.m33() + m.m32();
++		boolean zeroToOne = com.mojang.blaze3d.systems.RenderSystem.getDevice().getDeviceInfo().isZZeroToOne();
++        nzX = (zeroToOne ? 0 : m.m03()) + m.m02();
++        nzY = (zeroToOne ? 0 : m.m13()) + m.m12();
++        nzZ = (zeroToOne ? 0 : m.m23()) + m.m22();
++        nzW = (zeroToOne ? 0 : m.m33()) + m.m32();
+ 		invl = Math.invsqrt(nzX * nzX + nzY * nzY + nzZ * nzZ);
+ 		nzX *= invl;
+ 		nzY *= invl;
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/engine/uniform/PlayerUniforms.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/engine/uniform/PlayerUniforms.java
+@@ -63,7 +63,7 @@
+ 
+ 	private static long writeTeamColor(long ptr, @Nullable PlayerTeam team) {
+ 		if (team != null) {
+-			Integer color = team.getColor().getColor();
++			Integer color = team.getColor().map(net.minecraft.world.scores.TeamColor::rgb).orElse(null);
+ 
+ 			if (color != null) {
+ 				int red = ARGB.red(color);
+--- /dev/null
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/gl/BlendState.java
+@@ -0,0 +1,24 @@
++package dev.engine_room.flywheel.backend.gl;
++
++import com.mojang.blaze3d.opengl.GlStateManager;
++import org.lwjgl.opengl.GL11;
++import org.lwjgl.opengl.GL20;
++
++/** Preserve the old global blend semantics with the 26.2 per-attachment cache. */
++public final class BlendState {
++    private BlendState() { }
++    private static final class Limits {
++        // The game's indexed blend cache has eight slots; query only with a live GL context.
++        static final int DRAW_BUFFERS = Math.min(8, GL11.glGetInteger(GL20.GL_MAX_DRAW_BUFFERS));
++    }
++    public static void enable() {
++        for (int i = 0, count = Limits.DRAW_BUFFERS; i < count; i++) {
++            GlStateManager._enableBlend(i);
++        }
++    }
++    public static void disable() {
++        for (int i = 0, count = Limits.DRAW_BUFFERS; i < count; i++) {
++            GlStateManager._disableBlend(i);
++        }
++    }
++}
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/gl/array/GlVertexArrayDSA.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/gl/array/GlVertexArrayDSA.java
+@@ -60,9 +60,9 @@
+ 
+ 			if (!attribute.equals(attributes[attribIndex])) {
+ 				if (attribute instanceof VertexAttribute.Float f) {
+-					GL45C.glVertexArrayAttribFormat(handle, attribIndex, f.size(), GlConst.toGl(f.type()), f.normalized(), offset);
++					GL45C.glVertexArrayAttribFormat(handle, attribIndex, f.size(), f.type().glType(), f.normalized(), offset);
+ 				} else if (attribute instanceof VertexAttribute.Int vi) {
+-					GL45C.glVertexArrayAttribIFormat(handle, attribIndex, vi.size(), GlConst.toGl(vi.type()), offset);
++					GL45C.glVertexArrayAttribIFormat(handle, attribIndex, vi.size(), vi.type().glType(), offset);
+ 				}
+ 				attributes[attribIndex] = attribute;
+ 			}
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/gl/array/GlVertexArrayGL3.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/gl/array/GlVertexArrayGL3.java
+@@ -112,9 +112,9 @@
+ 		int stride = bindingStrides[bindingIndex];
+ 
+ 		if (attribute instanceof VertexAttribute.Float f) {
+-			GlStateManager._vertexAttribPointer(attribIndex, f.size(), GlConst.toGl(f.type()), f.normalized(), stride, offset);
++			GlStateManager._vertexAttribPointer(attribIndex, f.size(), f.type().glType(), f.normalized(), stride, offset);
+ 		} else if (attribute instanceof VertexAttribute.Int vi) {
+-			GlStateManager._vertexAttribIPointer(attribIndex, vi.size(), GlConst.toGl(vi.type()), stride, offset);
++			GlStateManager._vertexAttribIPointer(attribIndex, vi.size(), vi.type().glType(), stride, offset);
+ 		}
+ 
+ 		int divisor = bindingDivisors[bindingIndex];
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/gl/array/GlVertexArraySeparateAttributes.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/gl/array/GlVertexArraySeparateAttributes.java
+@@ -64,9 +64,9 @@
+ 
+ 			if (!attribute.equals(attributes[attribIndex])) {
+ 				if (attribute instanceof VertexAttribute.Float f) {
+-					GL43C.glVertexAttribFormat(attribIndex, f.size(), GlConst.toGl(f.type()), f.normalized(), offset);
++					GL43C.glVertexAttribFormat(attribIndex, f.size(), f.type().glType(), f.normalized(), offset);
+ 				} else if (attribute instanceof VertexAttribute.Int vi) {
+-					GL43C.glVertexAttribIFormat(attribIndex, vi.size(), GlConst.toGl(vi.type()), offset);
++					GL43C.glVertexAttribIFormat(attribIndex, vi.size(), vi.type().glType(), offset);
+ 				}
+ 				attributes[attribIndex] = attribute;
+ 			}
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/gl/array/VertexAttribute.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/gl/array/VertexAttribute.java
+@@ -3,6 +3,17 @@
+ import com.mojang.blaze3d.vertex.VertexFormatElement;
+ 
+ public sealed interface VertexAttribute {
++    /** Scalar GL encodings are independent of the game's packed GPU formats. */
++    enum ScalarType {
++        BYTE(0x1400, 1), UBYTE(0x1401, 1), SHORT(0x1402, 2), USHORT(0x1403, 2),
++        INT(0x1404, 4), UINT(0x1405, 4), FLOAT(0x1406, 4);
++        private final int glType;
++        private final int size;
++        ScalarType(int glType, int size) { this.glType = glType; this.size = size; }
++        public int glType() { return glType; }
++        public int size() { return size; }
++    }
++
+ 	int byteWidth();
+ 
+ 	/**
+@@ -12,7 +23,7 @@
+ 	 * @param size       The number of components in the attribute, e.g. 3 for a vec3.
+ 	 * @param normalized Whether the data is normalized.
+ 	 */
+-	record Float(VertexFormatElement.Type type, int size, boolean normalized) implements VertexAttribute {
++	record Float(dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType type, int size, boolean normalized) implements VertexAttribute {
+ 		@Override
+ 		public int byteWidth() {
+ 			return size * type.size();
+@@ -25,7 +36,7 @@
+ 	 * @param type The type of the attribute, e.g. GL_INT.
+ 	 * @param size The number of components in the attribute, e.g. 3 for a vec3.
+ 	 */
+-	record Int(VertexFormatElement.Type type, int size) implements VertexAttribute {
++	record Int(dev.engine_room.flywheel.backend.gl.array.VertexAttribute.ScalarType type, int size) implements VertexAttribute {
+ 		@Override
+ 		public int byteWidth() {
+ 			return size * type.size();
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/mixin/FogRendererMixin.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/mixin/FogRendererMixin.java
+@@ -12,7 +12,7 @@
+ @Mixin(FogRenderer.class)
+ abstract class FogRendererMixin {
+ 	@Inject(method = "updateBuffer(Lnet/minecraft/client/renderer/fog/FogData;)V", at = @At("HEAD"))
+-	private static void flywheel$onReturnSetupFog(FogData fog, CallbackInfo ci) {
++	private void flywheel$onReturnSetupFog(FogData fog, CallbackInfo ci) {
+ 		FogUniforms.update(fog.color, fog.environmentalStart, fog.environmentalEnd, fog.renderDistanceStart, fog.renderDistanceEnd, fog.skyEnd, fog.cloudEnd);
+ 	}
+ }
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/mixin/LevelRendererAccessor.java
++++ /dev/null
+@@ -1,12 +0,0 @@
+-package dev.engine_room.flywheel.backend.mixin;
+-
+-import org.spongepowered.asm.mixin.Mixin;
+-import org.spongepowered.asm.mixin.gen.Accessor;
+-
+-import net.minecraft.client.renderer.LevelRenderer;
+-
+-@Mixin(LevelRenderer.class)
+-public interface LevelRendererAccessor {
+-	@Accessor("ticks")
+-	int flywheel$getTicks();
+-}
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/mixin/LightingMixin.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/mixin/LightingMixin.java
+@@ -1,6 +1,6 @@
+ package dev.engine_room.flywheel.backend.mixin;
+ 
+-import org.joml.Vector3f;
++import org.joml.Vector3fc;
+ import org.spongepowered.asm.mixin.Mixin;
+ import org.spongepowered.asm.mixin.injection.At;
+ import org.spongepowered.asm.mixin.injection.Inject;
+@@ -13,8 +13,8 @@
+ 
+ @Mixin(Lighting.class)
+ abstract class LightingMixin {
+-	@Inject(method = "updateBuffer(Lcom/mojang/blaze3d/platform/Lighting$Entry;Lorg/joml/Vector3f;Lorg/joml/Vector3f;)V", at = @At("HEAD"))
+-	private static void flywheel$onHeadUpdateBuffer(Entry entry, Vector3f light0, Vector3f light1, CallbackInfo ci) {
++	@Inject(method = "updateBuffer(Lcom/mojang/blaze3d/platform/Lighting$Entry;Lorg/joml/Vector3fc;Lorg/joml/Vector3fc;)V", at = @At("HEAD"))
++	private static void flywheel$onHeadUpdateBuffer(Entry entry, Vector3fc light0, Vector3fc light1, CallbackInfo ci) {
+ 		if (entry == Entry.LEVEL) {
+ 			LevelUniforms.LIGHT0_DIRECTION.set(light0);
+ 			LevelUniforms.LIGHT1_DIRECTION.set(light1);
+--- a/common/src/backend/java/dev/engine_room/flywheel/backend/mixin/light/SkyDataLayerStorageMapAccessor.java
++++ b/common/src/backend/java/dev/engine_room/flywheel/backend/mixin/light/SkyDataLayerStorageMapAccessor.java
+@@ -5,7 +5,7 @@
+ 
+ import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
+ 
+-@Mixin(targets = "net.minecraft.world.level.lighting.SkyLightSectionStorage.SkyDataLayerStorageMap")
++@Mixin(targets = "net.minecraft.world.level.lighting.SkyLightSectionStorage$SkyDataLayerStorageMap")
+ public interface SkyDataLayerStorageMapAccessor {
+ 	@Accessor("currentLowestY")
+ 	int flywheel$currentLowestY();
+--- a/common/src/backend/resources/assets/flywheel/flywheel/internal/common.frag
++++ b/common/src/backend/resources/assets/flywheel/flywheel/internal/common.frag
+@@ -6,7 +6,7 @@
+ 
+ // optimize discard usage
+ #if defined(GL_ARB_conservative_depth) && defined(_FLW_USE_DISCARD)
+-layout (depth_greater) out float gl_FragDepth;
++layout (depth_less) out float gl_FragDepth;
+ #endif
+ 
+ #ifdef _FLW_CRUMBLING
+--- a/common/src/backend/resources/assets/flywheel/flywheel/internal/depth.glsl
++++ b/common/src/backend/resources/assets/flywheel/flywheel/internal/depth.glsl
+@@ -1,9 +1,8 @@
++// 26.2 uses a reversed finite perspective depth buffer: near=1, far=0.
+ float linearize_depth(float d, float zNear, float zFar) {
+-    float z_n = 2.0 * d - 1.0;
+-    return 2.0 * zNear * zFar / (zFar + zNear - z_n * (zFar - zNear));
++    return zNear * zFar / (zNear + d * (zFar - zNear));
+ }
+ 
+ float delinearize_depth(float linearDepth, float zNear, float zFar) {
+-    float z_n = (2.0 * zNear * zFar / linearDepth) - (zFar + zNear);
+-    return 0.5 * (z_n / (zNear - zFar) + 1.0);
++    return (zNear * zFar / linearDepth - zNear) / (zFar - zNear);
+ }
+--- a/common/src/backend/resources/assets/flywheel/flywheel/internal/indirect/cull.glsl
++++ b/common/src/backend/resources/assets/flywheel/flywheel/internal/indirect/cull.glsl
+@@ -1,3 +1,4 @@
++#include "flywheel:internal/depth.glsl"
+ #include "flywheel:internal/indirect/buffer_bindings.glsl"
+ #include "flywheel:internal/indirect/model_descriptor.glsl"
+ #include "flywheel:internal/uniforms/uniforms.glsl"
+@@ -109,11 +110,11 @@
+             float depth10 = texelFetch(_flw_depthPyramid, bounds.zy, level).r;
+             float depth00 = texelFetch(_flw_depthPyramid, bounds.xy, level).r;
+ 
+-            float depth = max(max(depth00, depth01), max(depth10, depth11));
++            float depth = min(min(depth00, depth01), min(depth10, depth11));
+ 
+-            float depthSphere = 1. + _flw_cullData.znear / (center.z + radius);
++            float depthSphere = delinearize_depth(-(center.z + radius), _flw_cullData.znear, _flw_cullData.zfar);
+ 
+-            isVisible = isVisible && depthSphere <= depth;
++            isVisible = isVisible && depthSphere >= depth;
+         }
+     }
+ 
+--- a/common/src/backend/resources/assets/flywheel/flywheel/internal/indirect/downsample.glsl
++++ b/common/src/backend/resources/assets/flywheel/flywheel/internal/indirect/downsample.glsl
+@@ -31,6 +31,6 @@
+ }
+ 
+ float reduce_4(vec4 v) {
+-    return max(max(v.x, v.y), max(v.z, v.w));
++    return min(min(v.x, v.y), min(v.z, v.w));
+ }
+ 
+--- a/common/src/backend/resources/flywheel.backend.mixins.json
++++ b/common/src/backend/resources/flywheel.backend.mixins.json
+@@ -12,7 +12,6 @@
+     "GlStateManagerAccessor",
+     "GlStateManagerMixin",
+     "GpuDeviceAccessor",
+-    "LevelRendererAccessor",
+     "LightingMixin",
+     "OptionsMixin",
+     "RenderSystemMixin",
+--- a/common/src/lib/java/dev/engine_room/flywheel/lib/model/ModelUtil.java
++++ b/common/src/lib/java/dev/engine_room/flywheel/lib/model/ModelUtil.java
+@@ -78,7 +78,7 @@
+ 
+ 	@Nullable
+ 	public static Material getItemMaterial(RenderType renderType) {
+-		if (renderType == Sheets.cutoutBlockSheet()) {
++		if (renderType == Sheets.cutoutBlockItemSheet()) {
+ 			return Materials.CUTOUT_BLOCK;
+ 		}
+ 
+--- a/common/src/lib/java/dev/engine_room/flywheel/lib/model/baked/MeshEmitter.java
++++ b/common/src/lib/java/dev/engine_room/flywheel/lib/model/baked/MeshEmitter.java
+@@ -10,7 +10,7 @@
+ import com.mojang.blaze3d.vertex.BufferBuilder;
+ import com.mojang.blaze3d.vertex.ByteBufferBuilder;
+ import com.mojang.blaze3d.vertex.VertexConsumer;
+-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
++import com.mojang.blaze3d.PrimitiveTopology;
+ 
+ import dev.engine_room.flywheel.api.material.Material;
+ import dev.engine_room.flywheel.api.model.Mesh;
+@@ -94,7 +94,7 @@
+ 		}
+ 
+ 		ByteBufferBuilder byteBufferBuilder = byteBufferBuilderStack.nextOrCreate();
+-		BufferBuilder bufferBuilder = new BufferBuilder(byteBufferBuilder, Mode.QUADS, FlywheelVertexFormats.BLOCK_VERTEX_FORMAT);
++		BufferBuilder bufferBuilder = new BufferBuilder(byteBufferBuilder, PrimitiveTopology.QUADS, FlywheelVertexFormats.BLOCK_VERTEX_FORMAT);
+ 
+ 		// currentIndex == numBufferBuildersPopulated here.
+ 		materials[currentIndex] = material;
+--- a/common/src/lib/java/dev/engine_room/flywheel/lib/vertex/FlywheelVertexFormats.java
++++ b/common/src/lib/java/dev/engine_room/flywheel/lib/vertex/FlywheelVertexFormats.java
+@@ -1,17 +1,16 @@
+ package dev.engine_room.flywheel.lib.vertex;
+ 
++import com.mojang.blaze3d.GpuFormat;
+ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+ import com.mojang.blaze3d.vertex.VertexFormat;
+-import com.mojang.blaze3d.vertex.VertexFormatElement;
+ 
+ public class FlywheelVertexFormats {
+-	/// Basically the same as {@link DefaultVertexFormat#BLOCK} but with the normals included
+-	public static final VertexFormat BLOCK_VERTEX_FORMAT = VertexFormat.builder()
+-			.add("Position", VertexFormatElement.POSITION)
+-			.add("Color",VertexFormatElement.COLOR)
+-			.add("UV0",VertexFormatElement.UV0)
+-			.add("UV2",VertexFormatElement.UV2)
+-			.add("Normal", VertexFormatElement.NORMAL)
+-			.padding(1)
+-			.build();
++    /// BLOCK plus a normal, retaining Flywheel's 32-byte mesh layout.
++    public static final VertexFormat BLOCK_VERTEX_FORMAT = VertexFormat.builder(0)
++            .addAttribute("Position", GpuFormat.RGB32_FLOAT)
++            .addAttribute("Color", GpuFormat.RGBA8_UNORM)
++            .addAttribute("UV0", GpuFormat.RG32_FLOAT)
++            .addAttribute("UV2", GpuFormat.RG16_SINT)
++            .addAttribute("Normal", GpuFormat.RGBA8_SNORM)
++            .build();
+ }
+--- a/common/src/lib/java/dev/engine_room/flywheel/lib/visual/AbstractBlockEntityVisual.java
++++ b/common/src/lib/java/dev/engine_room/flywheel/lib/visual/AbstractBlockEntityVisual.java
+@@ -100,11 +100,11 @@
+ 	}
+ 
+ 	protected int computePackedLight() {
+-		return LevelRenderer.getLightCoords(level, pos);
++		return net.minecraft.util.LightCoordsUtil.getLightCoords(level, pos);
+ 	}
+ 
+ 	protected void relight(BlockPos pos, @Nullable FlatLit... instances) {
+-		FlatLit.relight(LevelRenderer.getLightCoords(level, pos), instances);
++		FlatLit.relight(net.minecraft.util.LightCoordsUtil.getLightCoords(level, pos), instances);
+ 	}
+ 
+ 	protected void relight(@Nullable FlatLit... instances) {
+@@ -112,7 +112,7 @@
+ 	}
+ 
+ 	protected void relight(BlockPos pos, Iterator<@Nullable FlatLit> instances) {
+-		FlatLit.relight(LevelRenderer.getLightCoords(level, pos), instances);
++		FlatLit.relight(net.minecraft.util.LightCoordsUtil.getLightCoords(level, pos), instances);
+ 	}
+ 
+ 	protected void relight(Iterator<@Nullable FlatLit> instances) {
+@@ -120,7 +120,7 @@
+ 	}
+ 
+ 	protected void relight(BlockPos pos, Iterable<@Nullable FlatLit> instances) {
+-		FlatLit.relight(LevelRenderer.getLightCoords(level, pos), instances);
++		FlatLit.relight(net.minecraft.util.LightCoordsUtil.getLightCoords(level, pos), instances);
+ 	}
+ 
+ 	protected void relight(Iterable<@Nullable FlatLit> instances) {
+--- a/common/src/main/java/dev/engine_room/flywheel/impl/mixin/GameRendererMixin.java
++++ b/common/src/main/java/dev/engine_room/flywheel/impl/mixin/GameRendererMixin.java
+@@ -21,9 +21,9 @@
+ 
+ @Mixin(GameRenderer.class)
+ public class GameRendererMixin {
+-	@WrapOperation(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;renderLevel(Lcom/mojang/blaze3d/resource/GraphicsResourceAllocator;Lnet/minecraft/client/DeltaTracker;ZLnet/minecraft/client/renderer/state/level/CameraRenderState;Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/buffers/GpuBufferSlice;Lorg/joml/Vector4f;ZLnet/minecraft/client/renderer/chunk/ChunkSectionsToRender;)V"))
+-	private void extractProjectionMatrixNoBob(LevelRenderer instance, GraphicsResourceAllocator resourceAllocator, DeltaTracker deltaTracker, boolean renderOutline, CameraRenderState cameraState, Matrix4fc modelViewMatrix, GpuBufferSlice terrainFog, Vector4f fogColor, boolean shouldRenderSky, ChunkSectionsToRender chunkSectionsToRender, Operation<Void> original, @Local(name = "projectionMatrix") Matrix4f projectionMatrix) {
++	@WrapOperation(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;render(Lcom/mojang/blaze3d/resource/GraphicsResourceAllocator;Lnet/minecraft/client/DeltaTracker;ZLnet/minecraft/client/renderer/state/level/CameraRenderState;Lorg/joml/Matrix4fc;Lcom/mojang/blaze3d/buffers/GpuBufferSlice;Lorg/joml/Vector4f;Z)V"))
++	private void extractProjectionMatrixNoBob(LevelRenderer instance, GraphicsResourceAllocator resourceAllocator, DeltaTracker deltaTracker, boolean renderOutline, CameraRenderState cameraState, Matrix4fc modelViewMatrix, GpuBufferSlice terrainFog, Vector4f fogColor, boolean shouldRenderSky, Operation<Void> original, @Local(name = "projectionMatrix") Matrix4f projectionMatrix) {
+ 		ScopedValue.where(RenderContextImpl.PROJECTION_MATRIX_NO_BOB, projectionMatrix)
+-				.run(() -> original.call(instance, resourceAllocator, deltaTracker, renderOutline, cameraState, modelViewMatrix, terrainFog, fogColor, shouldRenderSky, chunkSectionsToRender));
++				.run(() -> original.call(instance, resourceAllocator, deltaTracker, renderOutline, cameraState, modelViewMatrix, terrainFog, fogColor, shouldRenderSky));
+ 	}
+ }
+--- /dev/null
++++ b/common/src/main/java/dev/engine_room/flywheel/impl/mixin/LevelExtractorMixin.java
+@@ -0,0 +1,31 @@
++package dev.engine_room.flywheel.impl.mixin;
++
++import java.util.Iterator;
++import com.google.common.collect.Iterators;
++import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
++import dev.engine_room.flywheel.api.visualization.VisualizationManager;
++import dev.engine_room.flywheel.impl.FlwImplXplat;
++import dev.engine_room.flywheel.lib.visualization.VisualizationHelper;
++import net.minecraft.client.multiplayer.ClientLevel;
++import net.minecraft.client.renderer.extract.LevelExtractor;
++import net.minecraft.world.entity.Entity;
++import org.spongepowered.asm.mixin.Mixin;
++import org.spongepowered.asm.mixin.Shadow;
++import org.spongepowered.asm.mixin.injection.At;
++import org.spongepowered.asm.mixin.injection.Inject;
++import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
++
++/** 26.2 moved world extraction and terrain rebuilds out of LevelRenderer. */
++@Mixin(LevelExtractor.class)
++abstract class LevelExtractorMixin {
++    @Shadow private ClientLevel level;
++    @Inject(method = "allChanged", at = @At("RETURN"))
++    private void flywheel$reload(CallbackInfo ci) {
++        if (level != null) FlwImplXplat.INSTANCE.dispatchReloadLevelRendererEvent(level);
++    }
++    @ModifyExpressionValue(method = "extractVisibleEntities", at = @At(value = "INVOKE", target = "Ljava/lang/Iterable;iterator()Ljava/util/Iterator;"))
++    private Iterator<Entity> flywheel$decideNotToRenderEntity(Iterator<Entity> original) {
++        return Iterators.filter(original, entity -> !(VisualizationManager.supportsVisualization(entity.level()) &&
++                VisualizationHelper.skipVanillaRender(entity)));
++    }
++}
+--- a/common/src/main/java/dev/engine_room/flywheel/impl/mixin/LevelRendererMixin.java
++++ b/common/src/main/java/dev/engine_room/flywheel/impl/mixin/LevelRendererMixin.java
+@@ -37,17 +37,11 @@
+ 
+ @Mixin(value = LevelRenderer.class, priority = 1001) // Higher priority to go after Sodium
+ abstract class LevelRendererMixin {
+-	@Shadow
+-	@Nullable
+-	private ClientLevel level;
+ 
+ 	@Shadow
+ 	@Final
+ 	private RenderBuffers renderBuffers;
+ 
+-	@Shadow
+-	@Final
+-	private Long2ObjectMap<SortedSet<BlockDestructionProgress>> destructionProgress;
+ 
+ 	@Shadow
+ 	@Final
+@@ -57,52 +51,35 @@
+ 	@Nullable
+ 	private RenderContextImpl flywheel$renderContext;
+ 
+-	@Inject(method = "renderLevel", at = @At("HEAD"))
+-	private void flywheel$beginRender(GraphicsResourceAllocator resourceAllocator, DeltaTracker deltaTracker, boolean renderOutline, CameraRenderState cameraState, Matrix4fc modelViewMatrix, GpuBufferSlice terrainFog, Vector4f fogColor, boolean shouldRenderSky, ChunkSectionsToRender chunkSectionsToRender, CallbackInfo ci) {
++	@Inject(method = "render", at = @At("HEAD"))
++	private void flywheel$beginRender(GraphicsResourceAllocator resourceAllocator, DeltaTracker deltaTracker, boolean renderOutline, CameraRenderState cameraState, Matrix4fc modelViewMatrix, GpuBufferSlice terrainFog, Vector4f fogColor, boolean shouldRenderSky, CallbackInfo ci) {
++		ClientLevel level = net.minecraft.client.Minecraft.getInstance().level;
+ 		Matrix4f projectionMatrix = RenderContextImpl.PROJECTION_MATRIX_NO_BOB.get();
+ 		flywheel$renderContext = RenderContextImpl.create((LevelRenderer) (Object) this, level, renderBuffers, modelViewMatrix, projectionMatrix, cameraState, levelRenderState, deltaTracker.getGameTimeDeltaPartialTick(false));
+ 
+-		VisualizationManager manager = VisualizationManager.get(level);
++		VisualizationManager manager = VisualizationManager.get(net.minecraft.client.Minecraft.getInstance().level);
+ 		if (manager != null) {
+ 			manager.renderDispatcher().onStartLevelRender(flywheel$renderContext);
+ 		}
+ 	}
+ 
+-	@Inject(method = "renderLevel", at = @At("RETURN"))
++	@Inject(method = "render", at = @At("RETURN"))
+ 	private void flywheel$endRender(CallbackInfo ci) {
+ 		flywheel$renderContext = null;
+ 	}
+ 
+-	@Inject(method = "allChanged", at = @At("RETURN"))
+-	private void flywheel$reload(CallbackInfo ci) {
+-		if (level != null) {
+-			FlwImplXplat.INSTANCE.dispatchReloadLevelRendererEvent(level);
+-		}
+-	}
+ 
+-	@Inject(method = "lambda$addMainPass$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;submitBlockEntities(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/state/level/LevelRenderState;Lnet/minecraft/client/renderer/SubmitNodeStorage;)V"))
++	@Inject(method = "lambda$addMainPass$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/FeatureRenderDispatcher$PreparedFrame;executeSolid()V", shift = At.Shift.AFTER))
+ 	private void flywheel$beforeBlockEntities(CallbackInfo ci) {
+ 		if (flywheel$renderContext != null) {
+-			VisualizationManager manager = VisualizationManager.get(level);
++			VisualizationManager manager = VisualizationManager.get(net.minecraft.client.Minecraft.getInstance().level);
+ 			if (manager != null) {
+-				manager.renderDispatcher().afterSubmitEntities(flywheel$renderContext);
++				// Draw inside the executed main pass, after its clear and solid terrain.
++                manager.renderDispatcher().afterSubmitEntities(flywheel$renderContext);
++                manager.renderDispatcher().beforeSubmitCrumbling(flywheel$renderContext,
++                    net.minecraft.client.Minecraft.getInstance().level.destructionProgress());
+ 			}
+ 		}
+ 	}
+ 
+-	@Inject(method = "lambda$addMainPass$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/LevelRenderer;submitBlockDestroyAnimation(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;Lnet/minecraft/client/renderer/state/level/LevelRenderState;)V"))
+-	private void flywheel$beforeRenderCrumbling(CallbackInfo ci) {
+-		if (flywheel$renderContext != null) {
+-			VisualizationManager manager = VisualizationManager.get(level);
+-			if (manager != null) {
+-				manager.renderDispatcher().beforeSubmitCrumbling(flywheel$renderContext, destructionProgress);
+-			}
+-		}
+-	}
+-
+-	@ModifyExpressionValue(method = "extractVisibleEntities", at = @At(value = "INVOKE", target = "Ljava/lang/Iterable;iterator()Ljava/util/Iterator;"))
+-	private Iterator<Entity> flywheel$decideNotToRenderEntity(Iterator<Entity> original) {
+-		return Iterators.filter(original, entity -> !(VisualizationManager.supportsVisualization(entity.level()) &&
+-				VisualizationHelper.skipVanillaRender(entity)));
+-	}
+ }
+--- a/common/src/main/java/dev/engine_room/flywheel/impl/mixin/visualmanage/LevelRendererMixin.java
++++ b/common/src/main/java/dev/engine_room/flywheel/impl/mixin/visualmanage/LevelRendererMixin.java
+@@ -8,12 +8,12 @@
+ 
+ import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+ import net.minecraft.client.multiplayer.ClientLevel;
+-import net.minecraft.client.renderer.LevelRenderer;
++import net.minecraft.client.renderer.extract.LevelExtractor;
+ import net.minecraft.core.BlockPos;
+ import net.minecraft.world.level.block.entity.BlockEntity;
+ import net.minecraft.world.level.block.state.BlockState;
+ 
+-@Mixin(LevelRenderer.class)
++@Mixin(LevelExtractor.class)
+ abstract class LevelRendererMixin {
+ 	@Shadow
+ 	private ClientLevel level;
+--- a/common/src/main/resources/flywheel.impl.mixins.json
++++ b/common/src/main/resources/flywheel.impl.mixins.json
+@@ -17,7 +17,8 @@
+     "visualmanage.BlockEntityMixin",
+     "visualmanage.LevelChunkMixin",
+     "visualmanage.LevelRendererMixin",
+-    "visualmanage.SectionCompilerMixin"
++    "visualmanage.SectionCompilerMixin",
++    "LevelExtractorMixin"
+   ],
+   "injectors": {
+     "defaultRequire": 1
+--- a/fabric/src/lib/java/dev/engine_room/flywheel/lib/model/baked/BlockStateModelBufferer.java
++++ b/fabric/src/lib/java/dev/engine_room/flywheel/lib/model/baked/BlockStateModelBufferer.java
+@@ -46,7 +46,7 @@
+ 		long seed = state.getSeed(pos);
+ 
+ 		Minecraft minecraft = Minecraft.getInstance();
+-		GameRenderState gameRenderState = minecraft.gameRenderer.getGameRenderState();
++		GameRenderState gameRenderState = minecraft.gameRenderer.gameRenderState();
+ 		BlockColors blockColors = minecraft.getBlockColors();
+ 
+ 		// See ModelBlockRenderer#tesselateBlock
+@@ -85,7 +85,7 @@
+ 
+ 		Minecraft minecraft = Minecraft.getInstance();
+ 		ModelManager modelManager = minecraft.getModelManager();
+-		GameRenderState gameRenderState = minecraft.gameRenderer.getGameRenderState();
++		GameRenderState gameRenderState = minecraft.gameRenderer.gameRenderState();
+ 		boolean useAo = gameRenderState.optionsRenderState.ambientOcclusion;
+ 		BlockColors blockColors = minecraft.getBlockColors();
+ 
+--- a/fabric/src/main/java/dev/engine_room/flywheel/impl/FlwCommands.java
++++ b/fabric/src/main/java/dev/engine_room/flywheel/impl/FlwCommands.java
+@@ -48,7 +48,7 @@
+ 						FabricFlwConfig.INSTANCE.save();
+ 
+ 						// Reload renderers so we can report the actual backend.
+-						Minecraft.getInstance().levelRenderer.allChanged();
++						Minecraft.getInstance().levelExtractor.allChanged();
+ 
+ 						Backend actualBackend = BackendManager.currentBackend();
+ 						String actualIdStr = Backend.REGISTRY.getIdOrThrow(actualBackend)
+@@ -64,7 +64,7 @@
+ 						FabricFlwConfig.INSTANCE.save();
+ 
+ 						// Reload renderers so we can report the actual backend.
+-						Minecraft.getInstance().levelRenderer.allChanged();
++						Minecraft.getInstance().levelExtractor.allChanged();
+ 
+ 						Backend actualBackend = BackendManager.currentBackend();
+ 						if (actualBackend != requestedBackend) {
+@@ -93,7 +93,7 @@
+ 							FabricFlwConfig.INSTANCE.limitUpdates = true;
+ 							FabricFlwConfig.INSTANCE.save();
+ 							context.getSource().sendFeedback(Component.translatable("command.flywheel.limit_updates.set.on"));
+-							Minecraft.getInstance().levelRenderer.allChanged();
++							Minecraft.getInstance().levelExtractor.allChanged();
+ 							return Command.SINGLE_SUCCESS;
+ 						}))
+ 				.then(ClientCommands.literal("off")
+@@ -101,7 +101,7 @@
+ 							FabricFlwConfig.INSTANCE.limitUpdates = false;
+ 							FabricFlwConfig.INSTANCE.save();
+ 							context.getSource().sendFeedback(Component.translatable("command.flywheel.limit_updates.set.off"));
+-							Minecraft.getInstance().levelRenderer.allChanged();
++							Minecraft.getInstance().levelExtractor.allChanged();
+ 							return Command.SINGLE_SUCCESS;
+ 						})));
+ 

@@ -46,5 +46,26 @@
     "commit": "5b1a83c22df485ad724f86bd755f724bac2ddc5c",
     "sourceArchiveSha256": "dc037131a58ed046ec36ab28f4841994259c1446fd91ad59e10b27dc4099716c",
     "license": "MIT"
-  }
+  },
+  "renderLibraryPorts": [
+    {
+      "id": "flywheel",
+      "repository": "https://github.com/Engine-Room/Flywheel",
+      "commit": "a6f934dc348c69d084ced62d634b843650e2702c",
+      "sourceMinecraft": "26.1.2",
+      "targetMinecraft": "26.2",
+      "sha256": "cf76657c1fa24740e8c033245956ec6496ff68e6675e8243d1d364d9280f8fdc",
+      "license": "MIT"
+    },
+    {
+      "id": "ponder",
+      "repository": "https://github.com/Creators-of-Create/Ponder",
+      "commit": "48800ff32435cad03e5f563f17c0b21d2e313d20",
+      "sourceMinecraft": "26.1.2",
+      "targetMinecraft": "26.2",
+      "sha256": "7cb3d2c51953fd9bdf7fc6f1c58f2cfd3a0499fe274591aa0c7dfc0086182651",
+      "license": "MIT"
+    }
+  ],
+  "renderLibraryPortsStatus": "Development scenarios passed; full Create remains NOT_PLAYABLE; source patches only, no dependency JAR redistribution."
 }

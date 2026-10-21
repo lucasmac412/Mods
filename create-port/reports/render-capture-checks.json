@@ -1,0 +1,10 @@
+{
+  "status": "PASSED",
+  "fixedFixture": "1280x720",
+  "pixelCounts": {
+    "indirectGoldPixels": 1486,
+    "instancingGoldPixels": 2724,
+    "ponderLavaPixels": 65
+  },
+  "scope": "Library rendering only, not Create gameplay, performance or exhaustive image equivalence"
+}
