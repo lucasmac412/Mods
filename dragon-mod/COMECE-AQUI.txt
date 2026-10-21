@@ -1,7 +1,15 @@
 DRAGÃO CELESTIAL — OURO E OBSIDIANA
-Minecraft Java Edition 26.2 | Fabric | versão 0.3.0-experimental
+Minecraft Java Edition 26.2 | Fabric | versão 0.3.1-experimental
 
-NOVO NA 0.3.0
+CORREÇÕES NA 0.3.1
+Pilares agora apoiados no piso, inclusive reparo dos apoios em arenas antigas com guardião.
+Blocos decorativos simplificados: sem faces sobrepostas que piscavam.
+Sons com maior alcance, incluindo a câmera da montaria. Volume: Criaturas hostis.
+O corpo do dragão não intercepta mais o clique de ovos normais que alcança o chão.
+Para reparar os apoios antigos, aproxime-se da arena com o guardião e espere a região carregar.
+O reparo não substitui blocos sólidos colocados por você. Não exige um mundo novo.
+
+RECURSOS DA MONTARIA
 Patas dianteiras mais longas; patas traseiras removidas.
 Raio mais grosso com aura. Câmera automática afastada e elevada ao montar.
 Shift acelera com raios; Ctrl desce; 2 toques rápidos em Ctrl desmontam.
@@ -37,11 +45,11 @@ No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
 Se o diretório estiver vazio, no Windows aperte Windows+R e abra:
 %APPDATA%\.minecraft
 Crie a pasta mods se ela não existir. Copie para ela os dois arquivos:
-- celestial-dragon-0.3.0-experimental.jar
+- celestial-dragon-0.3.1-experimental.jar
 - fabric-api-0.161.0+26.2.jar
 Se já houver Fabric API ou este mod, mantenha somente uma versão de cada.
-Se estiver atualizando de uma versão 0.2.x ou de uma versão 0.1.x, retire o JAR antigo do dragão da pasta mods e coloque
-celestial-dragon-0.3.0-experimental.jar. O Fabric API continua o mesmo.
+Se estiver atualizando da 0.3.0 ou de qualquer versão anterior, retire o JAR antigo do dragão da pasta mods e coloque
+celestial-dragon-0.3.1-experimental.jar. O Fabric API continua o mesmo.
 O mod é independente da Luma. Se usar os dois, basta um Fabric API compatível.
 
 3. COMECE NUM MUNDO NOVO

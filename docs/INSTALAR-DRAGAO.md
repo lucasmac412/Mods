@@ -2,11 +2,15 @@
 
 Este guia é para **Minecraft Java Edition no computador**, versão **26.2**. O Dragão Celestial é um mod Fabric independente da Luma.
 
-**[Baixar Dragao-Celestial-Fabric-26.2-v0.3.0-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.0-Experimental.zip)**
+**[Baixar Dragao-Celestial-Fabric-26.2-v0.3.1-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.1-Experimental.zip)**
 
 **Bioma comum para testes:** como na versão 0.1.1, enquanto desenvolvemos e testamos o mod, o Bosque Celestial está muito comum: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São **36 vezes mais centros por área** do que na 0.1.0, e bosques vizinhos podem se unir. Essa frequência é temporária para facilitar os testes.
 
-A **0.3.0** traz patas dianteiras mais longas e remove as traseiras. O raio tem um núcleo sólido mais grosso com aura translúcida; Shift acelera com arcos elétricos. Ao montar, a câmera passa automaticamente para terceira pessoa, afastada e elevada, com colisão contra blocos; ao desmontar, restaura a perspectiva anterior.
+A **0.3.1 corrige os pilares flutuantes, a cintilação dos blocos decorativos, o alcance dos sons e cliques de ovos normais interceptados pelo corpo do dragão**. Os quatro pilares agora chegam ao piso. Nas arenas antigas com guardião presente, os espaços de apoio são preenchidos automaticamente quando a região estiver carregada, preservando blocos sólidos já colocados pelo jogador. Os modelos decorativos passaram a usar um único cubo com seis faces, sem camadas sobrepostas. O visual dos pilares fica mais simples para evitar o defeito de renderização.
+
+Os sons do dragão usam o controle de volume **Criaturas hostis**. O alcance audível foi aumentado para funcionar com a câmera afastada; um dragão acordado também ruge ao aparecer/carregar. O guardião continua silencioso enquanto dorme. O uso de ovos normais mantém o alcance padrão do Minecraft: o corpo do dragão deixa de interceptar um clique que pode alcançar um bloco atrás dele.
+
+A versão mantém patas dianteiras mais longas e remove as traseiras. O raio tem um núcleo sólido mais grosso com aura translúcida; Shift acelera com arcos elétricos. Ao montar, a câmera passa automaticamente para terceira pessoa, afastada e elevada, com colisão contra blocos; ao desmontar, restaura a perspectiva anterior.
 
 A **Genki Dama** cresce acima do dragão durante **40 ticks (aproximadamente dois segundos)** até **20 blocos de diâmetro**, depois viaja a **0,30 bloco por tick (6 blocos por segundo)** na direção escolhida ao terminar a carga. A câmera abre mais durante a formação e o começo da viagem. Ao primeiro contato sólido, destrói uma área de **20 × 24 blocos e seis de profundidade**, sem quebrar bedrock ou outros blocos indestrutíveis. Os blocos destruídos não geram milhares de itens no chão. O dano a criaturas é três vezes o dano configurado para o raio, preservando dono e aliados. A recarga é de **600 ticks (30 segundos)**. A carga cancela se o dono desmontar; o projétil deixa de existir se seu dragão morrer ou a região adiante não estiver carregada. Se não atingir nenhum bloco, desaparece após até 25 segundos de viagem. Mire no terreno para produzir a explosão.
 
@@ -14,7 +18,7 @@ A nova arena do ninho mede **113 blocos de diâmetro**, com oito torres, anéis 
 
 O guardião natural começa **dormindo enrolado**, imóvel em sua plataforma. Visitas em Criativo ou Espectador não o despertam. A entrada de um jogador em Sobrevivência ou Aventura no interior da arena o acorda; atacá-lo também o acorda. Surge a barra de chefe no topo da tela para jogadores próximos. O estado de sono é salvo com o mundo. O dragão criado pelo ovo selvagem do Criativo não gera uma arena ao redor de si.
 
-O visual e os controles atualizam os dragões existentes. **A arena nova aparece apenas em regiões ainda não geradas**; prefira um mundo novo para conferir o ninho maior. Cliente e servidor precisam usar a mesma versão 0.3.0.
+Estas correções funcionam no mundo atual. O visual dos blocos muda ao atualizar o mod; os apoios antigos são reparados com o guardião presente. A arena maior introduzida na 0.3.0 continua aparecendo somente em regiões geradas com essa estrutura; mundos da 0.1.x ou 0.2.x precisam de regiões novas para encontrá-la. Cliente e servidor precisam usar a mesma versão 0.3.1.
 
 ## 1. Baixe e extraia o pacote
 
@@ -22,10 +26,10 @@ Abra o link acima. No navegador, `Ctrl + J` mostra os downloads. Localize o ZIP 
 
 | Arquivo | Função |
 | --- | --- |
-| `celestial-dragon-0.3.0-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
+| `celestial-dragon-0.3.1-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
 | `fabric-api-0.161.0+26.2.jar` | Dependência usada pelo mod. |
 
-Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.0-experimental/dragon-mod/README.md).
+Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.1-experimental/dragon-mod/README.md).
 
 ## 2. Abra o Minecraft Java 26.2 uma vez
 
@@ -64,14 +68,14 @@ No Windows, pressione `Windows + R`, cole `%APPDATA%\.minecraft` e aperte Enter 
 4. Se já houver outra versão do Dragão Celestial ou do Fabric API, guarde a versão substituída fora de `mods`. Deixe uma única versão de cada mod.
 5. Abra o Launcher, selecione **Fabric 26.2** e clique em **Jogar**.
 
-**Se você já usa uma versão 0.2.x ou uma versão 0.1.x:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.3.0-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
+**Se você já usa a 0.3.0 ou qualquer versão anterior:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.3.1-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
 
 O resultado deve ser parecido com:
 
 ```text
 .minecraft/
   mods/
-    celestial-dragon-0.3.0-experimental.jar
+    celestial-dragon-0.3.1-experimental.jar
     fabric-api-0.161.0+26.2.jar
 ```
 
@@ -175,6 +179,16 @@ Dragões podem atacar criaturas e jogadores. O seu dragão respeita você, seus 
 
 O alcance de percepção é de **35 blocos**, igual ao atributo padrão de um zumbi nesta versão. Isso não é a distância de uma mordida: ela atinge apenas de perto. O raio alcança até 35 blocos e para em paredes. O dragão precisa ter linha de visão para escolher um alvo e atacá-lo.
 
+## Sons e reparo da arena antiga
+
+Em **Opções → Música e sons**, deixe **Volume geral** e **Criaturas hostis** acima de zero. O guardião dormindo permanece quieto; acordá-lo e usar ataques produz os efeitos sonoros. Com comandos ativados, teste o recurso diretamente:
+
+```text
+/playsound celestial_dragon:dragon.roar hostile @s ~ ~ ~ 1 1
+```
+
+A atualização troca automaticamente os modelos de todos os blocos já colocados. Para os apoios dos pilares de uma arena da 0.3.0, volte à arena com o guardião presente e deixe a região carregar. O reparo preenche apenas o ar sob as colunas existentes, sem reconstruir o ninho nem trocar seus blocos sólidos. Se o guardião já tiver sido removido, esse reparo automático não roda; arenas novas já nascem corretas.
+
 ## 9. Ajuste vida e dano
 
 Dentro do mundo, pressione **Esc** e clique em **Dragão Celestial**. O dono do mundo individual ou um administrador do servidor pode editar os valores e salvar. Os demais jogadores conseguem consultar a configuração.
@@ -193,6 +207,7 @@ O arquivo de configuração fica em `config/celestial-dragon.json`, na pasta do 
 | A aba do mod não aparece no Criativo. | Pressione E e clique no botão Dragão Celestial no canto superior esquerdo. |
 | O ovo de criação do dragão não funciona. | Use o modo Criativo e clique num bloco em uma área ampla, sem água. Ele é diferente do ovo da incubadora. |
 | Um ovo normal do Minecraft não cria a criatura ou ela desaparece. | Aponte para um bloco próximo. Confira se o modo Pacífico removeu um monstro ou se o dragão atacou a criatura recém-criada. |
+| O dragão não faz som. | Confira Volume geral e Criaturas hostis. Teste o comando de som acima; o guardião dormindo permanece silencioso. |
 | O raio não dispara enquanto estou montado. | Esvazie as duas mãos, incluindo a mão secundária. Com um item na mão, o clique direito usa esse item. |
 | O bosque não aparece perto de casa. | Explore chunks novos ou use os comandos `/locate` em um mundo de teste. |
 | O ovo não pode ser colocado. | Libere uma área de três por três blocos e três blocos de altura, sobre um piso firme. |

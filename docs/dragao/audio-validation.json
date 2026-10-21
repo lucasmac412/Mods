@@ -1,0 +1,31 @@
+{
+  "version": "0.3.1-experimental",
+  "date": "2026-10-21",
+  "engine": "Minecraft OpenAL Soft Wave File Writer",
+  "serverDrivenEventsAt26Blocks": {
+    "dragon.roar": 97.92,
+    "dragon.bite": 48.0,
+    "dragon.beam": 64.0,
+    "dragon.hurt": 48.0,
+    "dragon.death": 64.0
+  },
+  "outputFormat": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "pcm_s16le",
+        "sample_rate": "44100",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "119.151927"
+    }
+  },
+  "outputMeanDb": -24.9,
+  "outputPeakDb": -0.0,
+  "outputHasNonzeroAudio": true,
+  "physicalPlaybackOnWindowsTested": false,
+  "captureNotDistributed": "The full test mix contains Minecraft audio and is retained only as local test output."
+}

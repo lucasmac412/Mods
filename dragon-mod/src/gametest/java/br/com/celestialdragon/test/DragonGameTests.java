@@ -96,6 +96,10 @@ public final class DragonGameTests {
         var level = helper.getLevel();
         BlockPos center = helper.absolutePos(new BlockPos(2048, 3, 2048));
         helper.assertTrue(NestGenerator.generate(level, center), "The giant nest must generate successfully");
+        for (int sx : new int[]{-1, 1}) for (int sz : new int[]{-1, 1})
+            for (int y = 2; y <= 19; y++)
+                helper.assertTrue(level.getBlockState(center.offset(sx*11, y, -24+sz*10)).is(DragonContent.ARENA_PILLAR),
+                        "Every sanctuary column must connect continuously to the floor");
         for (int y = 2; y <= 4; y++) helper.assertTrue(level.getBlockState(center.above(y)).is(DragonContent.EGG), "The nest contains the complete three-block egg");
         var nestBounds = new net.minecraft.world.phys.AABB(center).inflate(60,40,60);
         var dragons = level.getEntitiesOfClass(CelestialDragonEntity.class, nestBounds);
@@ -107,6 +111,30 @@ public final class DragonGameTests {
             if (level.getBlockState(center.offset(x, 0, z)).is(DragonContent.CELESTIAL_STONE)) special++;
         helper.assertTrue(special > 9000, "Nest footprint must be giant, using hundreds of custom foundation blocks");
         dragons.forEach(CelestialDragonEntity::discard);
+        helper.succeed();
+    }
+
+    @GameTest(structure = ARENA, maxTicks = 60, skyAccess = true)
+    public void oldFloatingSanctuaryRepairsOnlyMissingAirSupports(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos center = helper.absolutePos(new BlockPos(3072, 3, 3072));
+        for (int sx : new int[]{-1, 1}) for (int sz : new int[]{-1, 1}) {
+            BlockPos column = center.offset(sx*11, 0, -24+sz*10);
+            for (int dx=-1; dx<=1; dx++) for(int dz=-1; dz<=1; dz++) {
+                level.setBlock(column.offset(dx,1,dz), Blocks.STONE.defaultBlockState(), 3);
+                for(int y=2;y<=4;y++) level.setBlock(column.offset(dx,y,dz), Blocks.AIR.defaultBlockState(),3);
+                level.setBlock(column.offset(dx,5,dz), DragonContent.ARENA_PILLAR.defaultBlockState(),3);
+            }
+        }
+        BlockPos playerBlock = center.offset(-11,3,-34);
+        level.setBlock(playerBlock, Blocks.DIAMOND_BLOCK.defaultBlockState(),3);
+        helper.assertTrue(NestGenerator.repairSanctuarySupports(level, center.above(2)), "Loaded old arena can repair");
+        for (int sx : new int[]{-1, 1}) for (int sz : new int[]{-1, 1}) for(int y=2;y<=4;y++) {
+            BlockPos pos=center.offset(sx*11,y,-24+sz*10);
+            helper.assertTrue(!level.getBlockState(pos).isAir(), "Old support gap must be filled");
+        }
+        helper.assertTrue(level.getBlockState(playerBlock).is(Blocks.DIAMOND_BLOCK), "Repair preserves placed solid blocks");
+        helper.assertTrue(NestGenerator.repairSanctuarySupports(level, center.above(2)), "Repair can run again safely");
         helper.succeed();
     }
 

@@ -17,7 +17,8 @@
       "br.com.celestialdragon.test.DragonClientGameTest",
       "br.com.celestialdragon.test.DragonNaturalWorldGameTest",
       "br.com.celestialdragon.test.DragonVanillaEggClientGameTest",
-      "br.com.celestialdragon.test.DragonVisualClientGameTest"
+      "br.com.celestialdragon.test.DragonVisualClientGameTest",
+      "br.com.celestialdragon.test.DragonAudioClientGameTest"
     ]
   },
   "depends": {

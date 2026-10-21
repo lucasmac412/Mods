@@ -68,7 +68,7 @@ public final class NestGenerator {
                 if (towerDistance <= 1 && y > 23 && y <= 26) state = (towerDistance == 0 && y == 25 ? DragonContent.ARENA_LANTERN : DragonContent.ARENA_PILLAR).defaultBlockState();
                 // Four sanctuary columns and a crown above the sleeping platform.
                 if ((Math.abs(x) >= 10 && Math.abs(x) <= 12) && (Math.abs(z + 24) >= 9 && Math.abs(z + 24) <= 11)
-                        && y > 4 && y <= 20) state = (y == 20 && Math.abs(x) == 11 && Math.abs(z + 24) == 10 ? DragonContent.ARENA_LANTERN : DragonContent.ARENA_PILLAR).defaultBlockState();
+                        && y > 1 && y <= 20) state = (y == 20 && Math.abs(x) == 11 && Math.abs(z + 24) == 10 ? DragonContent.ARENA_LANTERN : DragonContent.ARENA_PILLAR).defaultBlockState();
                 if (Math.abs(x) <= 12 && z >= -36 && z <= -12 && y == 21 && (Math.abs(x) >= 10 || z <= -34 || z >= -14))
                     state = DragonContent.RUNESTONE.defaultBlockState();
                 if (x == 0 && z == 0 && y == 1) state = DragonContent.RUNESTONE.defaultBlockState();
@@ -80,6 +80,30 @@ public final class NestGenerator {
             }
         }
     }
+    /** Repair the missing supports in 0.3.0 arenas, without rebuilding terrain or forcing chunks. */
+    public static boolean repairSanctuarySupports(ServerLevel level, BlockPos egg) {
+        BlockPos center = egg.below(2);
+        for (int sx : new int[]{-1, 1}) for (int sz : new int[]{-1, 1}) {
+            BlockPos column = center.offset(sx * 11, 0, -24 + sz * 10);
+            if (!level.hasChunksAt(column.offset(-1, 0, -1), column.offset(1, 5, 1))) return false;
+        }
+        for (int sx : new int[]{-1, 1}) for (int sz : new int[]{-1, 1}) {
+            BlockPos column = center.offset(sx * 11, 0, -24 + sz * 10);
+            for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) {
+                // Only recognize the old sanctuary above an existing arena floor.
+                BlockPos base = column.offset(dx, 1, dz);
+                if (!level.getBlockState(base.above(4)).is(DragonContent.ARENA_PILLAR)
+                        || level.getBlockState(base).isAir()) continue;
+                for (int dy = 1; dy <= 3; dy++) {
+                    BlockPos support = base.above(dy);
+                    if (level.getBlockState(support).isAir())
+                        level.setBlock(support, DragonContent.ARENA_PILLAR.defaultBlockState(), 3);
+                }
+            }
+        }
+        return true;
+    }
+
     static boolean placeInhabitants(WorldGenLevel level, BlockPos center) {
         BlockPos egg = center.above(2);
         boolean complete = true;

@@ -1,16 +1,20 @@
 # Dragão Celestial — Ouro e Obsidiana
 
-Mod independente para **Minecraft Java Edition 26.2 + Fabric**, versão **0.3.0-experimental**. Adiciona um dragão chinês negro e dourado, voo montado, mordida, raio de energia, o Bosque Celestial, ninhos gigantes, ovos coletáveis e uma incubadora. Pode ser instalado sem a Luma.
+Mod independente para **Minecraft Java Edition 26.2 + Fabric**, versão **0.3.1-experimental**. Adiciona um dragão chinês negro e dourado, voo montado, mordida, raio de energia, o Bosque Celestial, ninhos gigantes, ovos coletáveis e uma incubadora. Pode ser instalado sem a Luma.
 
-**[Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.0-Experimental.zip)** · **[Instalação passo a passo](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.0-experimental/docs/INSTALAR-DRAGAO.md)** · **[Ver o movimento no jogo](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/docs/dragao/ondulacao.gif)**
+**[Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.1-Experimental.zip)** · **[Instalação passo a passo](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.1-experimental/docs/INSTALAR-DRAGAO.md)** · **[Ver o movimento no jogo](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.1-experimental/docs/dragao/ondulacao.gif)**
 
 O ZIP contém o JAR do dragão e o Fabric API compatível. Instale Minecraft 26.2, Fabric Loader 0.19.5 ou superior compatível e Java 25. Copie os dois JARs para a pasta `mods` do perfil Fabric. No multiplayer, instale os mesmos arquivos no servidor e nos clientes. Esta é uma versão experimental; faça uma cópia do mundo antes de usá-la e prefira um mundo novo para explorar a geração.
 
 **Bioma comum para testes:** o Bosque Celestial continua muito comum, como na 0.1.1. Há um centro de bosque e ninho por região de **256 × 256 blocos**, em vez de 1.536 × 1.536 na 0.1.0: **36 vezes mais centros por área**. O raio continua em 192 blocos, então bosques vizinhos podem se unir em áreas extensas. Essa frequência é temporária durante o desenvolvimento; o equilíbrio final será definido depois.
 
-[Veja as garras de perto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/docs/dragao/14-garras-ombro.png) · [Escamas pontudas](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/docs/dragao/15-escamas-costas.png).
+[Veja as garras de perto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.1-experimental/docs/dragao/14-garras-ombro.png) · [Escamas pontudas](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.1-experimental/docs/dragao/15-escamas-costas.png).
 
-A **0.3.0** traz patas dianteiras mais longas e remove as traseiras. O raio tem um núcleo sólido mais grosso com aura translúcida; Shift acelera com arcos elétricos. Ao montar, a câmera passa automaticamente para terceira pessoa, afastada e elevada, com colisão contra blocos; ao desmontar, restaura a perspectiva anterior.
+A **0.3.1 corrige os pilares flutuantes, a cintilação dos blocos decorativos, o alcance dos sons e cliques de ovos normais interceptados pelo corpo do dragão**. Os quatro pilares agora chegam ao piso. Nas arenas antigas com guardião presente, os espaços de apoio são preenchidos automaticamente quando a região estiver carregada, preservando blocos sólidos já colocados pelo jogador. Os modelos decorativos passaram a usar um único cubo com seis faces, sem camadas sobrepostas. O visual dos pilares fica mais simples para evitar o defeito de renderização.
+
+Os sons do dragão usam o controle de volume **Criaturas hostis**. O alcance audível foi aumentado para funcionar com a câmera afastada; um dragão acordado também ruge ao aparecer/carregar. O guardião continua silencioso enquanto dorme. O uso de ovos normais mantém o alcance padrão do Minecraft: o corpo do dragão deixa de interceptar um clique que pode alcançar um bloco atrás dele.
+
+A versão mantém patas dianteiras mais longas e remove as traseiras. O raio tem um núcleo sólido mais grosso com aura translúcida; Shift acelera com arcos elétricos. Ao montar, a câmera passa automaticamente para terceira pessoa, afastada e elevada, com colisão contra blocos; ao desmontar, restaura a perspectiva anterior.
 
 A **Genki Dama** cresce acima do dragão durante **40 ticks (aproximadamente dois segundos)** até **20 blocos de diâmetro**, depois viaja a **0,30 bloco por tick (6 blocos por segundo)** na direção escolhida ao terminar a carga. A câmera abre mais durante a formação e o começo da viagem. Ao primeiro contato sólido, destrói uma área de **20 × 24 blocos e seis de profundidade**, sem quebrar bedrock ou outros blocos indestrutíveis. Os blocos destruídos não geram milhares de itens no chão. O dano a criaturas é três vezes o dano configurado para o raio, preservando dono e aliados. A recarga é de **600 ticks (30 segundos)**. A carga cancela se o dono desmontar; o projétil deixa de existir se seu dragão morrer ou a região adiante não estiver carregada. Se não atingir nenhum bloco, desaparece após até 25 segundos de viagem. Mire no terreno para produzir a explosão.
 
@@ -18,9 +22,9 @@ A nova arena do ninho mede **113 blocos de diâmetro**, com oito torres, anéis 
 
 O guardião natural começa **dormindo enrolado**, imóvel em sua plataforma. Visitas em Criativo ou Espectador não o despertam. A entrada de um jogador em Sobrevivência ou Aventura no interior da arena o acorda; atacá-lo também o acorda. Surge a barra de chefe no topo da tela para jogadores próximos. O estado de sono é salvo com o mundo. O dragão criado pelo ovo selvagem do Criativo não gera uma arena ao redor de si.
 
-O visual e os controles atualizam os dragões existentes. **A arena nova aparece apenas em regiões ainda não geradas**; prefira um mundo novo para conferir o ninho maior. Cliente e servidor precisam usar a mesma versão 0.3.0.
+Estas correções funcionam no mundo atual. O visual dos blocos muda ao atualizar o mod; os apoios antigos são reparados com o guardião presente. A arena maior introduzida na 0.3.0 continua aparecendo somente em regiões geradas com essa estrutura; mundos da 0.1.x ou 0.2.x precisam de regiões novas para encontrá-la. Cliente e servidor precisam usar a mesma versão 0.3.1.
 
-Para atualizar de uma versão 0.2.x ou de qualquer versão 0.1.x, feche o jogo e substitua o JAR antigo por `celestial-dragon-0.3.0-experimental.jar`; mantenha apenas uma versão do dragão na pasta `mods`. O Fabric API continua o mesmo. Para ver a geração mais comum, crie um mundo novo ou explore regiões ainda não geradas: áreas já exploradas não são refeitas.
+Para atualizar da 0.3.0 ou de qualquer versão anterior, feche o jogo e substitua o JAR antigo por `celestial-dragon-0.3.1-experimental.jar`; mantenha apenas uma versão do dragão na pasta `mods`. O Fabric API continua o mesmo. Para ver a geração mais comum, crie um mundo novo ou explore regiões ainda não geradas: áreas já exploradas não são refeitas.
 
 ## Testar pelo Criativo
 
@@ -97,6 +101,6 @@ Com JDK 25 instalado, execute a partir da raiz deste repositório:
 ./gradlew -p dragon-mod runGameTest
 ```
 
-No Windows, use `gradlew.bat -p dragon-mod build`. O mod instalável fica em `dragon-mod/build/libs/celestial-dragon-0.3.0-experimental.jar`; o arquivo `-sources.jar` contém o código-fonte e não deve ser instalado como mod.
+No Windows, use `gradlew.bat -p dragon-mod build`. O mod instalável fica em `dragon-mod/build/libs/celestial-dragon-0.3.1-experimental.jar`; o arquivo `-sources.jar` contém o código-fonte e não deve ser instalado como mod.
 
-A suíte do servidor verifica configuração, ovos, incubação, combate e proteção de aliados. Os testes gráficos verificam modelo, menu, controles montados, uso dos ovos normais do Minecraft e geração em mundo Normal com recarga. Veja os [resultados, capturas reais e limites](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.0-experimental/docs/TESTES-DRAGAO.md). A nuvem não tem saída de áudio; a reprodução dos sons precisa ser conferida no computador do jogador.
+A suíte do servidor verifica configuração, ovos, incubação, combate e proteção de aliados. Os testes gráficos verificam modelo, menu, controles montados, uso dos ovos normais do Minecraft e geração em mundo Normal com recarga. Veja os [resultados, capturas reais e limites](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.1-experimental/docs/TESTES-DRAGAO.md). A execução na nuvem validou os cinco efeitos no motor OpenAL com saída digital gravada; a reprodução física no computador do jogador ainda precisa ser conferida.

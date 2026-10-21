@@ -1,8 +1,68 @@
 {
-  "dragon.roar": {"subtitle": "subtitles.celestial_dragon.roar", "sounds": [{"name": "celestial_dragon:roar", "volume": 0.85}]},
-  "dragon.bite": {"subtitle": "subtitles.celestial_dragon.bite", "sounds": [{"name": "celestial_dragon:bite", "volume": 0.8}]},
-  "dragon.beam": {"subtitle": "subtitles.celestial_dragon.beam", "sounds": [{"name": "celestial_dragon:beam", "volume": 0.75}]},
-  "dragon.hurt": {"subtitle": "subtitles.celestial_dragon.hurt", "sounds": [{"name": "celestial_dragon:hurt", "volume": 0.85}]},
-  "dragon.death": {"subtitle": "subtitles.celestial_dragon.death", "sounds": [{"name": "celestial_dragon:death", "volume": 0.85}]},
-  "biome.ambience": {"subtitle": "subtitles.celestial_dragon.ambience", "sounds": [{"name": "celestial_dragon:ambience", "volume": 0.65}]}
+  "dragon.roar": {
+    "subtitle": "subtitles.celestial_dragon.roar",
+    "sounds": [
+      {
+        "name": "celestial_dragon:roar",
+        "volume": 0.85,
+        "attenuation_distance": 64,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.bite": {
+    "subtitle": "subtitles.celestial_dragon.bite",
+    "sounds": [
+      {
+        "name": "celestial_dragon:bite",
+        "volume": 0.8,
+        "attenuation_distance": 48,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.beam": {
+    "subtitle": "subtitles.celestial_dragon.beam",
+    "sounds": [
+      {
+        "name": "celestial_dragon:beam",
+        "volume": 0.75,
+        "attenuation_distance": 64,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.hurt": {
+    "subtitle": "subtitles.celestial_dragon.hurt",
+    "sounds": [
+      {
+        "name": "celestial_dragon:hurt",
+        "volume": 0.85,
+        "attenuation_distance": 48,
+        "preload": true
+      }
+    ]
+  },
+  "dragon.death": {
+    "subtitle": "subtitles.celestial_dragon.death",
+    "sounds": [
+      {
+        "name": "celestial_dragon:death",
+        "volume": 0.85,
+        "attenuation_distance": 64,
+        "preload": true
+      }
+    ]
+  },
+  "biome.ambience": {
+    "subtitle": "subtitles.celestial_dragon.ambience",
+    "sounds": [
+      {
+        "name": "celestial_dragon:ambience",
+        "volume": 0.65,
+        "attenuation_distance": 24,
+        "preload": true
+      }
+    ]
+  }
 }

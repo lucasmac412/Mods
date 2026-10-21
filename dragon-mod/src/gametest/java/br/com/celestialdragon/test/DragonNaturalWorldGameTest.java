@@ -79,6 +79,10 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
             context.waitTicks(8);
             world.getConnection().waitForChunksRender();
             context.takeScreenshot(TestScreenshotOptions.of("17-sleeping-guardian-sanctuary").disableCounterPrefix().withSize(1280,720).withDestinationDir(REPORTS));
+            world.getServer().runCommand("time set midnight");
+            context.waitTicks(10);
+            context.takeScreenshot(TestScreenshotOptions.of("23-sanctuary-solid-pillars-night").disableCounterPrefix().withSize(1280,720).withDestinationDir(REPORTS));
+            world.getServer().runCommand("time set noon");
         }
 
         // Reopen the saved generated world, rather than rerunning the procedural command helper.
@@ -183,6 +187,9 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
                 || !level.getBlockState(base.offset(-56, 0, 0)).is(DragonContent.CELESTIAL_STONE)
                 || !level.getBlockState(base.offset(56, 0, 0)).is(DragonContent.CELESTIAL_STONE))
             throw new AssertionError("Natural 113-block nest foundation was clipped: " + stone + " blocks at " + base);
+        for (int sx : new int[]{-1, 1}) for (int sz : new int[]{-1, 1}) for (int y=2; y<=19; y++)
+            if (!level.getBlockState(base.offset(sx*11,y,-24+sz*10)).is(DragonContent.ARENA_PILLAR))
+                throw new AssertionError("Naturally generated sanctuary pillar must reach the floor");
         return stone;
     }
 

@@ -98,6 +98,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     private Vec3 idleDestination;
     private int spiritCooldown;
     private float boostAmount;
+    private boolean sanctuarySupportsChecked;
     private final ServerBossEvent boss = new ServerBossEvent(UUID.randomUUID(),
             Component.literal("Dragão Celestial — Guardião do Ninho"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS);
 
@@ -367,6 +368,9 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         boostAmount = Mth.clamp(boostAmount + (isBoosting() ? 0.08F : -0.12F), 0, 1);
         super.tick();
         if (!(level() instanceof ServerLevel server)) return;
+        if (tickCount == 1 && isAlive() && !isDormant()) playSound(DragonSounds.ROAR, 1.8F, 0.85F);
+        if (!sanctuarySupportsChecked && !isTamed() && nest != null && tickCount % 40 == 0)
+            sanctuarySupportsChecked = NestGenerator.repairSanctuarySupports(server, nest);
         if (tickCount % 20 == 0) {
             double configuredMax = DragonConfig.current().maxHealth();
             var attribute = getAttribute(Attributes.MAX_HEALTH);
@@ -508,7 +512,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     }
 
     private void applyBite(ServerLevel server) {
-        playSound(DragonSounds.BITE, 0.9F, 0.9F + random.nextFloat() * 0.15F);
+        playSound(DragonSounds.BITE, 1.25F, 0.9F + random.nextFloat() * 0.15F);
         Vec3 forward = getLookAngle();
         Vec3 origin = position().add(0, getBbHeight() * 0.52, 0);
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class,
@@ -613,6 +617,8 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     @Override
     protected SoundEvent getAmbientSound() { return isDormant() ? null : DragonSounds.ROAR; }
 
+    @Override public net.minecraft.sounds.SoundSource getSoundSource() { return net.minecraft.sounds.SoundSource.HOSTILE; }
+
     @Override
     public int getAmbientSoundInterval() { return 240; }
 
@@ -635,6 +641,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         output.putInt("DragonBeamCooldown", beamCooldown);
         output.putInt("DragonSpiritCooldown", spiritCooldown);
         output.putBoolean("DragonDormant", isDormant());
+        output.putBoolean("SanctuarySupportsV1", sanctuarySupportsChecked);
         // Health/attributes are persisted by LivingEntity above.
     }
 
@@ -654,6 +661,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         entityData.set(BEAM, 0);
         spiritCooldown = Mth.clamp(input.getIntOr("DragonSpiritCooldown", 0), 0, SPIRIT_COOLDOWN);
         entityData.set(DORMANT, !isTamed() && nest != null && input.getBooleanOr("DragonDormant", false));
+        sanctuarySupportsChecked = input.getBooleanOr("SanctuarySupportsV1", false);
         if (isDormant()) setNoAi(true);
         entityData.set(SPIRIT, 0);
         entityData.set(BOOST, false);

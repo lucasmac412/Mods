@@ -1,10 +1,10 @@
 # Instalar Luma com Ollama e voz
 
-Também disponível: **[Dragão Celestial 0.3.0 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.0-Experimental.zip)**, um mod independente, com dois JARs e instruções. Siga o [passo a passo do dragão](../docs/INSTALAR-DRAGAO.md). Não precisa de Luma ou Ollama. Para reconstruir esse pacote após compilar `dragon-mod`, execute `python3 scripts/package-dragon.py`.
+Também disponível: **[Dragão Celestial 0.3.1 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.1-Experimental.zip)**, um mod independente, com dois JARs e instruções. Siga o [passo a passo do dragão](../docs/INSTALAR-DRAGAO.md). Não precisa de Luma ou Ollama. Para reconstruir esse pacote após compilar `dragon-mod`, execute `python3 scripts/package-dragon.py`.
 
-A 0.3.0 acrescenta câmera afastada, Shift para acelerar, dois toques em Ctrl para desmontar, R para a Genki Dama gigante, raio com aura e ninho de 113 blocos com guardião adormecido e barra de chefe. Patas dianteiras mais longas e nenhuma pata traseira; 17 itens no Criativo. A arena maior aparece em regiões novas.
+A 0.3.1 corrige pilares flutuantes, blocos que piscavam, alcance dos sons e cliques dos ovos normais interceptados pelo dragão. Mantém câmera afastada, Shift para acelerar, dois toques em Ctrl para desmontar, R para a Genki Dama gigante, raio com aura e ninho de 113 blocos com guardião adormecido e barra de chefe. Patas dianteiras mais longas e nenhuma pata traseira; 17 itens no Criativo. A arena maior aparece em regiões novas.
 
-Nesta versão de testes, o Bosque Celestial continua muito comum: um centro de bosque e ninho por região de 256 × 256 blocos, 36 vezes mais centros por área do que na 0.1.0. Os bosques mantêm raio de 192 blocos e podem se unir. A frequência aumentada é temporária e aparece somente em regiões novas; prefira um mundo novo. Ao atualizar, substitua o JAR antigo por `celestial-dragon-0.3.0-experimental.jar`, sem deixar duas versões em `mods`; o Fabric API não mudou.
+Nesta versão de testes, o Bosque Celestial continua muito comum: um centro de bosque e ninho por região de 256 × 256 blocos, 36 vezes mais centros por área do que na 0.1.0. Os bosques mantêm raio de 192 blocos e podem se unir. A frequência aumentada é temporária e aparece somente em regiões novas; prefira um mundo novo. Ao atualizar, substitua o JAR antigo por `celestial-dragon-0.3.1-experimental.jar`, sem deixar duas versões em `mods`; o Fabric API não mudou.
 
 **[Baixar o pacote pronto 0.4.0 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/v0.4.0-experimental/downloads/Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip)**.
 
@@ -20,7 +20,7 @@ O erro “não foi possível baixar o artefato” refere-se à entrega de arquiv
 
 `SHA256SUMS.txt` registra os checksums. Leia o [guia completo](../docs/INSTALAR.md), o [guia de Ollama e voz](../docs/OLLAMA-E-VOZ.md) e os [testes](../docs/TESTES.md).
 
-Os pacotes 0.1, 0.2 e 0.3 são preservados para referência. O nome `Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip` identifica a versão anterior, sem esta integração com Ollama e sem o complemento de tecla de microfone.
+Os pacotes 0.1, 0.2 e 0.3 são preservados para referência. O nome `Luma-Fabric-26.2-IA-Propria-v0.3.1-Experimental.zip` identifica a versão anterior, sem esta integração com Ollama e sem o complemento de tecla de microfone.
 
 Luma Voz usa Vosk e um modelo de português de terceiros, com licenças e origem documentadas no pacote. A fala da Luma depende da voz do sistema. O reconhecimento do complemento ocorre localmente; o painel opcional no Chrome pode depender de serviços online do navegador.
 

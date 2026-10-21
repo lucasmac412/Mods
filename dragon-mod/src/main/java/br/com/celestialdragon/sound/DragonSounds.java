@@ -7,11 +7,11 @@ import net.minecraft.sounds.SoundEvent;
 
 /** Original sounds bundled with the mod, with bounded positional audibility. */
 public final class DragonSounds {
-    public static final SoundEvent ROAR = create("dragon.roar", 40.0F);
-    public static final SoundEvent BITE = create("dragon.bite", 24.0F);
-    public static final SoundEvent BEAM = create("dragon.beam", 40.0F);
-    public static final SoundEvent HURT = create("dragon.hurt", 28.0F);
-    public static final SoundEvent DEATH = create("dragon.death", 40.0F);
+    public static final SoundEvent ROAR = create("dragon.roar", 64.0F);
+    public static final SoundEvent BITE = create("dragon.bite", 48.0F);
+    public static final SoundEvent BEAM = create("dragon.beam", 64.0F);
+    public static final SoundEvent HURT = create("dragon.hurt", 48.0F);
+    public static final SoundEvent DEATH = create("dragon.death", 64.0F);
     public static final SoundEvent AMBIENCE = create("biome.ambience", 24.0F);
 
     private DragonSounds() {

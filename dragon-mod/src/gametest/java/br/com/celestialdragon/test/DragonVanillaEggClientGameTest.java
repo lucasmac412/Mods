@@ -32,6 +32,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.lwjgl.glfw.GLFW;
 
@@ -65,6 +66,25 @@ public final class DragonVanillaEggClientGameTest implements FabricClientGameTes
                     InteractionHand.MAIN_HAND, new BlockPos(0, 139, 3), null);
             clickVanillaEgg(context, world, Items.ZOMBIE_SPAWN_EGG, EntityTypes.ZOMBIE,
                     InteractionHand.MAIN_HAND, new BlockPos(-3, 139, 3), null);
+
+            UUID obstruction = server.computeOnServer(ignored -> {
+                var blocker = CelestialDragonMod.DRAGON.create(world.getConnection().getServerLevel(), EntitySpawnReason.COMMAND);
+                blocker.snapTo(.5,140,2.5,0,0);
+                blocker.setNoAi(true);
+                blocker.setInvulnerable(true);
+                world.getConnection().getServerLevel().addFreshEntity(blocker);
+                return blocker.getUUID();
+            });
+            world.getConnection().waitForClientboundEntityUpdates(CelestialDragonMod.DRAGON);
+            equip(context,world,InteractionHand.MAIN_HAND,Items.COW_SPAWN_EGG);
+            lookAtTopFace(context,new BlockPos(0,139,3));
+            context.runOnClient(client -> {
+                if (!(client.hitResult instanceof EntityHitResult hit) || !(hit.getEntity() instanceof CelestialDragonEntity))
+                    throw new AssertionError("Regression must reproduce a dragon intercepting a vanilla egg click");
+            });
+            clickVanillaEgg(context,world,Items.COW_SPAWN_EGG,EntityTypes.COW,InteractionHand.MAIN_HAND,new BlockPos(0,139,3),null);
+            server.runOnServer(ignored -> world.getConnection().getServerLevel().getEntity(obstruction).discard());
+            world.getConnection().waitForClientboundPackets();
 
             UUID dragonId = server.computeOnServer(ignored -> mountDragon(world));
             world.getConnection().waitForClientboundPackets();
@@ -120,7 +140,7 @@ public final class DragonVanillaEggClientGameTest implements FabricClientGameTes
                     || tab.getDisplayItems().size() != displayed.size()
                     || !displayed.contains(DragonContent.WILD_DRAGON_SPAWN_EGG)
                     || !displayed.contains(DragonContent.TAMED_DRAGON_SPAWN_EGG))
-                throw new AssertionError("The visible dragon tab must contain all twelve mod items, including both spawn eggs");
+                throw new AssertionError("The visible dragon tab must contain all seventeen mod items, including both spawn eggs");
             if (creative.getCurrentPage() != creative.getPage(tab))
                 throw new AssertionError("The shortcut must switch to the page actually containing the dragon tab");
         });
@@ -172,7 +192,10 @@ public final class DragonVanillaEggClientGameTest implements FabricClientGameTes
                 .getEntities(type, mob -> true).stream().map(Mob::getUUID).collect(java.util.stream.Collectors.toSet()));
         lookAtTopFace(context, target);
         context.runOnClient(client -> {
-            if (!(client.hitResult instanceof BlockHitResult hit) || !hit.getBlockPos().equals(target))
+            var blockRay = client.player.pick(client.player.blockInteractionRange(),1.0F,false);
+            boolean intercept = client.hitResult instanceof EntityHitResult entityHit && entityHit.getEntity() instanceof CelestialDragonEntity;
+            if (!(blockRay instanceof BlockHitResult hit) || !hit.getBlockPos().equals(target)
+                    || !(client.hitResult instanceof BlockHitResult) && !intercept)
                 throw new AssertionError("Egg click must point at its reachable block, got " + client.hitResult);
         });
         context.getInput().holdMouseFor(GLFW.GLFW_MOUSE_BUTTON_RIGHT, 1);
