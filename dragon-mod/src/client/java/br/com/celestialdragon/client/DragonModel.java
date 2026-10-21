@@ -342,7 +342,7 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
         neck.xRot = Mth.clamp(state.xRot * Mth.DEG_TO_RAD, -Mth.HALF_PI, Mth.HALF_PI) + attack.neckPitch();
         neck.z += attack.pullBack();
         head.yRot = Mth.clamp(state.yRot * Mth.DEG_TO_RAD * 0.5F, -0.45F, 0.45F)
-                * (state.beamTicks > 0 ? 0.08F : 1);
+                * (state.beamTicks > 0 ? 0.08F : 1 - 0.85F * attack.brace());
         head.xRot = attack.headPitch() + Mth.sin(time * 0.065F) * 0.012F * (1 - attack.brace());
         jaw.xRot = attack.jawOpening();
         neck.xRot = Mth.lerp(rest, neck.xRot, -.48F); neck.z += 18 * rest;

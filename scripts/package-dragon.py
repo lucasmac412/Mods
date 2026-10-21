@@ -7,8 +7,8 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.3.3-experimental"
-NAME = "Dragao-Celestial-Fabric-26.2-v0.3.3-Experimental.zip"
+VERSION = "0.3.4-experimental"
+NAME = "Dragao-Celestial-Fabric-26.2-v0.3.4-Experimental.zip"
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
 OLD_PACKAGE_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 
@@ -55,6 +55,9 @@ def main():
                     "assets/celestial_dragon/models/item/wild_dragon_spawn_egg.json",
                     "assets/celestial_dragon/models/item/tamed_dragon_spawn_egg.json",
                     "assets/celestial_dragon/textures/entity/celestial_dragon.png",
+                    "assets/celestial_dragon/textures/block/celestial_lantern_side.png",
+                    "assets/celestial_dragon/textures/block/celestial_lantern_top.png",
+                    "assets/celestial_dragon/textures/block/celestial_lantern_bottom.png",
                     "data/celestial_dragon/worldgen/biome/celestial_grove.json",
                     "data/celestial_dragon/worldgen/structure/dragon_nest.json",
                     "data/celestial_dragon/recipe/celestial_incubator.json"]
@@ -66,6 +69,11 @@ def main():
         for path in required:
             if path not in archive.namelist():
                 raise SystemExit("Recurso obrigatório ausente: " + path)
+        lantern = json.loads(archive.read("assets/celestial_dragon/models/block/celestial_lantern.json"))
+        expected_lantern = {face: f"celestial_dragon:block/celestial_lantern_{face}"
+                            for face in ("side", "top", "bottom")}
+        if lantern.get("textures") != expected_lantern:
+            raise SystemExit("A lanterna rúnica precisa usar suas três texturas próprias.")
         sounds = json.loads(archive.read("assets/celestial_dragon/sounds.json"))
         for key in ["dragon.roar", "dragon.bite", "dragon.beam", "dragon.hurt", "dragon.death", "biome.ambience", "dragon.breath", "dragon.flight", "dragon.beam_charge", "dragon.spirit_charge", "dragon.spirit_launch", "dragon.spirit_impact"]:
             if key not in sounds:
@@ -91,7 +99,7 @@ def main():
         "licenses/LICENSE-fabric-api.txt": fabric_license,
         "THIRD-PARTY-NOTICES.txt": (
             "Dragão Celestial: código, modelo e texturas do projeto, licença MIT (LICENSE).\n"
-            "Áudio 0.3.3: CC BY-SA 3.0, adaptado de gravações de Michael Klier e de rugido de leão em domínio público.\n"
+            "Áudio 0.3.4: CC BY-SA 3.0, adaptado de gravações de Michael Klier e de rugido de leão em domínio público.\n"
             "Créditos, mudanças, fontes e licença integral: licenses/dragon-audio/.\n\n"
             "Os modelos de blocos também referenciam texturas fornecidas pelo próprio Minecraft; esses arquivos do jogo não são redistribuídos neste pacote.\n\n"
             "Fabric API 0.161.0+26.2: FabricMC contributors, licença Apache-2.0.\n"

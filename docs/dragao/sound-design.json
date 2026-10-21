@@ -1,6 +1,6 @@
 {
-  "version": "0.3.3-experimental",
-  "provenance": "Recorded lion roar (PD-self) and Large Monster by Michael Klier (CC BY-SA 3.0), edited in layers; additional smooth synthesized energy and wind. No oscillator-generated vocal cords, saturation or random high-frequency arc pops.",
+  "version": "0.3.4-experimental",
+  "provenance": "Recorded lion roar (PD-self) and Large Monster by Michael Klier (CC BY-SA 3.0), layered and time stretched with Rubber Band; deeper 6.8-second roars, short jaw impacts; other eleven assets unchanged. YouTube reference was inaccessible; user described a deep, prolonged giant-monster roar. No YouTube audio copied. No human timbre review.",
   "audioLicense": "CC BY-SA 3.0",
   "sourceManifest": "../../third-party/dragon-audio/sources.json",
   "sources": [
@@ -52,21 +52,21 @@
     },
     {
       "name": "bite.ogg",
-      "seconds": 0.647,
+      "seconds": 0.417,
       "sampleRate": 44100,
       "channels": 1,
-      "meanDb": -19.9,
+      "meanDb": -15.7,
       "peakDb": -3.8,
-      "sha256": "d2cf25ac00b8a659b56d4481cf81a3983f30f70286a5a985f34366e4608cd729"
+      "sha256": "7c566c391cf0be8f256bbc9014ca43d1e6e55caa8663cfc2e3654fe0fca00bc5"
     },
     {
       "name": "bite_2.ogg",
-      "seconds": 0.697,
+      "seconds": 0.447,
       "sampleRate": 44100,
       "channels": 1,
-      "meanDb": -20.6,
+      "meanDb": -16.9,
       "peakDb": -3.9,
-      "sha256": "5a3bf75210bb300140ad15d96a111de75d4b5bf597a111ab46fadb3c2c4c5955"
+      "sha256": "45a301a66a8a01477e1ed422ff6c77eb33e500e99f9b87bd8de1921d2dafd836"
     },
     {
       "name": "breath.ogg",
@@ -115,21 +115,21 @@
     },
     {
       "name": "roar.ogg",
-      "seconds": 3.5,
+      "seconds": 6.8,
       "sampleRate": 44100,
       "channels": 1,
-      "meanDb": -15.0,
+      "meanDb": -16.8,
       "peakDb": -3.9,
-      "sha256": "220233553e0004711535d21ba0ed80893791ab85fe492e563ebbc98a332fe68b"
+      "sha256": "6b1d772ec266f3292663639a98d3da8f2ea9b9a4f6654a706a07249dc36b9fcf"
     },
     {
       "name": "roar_2.ogg",
-      "seconds": 3.2,
+      "seconds": 6.8,
       "sampleRate": 44100,
       "channels": 1,
-      "meanDb": -14.2,
+      "meanDb": -16.1,
       "peakDb": -3.9,
-      "sha256": "8f333980ebed2ab7d0723cb60d9d121356b30b503e4a31662e66bb9578bb988e"
+      "sha256": "90dc4a9a79bde86a0f88f19038b6a5094f0a9e8e8b8d5aead592eebe3b691719"
     },
     {
       "name": "spirit_charge.ogg",

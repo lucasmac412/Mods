@@ -1,8 +1,8 @@
 # Luma — Companhia de aventura
 
-**Novo mod independente: [Dragão Celestial — ouro e obsidiana](dragon-mod/README.md).** Dragão chinês montável, voo, mordida, raio de energia, bosque, ninhos e incubação. [Baixar o pacote pronto do dragão](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.3-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.3-Experimental.zip) · [Instalar passo a passo](docs/INSTALAR-DRAGAO.md).
+**Novo mod independente: [Dragão Celestial — ouro e obsidiana](dragon-mod/README.md).** Dragão chinês montável, voo, mordida, raio de energia, bosque, ninhos e incubação. [Baixar o pacote pronto do dragão](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.4-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.4-Experimental.zip) · [Instalar passo a passo](docs/INSTALAR-DRAGAO.md).
 
-A versão **0.3.3 do dragão** usa gravações de rugido e criatura nas vocalizações, remove a saturação e os estalos agudos e suaviza os efeitos de energia. Preserva a Genki Dama de 60 blocos com destruição do terreno, o sono enrolado e a ondulação do voo. Mantém câmera afastada, arena de chefe e as correções dos pilares e ovos. [Instalação e controles](docs/INSTALAR-DRAGAO.md).
+A versão **0.3.4 do dragão** prolonga e aprofunda os rugidos, refaz o impacto da mordida e sincroniza o fechamento da mandíbula com o dano. A lanterna celestial recebe texturas próprias, diferentes da lanterna do mar. Preserva a Genki Dama de 60 blocos com destruição do terreno, o sono enrolado e o voo. [Instalação e controles](docs/INSTALAR-DRAGAO.md).
 
 Luma é uma companheira humanoide para **Minecraft Java Edition 26.2 com Fabric**. Ela tem uma skin própria em roxo e ciano, acompanha o dono, recebe ordens em português do Brasil e pode conversar pelo Ollama e receber ordens por uma tecla de microfone dentro do jogo com o complemento **Luma Voz**.
 

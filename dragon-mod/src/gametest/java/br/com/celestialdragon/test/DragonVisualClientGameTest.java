@@ -3,6 +3,7 @@ package br.com.celestialdragon.test;
 import br.com.celestialdragon.CelestialDragonMod;
 import br.com.celestialdragon.client.DragonModel;
 import br.com.celestialdragon.client.DragonRenderState;
+import br.com.celestialdragon.content.DragonContent;
 import br.com.celestialdragon.entity.CelestialDragonEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import java.nio.file.Path;
@@ -22,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 
 /** Actual game views of the mane, hooked claws, pointed scales and combat poses. */
 public final class DragonVisualClientGameTest implements FabricClientGameTest {
-    private static final Path SHOTS = Path.of("../../reports/client-visual-v6").toAbsolutePath().normalize();
+    private static final Path SHOTS = Path.of("../../reports/client-visual-v7").toAbsolutePath().normalize();
 
     @Override
     public void runTest(ClientGameTestContext context) {
@@ -74,6 +75,27 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
             context.waitTicks(3);
             screenshot(context, "09-mordida-impacto");
             server.waitFor(ignored -> dragon(world, id).biteTicks() == 0);
+            context.waitTicks(CelestialDragonEntity.BITE_COOLDOWN);
+            // Step the actual world one tick per frame: GPU readback must not consume
+            // the short windup before the first screenshot has reached the disk.
+            server.runCommand("tick freeze");
+            try {
+                server.runOnServer(ignored -> {
+                    if (!dragon(world, id).tryBite()) throw new AssertionError("Bite must restart after cooldown");
+                });
+                for (int frame = 0; frame <= CelestialDragonEntity.BITE_DURATION; frame++) {
+                    context.waitTicks(2);
+                    screenshot(context, String.format("mordida-%02d", frame));
+                    if (frame < CelestialDragonEntity.BITE_DURATION) {
+                        int expected = CelestialDragonEntity.BITE_DURATION - frame - 1;
+                        server.runCommand("tick step 1");
+                        server.waitFor(ignored -> dragon(world, id).biteTicks() == expected);
+                    }
+                }
+            } finally {
+                server.runCommand("tick unfreeze");
+            }
+            server.waitFor(ignored -> dragon(world, id).biteTicks() == 0);
             view(context, world, 6.5, 147, 9, new BlockPos(0, 144, 3), 50);
             server.runOnServer(ignored -> {
                 if (!dragon(world, id).tryBeam()) throw new AssertionError("Beam must start after the bite recovery");
@@ -91,6 +113,17 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
                     CelestialDragonEntity.BEAM_DURATION - CelestialDragonEntity.BEAM_CHARGE_TICKS - 2);
             screenshot(context, "11-raio-disparado");
             server.waitFor(ignored -> dragon(world, id).beamTicks() == 0);
+            server.runOnServer(ignored -> {
+                var level = world.getConnection().getServerLevel();
+                level.setBlockAndUpdate(new BlockPos(12, 140, 14), DragonContent.ARENA_LANTERN.defaultBlockState());
+                level.setBlockAndUpdate(new BlockPos(14, 140, 14), DragonContent.ARENA_LANTERN.defaultBlockState());
+                level.setBlockAndUpdate(new BlockPos(14, 141, 14), DragonContent.ARENA_LANTERN.defaultBlockState());
+            });
+            view(context, world, 17, 143, 19, new BlockPos(13, 141, 14), 45);
+            screenshot(context, "24-lanterna-runica");
+            server.runCommand("time set midnight");
+            context.waitTicks(8);
+            screenshot(context, "25-lanterna-runica-noite");
         } finally {
             context.runOnClient(client -> { if (client.gui.hud.isHidden()) client.gui.hud.toggle(); });
         }

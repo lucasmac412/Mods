@@ -4,7 +4,7 @@ Sources, attribution and licenses: third-party/dragon-audio. Output: CC BY-SA 3.
 Requires numpy/scipy/ffmpeg to regenerate; the game only loads the bundled Vorbis files.
 """
 from pathlib import Path
-import hashlib,json,subprocess,tempfile,wave
+import argparse,hashlib,json,subprocess,tempfile,wave
 import numpy as np
 from scipy.signal import butter,sosfilt
 
@@ -12,7 +12,7 @@ RATE=44100
 ROOT=Path(__file__).resolve().parents[2]
 SOURCES=ROOT/'third-party/dragon-audio/sources'
 DEST=ROOT/'dragon-mod/src/main/resources/assets/celestial_dragon/sounds'
-DURATIONS={'roar':3.5,'roar_2':3.2,'hurt':1.05,'hurt_2':1.1,'death':4.4,'bite':.65,'bite_2':.7,
+DURATIONS={'roar':6.8,'roar_2':6.8,'hurt':1.05,'hurt_2':1.1,'death':4.4,'bite':.42,'bite_2':.45,
            'beam':1.6,'beam_charge':.5,'spirit_charge':2.,'spirit_launch':1.8,'spirit_impact':3.8,
            'breath':2.2,'flight':1.2,'ambience':10.}
 
@@ -26,11 +26,18 @@ def fade(x,attack=.03,release=.18):
     return x*np.minimum(1,t/max(attack,1/RATE))*np.minimum(1,np.maximum(0,duration-t)/max(release,1/RATE))
 
 
-def source(name,start=0,end=None,speed=1):
+def source(name,start=0,end=None,speed=1,tempo=1):
     raw=subprocess.check_output(['ffmpeg','-v','error','-i',str(SOURCES/name),'-ac','1','-ar',str(RATE),'-f','f32le','-'])
     x=np.frombuffer(raw,dtype='<f4').astype(float)
     x=x[round(start*RATE):None if end is None else round(end*RATE)]
     x=np.interp(np.arange(0,len(x)-1,speed),np.arange(len(x)),x)
+    if tempo != 1:
+        # High-quality independent time stretch: prolong the real articulation without
+        # repeating the take or lowering its pitch yet another octave.
+        raw=subprocess.check_output(['ffmpeg','-v','error','-f','f32le','-ar',str(RATE),'-ac','1',
+            '-i','pipe:0','-af',f'rubberband=tempo={tempo}:transients=smooth',
+            '-f','f32le','pipe:1'],input=x.astype('<f4').tobytes())
+        x=np.frombuffer(raw,dtype='<f4').astype(float)
     return fade(filtered(x),.025,.12)
 
 
@@ -51,12 +58,17 @@ def render(name,seconds):
         second=name.endswith('_2')
         begin,end=(4.87,6.43) if second else (.42,2.24)
         # Foreground articulation is a real lion recording, not a waveform approximating one.
-        primary=source('lion-roar.ogg',begin,end,.69 if second else .73)
-        add(x,primary,.12,1.0)
-        body=source('lion-roar.ogg',begin,end,.50)
-        add(x,filtered(body,42,220),.10,.26)
-        throat=source('creature-death-2.wav' if second else 'creature-death-1.wav',speed=.91)
-        add(x,filtered(throat,90,1400),.16,.20)
+        primary=source('lion-roar.ogg',begin,end,.59 if second else .62,tempo=.70 if second else .72)
+        add(x,filtered(primary,45,3000),.06,1.0)
+        body=source('lion-roar.ogg',begin,end,.47,tempo=.82)
+        add(x,filtered(body,42,240),.06,.24)
+        # A different recorded exhalation carries the long tail, with overlap instead
+        # of a looping waveform or a chain of electrical transients.
+        tail_begin,tail_end=(.42,2.24) if second else (4.87,6.43)
+        tail=source('lion-roar.ogg',tail_begin,tail_end,.68,tempo=.80)
+        add(x,filtered(tail,48,2400),3.0 if second else 3.35,.68)
+        throat=source('creature-death-2.wav' if second else 'creature-death-1.wav',speed=.78,tempo=.78)
+        add(x,filtered(throat,65,1100),.12,.15)
     elif name.startswith('hurt'):
         n='2' if name.endswith('_2') else '1'
         add(x,source('creature-hit-'+n+'.wav',speed=.88),0,1.0)
@@ -66,11 +78,14 @@ def render(name,seconds):
         add(x,filtered(source('lion-roar.ogg',1.25,2.22,.67),50,2400),1.9,.30)
     elif name.startswith('bite'):
         n='2' if name.endswith('_2') else '1'
-        jaw=source('creature-hit-'+n+'.wav',0,.34,1.10)
-        add(x,jaw,.055,.65)
-        # One rounded body impact, without the old repeated electrical crackle.
-        u=np.maximum(0,t-.12)
-        x+=.16*np.sin(2*np.pi*(78*u-40*u*u))*np.exp(-u*30)*(t>=.12)
+        jaw=source('creature-hit-'+n+'.wav',0,.23,.96)
+        add(x,filtered(jaw,90,1800),.01,.26)
+        # Single dry jaw closure at the start of the sound, on the server hit tick.
+        # Rounded pressure + a short band-limited crunch, not a delayed grunt.
+        attack=1-np.exp(-t*900)
+        x+=.25*tone(t,112,58)*np.exp(-t*32)*attack
+        crunch=filtered(rng.standard_normal(len(t)),350,2400)
+        x+=crunch*.12*np.exp(-t*65)*attack
     elif name=='breath':
         exhale=source('creature-death-2.wav',.85,1.9,.62)
         add(x,filtered(exhale,70,1400),.12,1)
@@ -105,7 +120,11 @@ def render(name,seconds):
     return dict(name=name,seconds=seconds,sampleRate=RATE,sha256=hashlib.sha256((DEST/(name+'.ogg')).read_bytes()).hexdigest())
 
 if __name__=='__main__':
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--only',nargs='+',choices=DURATIONS,help='Regenerate selected sounds only')
+    args=parser.parse_args()
     manifest=json.loads((SOURCES.parent/'sources.json').read_text())
     for name,expected in manifest['files'].items():
         if hashlib.sha256((SOURCES/name).read_bytes()).hexdigest()!=expected:raise SystemExit('Source checksum mismatch: '+name)
-    print(json.dumps([render(name,seconds) for name,seconds in DURATIONS.items()],indent=2))
+    print(json.dumps([render(name,seconds) for name,seconds in DURATIONS.items()
+                      if args.only is None or name in args.only],indent=2))

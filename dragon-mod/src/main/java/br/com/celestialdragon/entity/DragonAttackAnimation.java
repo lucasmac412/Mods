@@ -16,22 +16,31 @@ public final class DragonAttackAnimation {
 
     private static AttackPose bite(float remaining) {
         float elapsed = Math.max(0, CelestialDragonEntity.BITE_DURATION - remaining);
-        float windup = CelestialDragonEntity.BITE_HIT_DELAY - 1;
+        // Anticipation is small: do not slide the entire head almost a block along the neck.
+        float windup = CelestialDragonEntity.BITE_HIT_DELAY - 1.5F;
         if (elapsed <= windup) {
             float amount = smooth(elapsed / windup);
-            return new AttackPose(Mth.lerp(amount, 0.08F, 1.08F), 4 * amount,
-                    -0.13F * amount, -0.05F * amount, amount, 0, 0.35F * amount);
+            return new AttackPose(Mth.lerp(amount, 0.08F, 0.70F), 2.5F * amount,
+                    -0.045F * amount, -0.025F * amount, amount, 0, 0.65F * amount);
         }
-        float snapEnd = CelestialDragonEntity.BITE_HIT_DELAY + 1;
+        // The jaws finish closing on the server damage tick, not one tick after it.
+        float snapEnd = CelestialDragonEntity.BITE_HIT_DELAY;
         if (elapsed <= snapEnd) {
             float amount = smooth((elapsed - windup) / (snapEnd - windup));
-            return new AttackPose(Mth.lerp(amount, 1.08F, 0.04F), Mth.lerp(amount, 4, -10),
-                    Mth.lerp(amount, -0.13F, 0.13F), Mth.lerp(amount, -0.05F, 0.08F),
-                    Mth.lerp(amount, 1, 0.35F), 0, 0.35F * (1 - amount));
+            return new AttackPose(Mth.lerp(amount, 0.70F, 0.035F), Mth.lerp(amount, 2.5F, -4.5F),
+                    Mth.lerp(amount, -0.045F, 0.065F), Mth.lerp(amount, -0.025F, 0.045F),
+                    Mth.lerp(amount, 1, 0.65F), 0, 0.65F);
         }
-        float recover = smooth((elapsed - snapEnd) / (CelestialDragonEntity.BITE_DURATION - snapEnd));
-        return new AttackPose(Mth.lerp(recover, 0.04F, 0.08F), -10 * (1 - recover),
-                0.13F * (1 - recover), 0.08F * (1 - recover), 0.35F * (1 - recover), 0, 0);
+        float holdEnd = snapEnd + 1;
+        if (elapsed <= holdEnd) {
+            float amount = smooth(elapsed - snapEnd);
+            return new AttackPose(0.035F, Mth.lerp(amount, -4.5F, -3.6F),
+                    Mth.lerp(amount, 0.065F, 0.045F), 0.045F, 0.65F, 0, 0.65F);
+        }
+        float recover = smooth((elapsed - holdEnd) / (CelestialDragonEntity.BITE_DURATION - holdEnd));
+        return new AttackPose(Mth.lerp(recover, 0.035F, 0.08F), -3.6F * (1 - recover),
+                0.045F * (1 - recover), 0.045F * (1 - recover), 0.65F * (1 - recover),
+                0, 0.65F * (1 - recover));
     }
 
     private static AttackPose beam(float remaining, float time) {

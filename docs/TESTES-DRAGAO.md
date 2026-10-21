@@ -1,16 +1,18 @@
-# Validação do Dragão Celestial 0.3.3 experimental
+# Validação do Dragão Celestial 0.3.4 experimental
 
 Ambiente de desenvolvimento Linux x86_64, JDK 25, Minecraft Java 26.2, Fabric Loader 0.19.5 e Fabric API 0.161.0+26.2. O mod é independente da Luma e do Ollama.
 
-A versão **0.3.3** substitui as vocalizações sintéticas por gravações de rugido e criatura, remove a saturação e os estalos agudos e suaviza os efeitos de energia. Preserva a Genki Dama de 60 blocos, a escavação do terreno sob copas, o sono em espiral e o voo da 0.3.2. Mantém o modelo com juba volumosa e focinho alongado, patas dianteiras alongadas com garras curvas, sem patas traseiras e escamas maiores e pontudas nas costas e no corpo. Mantém a ondulação lateral, os dois ovos de criação e a aba do Criativo. O raio continua exigindo as duas mãos vazias, para permitir o uso normal dos itens enquanto montado.
+A versão **0.3.4** prolonga os dois rugidos para cerca de 6,8 segundos, baixa seu tom e substitui as duas mordidas por impactos curtos. A mandíbula abre menos de 45 graus, fecha no quinto tick, junto ao dano, e retorna gradualmente ao repouso. O pescoço se desloca menos de 0,3 bloco; a cabeça mantém a direção do golpe. A Lanterna rúnica celestial recebe três texturas próprias e opacas de 32 × 32, com modelo cúbico de seis faces, sem camadas sobrepostas nem animação de textura. Seu registro continua `celestial_dragon:celestial_lantern`; os 17 itens e os blocos já colocados são preservados. Mantém as demais mecânicas da 0.3.3.
 
 A frequência de testes da 0.1.1 foi preservada: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São 36 vezes mais centros por área do que na 0.1.0; bosques vizinhos podem se unir. Essa geração só aparece em regiões novas do Overworld. Prefira um mundo novo para testar.
 
 ## Resultados desta versão
 
-Em **21 de outubro de 2026**, passaram **4 testes JUnit**, **31 GameTests de servidor** (30 cenários do mod e um controle interno do Fabric) e os **cinco cenários de cliente** descritos abaixo.
+Em **21 de outubro de 2026**, passaram **7 testes JUnit**, **31 GameTests de servidor** (30 cenários do mod e um controle interno do Fabric) e os **cinco cenários de cliente** descritos abaixo.
 
-No teste com entradas reais, a Genki Dama acionada por R removeu **480 blocos da superfície** da plataforma. Em duas janelas de 16 ticks, W percorreu cerca de **10,08 blocos** e W + Shift cerca de **28,27 blocos**, mantendo o jogador montado. Isso confirma a aceleração nesse cenário; não é uma medição de desempenho no computador do jogador.
+No teste com entradas reais, a Genki Dama acionada por R removeu **480 blocos da superfície** da plataforma. Em duas janelas de 16 ticks, W percorreu cerca de **11,15 blocos** e W + Shift cerca de **25,08 blocos**, mantendo o jogador montado. Isso confirma a aceleração nesse cenário; não é uma medição de desempenho no computador do jogador.
+
+Os três novos testes JUnit verificam mandíbula fechada no tick do dano, limites de abertura e deslocamento sem saltos e recuperação sem acumular transformações entre ataques.
 
 ## Servidor e configuração
 
@@ -44,13 +46,13 @@ Relatórios reproduzíveis: `dragon-mod/build/test-results/test/TEST-*.xml` e `d
 1. **Modelo, configuração e montaria:** renderiza os dragões selvagem e domado; abre o botão do Esc; rejeita NaN na tela e no servidor; salva vida 240, mordida 14 e raio 35, confirmando os valores no servidor. Monta com o dono, usa as entradas reais W/Espaço/Ctrl, aciona o raio pelo botão direito e confere câmera automática e Shift sem desmontar, usa R para a Genki Dama, exige uma cratera real na plataforma, compara a distância de voo com W e W + Shift e desmonta com dois toques em Ctrl. A configuração original é restaurada no final.
 2. **Geração natural e persistência:** cria um mundo **Normal, semente 1**, usando o gerador real de terreno, sem montar um ninho por comando. Verifica bosque, fundação do ninho com 113 blocos de largura, ovo de três partes, árvores, folhas, solo, afloramentos de rocha, minério e localização da estrutura. Confirma um guardião selvagem adormecido; fecha e reabre o mundo e exige o mesmo UUID e o estado de sono, sem duplicação. Entra em Sobrevivência para conferir o despertar e a barra de chefe. Uma verificação de conexão das rochas ao solo detecta o erro visual de rochas flutuantes encontrado e corrigido durante o desenvolvimento.
 3. **Criativo e ovos do Minecraft:** abre o inventário e o atalho da aba Dragão Celestial. Reproduz um dragão interceptando a mira de um ovo e exige que o clique crie a criatura no bloco alcançável atrás dele. Usa cliques reais para criar criaturas com ovos normais em pé, durante a montaria com as mãos principal e secundária e após desmontar. Confere que os ovos não acionam o raio e que ele continua disponível com as duas mãos vazias. O cenário isola o combate e usa dificuldade que permite monstros, para distinguir falha do item de uma criatura morta pelo dragão ou removida pelo modo Pacífico.
-4. **Visual e animações:** apresenta o corpo serpentino com apenas duas patas dianteiras longas e garras curvas e tomadas próximas da juba e do focinho em três quartos, perfil e frente, além das fases de preparação e impacto da mordida, carga e disparo do raio. Confere poses finitas, ondulação lateral, repetição sem acumular transformações e mais de uma volta na pose de sono, além de malha com vértices finitos e iluminação válida nas pontas. As capturas permitem avaliar forma, tamanho e postura; valores de estado sozinhos não comprovam qualidade visual.
+4. **Visual e animações:** apresenta o corpo serpentino com apenas duas patas dianteiras longas e garras curvas e tomadas próximas da juba e do focinho em três quartos, perfil e frente, além das fases de preparação e impacto da mordida, carga e disparo do raio. Confere poses finitas, ondulação lateral, repetição sem acumular transformações e mais de uma volta na pose de sono, além de malha com vértices finitos e iluminação válida nas pontas. O cenário também fotografa a nova lanterna de dia e à noite. Para o GIF, o mundo é congelado e avança um tick por quadro usando os comandos vanilla; são poses do modelo real, apresentadas a 10 quadros por segundo (metade da velocidade de 20 ticks por segundo). As capturas permitem avaliar forma, tamanho e postura; valores de estado sozinhos não comprovam qualidade visual.
 
 5. **Áudio real no motor do jogo:** recebe do servidor rugido, respiração, vento, mordida, carga e disparo de raio, ferimento, morte e formação/lançamento/impacto da Genki Dama. Começa a 26 blocos e depois exercita a montaria e a câmera ampliada. Exige os eventos resolvidos no motor OpenAL carregado e distâncias de atenuação de pelo menos 48 blocos. Nesta execução foi usado o dispositivo digital OpenAL Soft Wave File Writer; a saída PCM gravada contém áudio não nulo. Não é um teste de caixas de som nem da configuração do Windows.
 
 Na amostra de geração natural desta execução, o teste encontrou 599 blocos de tronco, 6.032 de folhas e 12 de minério, sem componentes de rocha separados do solo. O guardião continuou sendo o mesmo após salvar e reabrir. As [contagens completas](dragao/natural-generation.json) descrevem essa amostra; não garantem a mesma densidade para qualquer semente.
 
-As capturas são do jogo, e não das imagens de conceito. As imagens e contagens abaixo foram registradas na 0.3.2; o visual e a geração foram preservados na revisão de áudio 0.3.3:
+As capturas são do jogo, e não das imagens de conceito. As novas capturas da mordida e da lanterna são da 0.3.4. As demais imagens e contagens foram registradas na 0.3.2 e ilustram os recursos preservados:
 
 - [Dragões selvagem e domado](dragao/01-dragoes.png).
 - [Menu com valores confirmados pelo servidor](dragao/02-configuracao.png).
@@ -59,6 +61,8 @@ As capturas são do jogo, e não das imagens de conceito. As imagens e contagens
 - [Novo corpo e ondulação em movimento](dragao/ondulacao.gif).
 - [Perfil do dragão serpentino](dragao/05-dragao-serpentino.png).
 - [Mordida: preparação](dragao/06-mordida-preparo.png) e [impacto](dragao/07-mordida-impacto.png).
+- [Mordida em câmera lenta na 0.3.4](dragao/mordida.gif).
+- [Lanterna rúnica celestial de dia](dragao/24-lanterna-runica.png) e [à noite](dragao/25-lanterna-runica-noite.png).
 - [Raio: carga](dragao/08-carga-raio.png) e [disparo](dragao/09-raio-disparado.png).
 - [Aba do Criativo com os 17 itens](dragao/10-criativo-itens.png).
 - [Cabeça e juba em três quartos](dragao/11-cabeca-tres-quartos.png).
@@ -73,15 +77,15 @@ As capturas são do jogo, e não das imagens de conceito. As imagens e contagens
 - [Pilares apoiados e modelos simplificados à noite](dragao/22-pilares-corrigidos-noite.png).
 - [Contagens do mundo e resultado da recarga](dragao/natural-generation.json).
 
-Os arquivos originais de cada execução ficam em `dragon-mod/build/reports/`, nas pastas de cada cenário: `client-smoke`, `client-natural`, `client-eggs` `client-visual-v6` e `client-audio`.
+Os arquivos originais de cada execução ficam em `dragon-mod/build/reports/`, nas pastas de cada cenário: `client-smoke`, `client-natural`, `client-eggs` `client-visual-v7` e `client-audio`.
 
 ## Recursos e distribuição
 
 O JAR instalável inclui o modelo articulado, texturas originais, sons OGG com créditos e licença de áudio, blocos, receita, bioma e estrutura. Os testes de desenvolvimento ficam fora dele. O empacotador verifica o Fabric API oficial por SHA-256, os recursos obrigatórios, os sons referenciados e o CRC dos arquivos ZIP/JAR; o pacote contém os dois JARs e os guias. `downloads/SHA256SUMS.txt` registra o checksum do ZIP.
 
-As vocalizações agora combinam trechos gravados de **“Large Monster”, Michael Klier (CC BY-SA 3.0)**, e **“Lion raring-sound1TamilNadu178”, த*உழவன் (domínio público, PD-self)**. A edição usa filtros, velocidade/tom, camadas graves e fades, sem saturação nem estalos de ruído agudo. Os efeitos de energia e vento complementam essa montagem com síntese. Os 15 recursos desta revisão estão sob **CC BY-SA 3.0**; os créditos e o texto integral acompanham o JAR e o ZIP. O código Java mantém sua licença MIT. Fontes e hashes: `third-party/dragon-audio/` no repositório.
+As vocalizações agora combinam trechos gravados de **“Large Monster”, Michael Klier (CC BY-SA 3.0)**, e **“Lion raring-sound1TamilNadu178”, த*உழவன் (domínio público, PD-self)**. A edição usa filtros, velocidade/tom, prolongamento com Rubber Band, camadas graves e fades, sem saturação nem estalos de ruído agudo. Os efeitos de energia e vento complementam essa montagem com síntese. Os 15 recursos desta revisão estão sob **CC BY-SA 3.0**; os créditos e o texto integral acompanham o JAR e o ZIP. O código Java mantém sua licença MIT. Fontes e hashes: `third-party/dragon-audio/` no repositório. O YouTube bloqueou o acesso ao vídeo indicado; a referência efetivamente usada foi a resposta textual do jogador: “Grave e prolongado, como um monstro gigante”. Não houve extração de áudio desse vídeo nem avaliação humana do resultado na nuvem.
 
-São **15 OGG mono em 44.100 Hz**, registrados em 12 eventos (11 do dragão e um do bioma). Rugido, mordida e dor têm duas variações. `dragon-mod/tools/generate-sounds.py` reproduz os recursos a partir das fontes incluídas usando NumPy, SciPy e FFmpeg; essas ferramentas não são necessárias para jogar. A prévia `OUVIR-SONS.html` no ZIP permite ouvir cada recurso no Chrome. O [relatório de áudio](dragao/audio-validation.json) registra os eventos e alcances reais; o [relatório dos arquivos](dragao/sound-design.json) registra duração, níveis, fontes e SHA-256 dos 15 recursos. O teste digital verifica o carregamento e a reprodução pelo motor, não a qualidade artística do timbre. A reprodução física no Windows e a avaliação humana do novo timbre continuam pendentes. A gravação completa inclui sons do Minecraft e não é redistribuída.
+São **15 OGG mono em 44.100 Hz**, registrados em 12 eventos (11 do dragão e um do bioma). Rugido, mordida e dor têm duas variações. `dragon-mod/tools/generate-sounds.py` reproduz os recursos a partir das fontes incluídas usando NumPy, SciPy e FFmpeg; essas ferramentas não são necessárias para jogar. Para regenerar só estes sons, use `python3 dragon-mod/tools/generate-sounds.py --only roar roar_2 bite bite_2`. As texturas da lanterna são geradas por `dragon-mod/tools/generate-lantern.py` com Pillow, usado apenas no desenvolvimento. A revisão muda quatro arquivos; os outros onze mantêm os mesmos bytes da 0.3.3. A prévia `OUVIR-SONS.html` no ZIP permite ouvir cada recurso no Chrome. O [relatório de áudio](dragao/audio-validation.json) registra os eventos e alcances reais; o [relatório dos arquivos](dragao/sound-design.json) registra duração, níveis, fontes e SHA-256 dos 15 recursos. O teste digital verifica o carregamento e a reprodução pelo motor, não a qualidade artística do timbre. A reprodução física no Windows e a avaliação humana do novo timbre continuam pendentes. A gravação completa inclui sons do Minecraft e não é redistribuída.
 
 ## Limites desta versão
 
@@ -101,4 +105,4 @@ Com JDK 25, na raiz do repositório:
 python3 scripts/package-dragon.py
 ```
 
-O segundo comando exige ambiente gráfico OpenGL e um dispositivo OpenAL. Nesta nuvem, os testes usaram `ALSOFT_DRIVERS=wave` e `ALSOFT_CONF=/workspace/.cache/celestial-dragon/audio-v033/alsoft.conf`, com destino WAV no workspace. Um dispositivo digital valida o processamento sem representar a saída física do jogador. O `build` executa os testes JUnit e do servidor, sem precisar de tela. O empacotamento exige o build concluído e o pacote anterior `downloads/Luma-Fabric-26.2.zip`, de onde reaproveita o Fabric API oficial verificado; não instala a Luma junto com o dragão.
+O segundo comando exige ambiente gráfico OpenGL e um dispositivo OpenAL. Nesta nuvem, os testes usaram `ALSOFT_DRIVERS=wave` e `ALSOFT_CONF=/workspace/.cache/celestial-dragon/audio-v034/alsoft.conf`, com destino WAV no workspace. Um dispositivo digital valida o processamento sem representar a saída física do jogador. O `build` executa os testes JUnit e do servidor, sem precisar de tela. O empacotamento exige o build concluído e o pacote anterior `downloads/Luma-Fabric-26.2.zip`, de onde reaproveita o Fabric API oficial verificado; não instala a Luma junto com o dragão.

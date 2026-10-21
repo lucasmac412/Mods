@@ -524,7 +524,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     }
 
     private void applyBite(ServerLevel server) {
-        playSound(DragonSounds.BITE, 1.25F, 0.9F + random.nextFloat() * 0.15F);
+        playSound(DragonSounds.BITE, 1.0F, 0.96F + random.nextFloat() * 0.08F);
         Vec3 forward = getLookAngle();
         Vec3 origin = position().add(0, getBbHeight() * 0.52, 0);
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class,

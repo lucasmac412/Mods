@@ -2,21 +2,21 @@
 
 Este guia é para **Minecraft Java Edition no computador**, versão **26.2**. O Dragão Celestial é um mod Fabric independente da Luma.
 
-**[Baixar Dragao-Celestial-Fabric-26.2-v0.3.3-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.3-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.3-Experimental.zip)**
+**[Baixar Dragao-Celestial-Fabric-26.2-v0.3.4-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.4-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.4-Experimental.zip)**
 
 **Bioma comum para testes:** como na versão 0.1.1, enquanto desenvolvemos e testamos o mod, o Bosque Celestial está muito comum: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São **36 vezes mais centros por área** do que na 0.1.0, e bosques vizinhos podem se unir. Essa frequência é temporária para facilitar os testes.
 
-A **0.3.3 troca as vocalizações sintéticas por gravações de rugido de leão e de criatura**, editadas em camadas. Remove a saturação e os estalos agudos dos efeitos anteriores e suaviza a energia. São 15 arquivos em 44,1 kHz, com variações de rugido, dor e mordida e efeitos próprios para o raio e a Genki Dama. O áudio está sob CC BY-SA 3.0, com créditos e licença incluídos no pacote. O ZIP também inclui **OUVIR-SONS.html**: abra no Chrome para ouvir cada som sem iniciar o jogo.
+A **0.3.4 traz dois rugidos mais graves e prolongados, de aproximadamente 6,8 segundos**, e duas mordidas curtas com impacto no início do som. A mandíbula abre menos, fecha no tick do dano e retorna gradualmente ao repouso; o deslocamento do pescoço foi reduzido. A **Lanterna rúnica celestial** agora usa três texturas próprias de obsidiana, dourado e cristal luminoso, em vez da textura de lanterna do mar. Mantém o mesmo identificador: os blocos já colocados recebem o novo visual ao atualizar, sem recriar o mundo. O áudio continua sob CC BY-SA 3.0, com créditos no pacote. O ZIP também inclui **OUVIR-SONS.html**: abra no Chrome para ouvir cada som sem iniciar o jogo.
 
 A **Genki Dama agora tem 60 blocos de diâmetro**, três vezes o anterior. Forma acima do dragão durante dois segundos e continua viajando devagar. O impacto abre uma faixa de **20 × 24 blocos**, até seis blocos abaixo do terreno de cada coluna, preservando bedrock e blocos indestrutíveis. Quando atinge copas, remove também folhas e troncos entre o contato e o chão (busca limitada a 64 blocos). A mira horizontal que não encontra bloco procura terreno carregado à frente; bordas da esfera em chunks não carregados não cancelam mais um impacto válido. Não força carregamento de regiões.
 
 O guardião dorme com o corpo em uma espiral de voltas mais apertadas e sobrepostas, cabeça elevada e respiração leve, seguindo a referência da cobra. A postura mistura gradualmente com o voo ao acordar. A ondulação do voo ficou mais lenta, longa e suave, com menor balanço vertical e esforço interpolado; a fase não reinicia ao acelerar ou parar.
 
-A nova arena do ninho mede **113 blocos de diâmetro**, com oito torres, anéis rúnicos, muralha e um santuário elevado. Acrescenta **tijolos celestiais, pedra rúnica, obsidiana celestial dourada, pilar do santuário e lanterna do santuário**, disponíveis na aba do Criativo e coletáveis na arena. Seus modelos combinam texturas do projeto e texturas já fornecidas pelo Minecraft.
+A nova arena do ninho mede **113 blocos de diâmetro**, com oito torres, anéis rúnicos, muralha e um santuário elevado. Acrescenta **tijolos celestiais, pedra rúnica, obsidiana celestial dourada, pilar do santuário e lanterna rúnica celestial**, disponíveis na aba do Criativo e coletáveis na arena. Seus modelos combinam texturas do projeto e texturas já fornecidas pelo Minecraft.
 
 O guardião natural começa **dormindo enrolado**, imóvel em sua plataforma. Visitas em Criativo ou Espectador não o despertam. A entrada de um jogador em Sobrevivência ou Aventura no interior da arena o acorda; atacá-lo também o acorda. Surge a barra de chefe no topo da tela para jogadores próximos. O estado de sono é salvo com o mundo; durante o repouso há respiração discreta. O dragão criado pelo ovo selvagem do Criativo não gera uma arena ao redor de si.
 
-Estas correções funcionam no mundo atual. O visual dos blocos muda ao atualizar o mod; os apoios antigos são reparados com o guardião presente. A arena maior introduzida na 0.3.0 continua aparecendo somente em regiões geradas com essa estrutura; mundos da 0.1.x ou 0.2.x precisam de regiões novas para encontrá-la. Cliente e servidor precisam usar a mesma versão 0.3.3.
+Estas correções funcionam no mundo atual. O visual dos blocos muda ao atualizar o mod; os apoios antigos são reparados com o guardião presente. A arena maior introduzida na 0.3.0 continua aparecendo somente em regiões geradas com essa estrutura; mundos da 0.1.x ou 0.2.x precisam de regiões novas para encontrá-la. Cliente e servidor precisam usar a mesma versão 0.3.4.
 
 ## 1. Baixe e extraia o pacote
 
@@ -24,10 +24,10 @@ Abra o link acima. No navegador, `Ctrl + J` mostra os downloads. Localize o ZIP 
 
 | Arquivo | Função |
 | --- | --- |
-| `celestial-dragon-0.3.3-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
+| `celestial-dragon-0.3.4-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
 | `fabric-api-0.161.0+26.2.jar` | Dependência usada pelo mod. |
 
-Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.3-experimental/dragon-mod/README.md).
+Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.4-experimental/dragon-mod/README.md).
 
 ## 2. Abra o Minecraft Java 26.2 uma vez
 
@@ -66,14 +66,14 @@ No Windows, pressione `Windows + R`, cole `%APPDATA%\.minecraft` e aperte Enter 
 4. Se já houver outra versão do Dragão Celestial ou do Fabric API, guarde a versão substituída fora de `mods`. Deixe uma única versão de cada mod.
 5. Abra o Launcher, selecione **Fabric 26.2** e clique em **Jogar**.
 
-**Se você já usa a 0.3.1 ou qualquer versão anterior:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.3.3-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
+**Se você já usa a 0.3.1 ou qualquer versão anterior:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.3.4-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
 
 O resultado deve ser parecido com:
 
 ```text
 .minecraft/
   mods/
-    celestial-dragon-0.3.3-experimental.jar
+    celestial-dragon-0.3.4-experimental.jar
     fabric-api-0.161.0+26.2.jar
 ```
 

@@ -1,5 +1,5 @@
 {
-  "version": "0.3.3-experimental",
+  "version": "0.3.4-experimental",
   "date": "2026-10-21",
   "engine": "Minecraft OpenAL Soft Wave File Writer",
   "serverDrivenEvents": {
@@ -13,7 +13,7 @@
     "dragon.hurt": 48.0,
     "dragon.spirit_charge": 192.0,
     "dragon.beam": 64.0,
-    "dragon.roar": 64.0
+    "dragon.roar": 68.0
   },
   "outputFormat": {
     "programs": [],
@@ -26,13 +26,15 @@
       }
     ],
     "format": {
-      "duration": "121.496599"
+      "duration": "127.848526"
     }
   },
-  "outputMeanDb": -27.1,
-  "outputPeakDb": -2.9,
+  "outputMeanDb": -26.7,
+  "outputPeakDb": -2.2,
   "outputHasNonzeroAudio": true,
   "physicalPlaybackOnWindowsTested": false,
   "humanTimbreReviewPerformed": false,
+  "youtubeReferenceHeard": false,
+  "creativeDirection": "User described a deep, prolonged giant-monster roar.",
   "captureNotDistributed": "Full test mix includes Minecraft audio and is retained only as local test output."
 }

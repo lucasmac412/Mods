@@ -1,4 +1,4 @@
-DRAGÃO CELESTIAL — ÁUDIO 0.3.3
+DRAGÃO CELESTIAL — ÁUDIO 0.3.4
 
 Os efeitos sonoros desta versão são distribuídos sob Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0).
 https://creativecommons.org/licenses/by-sa/3.0/
@@ -14,6 +14,8 @@ Base animal:
 https://commons.wikimedia.org/wiki/File:Lion_raring-sound1TamilNadu178.ogg
 
 Adaptação: projeto Dragão Celestial / lucasmac412/Mods.
-Mudanças: seleção de trechos, filtragem, variação de velocidade/tom, camadas graves, fades, mixagem mono, normalização e codificação Vorbis. Os efeitos de energia e vento complementam a montagem com síntese limpa, sem pulsos de ruído agudo.
+Mudanças: seleção de trechos, filtragem, variação de velocidade/tom, prolongamento com Rubber Band, camadas graves, fades, mixagem mono, normalização e codificação Vorbis. Os efeitos de energia e vento complementam a montagem com síntese limpa, sem pulsos de ruído agudo.
 Os sons adaptados e efeitos desta revisão estão sob CC BY-SA 3.0; o código, modelo e texturas do projeto mantêm suas licenças próprias. A licença de áudio não se aplica ao código Java.
 Fontes, hashes e receitas reproduzíveis: third-party/dragon-audio e dragon-mod/tools/generate-sounds.py no repositório.
+
+Revisão 0.3.4: dois rugidos de aproximadamente 6,8 segundos, mais graves e com exalações sobrepostas; duas mordidas curtas, com impacto no início do arquivo. O vídeo indicado pelo jogador não pôde ser acessado; o direcionamento usado foi sua descrição textual de um monstro gigante, grave e prolongado. Nenhum áudio do YouTube foi copiado.
