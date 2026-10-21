@@ -14,7 +14,7 @@ public final class DragonRenderer extends MobRenderer<CelestialDragonEntity, Dra
     private static final Identifier TEXTURE = CelestialDragonMod.id("textures/entity/celestial_dragon.png");
 
     public DragonRenderer(EntityRendererProvider.Context context) {
-        super(context, new DragonModel(context.bakeLayer(MODEL_LAYER)), 1.6F);
+        super(context, new DragonModel(context.bakeLayer(MODEL_LAYER)), 2.2F);
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -33,6 +33,9 @@ public final class DragonRenderer extends MobRenderer<CelestialDragonEntity, Dra
         state.ridden = entity.isVehicle();
         state.biteTicks = Math.max(0, entity.biteTicks() - partialTick);
         state.beamTicks = Math.max(0, entity.beamTicks() - partialTick);
+        // Vanilla interpolates this speed between ticks, keeping the travelling wave smooth
+        // when flight starts, stops or receives a network movement update.
+        state.movementAmount = Math.clamp(state.walkAnimationSpeed, 0.0F, 1.0F);
     }
 
     @Override
@@ -43,6 +46,6 @@ public final class DragonRenderer extends MobRenderer<CelestialDragonEntity, Dra
     @Override
     protected AABB getBoundingBoxForCulling(CelestialDragonEntity entity) {
         // The articulated tail extends well beyond the collision box.
-        return entity.getBoundingBox().inflate(16.0, 5.0, 16.0);
+        return entity.getBoundingBox().inflate(32.0, 10.0, 32.0);
     }
 }

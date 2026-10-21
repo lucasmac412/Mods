@@ -24,6 +24,13 @@ public final class DragonControls {
         return controllingDragon(minecraft) != null;
     }
 
+    /** Held items keep vanilla right-click behavior, including all spawn eggs and blocks. */
+    public static boolean shouldUseBeamControls(Minecraft minecraft) {
+        return controllingDragon(minecraft) != null
+                && minecraft.player.getMainHandItem().isEmpty()
+                && minecraft.player.getOffhandItem().isEmpty();
+    }
+
     private static CelestialDragonEntity controllingDragon(Minecraft minecraft) {
         if (minecraft.player == null || !(minecraft.player.getVehicle() instanceof CelestialDragonEntity dragon)
                 || !dragon.isTamed() || !minecraft.player.getUUID().equals(dragon.getOwnerId())
@@ -58,7 +65,7 @@ public final class DragonControls {
             if (minecraft.options.keyAttack.isDown()) {
                 requestAttack(minecraft, false);
             }
-            if (minecraft.options.keyUse.isDown()) {
+            if (minecraft.options.keyUse.isDown() && shouldUseBeamControls(minecraft)) {
                 requestAttack(minecraft, true);
             }
         }
@@ -67,7 +74,8 @@ public final class DragonControls {
     /** Called both for the initial click and held buttons, at most once per attack per tick. */
     public static void requestAttack(Minecraft minecraft, boolean beam) {
         if (controllingDragon(minecraft) == null || minecraft.level == null || minecraft.gui.screen() != null
-                || minecraft.gui.overlay() != null || minecraft.isPaused()) {
+                || minecraft.gui.overlay() != null || minecraft.isPaused()
+                || beam && !shouldUseBeamControls(minecraft)) {
             return;
         }
         long tick = minecraft.level.getGameTime();

@@ -31,7 +31,7 @@ public final class DragonControlNetworking {
         if (payload.bite()) {
             dragon.tryBite();
         }
-        if (payload.beam()) {
+        if (payload.beam() && player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty()) {
             dragon.tryBeam();
         }
     }

@@ -33,5 +33,11 @@
   "itemGroup.celestial_dragon.celestial": "Celestial Dragon",
   "message.celestial_dragon.incubator.empty": "Insert a celestial egg into the incubator.",
   "message.celestial_dragon.incubator.blocked": "Clear space beside the incubator for the dragon to hatch.",
-  "message.celestial_dragon.incubator.progress": "Incubation: %s%%"
+  "message.celestial_dragon.incubator.progress": "Incubation: %s%%",
+  "item.celestial_dragon.wild_dragon_spawn_egg": "Wild Celestial Dragon Spawn Egg",
+  "item.celestial_dragon.tamed_dragon_spawn_egg": "Tamed Celestial Dragon Spawn Egg",
+  "item.celestial_dragon.wild_dragon_spawn_egg.desc": "Creates a wild dragon when used on the ground.",
+  "item.celestial_dragon.tamed_dragon_spawn_egg.desc": "Creates a dragon already tamed to the player using the egg.",
+  "message.celestial_dragon.spawn_egg.creative_only": "Test egg: use in Creative mode.",
+  "message.celestial_dragon.spawn_egg.blocked": "Find a large, open and dry area to create this dragon."
 }

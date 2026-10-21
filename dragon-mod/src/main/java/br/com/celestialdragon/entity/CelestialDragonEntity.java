@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -50,8 +51,12 @@ import org.joml.Vector3fc;
 public final class CelestialDragonEntity extends PathfinderMob implements OwnableEntity {
     public static final double DETECTION_RANGE = 35.0;
     public static final int BITE_COOLDOWN = 18;
+    public static final int BITE_DURATION = 14;
+    public static final int BITE_HIT_DELAY = 5;
     public static final int BEAM_COOLDOWN = 100;
-    public static final int BEAM_DURATION = 24;
+    public static final int BEAM_DURATION = 36;
+    public static final int BEAM_CHARGE_TICKS = 10;
+    public static final int BEAM_RECOVERY_TICKS = 4;
     private static final EntityDataAccessor<String> OWNER = SynchedEntityData.defineId(
             CelestialDragonEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> BITE = SynchedEntityData.defineId(
@@ -61,6 +66,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     private static final EntityDataAccessor<Vector3fc> BEAM_END = SynchedEntityData.defineId(
             CelestialDragonEntity.class, EntityDataSerializers.VECTOR3);
     private static final DustParticleOptions CYAN = new DustParticleOptions(0x65FFFF, 1.65F);
+    private static final DustParticleOptions WHITE_CORE = new DustParticleOptions(0xE8FFFF, 1.35F);
     /** Optional Luma compatibility without linking its classes or requiring its mod. */
     private static final ClassValue<Optional<Method>> LUMA_OWNER_GETTER = new ClassValue<>() {
         @Override
@@ -174,7 +180,16 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     }
 
     public Vec3 mouthPosition() {
-        return position().add(0.0, getBbHeight() * 0.7, 0.0).add(getLookAngle().scale(3.2));
+        var pose = DragonAttackAnimation.pose(biteTicks(), beamTicks(), tickCount);
+        // Same two pivots and attack curve as the rendered neck/head. Model units are 1/16 block.
+        double headPitch = pose.headPitch();
+        double headY = 10 * Math.cos(headPitch) + 42.8 * Math.sin(headPitch) - 10;
+        double headZ = 10 * Math.sin(headPitch) - 42.8 * Math.cos(headPitch) - 34;
+        double pitch = getXRot() * Mth.DEG_TO_RAD + pose.neckPitch();
+        double height = 2.8 - (headY * Math.cos(pitch) - headZ * Math.sin(pitch)) / 16;
+        double forward = -(headY * Math.sin(pitch) + headZ * Math.cos(pitch) + pose.pullBack()) / 16;
+        double yaw = getYRot() * Mth.DEG_TO_RAD;
+        return position().add(-Math.sin(yaw) * forward, height, Math.cos(yaw) * forward);
     }
 
     /** All damage paths share this ownership check, including area attacks. */
@@ -322,10 +337,21 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         }
         if (biteCooldown > 0) biteCooldown--;
         if (beamCooldown > 0) beamCooldown--;
-        if (biteTicks() > 0) entityData.set(BITE, biteTicks() - 1);
+        if (!isAlive()) {
+            entityData.set(BITE, 0);
+            entityData.set(BEAM, 0);
+            beamHits.clear();
+            return;
+        }
+        if (biteTicks() > 0) {
+            int remaining = biteTicks() - 1;
+            entityData.set(BITE, remaining);
+            if (remaining == BITE_DURATION - BITE_HIT_DELAY) applyBite(server);
+        }
         if (beamTicks() > 0) {
-            tickBeam(server);
             entityData.set(BEAM, beamTicks() - 1);
+            if (beamTicks() > 0) tickBeam(server);
+            else beamHits.clear();
         }
         if (!isAlive() || isNoAi() || getControllingPassenger() != null) return;
         if (tickCount % 20 == 0) chooseTarget();
@@ -385,35 +411,42 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
 
     /** The rider sends only intent; the server finds legal targets in this short forward arc. */
     public boolean tryBite() {
-        if (!(level() instanceof ServerLevel server) || !isAlive() || biteCooldown > 0) return false;
+        if (!(level() instanceof ServerLevel) || !isAlive() || biteCooldown > 0
+                || biteTicks() > 0 || beamTicks() > 0) return false;
         biteCooldown = BITE_COOLDOWN;
-        entityData.set(BITE, 10);
+        entityData.set(BITE, BITE_DURATION);
+        return true;
+    }
+
+    private void applyBite(ServerLevel server) {
         playSound(DragonSounds.BITE, 0.9F, 0.9F + random.nextFloat() * 0.15F);
         Vec3 forward = getLookAngle();
+        Vec3 origin = position().add(0, getBbHeight() * 0.52, 0);
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class,
-                getBoundingBox().inflate(2.2), this::legalTarget)) {
-            Vec3 toTarget = target.getBoundingBox().getCenter().subtract(getEyePosition());
-            if ((isWithinMeleeAttackRange(target) || toTarget.lengthSqr() <= 12.25)
+                getBoundingBox().inflate(4.6, 1.8, 4.6), this::legalTarget)) {
+            Vec3 toTarget = target.getBoundingBox().getCenter().subtract(origin);
+            if (toTarget.lengthSqr() <= 36.0
                     && forward.dot(toTarget.normalize()) >= 0.15 && hasLineOfSight(target)) {
                 target.hurtServer(server, damageSources().mobAttack(this), (float) DragonConfig.current().biteDamage());
             }
         }
-        return true;
     }
 
     public boolean tryBeam() {
-        if (!(level() instanceof ServerLevel server) || !isAlive() || beamCooldown > 0 || beamTicks() > 0) return false;
+        if (!(level() instanceof ServerLevel server) || !isAlive() || beamCooldown > 0
+                || beamTicks() > 0 || biteTicks() > 0) return false;
         beamCooldown = BEAM_COOLDOWN;
         entityData.set(BEAM, BEAM_DURATION);
         LivingEntity rider = getControllingPassenger();
         beamDirection = (rider == null ? getLookAngle() : rider.getLookAngle()).normalize();
         beamHits.clear();
-        playSound(DragonSounds.BEAM, 1.0F, 1.0F);
         tickBeam(server);
         return true;
     }
 
     private void tickBeam(ServerLevel server) {
+        LivingEntity rider = getControllingPassenger();
+        beamDirection = (rider == null ? getLookAngle() : rider.getLookAngle()).normalize();
         Vec3 origin = getEyePosition();
         Vec3 start = mouthPosition();
         Vec3 desiredEnd = origin.add(beamDirection.scale(DETECTION_RANGE));
@@ -430,20 +463,41 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         }
         Vec3 end = wall.getLocation();
         entityData.set(BEAM_END, end.subtract(position()).toVector3f());
+        int elapsed = BEAM_DURATION - beamTicks();
+        if (elapsed < BEAM_CHARGE_TICKS) {
+            // Energy gathers at the actual muzzle before either particles or damage form a beam.
+            double phase = elapsed * 0.85;
+            double radius = 0.85 * (1.0 - (double)elapsed / BEAM_CHARGE_TICKS) + 0.16;
+            Vec3 charge = muzzleWall.getType() == HitResult.Type.BLOCK ? muzzleWall.getLocation() : start;
+            for (int i = 0; i < 8; i++) {
+                double angle = phase + i * Math.PI / 4;
+                server.sendParticles(CYAN, true, false, charge.x + Math.cos(angle) * radius,
+                        charge.y + Math.sin(angle) * radius, charge.z, 1, 0, 0, 0, 0);
+            }
+            server.sendParticles(WHITE_CORE, true, false, charge.x, charge.y, charge.z, 2, 0.07, 0.07, 0.07, 0);
+            return;
+        }
+        if (beamTicks() <= BEAM_RECOVERY_TICKS) return;
+        if (elapsed == BEAM_CHARGE_TICKS) {
+            playSound(DragonSounds.BEAM, 1.2F, 0.9F);
+            server.sendParticles(ColorParticleOption.create(ParticleTypes.FLASH, 0xFFDFFFFF), true, false,
+                    start.x, start.y, start.z, 1, 0, 0, 0, 0);
+        }
         Vec3 beam = end.subtract(start);
         double length = beam.length();
         Vec3 across = beamDirection.cross(Vec3.Y_AXIS).normalize();
         if (across.lengthSqr() < 0.01) across = Vec3.X_AXIS;
         Vec3 up = across.cross(beamDirection).normalize();
-        // Limited to ~48 particles per pulse regardless of render or simulation distance.
-        int points = Math.max(1, (int) Math.ceil(length / 0.8));
+        // A bright core and outer helix stay bounded by the fixed 35-block attack length.
+        int points = Math.max(1, (int) Math.ceil(length / 0.6));
         for (int i = 0; tickCount % 2 == 0 && i <= points; i++) {
             double fraction = (double) i / points;
             Vec3 center = start.add(beam.scale(fraction));
             double phase = fraction * 20 + tickCount * 0.6;
-            Vec3 spiral = center.add(across.scale(Math.cos(phase) * 0.22)).add(up.scale(Math.sin(phase) * 0.22));
-            server.sendParticles(CYAN, spiral.x, spiral.y, spiral.z, 1, 0, 0, 0, 0);
-            if (i % 6 == 0) server.sendParticles(ParticleTypes.ELECTRIC_SPARK,
+            Vec3 spiral = center.add(across.scale(Math.cos(phase) * 0.38)).add(up.scale(Math.sin(phase) * 0.38));
+            server.sendParticles(CYAN, true, false, spiral.x, spiral.y, spiral.z, 1, 0, 0, 0, 0);
+            if (i % 2 == 0) server.sendParticles(WHITE_CORE, true, false, center.x, center.y, center.z, 1, 0, 0, 0, 0);
+            if (i % 6 == 0) server.sendParticles(ParticleTypes.ELECTRIC_SPARK, true, false,
                     center.x, center.y, center.z, 1, 0.04, 0.04, 0.04, 0.01);
         }
         for (LivingEntity target : level().getEntitiesOfClass(LivingEntity.class,

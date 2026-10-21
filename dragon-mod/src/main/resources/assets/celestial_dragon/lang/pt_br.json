@@ -33,5 +33,11 @@
   "itemGroup.celestial_dragon.celestial": "Dragão Celestial",
   "message.celestial_dragon.incubator.empty": "Insira um ovo celestial na incubadora.",
   "message.celestial_dragon.incubator.blocked": "Abra espaço ao lado da incubadora para o dragão nascer.",
-  "message.celestial_dragon.incubator.progress": "Incubação: %s%%"
+  "message.celestial_dragon.incubator.progress": "Incubação: %s%%",
+  "item.celestial_dragon.wild_dragon_spawn_egg": "Ovo de criação — Dragão celestial selvagem",
+  "item.celestial_dragon.tamed_dragon_spawn_egg": "Ovo de criação — Dragão celestial domado",
+  "item.celestial_dragon.wild_dragon_spawn_egg.desc": "Cria um dragão selvagem ao clicar no chão.",
+  "item.celestial_dragon.tamed_dragon_spawn_egg.desc": "Cria um dragão já domado para quem usar o ovo.",
+  "message.celestial_dragon.spawn_egg.creative_only": "Ovo de teste: use no modo Criativo.",
+  "message.celestial_dragon.spawn_egg.blocked": "Abra uma área ampla e sem água para criar o dragão."
 }

@@ -7,8 +7,8 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.1.1-experimental"
-NAME = "Dragao-Celestial-Fabric-26.2-v0.1.1-Experimental.zip"
+VERSION = "0.2.0-experimental"
+NAME = "Dragao-Celestial-Fabric-26.2-v0.2.0-Experimental.zip"
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
 OLD_PACKAGE_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 
@@ -35,8 +35,16 @@ def main():
         if metadata["id"] != "celestial_dragon" or metadata["version"] != VERSION:
             raise SystemExit("O JAR não é a versão correta do dragão.")
         required = ["br/com/celestialdragon/entity/CelestialDragonEntity.class",
+                    "br/com/celestialdragon/entity/DragonAttackAnimation.class",
                     "br/com/celestialdragon/client/DragonModel.class",
+                    "br/com/celestialdragon/client/DragonAnimation.class",
                     "br/com/celestialdragon/client/DragonSettingsScreen.class",
+                    "br/com/celestialdragon/content/DragonCreativeTab.class",
+                    "br/com/celestialdragon/content/DragonSpawnEggItem.class",
+                    "assets/celestial_dragon/items/wild_dragon_spawn_egg.json",
+                    "assets/celestial_dragon/items/tamed_dragon_spawn_egg.json",
+                    "assets/celestial_dragon/models/item/wild_dragon_spawn_egg.json",
+                    "assets/celestial_dragon/models/item/tamed_dragon_spawn_egg.json",
                     "assets/celestial_dragon/textures/entity/celestial_dragon.png",
                     "data/celestial_dragon/worldgen/biome/celestial_grove.json",
                     "data/celestial_dragon/worldgen/structure/dragon_nest.json",

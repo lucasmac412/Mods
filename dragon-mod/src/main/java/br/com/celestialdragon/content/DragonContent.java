@@ -1,10 +1,13 @@
 package br.com.celestialdragon.content;
 
 import br.com.celestialdragon.CelestialDragonMod;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -16,6 +19,7 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
@@ -58,6 +62,8 @@ public final class DragonContent {
     public static final Item CELESTIAL_GEM = Registry.register(BuiltInRegistries.ITEM, CelestialDragonMod.id("celestial_gem"),
             new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, CelestialDragonMod.id("celestial_gem")))
                     .rarity(Rarity.UNCOMMON)));
+    public static final DragonSpawnEggItem WILD_DRAGON_SPAWN_EGG = spawnEgg("wild_dragon_spawn_egg", false);
+    public static final DragonSpawnEggItem TAMED_DRAGON_SPAWN_EGG = spawnEgg("tamed_dragon_spawn_egg", true);
     public static final BlockEntityType<CelestialIncubatorBlockEntity> INCUBATOR_ENTITY = Registry.register(
             BuiltInRegistries.BLOCK_ENTITY_TYPE, CelestialDragonMod.id("celestial_incubator"),
             FabricBlockEntityTypeBuilder.create(CelestialIncubatorBlockEntity::new, INCUBATOR).build());
@@ -76,11 +82,30 @@ public final class DragonContent {
     }
 
     public static void register() {
-        // Initializing this class performs the registry writes exactly once.
+        // These test eggs need a Creative player to assign ownership. Vanilla's automatic
+        // spawn-egg dispenser behavior would bypass useOn and create an unowned dragon.
+        DispenserBlock.registerBehavior(WILD_DRAGON_SPAWN_EGG, new DefaultDispenseItemBehavior());
+        DispenserBlock.registerBehavior(TAMED_DRAGON_SPAWN_EGG, new DefaultDispenseItemBehavior());
+    }
+
+    private static DragonSpawnEggItem spawnEgg(String name, boolean tamed) {
+        var identifier = CelestialDragonMod.id(name);
+        return Registry.register(BuiltInRegistries.ITEM, identifier, new DragonSpawnEggItem(tamed,
+                new Item.Properties().setId(ResourceKey.create(Registries.ITEM, identifier))
+                        .spawnEgg(CelestialDragonMod.DRAGON).rarity(Rarity.RARE)));
     }
 
     public static List<ItemLike> creativeEntries() {
-        return List.of(CELESTIAL_STONE, CELESTIAL_SOIL, CELESTIAL_LOG, CELESTIAL_LEAVES,
-                CELESTIAL_ORE, DEEPSLATE_CELESTIAL_ORE, CELESTIAL_GEM, NEST_BLOCK, EGG, INCUBATOR);
+        // Group known items deliberately, then include every other item from this mod too.
+        // Using Item identities throughout prevents a Block and its BlockItem appearing twice.
+        var entries = new LinkedHashSet<Item>(List.of(CELESTIAL_STONE.asItem(), CELESTIAL_SOIL.asItem(),
+                CELESTIAL_LOG.asItem(), CELESTIAL_LEAVES.asItem(), CELESTIAL_ORE.asItem(),
+                DEEPSLATE_CELESTIAL_ORE.asItem(), CELESTIAL_GEM, NEST_BLOCK.asItem(), EGG.asItem(),
+                INCUBATOR.asItem(), WILD_DRAGON_SPAWN_EGG, TAMED_DRAGON_SPAWN_EGG));
+        BuiltInRegistries.ITEM.stream()
+                .filter(item -> BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(CelestialDragonMod.ID))
+                .sorted(Comparator.comparing(item -> BuiltInRegistries.ITEM.getKey(item).toString()))
+                .forEach(entries::add);
+        return List.copyOf(entries);
     }
 }

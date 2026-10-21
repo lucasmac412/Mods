@@ -1,24 +1,31 @@
-# Validação do Dragão Celestial 0.1.1 experimental
+# Validação do Dragão Celestial 0.2.0 experimental
 
 Ambiente de desenvolvimento Linux x86_64, JDK 25, Minecraft Java 26.2, Fabric Loader 0.19.5 e Fabric API 0.161.0+26.2. O mod é independente da Luma e do Ollama.
 
-A versão **0.1.1** usa frequência aumentada temporária para facilitar o desenvolvimento: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São 36 vezes mais centros por área do que na 0.1.0; bosques vizinhos podem se unir. Essa mudança só aparece em regiões novas do Overworld. Prefira um mundo novo para testar.
+A versão **0.2.0** redesenha o dragão com corpo maior e ondulação lateral, acrescenta dois ovos de criação e facilita o acesso à aba do Criativo. Também permite usar itens normalmente enquanto montado: o raio exige as duas mãos vazias.
+
+A frequência de testes da 0.1.1 foi preservada: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São 36 vezes mais centros por área do que na 0.1.0; bosques vizinhos podem se unir. Essa geração só aparece em regiões novas do Overworld. Prefira um mundo novo para testar.
+
+## Resultados desta versão
+
+Em 21/10/2026, `./gradlew --no-daemon -p dragon-mod build` terminou com `BUILD SUCCESSFUL`: **quatro testes JUnit e 24 GameTests passaram**, sem falhas. Dos GameTests, **23 são cenários do mod e um é o controle interno do Fabric**.
+
+Na mesma data, `./gradlew --no-daemon -p dragon-mod runClientGameTest` terminou com `BUILD SUCCESSFUL`: **os quatro cenários gráficos passaram** no cliente real do Minecraft. As verificações incluem entradas de teclado e mouse, geração natural, recarga do mundo, inventário, ovos vanilla durante a montaria e as fases das animações. As capturas e a animação abaixo vêm dessa execução da 0.2.0.
 
 ## Servidor e configuração
 
-Em 20/10/2026, `./gradlew --no-daemon -p dragon-mod build` terminou com `BUILD SUCCESSFUL`: **quatro testes JUnit e 18 GameTests passaram**, sem falhas. Dos GameTests, **17 são cenários do mod e um é o controle interno do Fabric**.
-
-A amostragem real da fonte de biomas encontrou o Bosque Celestial em **65.216 de 65.536 posições (99,51%)**, numa grade de 8.192 × 8.192 blocos, de −4.096 até 4.064 em cada eixo, com passo de 32 blocos. A verificação exige mais de 98% de cobertura e falharia na frequência antiga. Essa porcentagem descreve a amostra; não significa que cada bloco de qualquer mundo seja celestial.
-
-Os cenários verificam:
+O comando `./gradlew --no-daemon -p dragon-mod build` compila as partes de servidor e cliente e executa JUnit e GameTests. Os cenários do servidor verificam:
 
 - Quebrar cada seção do ovo em Sobrevivência solta um único item; perder o suporte ou sofrer uma explosão também não duplica ovos. Quebrar no Criativo não solta item.
 - Incubação conserva dono e progresso ao salvar, gera um único dragão domado e espera quando o nascimento está bloqueado. Quebrar a incubadora ocupada devolve seu ovo.
 - O ninho gigante contém um ovo completo e um guardião selvagem, sem duplicação ao reprocessar a mesma estrutura.
+- Os dois ovos de criação produzem as versões selvagem e domada com o dono correto, não funcionam em Sobrevivência e esperam uma área desobstruída. Dispensers apenas devolvem esses ovos como itens.
+- A aba do Criativo contém todos os 12 itens registrados, sem duplicatas, e permite encontrá-los na busca.
 - O bioma é registrado no Overworld, cobre mais de 98% da grade de amostragem na frequência de testes e preserva a seleção do Nether.
 - Dono, animais domados, dragões do mesmo dono e membros da equipe do dono ficam protegidos da mordida e do raio.
 - Paredes interrompem o raio; o ataque não destrói blocos, não passa de 35 blocos e causa um único acerto por alvo em cada disparo.
-- Os intervalos de mordida e raio são respeitados. Uma vaca consegue reagir e causar dano mesmo sem atributo de ataque vanilla.
+- A mordida não causa dano durante a preparação e acerta no quinto tick. O raio carrega por dez ticks antes de causar dano e não atinge novos alvos durante a recuperação. Um golpe não começa durante a animação do outro.
+- Os intervalos de mordida e raio são respeitados. A morte durante a preparação cancela o ataque pendente. Uma vaca consegue reagir e causar dano mesmo sem atributo de ataque vanilla.
 - Dono, ninho, vida e intervalos sobrevivem ao salvamento. Somente o dono montado consegue enviar controles válidos.
 - Alterar vida máxima atualiza dragões existentes sem curá-los e vale para novos dragões; diminuir o máximo limita a vida atual.
 - Configurações inválidas, NaN e infinitos são rejeitados. Falhas de gravação não aplicam valores que não foram salvos.
@@ -27,22 +34,29 @@ Relatórios reproduzíveis: `dragon-mod/build/test-results/test/TEST-*.xml` e `d
 
 ## Cliente gráfico e geração natural
 
-`./gradlew --no-daemon -p dragon-mod runClientGameTest` executa dois cenários em um cliente real do Minecraft, com OpenGL por software e uma tela virtual na nuvem:
+`./gradlew --no-daemon -p dragon-mod runClientGameTest` exercita os seguintes cenários em um cliente real do Minecraft, com OpenGL por software e uma tela virtual na nuvem:
 
 1. **Modelo, configuração e montaria:** renderiza os dragões selvagem e domado; abre o botão do Esc; rejeita NaN na tela e no servidor; salva vida 240, mordida 14 e raio 35, confirmando os valores no servidor. Monta com o dono, usa as entradas reais W/Espaço/Ctrl, aciona o raio pelo botão direito e desmonta com Shift. A configuração original é restaurada no final.
 2. **Geração natural e persistência:** cria um mundo **Normal, semente 1**, usando o gerador real de terreno, sem montar um ninho por comando. Verifica bosque, fundação do ninho com 41 blocos de largura, ovo de três partes, árvores, folhas, solo, afloramentos de rocha, minério e localização da estrutura. Confirma um guardião selvagem; fecha e reabre o mundo e exige o mesmo UUID, sem duplicação. Uma verificação de conexão das rochas ao solo detecta o erro visual de rochas flutuantes encontrado e corrigido durante o desenvolvimento.
+3. **Criativo e ovos do Minecraft:** abre o inventário e o atalho da aba Dragão Celestial. Usa cliques reais para criar criaturas com ovos normais em pé, durante a montaria com as mãos principal e secundária e após desmontar. Confere que os ovos não acionam o raio e que ele continua disponível com as duas mãos vazias. O cenário isola o combate e usa dificuldade que permite monstros, para distinguir falha do item de uma criatura morta pelo dragão ou removida pelo modo Pacífico.
+4. **Visual e animações:** apresenta o perfil do novo corpo serpentino e as fases de preparação e impacto da mordida, carga e disparo do raio. As capturas permitem avaliar forma, tamanho e postura; valores de estado sozinhos não comprovam qualidade visual.
 
-**Os dois cenários gráficos passaram em 20/10/2026**, com `BUILD SUCCESSFUL` e saída 0. Na amostra de 16 chunks periféricos foram contados **563 blocos de tronco, 5.905 de folhas, 25 de minério e zero grupos de rochas sem apoio**. O mesmo guardião selvagem permaneceu após reabrir o mundo. As contagens estão no [relatório de geração natural](dragao/natural-generation.json); descrevem esta amostra, não uma garantia de densidade para qualquer semente.
+Na amostra de geração natural desta execução, o teste encontrou 563 blocos de tronco, 5.905 de folhas e 25 de minério, sem componentes de rocha separados do solo. O guardião continuou sendo o mesmo após salvar e reabrir. As [contagens completas](dragao/natural-generation.json) descrevem essa amostra; não garantem a mesma densidade para qualquer semente.
 
 As capturas são do jogo, e não das imagens de conceito:
 
 - [Dragões selvagem e domado](dragao/01-dragoes.png).
 - [Menu com valores confirmados pelo servidor](dragao/02-configuracao.png).
-- [Jogador montado](dragao/03-montaria.png). O enquadramento não mostra claramente o feixe; a ativação foi verificada pelo estado do servidor e o dano pelos GameTests.
+- [Jogador montado](dragao/03-montaria.png).
 - [Bosque e ninho gerados naturalmente](dragao/04-bosque-e-ninho.png).
+- [Novo corpo e ondulação em movimento](dragao/ondulacao.gif).
+- [Perfil do dragão serpentino](dragao/05-dragao-serpentino.png).
+- [Mordida: preparação](dragao/06-mordida-preparo.png) e [impacto](dragao/07-mordida-impacto.png).
+- [Raio: carga](dragao/08-carga-raio.png) e [disparo](dragao/09-raio-disparado.png).
+- [Aba do Criativo com os 12 itens](dragao/10-criativo-itens.png).
 - [Contagens do mundo e resultado da recarga](dragao/natural-generation.json).
 
-Os arquivos originais de cada execução ficam em `dragon-mod/build/reports/client-smoke` e `dragon-mod/build/reports/client-natural`.
+Os arquivos originais de cada execução ficam em `dragon-mod/build/reports/`, nas pastas de cada cenário: `client-smoke`, `client-natural`, `client-eggs` e `client-visual-v2`.
 
 ## Recursos e distribuição
 

@@ -1,0 +1,165 @@
+package br.com.celestialdragon.test;
+
+import br.com.celestialdragon.CelestialDragonMod;
+import br.com.celestialdragon.client.DragonModel;
+import br.com.celestialdragon.client.DragonRenderState;
+import br.com.celestialdragon.entity.CelestialDragonEntity;
+import java.nio.file.Path;
+import java.util.Set;
+import java.util.UUID;
+import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
+import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
+import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
+import net.fabricmc.fabric.api.client.gametest.v1.screenshot.TestScreenshotOptions;
+import net.minecraft.client.CameraType;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.gui.screens.worldselection.WorldCreationUiState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
+
+/** Actual game views of the larger serpent and its distinct attack phases. */
+public final class DragonVisualClientGameTest implements FabricClientGameTest {
+    private static final Path SHOTS = Path.of("../../reports/client-visual-v2").toAbsolutePath().normalize();
+
+    @Override
+    public void runTest(ClientGameTestContext context) {
+        context.getInput().resizeWindow(1280, 720);
+        context.runOnClient(client -> {
+            client.options.setCameraType(CameraType.FIRST_PERSON);
+            client.options.renderDistance().set(5);
+            client.options.simulationDistance().set(5);
+            client.options.fov().set(75);
+            client.options.pauseOnLostFocus = false;
+            if (!client.gui.hud.isHidden()) client.gui.hud.toggle();
+            assertAnimationPoses();
+        });
+        try (var world = context.worldBuilder().adjustSettings(settings ->
+                settings.setGameMode(WorldCreationUiState.SelectedGameMode.CREATIVE)).create()) {
+            var server = world.getServer();
+            server.runCommand("gamerule minecraft:send_command_feedback false");
+            server.runCommand("time set noon");
+            server.runCommand("weather clear");
+            UUID id = server.computeOnServer(ignored -> scene(world));
+            world.getConnection().waitForChunksDownload();
+            world.getConnection().waitForClientboundEntityUpdates(CelestialDragonMod.DRAGON);
+            world.getConnection().waitForChunksRender();
+            context.getInput().lookAt(new BlockPos(0, 144, -10));
+            context.waitTicks(10);
+            screenshot(context, "07-perfil-serpentino");
+            // Separate frames let reviewers see the lateral wave travelling along the body.
+            for (int i = 0; i < 26; i++) {
+                context.waitTicks(2);
+                screenshot(context, String.format("onda-%02d", i));
+            }
+            server.runOnServer(ignored -> {
+                if (!dragon(world, id).tryBite()) throw new AssertionError("Bite must start for the visual check");
+            });
+            context.waitTicks(2);
+            screenshot(context, "08-mordida-preparo");
+            context.waitTicks(3);
+            screenshot(context, "09-mordida-impacto");
+            server.waitFor(ignored -> dragon(world, id).biteTicks() == 0);
+            server.runOnServer(ignored -> {
+                if (!dragon(world, id).tryBeam()) throw new AssertionError("Beam must start after the bite recovery");
+            });
+            context.waitTicks(4);
+            screenshot(context, "10-carga-raio");
+            server.waitFor(ignored -> dragon(world, id).beamTicks() <=
+                    CelestialDragonEntity.BEAM_DURATION - CelestialDragonEntity.BEAM_CHARGE_TICKS - 2);
+            screenshot(context, "11-raio-disparado");
+            server.waitFor(ignored -> dragon(world, id).beamTicks() == 0);
+        } finally {
+            context.runOnClient(client -> { if (client.gui.hud.isHidden()) client.gui.hud.toggle(); });
+        }
+    }
+
+    private static UUID scene(TestSingleplayerContext world) {
+        var level = world.getConnection().getServerLevel();
+        for (int x = -18; x <= 18; x++) for (int z = -38; z <= 42; z++)
+            level.setBlockAndUpdate(new BlockPos(x, 139, z), Blocks.GRASS_BLOCK.defaultBlockState());
+        CelestialDragonEntity dragon = CelestialDragonMod.DRAGON.create(level, EntitySpawnReason.COMMAND);
+        if (dragon == null) throw new AssertionError("Dragon factory returned null");
+        dragon.tame(world.getConnection().getServerPlayer().getUUID());
+        dragon.setNoAi(true);
+        dragon.snapTo(0, 141, 0, 0, 0);
+        dragon.setDeltaMovement(Vec3.ZERO);
+        level.addFreshEntity(dragon);
+        var player = world.getConnection().getServerPlayer();
+        player.getAbilities().flying = true;
+        player.onUpdateAbilities();
+        player.teleportTo(level, 24, 164, -10, Set.of(), 90, 10, false);
+        return dragon.getUUID();
+    }
+
+    private static CelestialDragonEntity dragon(TestSingleplayerContext world, UUID id) {
+        if (!(world.getConnection().getServerLevel().getEntity(id) instanceof CelestialDragonEntity dragon))
+            throw new AssertionError("Visual check dragon disappeared");
+        return dragon;
+    }
+
+    private static void screenshot(ClientGameTestContext context, String name) {
+        context.takeScreenshot(TestScreenshotOptions.of(name).disableCounterPrefix().withSize(1280, 720)
+                .withDestinationDir(SHOTS));
+    }
+
+    private static void assertAnimationPoses() {
+        DragonModel model = new DragonModel(DragonModel.createBodyLayer().bakeRoot());
+        DragonRenderState state = new DragonRenderState();
+        state.tamed = true;
+        state.movementAmount = 1;
+        state.ageInTicks = 24;
+        model.setupAnim(state);
+        ModelPart segment = model.root().getChild("body");
+        float yaw = 0, minimum = 0, maximum = 0;
+        for (int i = 0; i < DragonModel.SEGMENT_COUNT; i++) {
+            segment = segment.getChild("segment_" + i);
+            yaw += segment.yRot;
+            minimum = Math.min(minimum, yaw);
+            maximum = Math.max(maximum, yaw);
+        }
+        if (!(minimum < -0.2F && maximum > 0.2F && minimum > -1.2F && maximum < 1.2F))
+            throw new AssertionError("The spine must form a bounded lateral S, not remain rigid or curl indefinitely");
+        float[] original = transforms(model);
+        state.ageInTicks = 48;
+        model.setupAnim(state);
+        float[] later = transforms(model);
+        boolean changed = false;
+        for (int i = 0; i < original.length; i++) changed |= Math.abs(original[i] - later[i]) > 0.01F;
+        if (!changed) throw new AssertionError("The serpent wave must move over time");
+        state.ageInTicks = 24;
+        model.setupAnim(state);
+        float[] repeated = transforms(model);
+        for (int i = 0; i < original.length; i++)
+            if (Math.abs(original[i] - repeated[i]) > 0.00001F)
+                throw new AssertionError("Repeating the same pose must not accumulate transforms");
+        ModelPart jaw = model.root().getChild("body").getChild("neck").getChild("head").getChild("jaw");
+        state.biteTicks = CelestialDragonEntity.BITE_DURATION - 4;
+        model.setupAnim(state);
+        float opened = jaw.xRot;
+        state.biteTicks = CelestialDragonEntity.BITE_DURATION - 6;
+        model.setupAnim(state);
+        if (opened < jaw.xRot + 0.3F) throw new AssertionError("Bite must open before snapping its jaws shut");
+        state.biteTicks = 0;
+        for (int remaining = CelestialDragonEntity.BEAM_DURATION; remaining >= 0; remaining--) {
+            state.beamTicks = remaining;
+            model.setupAnim(state);
+            transforms(model); // Every charging, firing and recovery transform must remain finite.
+        }
+    }
+
+    private static float[] transforms(DragonModel model) {
+        var parts = model.allParts();
+        float[] values = new float[parts.size() * 9];
+        int index = 0;
+        for (ModelPart part : parts) {
+            for (float value : new float[]{part.x, part.y, part.z, part.xRot, part.yRot, part.zRot,
+                    part.xScale, part.yScale, part.zScale}) {
+                if (!Float.isFinite(value)) throw new AssertionError("Dragon animation produced a non-finite transform");
+                values[index++] = value;
+            }
+        }
+        return values;
+    }
+}

@@ -29,7 +29,7 @@ public abstract class DragonInputMixin {
     @Inject(method = "startUseItem", at = @At("HEAD"), cancellable = true)
     private void celestialDragon$beam(CallbackInfo callback) {
         Minecraft minecraft = (Minecraft) (Object) this;
-        if (DragonControls.isControllingDragon(minecraft)) {
+        if (DragonControls.shouldUseBeamControls(minecraft)) {
             DragonControls.requestAttack(minecraft, true);
             callback.cancel();
         }

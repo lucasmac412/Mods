@@ -2,9 +2,11 @@
 
 Este guia é para **Minecraft Java Edition no computador**, versão **26.2**. O Dragão Celestial é um mod Fabric independente da Luma.
 
-**[Baixar Dragao-Celestial-Fabric-26.2-v0.1.1-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.1.1-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.1.1-Experimental.zip)**
+**[Baixar Dragao-Celestial-Fabric-26.2-v0.2.0-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.2.0-Experimental.zip)**
 
-**Novidade da 0.1.1:** enquanto desenvolvemos e testamos o mod, o Bosque Celestial está muito comum: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São **36 vezes mais centros por área** do que na 0.1.0, e bosques vizinhos podem se unir. Essa frequência é temporária para facilitar os testes.
+**Bioma comum para testes:** como na versão 0.1.1, enquanto desenvolvemos e testamos o mod, o Bosque Celestial está muito comum: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São **36 vezes mais centros por área** do que na 0.1.0, e bosques vizinhos podem se unir. Essa frequência é temporária para facilitar os testes.
+
+**Novidade da 0.2.0:** dragão maior, corpo longo com ondulação lateral, cabeça redesenhada e golpes com preparação e recuperação. O Criativo oferece os 12 itens do mod e ovos separados para criar as versões selvagem e domada.
 
 ## 1. Baixe e extraia o pacote
 
@@ -12,10 +14,10 @@ Abra o link acima. No navegador, `Ctrl + J` mostra os downloads. Localize o ZIP 
 
 | Arquivo | Função |
 | --- | --- |
-| `celestial-dragon-0.1.1-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
+| `celestial-dragon-0.2.0-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
 | `fabric-api-0.161.0+26.2.jar` | Dependência usada pelo mod. |
 
-Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.1.1-experimental/dragon-mod/README.md).
+Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.2.0-experimental/dragon-mod/README.md).
 
 ## 2. Abra o Minecraft Java 26.2 uma vez
 
@@ -54,20 +56,44 @@ No Windows, pressione `Windows + R`, cole `%APPDATA%\.minecraft` e aperte Enter 
 4. Se já houver outra versão do Dragão Celestial ou do Fabric API, guarde a versão substituída fora de `mods`. Deixe uma única versão de cada mod.
 5. Abra o Launcher, selecione **Fabric 26.2** e clique em **Jogar**.
 
-**Se você já usa a versão 0.1.0:** feche o jogo, mova `celestial-dragon-0.1.0-experimental.jar` para fora de `mods` e coloque `celestial-dragon-0.1.1-experimental.jar` no lugar. Nunca deixe as duas versões juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
+**Se você já usa uma versão 0.1.0 ou 0.1.1:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.2.0-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
 
 O resultado deve ser parecido com:
 
 ```text
 .minecraft/
   mods/
-    celestial-dragon-0.1.1-experimental.jar
+    celestial-dragon-0.2.0-experimental.jar
     fabric-api-0.161.0+26.2.jar
 ```
 
 Não coloque o ZIP inteiro ou o arquivo `-sources.jar` em `mods`. A Luma não é necessária para jogar com o dragão. Em um servidor multiplayer, os mesmos dois JARs devem estar no servidor Fabric e nos computadores dos jogadores.
 
-## 5. Encontre um ninho
+## 5. Abra a aba do Criativo e crie um dragão de teste
+
+Crie um **mundo novo do tipo Normal, em Criativo, com comandos ativados**. Pressione **E** para abrir o inventário. A aba **Dragão Celestial** reúne todos os 12 itens e blocos do mod.
+
+Se a aba não estiver visível, clique no botão **Dragão Celestial** no canto superior esquerdo do inventário. Ele abre diretamente a página e a aba do mod.
+
+Para testar sem esperar a incubação, pegue um destes ovos:
+
+| Item | O que acontece ao usá-lo |
+| --- | --- |
+| **Ovo de criação — Dragão celestial selvagem** | Cria um dragão sem dono, que não aceita montaria direta. |
+| **Ovo de criação — Dragão celestial domado** | Cria um dragão que pertence a você e pode ser montado por você. |
+
+Segure o ovo e clique com o botão direito num bloco ou no chão, em uma área bem aberta e sem água. Esses ovos funcionam somente no **Criativo**, não têm receita e são diferentes do ovo grande usado na incubadora.
+
+Com comandos, os mesmos itens podem ser obtidos assim:
+
+```text
+/give @s celestial_dragon:wild_dragon_spawn_egg
+/give @s celestial_dragon:tamed_dragon_spawn_egg
+```
+
+O **Ovo celestial** de três blocos e a incubadora continuam disponíveis para testar o processo de Sobrevivência.
+
+## 6. Encontre um ninho
 
 Para o primeiro teste, crie um **mundo novo em Criativo, com comandos ativados**. O Bosque Celestial aparece com muita frequência no Overworld, com árvores, solo, rochas e minério próprios. Cada centro de geração contém um ninho gigante com um dragão selvagem e um ovo. Como bosques vizinhos podem se unir, uma área celestial extensa pode conter vários ninhos. Os dragões selvagens surgem nesses ninhos.
 
@@ -87,9 +113,9 @@ Para localizar o ninho diretamente, use:
 
 O jogo informa as coordenadas. Você pode viajar até elas ou, com comandos, usar `/tp @s X Y Z`, substituindo X, Y e Z por números e escolhendo uma altura segura. Em um mundo antigo, explore regiões ainda não geradas: o mod preserva o terreno de chunks já explorados.
 
-O dragão selvagem protege o ninho. Para ter um dragão seu, recolha o ovo e use a incubadora; o dragão selvagem não aceita montaria direta.
+O dragão selvagem protege o ninho. Em Sobrevivência, para ter um dragão seu, recolha o ovo e use a incubadora; o dragão selvagem não aceita montaria direta.
 
-## 6. Incube seu ovo
+## 7. Incube seu ovo
 
 O ovo tem **três blocos de altura e cerca de dois de largura**. Em **Sobrevivência**, quebre qualquer uma das partes para recolher **um único ovo**. Você pode recolocá-lo em uma área livre com piso firme. Em **Criativo**, quebrar o ovo o remove sem soltar item; pegue outro pela aba **Dragão Celestial** ou pelo comando `/give` abaixo.
 
@@ -101,7 +127,7 @@ Fabrique uma **Incubadora celestial** na bancada usando os quatro ingredientes a
 | 1 | **Madeira celestial**: tronco das árvores do bosque. |
 | 1 | **Rocha celestial**: o bloco rochoso do terreno, obtido com picareta. |
 
-1. Coloque a incubadora em uma área aberta.
+1. Coloque a incubadora em uma área bem aberta. O dragão cresceu nesta versão e precisa de mais espaço livre para nascer.
 2. Segure o ovo e clique com o botão direito na incubadora. Ela recebe um ovo por vez.
 3. Aguarde **cinco minutos de mundo em processamento**, equivalentes a 6.000 ticks. Fique perto para a região continuar carregada. Em servidores lentos, os cinco minutos de ticks podem levar mais tempo no relógio.
 4. Clique na incubadora para consultar a porcentagem. Se o aviso pedir espaço, desobstrua a área acima e ao redor; o ovo permanece seguro aguardando.
@@ -116,7 +142,7 @@ No Criativo, a aba **Dragão Celestial** também oferece o ovo, os materiais e a
 /give @s celestial_dragon:celestial_incubator
 ```
 
-## 7. Monte e controle o dragão
+## 8. Monte e controle o dragão
 
 Com a mão vazia, clique com o botão direito no seu dragão. Somente o dono consegue montar. Solte Shift antes de tentar subir nele.
 
@@ -128,15 +154,18 @@ Com a mão vazia, clique com o botão direito no seu dragão. Somente o dono con
 | Ctrl | Descer, usando a tecla configurada para correr. |
 | Shift | Desmontar, usando a tecla configurada para agachar. |
 | Clique esquerdo | Mordida. |
-| Clique direito | Raio de energia. |
+| Clique direito com as duas mãos vazias | Raio de energia. |
+| Clique direito com item em qualquer mão | Usa o item normalmente, inclusive ovos de criaturas do Minecraft. |
 
-Se você mudou as teclas do Minecraft, use as suas teclas de **pular**, **correr** e **agachar** para subir, descer e desmontar. Os ataques têm intervalo entre usos.
+Se você mudou as teclas do Minecraft, use as suas teclas de **pular**, **correr** e **agachar** para subir, descer e desmontar. A mordida recolhe a cabeça antes do impacto. O raio carrega por aproximadamente meio segundo antes de disparar. Os ataques têm recuperação e intervalo entre usos; não começam juntos.
+
+Os ovos normais do Minecraft continuam sendo usados com clique direito, inclusive enquanto você está montado. Aponte para um bloco próximo, dentro do alcance do jogador. Se um animal aparece e logo morre perto do dragão, ele pode ter sido atacado: o dragão continua agressivo com outras criaturas. Afaste-se do dragão para conferir um ovo sem esse combate. No modo Pacífico, monstros como zumbis são removidos pelo próprio Minecraft.
 
 Dragões podem atacar criaturas e jogadores. O seu dragão respeita você, seus animais domados, outros dragões do mesmo dono e aliados de equipe. Jogadores em Criativo ou Espectador não são alvos.
 
 O alcance de percepção é de **35 blocos**, igual ao atributo padrão de um zumbi nesta versão. Isso não é a distância de uma mordida: ela atinge apenas de perto. O raio alcança até 35 blocos e para em paredes. O dragão precisa ter linha de visão para escolher um alvo e atacá-lo.
 
-## 8. Ajuste vida e dano
+## 9. Ajuste vida e dano
 
 Dentro do mundo, pressione **Esc** e clique em **Dragão Celestial**. O dono do mundo individual ou um administrador do servidor pode editar os valores e salvar. Os demais jogadores conseguem consultar a configuração.
 
@@ -151,10 +180,14 @@ O arquivo de configuração fica em `config/celestial-dragon.json`, na pasta do 
 | O jogo acusa dependência ausente. | Confira os dois JARs, Fabric Loader e Minecraft 26.2. |
 | Aparece erro de Java. | Confira se o perfil usa Java 25. |
 | O conteúdo não aparece. | Confirme que iniciou o perfil Fabric e copiou os JARs para a pasta daquele perfil. |
+| A aba do mod não aparece no Criativo. | Pressione E e clique no botão Dragão Celestial no canto superior esquerdo. |
+| O ovo de criação do dragão não funciona. | Use o modo Criativo e clique num bloco em uma área ampla, sem água. Ele é diferente do ovo da incubadora. |
+| Um ovo normal do Minecraft não cria a criatura ou ela desaparece. | Aponte para um bloco próximo. Confira se o modo Pacífico removeu um monstro ou se o dragão atacou a criatura recém-criada. |
+| O raio não dispara enquanto estou montado. | Esvazie as duas mãos, incluindo a mão secundária. Com um item na mão, o clique direito usa esse item. |
 | O bosque não aparece perto de casa. | Explore chunks novos ou use os comandos `/locate` em um mundo de teste. |
 | O ovo não pode ser colocado. | Libere uma área de três por três blocos e três blocos de altura, sobre um piso firme. |
 | A incubação fica em 100%. | Abra espaço acima e ao redor da incubadora para o corpo do dragão. |
-| Não consigo montar. | Use o dragão nascido de um ovo que você inseriu, mão vazia e sem Shift. |
+| Não consigo montar. | Use seu dragão nascido da incubadora ou criado por você com o ovo domado do Criativo, mão vazia e sem Shift. |
 | Não consigo alterar vida e dano. | Somente o dono do mundo individual ou um administrador do servidor pode salvar alterações. |
 
 Ao relatar um problema, informe a versão do Minecraft, a versão do mod, o que fez e o que aconteceu. O arquivo `logs/latest.log` da pasta do jogo ajuda a localizar falhas de carregamento.

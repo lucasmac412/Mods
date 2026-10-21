@@ -9,11 +9,14 @@
     "fabric-gametest": [
       "br.com.celestialdragon.test.DragonGameTests",
       "br.com.celestialdragon.test.DragonEntityGameTests",
-      "br.com.celestialdragon.test.DragonContentEdgeGameTests"
+      "br.com.celestialdragon.test.DragonContentEdgeGameTests",
+      "br.com.celestialdragon.test.DragonCreativeGameTests"
     ],
     "fabric-client-gametest": [
       "br.com.celestialdragon.test.DragonClientGameTest",
-      "br.com.celestialdragon.test.DragonNaturalWorldGameTest"
+      "br.com.celestialdragon.test.DragonNaturalWorldGameTest",
+      "br.com.celestialdragon.test.DragonVanillaEggClientGameTest",
+      "br.com.celestialdragon.test.DragonVisualClientGameTest"
     ]
   },
   "depends": {

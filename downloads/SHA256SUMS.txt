@@ -1,5 +1,6 @@
 b5446b56e02a8a370099535c6c5d945d1729a1dbceb93ea629d51840b83c1691  Dragao-Celestial-Fabric-26.2-v0.1.0-Experimental.zip
 7613890ad9ee0cadc17ae808762f95a1fe93be266a0f18df89d09e47a2b4b01e  Dragao-Celestial-Fabric-26.2-v0.1.1-Experimental.zip
+ff65275a5b6e025658fe96ff0dae687c161424730b5b093594aca208dfc985a7  Dragao-Celestial-Fabric-26.2-v0.2.0-Experimental.zip
 47d45ce8535a41c63498ee31b99fd2f73ee6c74c00113af2da8af46bb1ffdd38  Luma-Fabric-26.2-IA-Propria-Experimental.zip
 ec07ad9840b007b44926ab6f8ae2d75e5d118edfc4d85bb9395e0e36dc476fc9  Luma-Fabric-26.2-IA-Propria-v0.3.0-Experimental.zip
 2c5a8fbc7bf8b4feed55247780cd8912ef8ea4211275ca47d04e2a266c8ac466  Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip

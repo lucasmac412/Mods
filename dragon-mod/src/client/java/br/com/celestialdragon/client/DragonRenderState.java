@@ -7,4 +7,5 @@ public final class DragonRenderState extends LivingEntityRenderState {
     public boolean ridden;
     public float biteTicks;
     public float beamTicks;
+    public float movementAmount;
 }
