@@ -1,5 +1,5 @@
 {
-  "version": "0.3.2-experimental",
+  "version": "0.3.3-experimental",
   "date": "2026-10-21",
   "engine": "Minecraft OpenAL Soft Wave File Writer",
   "serverDrivenEvents": {
@@ -26,12 +26,13 @@
       }
     ],
     "format": {
-      "duration": "122.573016"
+      "duration": "121.496599"
     }
   },
-  "outputMeanDb": -25.8,
-  "outputPeakDb": -0.0,
+  "outputMeanDb": -27.1,
+  "outputPeakDb": -2.9,
   "outputHasNonzeroAudio": true,
   "physicalPlaybackOnWindowsTested": false,
+  "humanTimbreReviewPerformed": false,
   "captureNotDistributed": "Full test mix includes Minecraft audio and is retained only as local test output."
 }

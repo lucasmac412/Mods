@@ -1,9 +1,12 @@
 DRAGÃO CELESTIAL — OURO E OBSIDIANA
-Minecraft Java Edition 26.2 | Fabric | versão 0.3.2-experimental
+Minecraft Java Edition 26.2 | Fabric | versão 0.3.3-experimental
 
-NOVO NA 0.3.2
-Todos os efeitos sonoros refeitos: 15 sons originais, com variações e efeitos separados de energia.
+NOVO NA 0.3.3
+Vocalizações refeitas com gravações de rugido de leão e criatura, editadas em camadas.
+Retirados a saturação e os estalos agudos; energia mais suave.
+15 arquivos de áudio sob CC BY-SA 3.0: créditos e licença em licenses/dragon-audio/.
 Abra OUVIR-SONS.html no Chrome para ouvir os sons do pacote.
+Os sons mudam também nos dragões do mundo atual; não é preciso criar outro mundo para isso.
 Genki Dama com 60 blocos de diâmetro: três vezes o tamanho anterior.
 O impacto remove folhas/troncos e abre uma faixa de 20 x 24 no terreno, até 6 de profundidade.
 Mira horizontal procura terreno à frente; bordas fora da área carregada não cancelam o impacto.
@@ -46,11 +49,11 @@ No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
 Se o diretório estiver vazio, no Windows aperte Windows+R e abra:
 %APPDATA%\.minecraft
 Crie a pasta mods se ela não existir. Copie para ela os dois arquivos:
-- celestial-dragon-0.3.2-experimental.jar
+- celestial-dragon-0.3.3-experimental.jar
 - fabric-api-0.161.0+26.2.jar
 Se já houver Fabric API ou este mod, mantenha somente uma versão de cada.
-Se estiver atualizando da 0.3.1 ou de qualquer versão anterior, retire o JAR antigo do dragão da pasta mods e coloque
-celestial-dragon-0.3.2-experimental.jar. O Fabric API continua o mesmo.
+Se estiver atualizando da 0.3.2 ou de qualquer versão anterior, retire o JAR antigo do dragão da pasta mods e coloque
+celestial-dragon-0.3.3-experimental.jar. O Fabric API continua o mesmo.
 O mod é independente da Luma. Se usar os dois, basta um Fabric API compatível.
 
 3. COMECE NUM MUNDO NOVO

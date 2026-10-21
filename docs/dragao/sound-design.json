@@ -1,111 +1,162 @@
 {
-  "version": "0.3.2-experimental",
-  "provenance": "Original deterministic synthesis; no recordings or third-party samples.",
+  "version": "0.3.3-experimental",
+  "provenance": "Recorded lion roar (PD-self) and Large Monster by Michael Klier (CC BY-SA 3.0), edited in layers; additional smooth synthesized energy and wind. No oscillator-generated vocal cords, saturation or random high-frequency arc pops.",
+  "audioLicense": "CC BY-SA 3.0",
+  "sourceManifest": "../../third-party/dragon-audio/sources.json",
+  "sources": [
+    {
+      "author": "Michael Klier",
+      "title": "Large Monster",
+      "page": "https://opengameart.org/content/large-monster",
+      "download": "https://opengameart.org/sites/default/files/Large%20Monster_1.zip",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "originalArchiveSha256": "436e0a2c1f1e276cfe8dd2c9fd4754a7cdc93d34a96f9e832841cf65f53ec5bb"
+    },
+    {
+      "author": "த*உழவன் (Commons user தகவலுழவன்)",
+      "title": "Lion raring-sound1TamilNadu178",
+      "page": "https://commons.wikimedia.org/wiki/File:Lion_raring-sound1TamilNadu178.ogg",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Lion_raring-sound1TamilNadu178.ogg",
+      "license": "Public domain (PD-self)",
+      "originalSha256": "ab237d0f960e83412251d0c11f69959f3c2e8d3b14595f7181c3056f7fa18bf7"
+    }
+  ],
   "assets": [
     {
       "name": "ambience.ogg",
       "seconds": 10.0,
-      "meanDb": -23.6,
-      "peakDb": -8.3,
-      "sha256": "ef236e1487453b0bbd405b48a304b632a995cb8d50f1e6299bd7839458aa2ca1"
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -23.8,
+      "peakDb": -8.7,
+      "sha256": "b7bc93607167b7fe93a75007f7ec2aff220a72f4fcf8d65dcfef3a9b16519e58"
     },
     {
       "name": "beam.ogg",
       "seconds": 1.6,
-      "meanDb": -13.2,
-      "peakDb": -2.7,
-      "sha256": "baa90010bf2c62822e2dab28d8af2e3bfb54ca42ac315a96f3a8b15ba95ad1b7"
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -12.4,
+      "peakDb": -3.8,
+      "sha256": "a5d0b3f698899da3de234cc129d84d062aa918906431e388b705db7fc2919af9"
     },
     {
       "name": "beam_charge.ogg",
-      "seconds": 0.5,
-      "meanDb": -16.4,
-      "peakDb": -3.5,
-      "sha256": "165453aadfb09e5176b997e209af0755a05b39eac9ddff15d2298fc22bbf3e19"
+      "seconds": 0.497,
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -14.3,
+      "peakDb": -3.8,
+      "sha256": "5a64293b6d2a4ad6c2f9cb05617473525a78b006357c258eb4aa7ff1c7bddae9"
     },
     {
       "name": "bite.ogg",
-      "seconds": 0.65,
-      "meanDb": -22.2,
-      "peakDb": -3.2,
-      "sha256": "2f861e9d4bbefed21a73ab5774512795cec8e20f26a2712420ba798aac8992dc"
+      "seconds": 0.647,
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -19.9,
+      "peakDb": -3.8,
+      "sha256": "d2cf25ac00b8a659b56d4481cf81a3983f30f70286a5a985f34366e4608cd729"
     },
     {
       "name": "bite_2.ogg",
-      "seconds": 0.7,
-      "meanDb": -23.3,
-      "peakDb": -3.7,
-      "sha256": "559f09c07d8aaf96e0b9c3b54876b58838ea05f1f42fcb573bc7108d5dbfcfa3"
+      "seconds": 0.697,
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -20.6,
+      "peakDb": -3.9,
+      "sha256": "5a3bf75210bb300140ad15d96a111de75d4b5bf597a111ab46fadb3c2c4c5955"
     },
     {
       "name": "breath.ogg",
       "seconds": 2.2,
-      "meanDb": -23.1,
-      "peakDb": -7.8,
-      "sha256": "a9732155fc7350c15ed10c20e1f6a2d3e3c6e44093a097e08534e7b912ef5d6e"
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -25.7,
+      "peakDb": -8.8,
+      "sha256": "4db324df677725ddde377f67cb3108dfd3d0c659363d454d083d44e57ff97da7"
     },
     {
       "name": "death.ogg",
-      "seconds": 5.1,
-      "meanDb": -14.1,
-      "peakDb": -3.1,
-      "sha256": "f84da61c67fb1a1f48d1f1c01f42a5d2e69afa91de6b6ffd02b3c1dceb2855c8"
+      "seconds": 4.4,
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -22.3,
+      "peakDb": -3.9,
+      "sha256": "d9695c64f0a23e88febac7458ce9e5db84602933466918f2ca9a51360b83f98e"
     },
     {
       "name": "flight.ogg",
       "seconds": 1.2,
-      "meanDb": -19.2,
-      "peakDb": -8.1,
-      "sha256": "f374477e5ee83d708adecdc0397a98e016518cc8890395d579826b60db6d029f"
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -23.6,
+      "peakDb": -9.2,
+      "sha256": "e17aaf356cbbfc82f6c86f1e90fa55c53e25c48b144952b45bf5ca867b0dd93c"
     },
     {
       "name": "hurt.ogg",
-      "seconds": 1.15,
-      "meanDb": -13.6,
-      "peakDb": -3.4,
-      "sha256": "6f01221b7fede04e4113272a2a2df9da0629416f54272bfc69b2e4b2a1765efe"
+      "seconds": 1.05,
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -18.9,
+      "peakDb": -3.9,
+      "sha256": "1a67705b893be17250829be7ac8ab4a0cb27a2409453835e97c6fb95ec9858f0"
     },
     {
       "name": "hurt_2.ogg",
-      "seconds": 1.3,
-      "meanDb": -13.5,
-      "peakDb": -3.3,
-      "sha256": "1f43eb62c3672b5e111ae418724631d0bf261c3a03ecac5c5424504a7b39fa0f"
+      "seconds": 1.1,
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -19.7,
+      "peakDb": -4.0,
+      "sha256": "97eca158b45bab1bb066cf02a63eb985ec57e097bdd9d8d8a4d57c069987cb52"
     },
     {
       "name": "roar.ogg",
-      "seconds": 3.8,
-      "meanDb": -14.0,
-      "peakDb": -3.1,
-      "sha256": "1b1827eb780e453977df09db163fddafe4f07e1c6f65f78cd9a66d472a9d1423"
+      "seconds": 3.5,
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -15.0,
+      "peakDb": -3.9,
+      "sha256": "220233553e0004711535d21ba0ed80893791ab85fe492e563ebbc98a332fe68b"
     },
     {
       "name": "roar_2.ogg",
-      "seconds": 3.3,
-      "meanDb": -14.1,
-      "peakDb": -3.0,
-      "sha256": "df4034f7831c1eaff1dfdbccbcc8172bef54c37eff0141c2e88c7392b6312c8f"
+      "seconds": 3.2,
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -14.2,
+      "peakDb": -3.9,
+      "sha256": "8f333980ebed2ab7d0723cb60d9d121356b30b503e4a31662e66bb9578bb988e"
     },
     {
       "name": "spirit_charge.ogg",
       "seconds": 2.0,
-      "meanDb": -16.8,
-      "peakDb": -3.6,
-      "sha256": "55ab34ddb9223ea03d7ca252d362b4950999f08a20bc926f0db6cb8fda432107"
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -14.0,
+      "peakDb": -3.8,
+      "sha256": "10bb36e50b4fc82b09607270e11b91ef4826a861f193ce4ce9c8ae0c9e76caef"
     },
     {
       "name": "spirit_impact.ogg",
       "seconds": 3.8,
-      "meanDb": -19.3,
-      "peakDb": -3.0,
-      "sha256": "fafac2363a61a5799c4a318af1893f54853f73cc33b706830df16421adac4404"
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -20.0,
+      "peakDb": -4.0,
+      "sha256": "06e941625d98cc7a22e84d5864ac24a3dcfad4097d464e3227dccee07d2aa459"
     },
     {
       "name": "spirit_launch.ogg",
       "seconds": 1.8,
-      "meanDb": -13.5,
-      "peakDb": -3.2,
-      "sha256": "53e4c547a8d2ecfe80cc6c8e2228f541cd92bb8bb1adcfb10750f5c5c1a6d193"
+      "sampleRate": 44100,
+      "channels": 1,
+      "meanDb": -12.8,
+      "peakDb": -3.9,
+      "sha256": "2b88b046cb427e0603b87cc6603de4f3a9792fce952ac2777d35b21dd8c8ad48"
     }
   ]
 }

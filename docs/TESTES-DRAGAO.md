@@ -1,8 +1,8 @@
-# Validação do Dragão Celestial 0.3.2 experimental
+# Validação do Dragão Celestial 0.3.3 experimental
 
 Ambiente de desenvolvimento Linux x86_64, JDK 25, Minecraft Java 26.2, Fabric Loader 0.19.5 e Fabric API 0.161.0+26.2. O mod é independente da Luma e do Ollama.
 
-A versão **0.3.2** refaz todos os sons, amplia a Genki Dama para 60 blocos, escava o terreno sob copas e melhora o sono em espiral e o voo. Mantém o modelo com juba volumosa e focinho alongado, patas dianteiras alongadas com garras curvas, sem patas traseiras e escamas maiores e pontudas nas costas e no corpo. Mantém a ondulação lateral, os dois ovos de criação e a aba do Criativo. O raio continua exigindo as duas mãos vazias, para permitir o uso normal dos itens enquanto montado.
+A versão **0.3.3** substitui as vocalizações sintéticas por gravações de rugido e criatura, remove a saturação e os estalos agudos e suaviza os efeitos de energia. Preserva a Genki Dama de 60 blocos, a escavação do terreno sob copas, o sono em espiral e o voo da 0.3.2. Mantém o modelo com juba volumosa e focinho alongado, patas dianteiras alongadas com garras curvas, sem patas traseiras e escamas maiores e pontudas nas costas e no corpo. Mantém a ondulação lateral, os dois ovos de criação e a aba do Criativo. O raio continua exigindo as duas mãos vazias, para permitir o uso normal dos itens enquanto montado.
 
 A frequência de testes da 0.1.1 foi preservada: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São 36 vezes mais centros por área do que na 0.1.0; bosques vizinhos podem se unir. Essa geração só aparece em regiões novas do Overworld. Prefira um mundo novo para testar.
 
@@ -10,7 +10,7 @@ A frequência de testes da 0.1.1 foi preservada: um centro de bosque e ninho por
 
 Em **21 de outubro de 2026**, passaram **4 testes JUnit**, **31 GameTests de servidor** (30 cenários do mod e um controle interno do Fabric) e os **cinco cenários de cliente** descritos abaixo.
 
-No teste com entradas reais, a Genki Dama acionada por R removeu **480 blocos da superfície** da plataforma. Em duas janelas de 16 ticks, W percorreu cerca de **10,08 blocos** e W + Shift cerca de **25,93 blocos**, mantendo o jogador montado. Isso confirma a aceleração nesse cenário; não é uma medição de desempenho no computador do jogador.
+No teste com entradas reais, a Genki Dama acionada por R removeu **480 blocos da superfície** da plataforma. Em duas janelas de 16 ticks, W percorreu cerca de **10,08 blocos** e W + Shift cerca de **28,27 blocos**, mantendo o jogador montado. Isso confirma a aceleração nesse cenário; não é uma medição de desempenho no computador do jogador.
 
 ## Servidor e configuração
 
@@ -50,7 +50,7 @@ Relatórios reproduzíveis: `dragon-mod/build/test-results/test/TEST-*.xml` e `d
 
 Na amostra de geração natural desta execução, o teste encontrou 599 blocos de tronco, 6.032 de folhas e 12 de minério, sem componentes de rocha separados do solo. O guardião continuou sendo o mesmo após salvar e reabrir. As [contagens completas](dragao/natural-generation.json) descrevem essa amostra; não garantem a mesma densidade para qualquer semente.
 
-As capturas são do jogo, e não das imagens de conceito:
+As capturas são do jogo, e não das imagens de conceito. As imagens e contagens abaixo foram registradas na 0.3.2; o visual e a geração foram preservados na revisão de áudio 0.3.3:
 
 - [Dragões selvagem e domado](dragao/01-dragoes.png).
 - [Menu com valores confirmados pelo servidor](dragao/02-configuracao.png).
@@ -77,9 +77,11 @@ Os arquivos originais de cada execução ficam em `dragon-mod/build/reports/`, n
 
 ## Recursos e distribuição
 
-O JAR instalável inclui o modelo articulado, texturas originais, sons OGG originais, blocos, receita, bioma e estrutura. Os testes de desenvolvimento ficam fora dele. O empacotador verifica o Fabric API oficial por SHA-256, os recursos obrigatórios, os sons referenciados e o CRC dos arquivos ZIP/JAR; o pacote contém os dois JARs e os guias. `downloads/SHA256SUMS.txt` registra o checksum do ZIP.
+O JAR instalável inclui o modelo articulado, texturas originais, sons OGG com créditos e licença de áudio, blocos, receita, bioma e estrutura. Os testes de desenvolvimento ficam fora dele. O empacotador verifica o Fabric API oficial por SHA-256, os recursos obrigatórios, os sons referenciados e o CRC dos arquivos ZIP/JAR; o pacote contém os dois JARs e os guias. `downloads/SHA256SUMS.txt` registra o checksum do ZIP.
 
-Os sons foram refeitos com ruído filtrado, pulsos glotais irregulares, ressonâncias de garganta, transientes e reflexões curtas, sem gravações nem amostras de terceiros. São **15 OGG mono em 44.100 Hz**, registrados em 12 eventos (11 do dragão e um do bioma). Rugido, mordida e dor têm duas variações. `dragon-mod/tools/generate-sounds.py` reproduz os recursos com NumPy, SciPy e FFmpeg; essas ferramentas não são necessárias para jogar. A prévia `OUVIR-SONS.html` no ZIP permite ouvir cada recurso no Chrome. O motor OpenAL carregado recebeu os onze efeitos emitidos pelo servidor, com saída digital PCM estéreo não nula (média -25.8 dB; pico -0.0 dB). O [relatório de áudio](dragao/audio-validation.json) registra os alcances reais e o [relatório dos arquivos](dragao/sound-design.json) registra duração, níveis e SHA-256 dos 15 recursos. A reprodução física no Windows e a avaliação humana do timbre continuam pendentes. A gravação completa inclui sons do Minecraft e não é redistribuída.
+As vocalizações agora combinam trechos gravados de **“Large Monster”, Michael Klier (CC BY-SA 3.0)**, e **“Lion raring-sound1TamilNadu178”, த*உழவன் (domínio público, PD-self)**. A edição usa filtros, velocidade/tom, camadas graves e fades, sem saturação nem estalos de ruído agudo. Os efeitos de energia e vento complementam essa montagem com síntese. Os 15 recursos desta revisão estão sob **CC BY-SA 3.0**; os créditos e o texto integral acompanham o JAR e o ZIP. O código Java mantém sua licença MIT. Fontes e hashes: `third-party/dragon-audio/` no repositório.
+
+São **15 OGG mono em 44.100 Hz**, registrados em 12 eventos (11 do dragão e um do bioma). Rugido, mordida e dor têm duas variações. `dragon-mod/tools/generate-sounds.py` reproduz os recursos a partir das fontes incluídas usando NumPy, SciPy e FFmpeg; essas ferramentas não são necessárias para jogar. A prévia `OUVIR-SONS.html` no ZIP permite ouvir cada recurso no Chrome. O [relatório de áudio](dragao/audio-validation.json) registra os eventos e alcances reais; o [relatório dos arquivos](dragao/sound-design.json) registra duração, níveis, fontes e SHA-256 dos 15 recursos. O teste digital verifica o carregamento e a reprodução pelo motor, não a qualidade artística do timbre. A reprodução física no Windows e a avaliação humana do novo timbre continuam pendentes. A gravação completa inclui sons do Minecraft e não é redistribuída.
 
 ## Limites desta versão
 
@@ -99,4 +101,4 @@ Com JDK 25, na raiz do repositório:
 python3 scripts/package-dragon.py
 ```
 
-O segundo comando exige ambiente gráfico OpenGL e um dispositivo OpenAL. Nesta nuvem, os testes usaram `ALSOFT_DRIVERS=wave` e `ALSOFT_CONF=/workspace/.cache/celestial-dragon/audio-v032/alsoft.conf`, com destino WAV no workspace. Um dispositivo digital valida o processamento sem representar a saída física do jogador. O `build` executa os testes JUnit e do servidor, sem precisar de tela. O empacotamento exige o build concluído e o pacote anterior `downloads/Luma-Fabric-26.2.zip`, de onde reaproveita o Fabric API oficial verificado; não instala a Luma junto com o dragão.
+O segundo comando exige ambiente gráfico OpenGL e um dispositivo OpenAL. Nesta nuvem, os testes usaram `ALSOFT_DRIVERS=wave` e `ALSOFT_CONF=/workspace/.cache/celestial-dragon/audio-v033/alsoft.conf`, com destino WAV no workspace. Um dispositivo digital valida o processamento sem representar a saída física do jogador. O `build` executa os testes JUnit e do servidor, sem precisar de tela. O empacotamento exige o build concluído e o pacote anterior `downloads/Luma-Fabric-26.2.zip`, de onde reaproveita o Fabric API oficial verificado; não instala a Luma junto com o dragão.

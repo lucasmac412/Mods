@@ -1,0 +1,19 @@
+DRAGÃO CELESTIAL — ÁUDIO 0.3.3
+
+Os efeitos sonoros desta versão são distribuídos sob Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0).
+https://creativecommons.org/licenses/by-sa/3.0/
+Texto integral: CC-BY-SA-3.0.txt.
+
+Base de voz de criatura:
+"Large Monster", Michael Klier, CC BY-SA 3.0.
+https://opengameart.org/content/large-monster
+Usados: Large Monster Death 01/02.wav e Large Monster Grunt Hit 01/02.wav.
+
+Base animal:
+"Lion raring-sound1TamilNadu178", த*உழவன் (Commons user தகவலுழவன்), domínio público por declaração do autor (PD-self).
+https://commons.wikimedia.org/wiki/File:Lion_raring-sound1TamilNadu178.ogg
+
+Adaptação: projeto Dragão Celestial / lucasmac412/Mods.
+Mudanças: seleção de trechos, filtragem, variação de velocidade/tom, camadas graves, fades, mixagem mono, normalização e codificação Vorbis. Os efeitos de energia e vento complementam a montagem com síntese limpa, sem pulsos de ruído agudo.
+Os sons adaptados e efeitos desta revisão estão sob CC BY-SA 3.0; o código, modelo e texturas do projeto mantêm suas licenças próprias. A licença de áudio não se aplica ao código Java.
+Fontes, hashes e receitas reproduzíveis: third-party/dragon-audio e dragon-mod/tools/generate-sounds.py no repositório.

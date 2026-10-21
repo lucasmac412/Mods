@@ -1,8 +1,8 @@
 # Luma — Companhia de aventura
 
-**Novo mod independente: [Dragão Celestial — ouro e obsidiana](dragon-mod/README.md).** Dragão chinês montável, voo, mordida, raio de energia, bosque, ninhos e incubação. [Baixar o pacote pronto do dragão](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.2-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.2-Experimental.zip) · [Instalar passo a passo](docs/INSTALAR-DRAGAO.md).
+**Novo mod independente: [Dragão Celestial — ouro e obsidiana](dragon-mod/README.md).** Dragão chinês montável, voo, mordida, raio de energia, bosque, ninhos e incubação. [Baixar o pacote pronto do dragão](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.3-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.3-Experimental.zip) · [Instalar passo a passo](docs/INSTALAR-DRAGAO.md).
 
-A versão **0.3.2 do dragão** refaz os sons, triplica a Genki Dama para 60 blocos, corrige o impacto no terreno sob as árvores e melhora a postura de sono e a ondulação do voo. Mantém câmera afastada, arena de chefe e as correções dos pilares e ovos. [Instalação e controles](docs/INSTALAR-DRAGAO.md).
+A versão **0.3.3 do dragão** usa gravações de rugido e criatura nas vocalizações, remove a saturação e os estalos agudos e suaviza os efeitos de energia. Preserva a Genki Dama de 60 blocos com destruição do terreno, o sono enrolado e a ondulação do voo. Mantém câmera afastada, arena de chefe e as correções dos pilares e ovos. [Instalação e controles](docs/INSTALAR-DRAGAO.md).
 
 Luma é uma companheira humanoide para **Minecraft Java Edition 26.2 com Fabric**. Ela tem uma skin própria em roxo e ciano, acompanha o dono, recebe ordens em português do Brasil e pode conversar pelo Ollama e receber ordens por uma tecla de microfone dentro do jogo com o complemento **Luma Voz**.
 
@@ -91,4 +91,4 @@ No ambiente de nuvem Linux x86_64, `bash scripts/setup-cloud.sh` instala o JDK v
 
 Para desenvolver o motor próprio separadamente, execute `./gradlew -p native-ai build`. Os comandos de treino, avaliação e conversa estão no [laboratório](native-ai/README.md). Para compilar Luma Voz, execute `./gradlew -p voice-input build`; o JAR fica em `voice-input/build/libs`. O adaptador legado `RemoteBrain` permanece para referência/testes; a integração atual usa `OllamaBrain`, sem variáveis `LUMA_AI_*`. O arquivo de reconhecimento Vosk é distribuído com avisos/licenças de terceiros; o modelo de conversa do Ollama é baixado pelo próprio usuário.
 
-Licença: [MIT](LICENSE).
+Código, modelos e texturas do projeto: [MIT](LICENSE). Os sons do Dragão Celestial a partir da 0.3.3 estão sob **CC BY-SA 3.0**; consulte os [créditos e as fontes](third-party/dragon-audio/CREDITS.txt).

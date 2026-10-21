@@ -207,7 +207,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         if (!isDormant()) return;
         entityData.set(DORMANT, false);
         setNoAi(false);
-        playSound(DragonSounds.ROAR, 2.0F, 0.75F);
+        playSound(DragonSounds.ROAR, 1.25F, 1.0F);
     }
     public void setRiderBoostInput(boolean boost) {
         entityData.set(BOOST, boost && isTamed() && getControllingPassenger() != null);
@@ -380,7 +380,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         if (!(level() instanceof ServerLevel server)) return;
         if (isAlive() && tickCount % 160 == 0) playSound(DragonSounds.BREATH, isDormant() ? .18F : .45F, 1.0F);
         if (isBoosting() && tickCount % 24 == 0) playSound(DragonSounds.FLIGHT, .55F, 1.0F);
-        if (tickCount == 1 && isAlive() && !isDormant()) playSound(DragonSounds.ROAR, 1.8F, 0.85F);
+        if (tickCount == 1 && isAlive() && !isDormant()) playSound(DragonSounds.ROAR, 1.25F, 1.0F);
         if (!sanctuarySupportsChecked && !isTamed() && nest != null && tickCount % 40 == 0)
             sanctuarySupportsChecked = NestGenerator.repairSanctuarySupports(server, nest);
         if (tickCount % 20 == 0) {

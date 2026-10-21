@@ -1,0 +1,91 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "11377361": {
+        "pageid": 11377361,
+        "ns": 6,
+        "title": "File:Lion raring-sound1TamilNadu178.ogg",
+        "imagerepository": "local",
+        "imageinfo": [
+          {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Lion_raring-sound1TamilNadu178.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+            "descriptionurl": "https://commons.wikimedia.org/wiki/File:Lion_raring-sound1TamilNadu178.ogg",
+            "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=11377361",
+            "extmetadata": {
+              "DateTime": {
+                "value": "2010-09-04 04:02:03",
+                "source": "mediawiki-metadata",
+                "hidden": ""
+              },
+              "ObjectName": {
+                "value": "Lion raring-sound1TamilNadu178",
+                "source": "mediawiki-metadata"
+              },
+              "CommonsMetadataExtension": {
+                "value": 1.2,
+                "source": "extension",
+                "hidden": ""
+              },
+              "Categories": {
+                "value": "Panthera leo (male)|Self-published work|PD-self|Audio files of Felidae|Audio files of 2010|Link zu Audio",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "Assessments": {
+                "value": "",
+                "source": "commons-categories",
+                "hidden": ""
+              },
+              "ImageDescription": {
+                "value": "the roaring of a lion in captivity<div class=\"description ta\" dir=\"ltr\" lang=\"ta\"><span class=\"language ta\" title=\"Tamil\"><b>\u0ba4\u0bae\u0bbf\u0bb4\u0bcd: </b></span> \u0bb5\u0bbf\u0bb2\u0b99\u0bcd\u0b95\u0bbf\u0baf\u0bb2\u0bcd \u0baa\u0bc2\u0b99\u0bcd\u0b95\u0bbe\u0bb5\u0bbf\u0bb2\u0bc1\u0bb3\u0bcd\u0bb3, \u0b86\u0ba3\u0bcd \u0b9a\u0bbf\u0b99\u0bcd\u0b95\u0ba4\u0bcd\u0ba4\u0bbf\u0ba9\u0bcd \u0b95\u0bc1\u0bb0\u0bb2\u0bcd.\u0b92\u0bb2\u0bbf \u0b9a\u0bc0\u0bb0\u0bae\u0bc8\u0baa\u0bcd\u0baa\u0bc1\u0b9a\u0bcd \u0b9a\u0bc6\u0baf\u0bcd\u0baf\u0baa\u0bcd\u0baa\u0b9f\u0bcd\u0b9f\u0ba4\u0bc1.</div>",
+                "source": "commons-desc-page"
+              },
+              "DateTimeOriginal": {
+                "value": "2010-09-04",
+                "source": "commons-desc-page"
+              },
+              "Credit": {
+                "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+                "source": "commons-desc-page"
+              },
+              "Artist": {
+                "value": "<a href=\"//commons.wikimedia.org/wiki/User:%E0%AE%A4%E0%AE%95%E0%AE%B5%E0%AE%B2%E0%AF%81%E0%AE%B4%E0%AE%B5%E0%AE%A9%E0%AF%8D\" class=\"mw-redirect\" title=\"User:\u0ba4\u0b95\u0bb5\u0bb2\u0bc1\u0bb4\u0bb5\u0ba9\u0bcd\">\u0ba4*\u0b89\u0bb4\u0bb5\u0ba9\u0bcd</a>",
+                "source": "commons-desc-page"
+              },
+              "LicenseShortName": {
+                "value": "Public domain",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "UsageTerms": {
+                "value": "Public domain",
+                "source": "commons-desc-page"
+              },
+              "AttributionRequired": {
+                "value": "false",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Copyrighted": {
+                "value": "False",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "Restrictions": {
+                "value": "",
+                "source": "commons-desc-page",
+                "hidden": ""
+              },
+              "License": {
+                "value": "pd",
+                "source": "commons-templates",
+                "hidden": ""
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

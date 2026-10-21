@@ -1,10 +1,10 @@
 # Instalar Luma com Ollama e voz
 
-Também disponível: **[Dragão Celestial 0.3.2 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.2-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.2-Experimental.zip)**, um mod independente, com dois JARs e instruções. Siga o [passo a passo do dragão](../docs/INSTALAR-DRAGAO.md). Não precisa de Luma ou Ollama. Para reconstruir esse pacote após compilar `dragon-mod`, execute `python3 scripts/package-dragon.py`.
+Também disponível: **[Dragão Celestial 0.3.3 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.3-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.3-Experimental.zip)**, um mod independente, com dois JARs e instruções. Siga o [passo a passo do dragão](../docs/INSTALAR-DRAGAO.md). Não precisa de Luma ou Ollama. Para reconstruir esse pacote após compilar `dragon-mod`, execute `python3 scripts/package-dragon.py`.
 
-A 0.3.2 refaz todos os sons, amplia a Genki Dama para 60 blocos de diâmetro, escava o terreno sob copas de árvores e melhora o sono enrolado e o voo. Inclui OUVIR-SONS.html para ouvir os efeitos no navegador. Mantém os controles e as correções de pilares e ovos.
+A 0.3.3 substitui a voz sintética por gravações de rugido e criatura, remove a saturação e os estalos agudos e suaviza os efeitos de energia. Os sons estão sob CC BY-SA 3.0, com créditos incluídos. Preserva a Genki Dama de 60 blocos com destruição do chão, o sono enrolado e o voo. Inclui OUVIR-SONS.html para ouvir os efeitos no navegador. Mantém os controles e as correções de pilares e ovos.
 
-Nesta versão de testes, o Bosque Celestial continua muito comum: um centro de bosque e ninho por região de 256 × 256 blocos, 36 vezes mais centros por área do que na 0.1.0. Os bosques mantêm raio de 192 blocos e podem se unir. A frequência aumentada é temporária e aparece somente em regiões novas; prefira um mundo novo. Ao atualizar, substitua o JAR antigo por `celestial-dragon-0.3.2-experimental.jar`, sem deixar duas versões em `mods`; o Fabric API não mudou.
+Nesta versão de testes, o Bosque Celestial continua muito comum: um centro de bosque e ninho por região de 256 × 256 blocos, 36 vezes mais centros por área do que na 0.1.0. Os bosques mantêm raio de 192 blocos e podem se unir. A frequência aumentada é temporária e aparece somente em regiões novas; prefira um mundo novo. Ao atualizar, substitua o JAR antigo por `celestial-dragon-0.3.3-experimental.jar`, sem deixar duas versões em `mods`; o Fabric API não mudou.
 
 **[Baixar o pacote pronto 0.4.0 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/v0.4.0-experimental/downloads/Luma-Fabric-26.2-Ollama-e-Voz-v0.4.0-Experimental.zip)**.
 

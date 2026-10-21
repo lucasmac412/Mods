@@ -7,8 +7,8 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.3.2-experimental"
-NAME = "Dragao-Celestial-Fabric-26.2-v0.3.2-Experimental.zip"
+VERSION = "0.3.3-experimental"
+NAME = "Dragao-Celestial-Fabric-26.2-v0.3.3-Experimental.zip"
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
 OLD_PACKAGE_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 
@@ -48,6 +48,8 @@ def main():
                     "br/com/celestialdragon/client/DragonSettingsScreen.class",
                     "br/com/celestialdragon/content/DragonCreativeTab.class",
                     "br/com/celestialdragon/content/DragonSpawnEggItem.class",
+                    "META-INF/licenses/dragon-audio/CREDITS.txt",
+                    "META-INF/licenses/dragon-audio/CC-BY-SA-3.0.txt",
                     "assets/celestial_dragon/items/wild_dragon_spawn_egg.json",
                     "assets/celestial_dragon/items/tamed_dragon_spawn_egg.json",
                     "assets/celestial_dragon/models/item/wild_dragon_spawn_egg.json",
@@ -88,7 +90,9 @@ def main():
         "LICENSE": (ROOT / "LICENSE").read_bytes(),
         "licenses/LICENSE-fabric-api.txt": fabric_license,
         "THIRD-PARTY-NOTICES.txt": (
-            "Dragão Celestial: código, modelo, texturas e sons originais deste projeto, licença MIT (LICENSE).\n\n"
+            "Dragão Celestial: código, modelo e texturas do projeto, licença MIT (LICENSE).\n"
+            "Áudio 0.3.3: CC BY-SA 3.0, adaptado de gravações de Michael Klier e de rugido de leão em domínio público.\n"
+            "Créditos, mudanças, fontes e licença integral: licenses/dragon-audio/.\n\n"
             "Os modelos de blocos também referenciam texturas fornecidas pelo próprio Minecraft; esses arquivos do jogo não são redistribuídos neste pacote.\n\n"
             "Fabric API 0.161.0+26.2: FabricMC contributors, licença Apache-2.0.\n"
             "Licença preservada em licenses/LICENSE-fabric-api.txt e dentro do JAR oficial.\n"
@@ -97,6 +101,8 @@ def main():
             "O Fabric Loader e o Minecraft são instalados separadamente. Minecraft não está incluído.\n"
         ).encode("utf-8"),
     }
+    for name in ["CREDITS.txt", "CC-BY-SA-3.0.txt", "sources.json"]:
+        entries["licenses/dragon-audio/" + name] = (ROOT / "third-party/dragon-audio" / name).read_bytes()
     entries["OUVIR-SONS.html"] = (ROOT / "dragon-mod/preview-sounds.html").read_bytes()
     for sound in sorted((ROOT / "dragon-mod/src/main/resources/assets/celestial_dragon/sounds").glob("*.ogg")):
         entries["sons/" + sound.name] = sound.read_bytes()

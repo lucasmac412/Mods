@@ -5,7 +5,7 @@
   "name": "Dragão Celestial — Ouro e Obsidiana",
   "description": "Dragão chinês montável, bioma celestial, ninhos gigantes, ovos e incubação.",
   "authors": ["lucasmac412"],
-  "license": "MIT",
+  "license": ["MIT", "CC-BY-SA-3.0"],
   "environment": "*",
   "entrypoints": {
     "main": ["br.com.celestialdragon.CelestialDragonMod"],

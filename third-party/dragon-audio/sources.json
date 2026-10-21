@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "author": "Michael Klier",
+      "title": "Large Monster",
+      "page": "https://opengameart.org/content/large-monster",
+      "download": "https://opengameart.org/sites/default/files/Large%20Monster_1.zip",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "originalArchiveSha256": "436e0a2c1f1e276cfe8dd2c9fd4754a7cdc93d34a96f9e832841cf65f53ec5bb"
+    },
+    {
+      "author": "த*உழவன் (Commons user தகவலுழவன்)",
+      "title": "Lion raring-sound1TamilNadu178",
+      "page": "https://commons.wikimedia.org/wiki/File:Lion_raring-sound1TamilNadu178.ogg",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Lion_raring-sound1TamilNadu178.ogg",
+      "license": "Public domain (PD-self)",
+      "originalSha256": "ab237d0f960e83412251d0c11f69959f3c2e8d3b14595f7181c3056f7fa18bf7"
+    }
+  ],
+  "files": {
+    "creature-death-1.wav": "6aacb6a2141d3a644a70e8eea3985853a4e6f88fd9072948842310441b7a1d13",
+    "creature-death-2.wav": "538160d398206fbdfda729067df1c9e979da65f4fc68fb0a842d81df3728a059",
+    "creature-hit-1.wav": "8b783e1e5ed8f9d328b06ededa20af39b2399b7958aa0a96959c89075e2b2cfc",
+    "creature-hit-2.wav": "a0c49a4ce68769b9be2a99522ea9d7e07dcfbd460396a6065d61e83697c2b553",
+    "lion-roar.ogg": "ab237d0f960e83412251d0c11f69959f3c2e8d3b14595f7181c3056f7fa18bf7"
+  }
+}
