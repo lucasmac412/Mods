@@ -17,6 +17,10 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.world.BossEvent;
+import net.minecraft.network.chat.Component;
+import br.com.celestialdragon.world.NestGenerator;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -57,6 +61,11 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     public static final int BEAM_DURATION = 36;
     public static final int BEAM_CHARGE_TICKS = 10;
     public static final int BEAM_RECOVERY_TICKS = 4;
+    public static final int SPIRIT_CHARGE_TICKS = 40;
+    public static final int SPIRIT_COOLDOWN = 600;
+    private static final EntityDataAccessor<Boolean> DORMANT = SynchedEntityData.defineId(CelestialDragonEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> BOOST = SynchedEntityData.defineId(CelestialDragonEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> SPIRIT = SynchedEntityData.defineId(CelestialDragonEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<String> OWNER = SynchedEntityData.defineId(
             CelestialDragonEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> BITE = SynchedEntityData.defineId(
@@ -87,6 +96,10 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     private float riderVerticalInput;
     private Vec3 beamDirection = Vec3.Z_AXIS;
     private Vec3 idleDestination;
+    private int spiritCooldown;
+    private float boostAmount;
+    private final ServerBossEvent boss = new ServerBossEvent(UUID.randomUUID(),
+            Component.literal("Dragão Celestial — Guardião do Ninho"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS);
 
     public CelestialDragonEntity(EntityType<? extends CelestialDragonEntity> type, Level level) {
         super(type, level);
@@ -130,6 +143,9 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         builder.define(BITE, 0);
         builder.define(BEAM, 0);
         builder.define(BEAM_END, new Vector3f());
+        builder.define(DORMANT, false);
+        builder.define(BOOST, false);
+        builder.define(SPIRIT, 0);
     }
 
     public boolean isTamed() {
@@ -155,6 +171,8 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     /** Called by the incubator when its owner hatches this dragon. */
     public void tame(UUID owner) {
         entityData.set(OWNER, Objects.requireNonNull(owner).toString());
+        entityData.set(DORMANT, false);
+        boss.removeAllPlayers();
         setTarget(null);
         setPersistenceRequired();
     }
@@ -165,6 +183,28 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
 
     public BlockPos getNest() {
         return nest;
+    }
+
+    public boolean isDormant() { return entityData.get(DORMANT); }
+    public boolean isBoosting() { return entityData.get(BOOST) && getControllingPassenger() != null; }
+    public int spiritTicks() { return entityData.get(SPIRIT); }
+    public ServerBossEvent bossEvent() { return boss; }
+    public void restAtNest() {
+        if (isTamed() || nest == null) return;
+        entityData.set(DORMANT, true);
+        setNoAi(true);
+        setTarget(null);
+        setDeltaMovement(Vec3.ZERO);
+    }
+    public void wakeFromNest() {
+        if (!isDormant()) return;
+        entityData.set(DORMANT, false);
+        setNoAi(false);
+        playSound(DragonSounds.ROAR, 2.0F, 0.75F);
+    }
+    public void setRiderBoostInput(boolean boost) {
+        entityData.set(BOOST, boost && isTamed() && getControllingPassenger() != null);
+        verticalInputTick = tickCount;
     }
 
     public int biteTicks() {
@@ -289,7 +329,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
 
     @Override
     protected Vec3 getRiddenInput(Player rider, Vec3 input) {
-        if (tickCount - verticalInputTick > 10) riderVerticalInput = 0.0F;
+        if (tickCount - verticalInputTick > 10) { riderVerticalInput = 0.0F; entityData.set(BOOST, false); }
         return new Vec3(rider.xxa * 0.8, riderVerticalInput * 0.85, rider.zza);
     }
 
@@ -306,7 +346,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
 
     @Override
     protected float getRiddenSpeed(Player rider) {
-        return 0.7F;
+        return 0.7F + boostAmount * 0.9F;
     }
 
     @Override
@@ -324,6 +364,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
 
     @Override
     public void tick() {
+        boostAmount = Mth.clamp(boostAmount + (isBoosting() ? 0.08F : -0.12F), 0, 1);
         super.tick();
         if (!(level() instanceof ServerLevel server)) return;
         if (tickCount % 20 == 0) {
@@ -337,9 +378,17 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         }
         if (biteCooldown > 0) biteCooldown--;
         if (beamCooldown > 0) beamCooldown--;
+        if (spiritCooldown > 0) spiritCooldown--;
+        if (spiritTicks() > 0) entityData.set(SPIRIT, spiritTicks() - 1);
+        if (tickCount % 10 == 0) updateBoss(server);
+        if (isBoosting() && tickCount % 2 == 0) server.sendParticles(ParticleTypes.ELECTRIC_SPARK,
+                getX(), getY() + 3, getZ(), 12, 2, 1.4, 2, 0.05);
         if (!isAlive()) {
             entityData.set(BITE, 0);
             entityData.set(BEAM, 0);
+            entityData.set(SPIRIT, 0);
+            entityData.set(BOOST, false);
+            boss.removeAllPlayers();
             beamHits.clear();
             return;
         }
@@ -353,6 +402,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
             if (beamTicks() > 0) tickBeam(server);
             else beamHits.clear();
         }
+        if (isDormant()) { setDeltaMovement(Vec3.ZERO); return; }
         if (!isAlive() || isNoAi() || getControllingPassenger() != null) return;
         if (tickCount % 20 == 0) chooseTarget();
         LivingEntity target = getTarget();
@@ -378,6 +428,45 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         } else {
             flyNearHome();
         }
+    }
+
+    private void updateBoss(ServerLevel server) {
+        if (isTamed() || nest == null || !isAlive()) { boss.removeAllPlayers(); return; }
+        Vec3 center = Vec3.atCenterOf(nest);
+        double range = NestGenerator.RADIUS + 20.0;
+        if (isDormant()) {
+            for (var player : server.players()) {
+                double dx = player.getX() - center.x, dz = player.getZ() - center.z;
+                if (player.isAlive() && !player.isCreative() && !player.isSpectator()
+                        && Math.abs(player.getY() - center.y) < 40 && dx * dx + dz * dz < (NestGenerator.RADIUS - 2.0) * (NestGenerator.RADIUS - 2.0)) {
+                    wakeFromNest(); break;
+                }
+            }
+        }
+        boss.setProgress(Mth.clamp(getHealth() / getMaxHealth(), 0, 1));
+        boss.setVisible(!isDormant());
+        var nearby = new HashSet<net.minecraft.server.level.ServerPlayer>();
+        if (!isDormant()) for (var player : server.players()) {
+            if (player.isAlive() && !player.isSpectator() && player.distanceToSqr(center) <= range * range) {
+                nearby.add(player); boss.addPlayer(player);
+            }
+        }
+        for (var player : Set.copyOf(boss.getPlayers())) if (!nearby.contains(player)) boss.removePlayer(player);
+    }
+
+    @Override public void remove(RemovalReason reason) { boss.removeAllPlayers(); super.remove(reason); }
+
+    public boolean trySpiritBomb() {
+        if (!(level() instanceof ServerLevel server) || !isAlive() || isDormant() || !isTamed()
+                || getControllingPassenger() == null || spiritCooldown > 0 || biteTicks() > 0 || beamTicks() > 0 || spiritTicks() > 0) return false;
+        CelestialOrbEntity orb = br.com.celestialdragon.CelestialDragonMod.SPIRIT_ORB.create(server, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        if (orb == null) return false;
+        orb.begin(this);
+        if (!server.addFreshEntity(orb)) return false;
+        spiritCooldown = SPIRIT_COOLDOWN;
+        entityData.set(SPIRIT, SPIRIT_CHARGE_TICKS);
+        playSound(DragonSounds.BEAM, 2.0F, 0.45F);
+        return true;
     }
 
     private void chooseTarget() {
@@ -412,7 +501,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     /** The rider sends only intent; the server finds legal targets in this short forward arc. */
     public boolean tryBite() {
         if (!(level() instanceof ServerLevel) || !isAlive() || biteCooldown > 0
-                || biteTicks() > 0 || beamTicks() > 0) return false;
+                || isDormant() || spiritTicks() > 0 || biteTicks() > 0 || beamTicks() > 0) return false;
         biteCooldown = BITE_COOLDOWN;
         entityData.set(BITE, BITE_DURATION);
         return true;
@@ -434,7 +523,7 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
 
     public boolean tryBeam() {
         if (!(level() instanceof ServerLevel server) || !isAlive() || beamCooldown > 0
-                || beamTicks() > 0 || biteTicks() > 0) return false;
+                || isDormant() || spiritTicks() > 0 || beamTicks() > 0 || biteTicks() > 0) return false;
         beamCooldown = BEAM_COOLDOWN;
         entityData.set(BEAM, BEAM_DURATION);
         LivingEntity rider = getControllingPassenger();
@@ -516,11 +605,13 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         if (source.getEntity() instanceof LivingEntity attacker
                 && (isProtectedAlly(this, attacker) || isAlliedTo(attacker))) return false;
-        return super.hurtServer(level, source, amount);
+        boolean hurt = super.hurtServer(level, source, amount);
+        if (hurt) wakeFromNest();
+        return hurt;
     }
 
     @Override
-    protected SoundEvent getAmbientSound() { return DragonSounds.ROAR; }
+    protected SoundEvent getAmbientSound() { return isDormant() ? null : DragonSounds.ROAR; }
 
     @Override
     public int getAmbientSoundInterval() { return 240; }
@@ -542,6 +633,8 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         if (nest != null) output.putLong("DragonNest", nest.asLong());
         output.putInt("DragonBiteCooldown", biteCooldown);
         output.putInt("DragonBeamCooldown", beamCooldown);
+        output.putInt("DragonSpiritCooldown", spiritCooldown);
+        output.putBoolean("DragonDormant", isDormant());
         // Health/attributes are persisted by LivingEntity above.
     }
 
@@ -559,6 +652,11 @@ public final class CelestialDragonEntity extends PathfinderMob implements Ownabl
         beamCooldown = Mth.clamp(input.getIntOr("DragonBeamCooldown", 0), 0, BEAM_COOLDOWN);
         entityData.set(BITE, 0);
         entityData.set(BEAM, 0);
+        spiritCooldown = Mth.clamp(input.getIntOr("DragonSpiritCooldown", 0), 0, SPIRIT_COOLDOWN);
+        entityData.set(DORMANT, !isTamed() && nest != null && input.getBooleanOr("DragonDormant", false));
+        if (isDormant()) setNoAi(true);
+        entityData.set(SPIRIT, 0);
+        entityData.set(BOOST, false);
         setNoGravity(true);
         setPersistenceRequired();
     }

@@ -2,11 +2,19 @@
 
 Este guia é para **Minecraft Java Edition no computador**, versão **26.2**. O Dragão Celestial é um mod Fabric independente da Luma.
 
-**[Baixar Dragao-Celestial-Fabric-26.2-v0.2.2-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.2-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.2.2-Experimental.zip)**
+**[Baixar Dragao-Celestial-Fabric-26.2-v0.3.0-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.0-Experimental.zip)**
 
 **Bioma comum para testes:** como na versão 0.1.1, enquanto desenvolvemos e testamos o mod, o Bosque Celestial está muito comum: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São **36 vezes mais centros por área** do que na 0.1.0, e bosques vizinhos podem se unir. Essa frequência é temporária para facilitar os testes.
 
-**Novidade da 0.2.2:** visual refeito com juba volumosa, focinho alongado e mandíbula marcada; garras curvas em membros curtos e escamas maiores e pontudas nas costas e nas laterais. A ondulação lateral e os golpes com preparação e recuperação continuam presentes. O Criativo oferece os 12 itens do mod e ovos separados para criar as versões selvagem e domada.
+A **0.3.0** traz patas dianteiras mais longas e remove as traseiras. O raio tem um núcleo sólido mais grosso com aura translúcida; Shift acelera com arcos elétricos. Ao montar, a câmera passa automaticamente para terceira pessoa, afastada e elevada, com colisão contra blocos; ao desmontar, restaura a perspectiva anterior.
+
+A **Genki Dama** cresce acima do dragão durante **40 ticks (aproximadamente dois segundos)** até **20 blocos de diâmetro**, depois viaja a **0,30 bloco por tick (6 blocos por segundo)** na direção escolhida ao terminar a carga. A câmera abre mais durante a formação e o começo da viagem. Ao primeiro contato sólido, destrói uma área de **20 × 24 blocos e seis de profundidade**, sem quebrar bedrock ou outros blocos indestrutíveis. Os blocos destruídos não geram milhares de itens no chão. O dano a criaturas é três vezes o dano configurado para o raio, preservando dono e aliados. A recarga é de **600 ticks (30 segundos)**. A carga cancela se o dono desmontar; o projétil deixa de existir se seu dragão morrer ou a região adiante não estiver carregada. Se não atingir nenhum bloco, desaparece após até 25 segundos de viagem. Mire no terreno para produzir a explosão.
+
+A nova arena do ninho mede **113 blocos de diâmetro**, com oito torres, anéis rúnicos, muralha e um santuário elevado. Acrescenta **tijolos celestiais, pedra rúnica, obsidiana celestial dourada, pilar do santuário e lanterna do santuário**, disponíveis na aba do Criativo e coletáveis na arena. Seus modelos combinam texturas do projeto e texturas já fornecidas pelo Minecraft.
+
+O guardião natural começa **dormindo enrolado**, imóvel em sua plataforma. Visitas em Criativo ou Espectador não o despertam. A entrada de um jogador em Sobrevivência ou Aventura no interior da arena o acorda; atacá-lo também o acorda. Surge a barra de chefe no topo da tela para jogadores próximos. O estado de sono é salvo com o mundo. O dragão criado pelo ovo selvagem do Criativo não gera uma arena ao redor de si.
+
+O visual e os controles atualizam os dragões existentes. **A arena nova aparece apenas em regiões ainda não geradas**; prefira um mundo novo para conferir o ninho maior. Cliente e servidor precisam usar a mesma versão 0.3.0.
 
 ## 1. Baixe e extraia o pacote
 
@@ -14,10 +22,10 @@ Abra o link acima. No navegador, `Ctrl + J` mostra os downloads. Localize o ZIP 
 
 | Arquivo | Função |
 | --- | --- |
-| `celestial-dragon-0.2.2-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
+| `celestial-dragon-0.3.0-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
 | `fabric-api-0.161.0+26.2.jar` | Dependência usada pelo mod. |
 
-Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.2.2-experimental/dragon-mod/README.md).
+Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.0-experimental/dragon-mod/README.md).
 
 ## 2. Abra o Minecraft Java 26.2 uma vez
 
@@ -56,14 +64,14 @@ No Windows, pressione `Windows + R`, cole `%APPDATA%\.minecraft` e aperte Enter 
 4. Se já houver outra versão do Dragão Celestial ou do Fabric API, guarde a versão substituída fora de `mods`. Deixe uma única versão de cada mod.
 5. Abra o Launcher, selecione **Fabric 26.2** e clique em **Jogar**.
 
-**Se você já usa a 0.2.1, a 0.2.0 ou uma versão 0.1.x:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.2.2-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
+**Se você já usa uma versão 0.2.x ou uma versão 0.1.x:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.3.0-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
 
 O resultado deve ser parecido com:
 
 ```text
 .minecraft/
   mods/
-    celestial-dragon-0.2.2-experimental.jar
+    celestial-dragon-0.3.0-experimental.jar
     fabric-api-0.161.0+26.2.jar
 ```
 
@@ -71,7 +79,7 @@ Não coloque o ZIP inteiro ou o arquivo `-sources.jar` em `mods`. A Luma não é
 
 ## 5. Abra a aba do Criativo e crie um dragão de teste
 
-Crie um **mundo novo do tipo Normal, em Criativo, com comandos ativados**. Pressione **E** para abrir o inventário. A aba **Dragão Celestial** reúne todos os 12 itens e blocos do mod.
+Crie um **mundo novo do tipo Normal, em Criativo, com comandos ativados**. Pressione **E** para abrir o inventário. A aba **Dragão Celestial** reúne todos os 17 itens e blocos do mod.
 
 Se a aba não estiver visível, clique no botão **Dragão Celestial** no canto superior esquerdo do inventário. Ele abre diretamente a página e a aba do mod.
 
@@ -152,12 +160,14 @@ Com a mão vazia, clique com o botão direito no seu dragão. Somente o dono con
 | Mouse | Orientar a direção do voo. |
 | Espaço | Subir. |
 | Ctrl | Descer, usando a tecla configurada para correr. |
-| Shift | Desmontar, usando a tecla configurada para agachar. |
+| Shift | Acelerar com aura elétrica; combine com W para avançar mais rápido. |
+| Dois toques rápidos em Ctrl | Desmontar, usando a tecla configurada para correr. |
+| R | Genki Dama. |
 | Clique esquerdo | Mordida. |
 | Clique direito com as duas mãos vazias | Raio de energia. |
 | Clique direito com item em qualquer mão | Usa o item normalmente, inclusive ovos de criaturas do Minecraft. |
 
-Se você mudou as teclas do Minecraft, use as suas teclas de **pular**, **correr** e **agachar** para subir, descer e desmontar. A mordida recolhe a cabeça antes do impacto. O raio carrega por aproximadamente meio segundo antes de disparar. Os ataques têm recuperação e intervalo entre usos; não começam juntos.
+Se você mudou as teclas do Minecraft, use as suas teclas de **pular**, **correr** e **agachar** para subir, descer e acelerar; desmontar exige dois toques rápidos na tecla de correr. A mordida recolhe a cabeça antes do impacto. O raio carrega por aproximadamente meio segundo antes de disparar. Os ataques têm recuperação e intervalo entre usos; não começam juntos.
 
 Os ovos normais do Minecraft continuam sendo usados com clique direito, inclusive enquanto você está montado. Aponte para um bloco próximo, dentro do alcance do jogador. Se um animal aparece e logo morre perto do dragão, ele pode ter sido atacado: o dragão continua agressivo com outras criaturas. Afaste-se do dragão para conferir um ovo sem esse combate. No modo Pacífico, monstros como zumbis são removidos pelo próprio Minecraft.
 

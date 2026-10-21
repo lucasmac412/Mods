@@ -1,18 +1,26 @@
 # Dragão Celestial — Ouro e Obsidiana
 
-Mod independente para **Minecraft Java Edition 26.2 + Fabric**, versão **0.2.2-experimental**. Adiciona um dragão chinês negro e dourado, voo montado, mordida, raio de energia, o Bosque Celestial, ninhos gigantes, ovos coletáveis e uma incubadora. Pode ser instalado sem a Luma.
+Mod independente para **Minecraft Java Edition 26.2 + Fabric**, versão **0.3.0-experimental**. Adiciona um dragão chinês negro e dourado, voo montado, mordida, raio de energia, o Bosque Celestial, ninhos gigantes, ovos coletáveis e uma incubadora. Pode ser instalado sem a Luma.
 
-**[Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.2-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.2.2-Experimental.zip)** · **[Instalação passo a passo](https://github.com/lucasmac412/Mods/blob/dragao-v0.2.2-experimental/docs/INSTALAR-DRAGAO.md)** · **[Ver o movimento no jogo](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.2-experimental/docs/dragao/ondulacao.gif)**
+**[Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.0-Experimental.zip)** · **[Instalação passo a passo](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.0-experimental/docs/INSTALAR-DRAGAO.md)** · **[Ver o movimento no jogo](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/docs/dragao/ondulacao.gif)**
 
 O ZIP contém o JAR do dragão e o Fabric API compatível. Instale Minecraft 26.2, Fabric Loader 0.19.5 ou superior compatível e Java 25. Copie os dois JARs para a pasta `mods` do perfil Fabric. No multiplayer, instale os mesmos arquivos no servidor e nos clientes. Esta é uma versão experimental; faça uma cópia do mundo antes de usá-la e prefira um mundo novo para explorar a geração.
 
 **Bioma comum para testes:** o Bosque Celestial continua muito comum, como na 0.1.1. Há um centro de bosque e ninho por região de **256 × 256 blocos**, em vez de 1.536 × 1.536 na 0.1.0: **36 vezes mais centros por área**. O raio continua em 192 blocos, então bosques vizinhos podem se unir em áreas extensas. Essa frequência é temporária durante o desenvolvimento; o equilíbrio final será definido depois.
 
-[Veja as garras de perto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.2-experimental/docs/dragao/14-garras-ombro.png) · [Escamas pontudas](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.2.2-experimental/docs/dragao/15-escamas-costas.png).
+[Veja as garras de perto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/docs/dragao/14-garras-ombro.png) · [Escamas pontudas](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.0-experimental/docs/dragao/15-escamas-costas.png).
 
-**Novo na 0.2.2:** visual refeito com juba volumosa, focinho alongado, membros curtos com garras curvas e escamas maiores e pontudas. O corpo é mais fino, com volumes que sugerem musculatura, e mantém a ondulação lateral. A mordida tem preparação, avanço e recuperação; o raio reúne energia antes do disparo. O inventário Criativo oferece todos os 12 itens do mod e dois ovos para criar dragões diretamente.
+A **0.3.0** traz patas dianteiras mais longas e remove as traseiras. O raio tem um núcleo sólido mais grosso com aura translúcida; Shift acelera com arcos elétricos. Ao montar, a câmera passa automaticamente para terceira pessoa, afastada e elevada, com colisão contra blocos; ao desmontar, restaura a perspectiva anterior.
 
-Para atualizar da 0.2.1, da 0.2.0 ou de qualquer versão 0.1.x, feche o jogo e substitua o JAR antigo por `celestial-dragon-0.2.2-experimental.jar`; mantenha apenas uma versão do dragão na pasta `mods`. O Fabric API continua o mesmo. Para ver a geração mais comum, crie um mundo novo ou explore regiões ainda não geradas: áreas já exploradas não são refeitas.
+A **Genki Dama** cresce acima do dragão durante **40 ticks (aproximadamente dois segundos)** até **20 blocos de diâmetro**, depois viaja a **0,30 bloco por tick (6 blocos por segundo)** na direção escolhida ao terminar a carga. A câmera abre mais durante a formação e o começo da viagem. Ao primeiro contato sólido, destrói uma área de **20 × 24 blocos e seis de profundidade**, sem quebrar bedrock ou outros blocos indestrutíveis. Os blocos destruídos não geram milhares de itens no chão. O dano a criaturas é três vezes o dano configurado para o raio, preservando dono e aliados. A recarga é de **600 ticks (30 segundos)**. A carga cancela se o dono desmontar; o projétil deixa de existir se seu dragão morrer ou a região adiante não estiver carregada. Se não atingir nenhum bloco, desaparece após até 25 segundos de viagem. Mire no terreno para produzir a explosão.
+
+A nova arena do ninho mede **113 blocos de diâmetro**, com oito torres, anéis rúnicos, muralha e um santuário elevado. Acrescenta **tijolos celestiais, pedra rúnica, obsidiana celestial dourada, pilar do santuário e lanterna do santuário**, disponíveis na aba do Criativo e coletáveis na arena. Seus modelos combinam texturas do projeto e texturas já fornecidas pelo Minecraft.
+
+O guardião natural começa **dormindo enrolado**, imóvel em sua plataforma. Visitas em Criativo ou Espectador não o despertam. A entrada de um jogador em Sobrevivência ou Aventura no interior da arena o acorda; atacá-lo também o acorda. Surge a barra de chefe no topo da tela para jogadores próximos. O estado de sono é salvo com o mundo. O dragão criado pelo ovo selvagem do Criativo não gera uma arena ao redor de si.
+
+O visual e os controles atualizam os dragões existentes. **A arena nova aparece apenas em regiões ainda não geradas**; prefira um mundo novo para conferir o ninho maior. Cliente e servidor precisam usar a mesma versão 0.3.0.
+
+Para atualizar de uma versão 0.2.x ou de qualquer versão 0.1.x, feche o jogo e substitua o JAR antigo por `celestial-dragon-0.3.0-experimental.jar`; mantenha apenas uma versão do dragão na pasta `mods`. O Fabric API continua o mesmo. Para ver a geração mais comum, crie um mundo novo ou explore regiões ainda não geradas: áreas já exploradas não são refeitas.
 
 ## Testar pelo Criativo
 
@@ -63,7 +71,9 @@ Somente o dono pode montar o dragão domado: aproxime-se com a mão vazia e cliq
 | Mouse | Orientar a direção. |
 | Espaço | Subir. |
 | Ctrl, tecla de correr | Descer. |
-| Shift, tecla de agachar | Desmontar. |
+| Shift, tecla de agachar | Acelerar com aura elétrica; combine com W para avançar mais rápido. |
+| Dois toques rápidos em Ctrl | Desmontar. |
+| R | Formar e lançar a Genki Dama. |
 | Botão esquerdo do mouse | Morder. |
 | Botão direito do mouse, com as duas mãos vazias | Disparar o raio de energia. |
 | Botão direito com item em qualquer mão | Usar o item normalmente, inclusive ovos de criaturas do Minecraft. |
@@ -87,6 +97,6 @@ Com JDK 25 instalado, execute a partir da raiz deste repositório:
 ./gradlew -p dragon-mod runGameTest
 ```
 
-No Windows, use `gradlew.bat -p dragon-mod build`. O mod instalável fica em `dragon-mod/build/libs/celestial-dragon-0.2.2-experimental.jar`; o arquivo `-sources.jar` contém o código-fonte e não deve ser instalado como mod.
+No Windows, use `gradlew.bat -p dragon-mod build`. O mod instalável fica em `dragon-mod/build/libs/celestial-dragon-0.3.0-experimental.jar`; o arquivo `-sources.jar` contém o código-fonte e não deve ser instalado como mod.
 
-A suíte do servidor verifica configuração, ovos, incubação, combate e proteção de aliados. Os testes gráficos verificam modelo, menu, controles montados, uso dos ovos normais do Minecraft e geração em mundo Normal com recarga. Veja os [resultados, capturas reais e limites](https://github.com/lucasmac412/Mods/blob/dragao-v0.2.2-experimental/docs/TESTES-DRAGAO.md). A nuvem não tem saída de áudio; a reprodução dos sons precisa ser conferida no computador do jogador.
+A suíte do servidor verifica configuração, ovos, incubação, combate e proteção de aliados. Os testes gráficos verificam modelo, menu, controles montados, uso dos ovos normais do Minecraft e geração em mundo Normal com recarga. Veja os [resultados, capturas reais e limites](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.0-experimental/docs/TESTES-DRAGAO.md). A nuvem não tem saída de áudio; a reprodução dos sons precisa ser conferida no computador do jogador.

@@ -94,17 +94,18 @@ public final class DragonGameTests {
     @GameTest(structure = ARENA, maxTicks = 80, skyAccess = true)
     public void giantNestContainsWideEggAndOneWildDragon(GameTestHelper helper) {
         var level = helper.getLevel();
-        BlockPos center = helper.absolutePos(new BlockPos(32, 3, 32));
+        BlockPos center = helper.absolutePos(new BlockPos(2048, 3, 2048));
         helper.assertTrue(NestGenerator.generate(level, center), "The giant nest must generate successfully");
         for (int y = 2; y <= 4; y++) helper.assertTrue(level.getBlockState(center.above(y)).is(DragonContent.EGG), "The nest contains the complete three-block egg");
-        var dragons = level.getEntitiesOfClass(CelestialDragonEntity.class, helper.getBounds());
-        helper.assertTrue(dragons.size() == 1 && !dragons.getFirst().isTamed(), "A nest starts with one wild guardian");
+        var nestBounds = new net.minecraft.world.phys.AABB(center).inflate(60,40,60);
+        var dragons = level.getEntitiesOfClass(CelestialDragonEntity.class, nestBounds);
+        helper.assertTrue(dragons.size() == 1 && !dragons.getFirst().isTamed() && dragons.getFirst().isDormant(), "A nest starts with one wild guardian");
         helper.assertTrue(NestGenerator.generate(level, center), "Reprocessing the same nest must retain its original inhabitants");
-        helper.assertTrue(level.getEntitiesOfClass(CelestialDragonEntity.class, helper.getBounds()).size() == 1, "Reprocessing cannot duplicate the wild guardian");
+        helper.assertTrue(level.getEntitiesOfClass(CelestialDragonEntity.class, nestBounds).size() == 1, "Reprocessing cannot duplicate the wild guardian");
         int special = 0;
-        for (int x = -20; x <= 20; x++) for (int z = -20; z <= 20; z++)
+        for (int x = -56; x <= 56; x++) for (int z = -56; z <= 56; z++)
             if (level.getBlockState(center.offset(x, 0, z)).is(DragonContent.CELESTIAL_STONE)) special++;
-        helper.assertTrue(special > 800, "Nest footprint must be giant, using hundreds of custom foundation blocks");
+        helper.assertTrue(special > 9000, "Nest footprint must be giant, using hundreds of custom foundation blocks");
         dragons.forEach(CelestialDragonEntity::discard);
         helper.succeed();
     }

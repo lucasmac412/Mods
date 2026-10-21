@@ -5,6 +5,7 @@ import br.com.celestialdragon.config.DragonConfig;
 import br.com.celestialdragon.content.DragonContent;
 import br.com.celestialdragon.content.DragonCreativeTab;
 import br.com.celestialdragon.entity.CelestialDragonEntity;
+import br.com.celestialdragon.entity.CelestialOrbEntity;
 import br.com.celestialdragon.network.DragonControlNetworking;
 import br.com.celestialdragon.network.DragonSettingsNetworking;
 import br.com.celestialdragon.sound.DragonSounds;
@@ -30,6 +31,10 @@ public final class CelestialDragonMod implements ModInitializer {
             id("celestial_dragon"), EntityType.Builder.of(CelestialDragonEntity::new, MobCategory.CREATURE)
                     .sized(3.6F, 4.0F).clientTrackingRange(16)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, id("celestial_dragon"))));
+    public static final EntityType<CelestialOrbEntity> SPIRIT_ORB = Registry.register(BuiltInRegistries.ENTITY_TYPE,
+            id("spirit_orb"), EntityType.Builder.<CelestialOrbEntity>of(CelestialOrbEntity::new, MobCategory.MISC)
+                    .sized(20, 20).clientTrackingRange(16).updateInterval(1)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, id("spirit_orb"))));
 
     @Override public void onInitialize() {
         DragonConfig.load(FabricLoader.getInstance().getConfigDir().resolve("celestial-dragon.json"));
@@ -44,7 +49,7 @@ public final class CelestialDragonMod implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, access, selection) -> dispatcher.register(
                 Commands.literal("dragao").executes(context -> {
                     context.getSource().sendSuccess(() -> Component.literal("Dragão Celestial: procure o Bosque Celestial e o ninho no centro. "
-                            + "Recolha o ovo e use a incubadora. No seu dragão: WASD, Espaço sobe, Ctrl desce, Shift desmonta; "
+                            + "Recolha o ovo e use a incubadora. No seu dragão: WASD, Espaço sobe, Ctrl desce, 2× Ctrl desmonta, Shift acelera, R Genki Dama; "
                             + "botão esquerdo morde, direito dispara. ESC → Dragão Celestial ajusta vida/dano."), false);
                     return 1;
                 })));

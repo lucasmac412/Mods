@@ -28,11 +28,19 @@ public final class DragonControlNetworking {
             return;
         }
         dragon.setRiderVerticalInput(Mth.clamp(payload.vertical(), -1.0F, 1.0F));
+        dragon.setRiderBoostInput(payload.boost());
+        if (payload.dismount()) {
+            dragon.setRiderBoostInput(false);
+            dragon.setRiderVerticalInput(0);
+            player.stopRiding();
+            return;
+        }
         if (payload.bite()) {
             dragon.tryBite();
         }
         if (payload.beam() && player.getMainHandItem().isEmpty() && player.getOffhandItem().isEmpty()) {
             dragon.tryBeam();
         }
+        if (payload.spirit()) dragon.trySpiritBomb();
     }
 }

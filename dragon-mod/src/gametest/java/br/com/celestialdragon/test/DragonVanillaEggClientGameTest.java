@@ -85,7 +85,9 @@ public final class DragonVanillaEggClientGameTest implements FabricClientGameTes
             });
             context.getInput().holdMouseFor(GLFW.GLFW_MOUSE_BUTTON_RIGHT, 2);
             server.waitFor(ignored -> dragon(world, dragonId).beamTicks() > 0);
-            context.getInput().holdKeyFor(options -> options.keyShift, 2);
+            context.getInput().holdKeyFor(options -> options.keySprint, 1);
+        context.waitTicks(1);
+        context.getInput().holdKeyFor(options -> options.keySprint, 1);
             server.waitFor(ignored -> !world.getConnection().getServerPlayer().isPassenger());
             server.runOnServer(ignored -> world.getConnection().getServerPlayer().teleportTo(
                     world.getConnection().getServerLevel(), 24.5, 140, 0.5, Set.of(), 0, 0, false));
@@ -114,7 +116,7 @@ public final class DragonVanillaEggClientGameTest implements FabricClientGameTes
                     .collect(java.util.stream.Collectors.toSet());
             Set<Item> displayed = tab.getDisplayItems().stream().map(ItemStack::getItem)
                     .collect(java.util.stream.Collectors.toSet());
-            if (registered.size() != 12 || !displayed.equals(registered)
+            if (registered.size() != 17 || !displayed.equals(registered)
                     || tab.getDisplayItems().size() != displayed.size()
                     || !displayed.contains(DragonContent.WILD_DRAGON_SPAWN_EGG)
                     || !displayed.contains(DragonContent.TAMED_DRAGON_SPAWN_EGG))

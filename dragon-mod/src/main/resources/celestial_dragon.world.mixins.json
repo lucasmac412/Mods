@@ -1,1 +1,13 @@
-{"required":true,"package":"br.com.celestialdragon.mixin.world","compatibilityLevel":"JAVA_25","mixins":["CelestialParameterListMixin","CelestialBiomeSourceMixin"],"injectors":{"defaultRequire":1}}
+{
+  "required": true,
+  "package": "br.com.celestialdragon.mixin.world",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "CelestialParameterListMixin",
+    "CelestialBiomeSourceMixin",
+    "DragonRidingMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

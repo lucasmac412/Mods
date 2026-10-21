@@ -8,4 +8,8 @@ public final class DragonRenderState extends LivingEntityRenderState {
     public float biteTicks;
     public float beamTicks;
     public float movementAmount;
+    public float spiritTicks;
+    public boolean dormant, boosting;
+    public net.minecraft.world.phys.Vec3 beamStart = net.minecraft.world.phys.Vec3.ZERO;
+    public net.minecraft.world.phys.Vec3 beamEnd = net.minecraft.world.phys.Vec3.ZERO;
 }

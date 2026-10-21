@@ -30,6 +30,16 @@ import net.minecraft.world.level.material.PushReaction;
 
 /** The mineral, terrain and survival crafting content of the celestial biome. */
 public final class DragonContent {
+    public static final Block CELESTIAL_BRICKS = block("celestial_bricks", Block::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(4, 18).sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops());
+    public static final Block RUNESTONE = block("celestial_runestone", Block::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).strength(4, 18).sound(SoundType.AMETHYST).lightLevel(s -> 3).requiresCorrectToolForDrops());
+    public static final Block ARENA_PILLAR = block("celestial_pillar", Block::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(4, 18).sound(SoundType.METAL).requiresCorrectToolForDrops());
+    public static final Block CELESTIAL_OBSIDIAN = block("celestial_obsidian", Block::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(8, 1200).sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops());
+    public static final Block ARENA_LANTERN = block("celestial_lantern", Block::new,
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).strength(2, 8).sound(SoundType.LANTERN).lightLevel(s -> 15).noOcclusion());
     public static final Block CELESTIAL_STONE = block("celestial_stone", Block::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(2.0F, 7.0F)
                     .sound(SoundType.DEEPSLATE).requiresCorrectToolForDrops());

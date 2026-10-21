@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 
 /** Actual game views of the mane, hooked claws, pointed scales and combat poses. */
 public final class DragonVisualClientGameTest implements FabricClientGameTest {
-    private static final Path SHOTS = Path.of("../../reports/client-visual-v4").toAbsolutePath().normalize();
+    private static final Path SHOTS = Path.of("../../reports/client-visual-v5").toAbsolutePath().normalize();
 
     @Override
     public void runTest(ClientGameTestContext context) {
@@ -162,6 +162,7 @@ public final class DragonVisualClientGameTest implements FabricClientGameTest {
         float yaw = 0, minimum = 0, maximum = 0;
         for (int i = 0; i < DragonModel.SEGMENT_COUNT; i++) {
             segment = segment.getChild("segment_" + i);
+            if (i > 2 && segment.hasChild("talon_arm_left")) throw new AssertionError("The dragon must not retain hind limbs");
             yaw += segment.yRot;
             minimum = Math.min(minimum, yaw);
             maximum = Math.max(maximum, yaw);

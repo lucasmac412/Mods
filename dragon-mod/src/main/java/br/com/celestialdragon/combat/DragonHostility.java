@@ -66,7 +66,7 @@ public final class DragonHostility {
         }
 
         private boolean canConfront(CelestialDragonEntity candidate) {
-            return candidate.isAlive()
+            return candidate.isAlive() && !candidate.isDormant()
                     && !candidate.isInvulnerable()
                     && !mob.isPassengerOfSameVehicle(candidate)
                     && !CelestialDragonEntity.isProtectedAlly(candidate, mob)

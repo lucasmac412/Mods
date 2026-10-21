@@ -7,8 +7,8 @@ import json
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = "0.2.2-experimental"
-NAME = "Dragao-Celestial-Fabric-26.2-v0.2.2-Experimental.zip"
+VERSION = "0.3.0-experimental"
+NAME = "Dragao-Celestial-Fabric-26.2-v0.3.0-Experimental.zip"
 FABRIC_SHA = "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a"
 OLD_PACKAGE_SHA = "00106b9f9a194dec6c73bf5aba125d318e2660c08d509d0e3b06c6140db79067"
 
@@ -35,6 +35,11 @@ def main():
         if metadata["id"] != "celestial_dragon" or metadata["version"] != VERSION:
             raise SystemExit("O JAR não é a versão correta do dragão.")
         required = ["br/com/celestialdragon/entity/CelestialDragonEntity.class",
+                    "br/com/celestialdragon/entity/CelestialOrbEntity.class",
+                    "br/com/celestialdragon/client/SpiritOrbRenderer.class",
+                    "br/com/celestialdragon/client/DragonEnergyGeometry.class",
+                    "br/com/celestialdragon/mixin/client/DragonCameraMixin.class",
+                    "br/com/celestialdragon/mixin/world/DragonRidingMixin.class",
                     "br/com/celestialdragon/entity/DragonAttackAnimation.class",
                     "br/com/celestialdragon/client/DragonModel.class",
                     "br/com/celestialdragon/client/DragonGeometry.class",
@@ -50,6 +55,11 @@ def main():
                     "data/celestial_dragon/worldgen/biome/celestial_grove.json",
                     "data/celestial_dragon/worldgen/structure/dragon_nest.json",
                     "data/celestial_dragon/recipe/celestial_incubator.json"]
+        for material in ["celestial_bricks", "celestial_runestone", "celestial_obsidian", "celestial_pillar", "celestial_lantern"]:
+            required.extend([f"assets/celestial_dragon/models/block/{material}.json",
+                             f"assets/celestial_dragon/blockstates/{material}.json",
+                             f"assets/celestial_dragon/items/{material}.json",
+                             f"data/celestial_dragon/loot_table/blocks/{material}.json"])
         for path in required:
             if path not in archive.namelist():
                 raise SystemExit("Recurso obrigatório ausente: " + path)
@@ -78,6 +88,7 @@ def main():
         "licenses/LICENSE-fabric-api.txt": fabric_license,
         "THIRD-PARTY-NOTICES.txt": (
             "Dragão Celestial: código, modelo, texturas e sons originais deste projeto, licença MIT (LICENSE).\n\n"
+            "Os modelos de blocos também referenciam texturas fornecidas pelo próprio Minecraft; esses arquivos do jogo não são redistribuídos neste pacote.\n\n"
             "Fabric API 0.161.0+26.2: FabricMC contributors, licença Apache-2.0.\n"
             "Licença preservada em licenses/LICENSE-fabric-api.txt e dentro do JAR oficial.\n"
             "Fonte: https://github.com/FabricMC/fabric\n"

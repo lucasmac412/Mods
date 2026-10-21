@@ -20,6 +20,7 @@ public final class CelestialDragonClient implements ClientModInitializer {
     @Override public void onInitializeClient() {
         ModelLayerRegistry.registerModelLayer(DragonModel.MODEL_LAYER, DragonModel::createBodyLayer);
         EntityRendererRegistry.register(CelestialDragonMod.DRAGON, DragonRenderer::new);
+        EntityRendererRegistry.register(CelestialDragonMod.SPIRIT_ORB, SpiritOrbRenderer::new);
         DragonControls.register();
         BiomeAtmosphere.register();
         ClientPlayNetworking.registerGlobalReceiver(DragonSettingsNetworking.Snapshot.TYPE,

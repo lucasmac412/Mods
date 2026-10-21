@@ -5,6 +5,11 @@
     "celestial_dragon:celestial_ore",
     "celestial_dragon:deepslate_celestial_ore",
     "celestial_dragon:celestial_incubator",
-    "celestial_dragon:celestial_egg"
+    "celestial_dragon:celestial_egg",
+    "celestial_dragon:celestial_bricks",
+    "celestial_dragon:celestial_obsidian",
+    "celestial_dragon:celestial_pillar",
+    "celestial_dragon:celestial_runestone",
+    "celestial_dragon:celestial_lantern"
   ]
 }

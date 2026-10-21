@@ -5,6 +5,7 @@ import br.com.celestialdragon.content.CelestialEggBlock;
 import br.com.celestialdragon.content.DragonContent;
 import br.com.celestialdragon.world.DragonWorld;
 import br.com.celestialdragon.world.GroveLayout;
+import br.com.celestialdragon.world.NestGenerator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,7 +40,7 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
     public void runTest(ClientGameTestContext context) {
         context.getInput().resizeWindow(1280, 720);
         context.runOnClient(client -> {
-            client.options.renderDistance().set(5);
+            client.options.renderDistance().set(6);
             client.options.simulationDistance().set(5);
             client.options.fov().set(75);
             client.options.pauseOnLostFocus = false;
@@ -69,6 +70,15 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
             context.waitTicks(10);
             context.takeScreenshot(TestScreenshotOptions.of("06-natural-celestial-grove-and-nest")
                     .disableCounterPrefix().withSize(1280, 720).withDestinationDir(REPORTS));
+            world.getServer().runOnServer(ignored -> world.getConnection().getServerPlayer().teleportTo(
+                    world.getConnection().getServerLevel(), observed.egg().getX()+.5, observed.egg().getY()+12,
+                    observed.egg().getZ()+4.5, Set.of(), 135,15,false));
+            world.getConnection().waitForClientboundPackets();
+            context.runOnClient(client -> client.options.fov().set(65));
+            context.getInput().lookAt(observed.egg().offset(0,4,-24));
+            context.waitTicks(8);
+            world.getConnection().waitForChunksRender();
+            context.takeScreenshot(TestScreenshotOptions.of("17-sleeping-guardian-sanctuary").disableCounterPrefix().withSize(1280,720).withDestinationDir(REPORTS));
         }
 
         // Reopen the saved generated world, rather than rerunning the procedural command helper.
@@ -81,6 +91,22 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
             });
             world.getConnection().waitForChunksDownload();
             checkGuardian(context, world, observed.egg(), guardianId);
+            world.getServer().runOnServer(ignored -> {
+                var guardian = (br.com.celestialdragon.entity.CelestialDragonEntity)world.getConnection().getServerLevel().getEntity(guardianId);
+                if (!guardian.isDormant()) throw new AssertionError("The guard must remain asleep after Creative visits and reload");
+                var player = world.getConnection().getServerPlayer();
+                player.setGameMode(GameType.SURVIVAL);
+                player.getAbilities().invulnerable = true;
+                player.teleportTo(world.getConnection().getServerLevel(), observed.egg().getX() + .5, observed.egg().getY() + 2, observed.egg().getZ() + 35.5, Set.of(), 180, 0, false);
+            });
+            world.getServer().waitFor(ignored -> {
+                var guardian = (br.com.celestialdragon.entity.CelestialDragonEntity)world.getConnection().getServerLevel().getEntity(guardianId);
+                return !guardian.isDormant() && guardian.bossEvent().getPlayers().contains(world.getConnection().getServerPlayer());
+            });
+            world.getConnection().waitForClientboundPackets();
+            context.waitTicks(10);
+            context.getInput().lookAt(observed.egg().offset(0, 3, -20));
+            context.takeScreenshot(TestScreenshotOptions.of("18-boss-awake-health-bar").disableCounterPrefix().withSize(1280,720).withDestinationDir(REPORTS));
         }
         writeReport(observed, guardianId);
     }
@@ -117,8 +143,8 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
 
         Counts counts = new Counts();
         // Sixteen peripheral chunks avoid counting the nest's logs as generated trees.
-        for (int dx = -4; dx <= 4; dx += 2) for (int dz = -4; dz <= 4; dz += 2) {
-            if (Math.max(Math.abs(dx), Math.abs(dz)) == 4)
+        for (int dx = -6; dx <= 6; dx += 3) for (int dz = -6; dz <= 6; dz += 3) {
+            if (Math.max(Math.abs(dx), Math.abs(dz)) == 6)
                 inspectChunk(level, level.getChunk((center.getX() >> 4) + dx, (center.getZ() >> 4) + dz), counts);
         }
         if (counts.soil < 256 || counts.stone < 256 || counts.logs < 7 || counts.leaves < 30 || counts.outcrops == 0)
@@ -131,13 +157,13 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
         player.setGameMode(GameType.CREATIVE);
         player.getAbilities().flying = true;
         player.onUpdateAbilities();
-        player.teleportTo(level, center.getX() + 44.5, egg.getY() + 35, center.getZ() + 48.5,
+        player.teleportTo(level, center.getX() + .5, egg.getY() + 85, center.getZ() + 35.5,
                 Set.of(), 135, 25, false);
         return new Observed(center, egg, foundation, counts);
     }
 
     private static void generateNestChunks(ServerLevel level, BlockPos center) {
-        for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++)
+        for (int dx = -4; dx <= 4; dx++) for (int dz = -4; dz <= 4; dz++)
             level.getChunk((center.getX() >> 4) + dx, (center.getZ() >> 4) + dz);
     }
 
@@ -151,12 +177,12 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
 
     private static int checkFoundation(ServerLevel level, BlockPos base) {
         int stone = 0;
-        for (int dx = -20; dx <= 20; dx++) for (int dz = -20; dz <= 20; dz++)
+        for (int dx = -56; dx <= 56; dx++) for (int dz = -56; dz <= 56; dz++)
             if (level.getBlockState(base.offset(dx, 0, dz)).is(DragonContent.CELESTIAL_STONE)) stone++;
-        if (stone < 1_000
-                || !level.getBlockState(base.offset(-20, 0, 0)).is(DragonContent.CELESTIAL_STONE)
-                || !level.getBlockState(base.offset(20, 0, 0)).is(DragonContent.CELESTIAL_STONE))
-            throw new AssertionError("Natural 41-block nest foundation was clipped: " + stone + " blocks at " + base);
+        if (stone < 9_000
+                || !level.getBlockState(base.offset(-56, 0, 0)).is(DragonContent.CELESTIAL_STONE)
+                || !level.getBlockState(base.offset(56, 0, 0)).is(DragonContent.CELESTIAL_STONE))
+            throw new AssertionError("Natural 113-block nest foundation was clipped: " + stone + " blocks at " + base);
         return stone;
     }
 
@@ -243,7 +269,7 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
                   "generator": "normal_noise",
                   "center": [%d, %d, %d],
                   "eggHeightBlocks": 3,
-                  "nestWidthBlocks": 41,
+                  "nestWidthBlocks": 113,
                   "nestFoundationBlocks": %d,
                   "sampledPeripheralChunks": 16,
                   "soilBlocks": %d,
@@ -255,6 +281,8 @@ public final class DragonNaturalWorldGameTest implements FabricClientGameTest {
                   "oreBlocks": %d,
                   "guardianCountBeforeAndAfterReload": 1,
                   "guardianIsWild": true,
+                  "dormantAfterCreativeVisitAndReload": true,
+                  "survivalEntryWakesGuardianWithBossBar": true,
                   "guardianUuid": "%s",
                   "locateStructurePassed": true,
                   "saveAndReloadPassed": true

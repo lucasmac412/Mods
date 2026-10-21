@@ -27,8 +27,8 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
     private final ModelPart[] segments = new ModelPart[SEGMENT_COUNT];
     private final ModelPart[] whiskers = new ModelPart[2];
     private final ModelPart[] mane = new ModelPart[34];
-    private final ModelPart[] arms = new ModelPart[4];
-    private final ModelPart[] hands = new ModelPart[4];
+    private final ModelPart[] arms = new ModelPart[2];
+    private final ModelPart[] hands = new ModelPart[2];
 
     public DragonModel(ModelPart root) {
         super(DragonGeometry.finish(root));
@@ -49,7 +49,7 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
         whiskers[1] = head.getChild("whisker_right");
         for (int i = 0; i < mane.length; i++) mane[i] = head.getChild("mane_lock_" + i);
         for (int i = 0; i < arms.length; i++) {
-            arms[i] = segments[i < 2 ? 2 : 12].getChild(i % 2 == 0 ? "talon_arm_left" : "talon_arm_right");
+            arms[i] = segments[2].getChild(i % 2 == 0 ? "talon_arm_left" : "talon_arm_right");
             hands[i] = arms[i].getChild("forearm").getChild("hand");
         }
     }
@@ -109,7 +109,7 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                                     plateWidth * 0.68F, 1.2F, plateLength - 3.6F), PartPose.ZERO);
                 }
             }
-            if (i == 2 || i == 12) {
+            if (i == 2) {
                 addTalonArm(segment, 1, width, i == 12);
                 addTalonArm(segment, -1, width, i == 12);
             }
@@ -240,18 +240,18 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
     private static void addTalonArm(PartDefinition segment, int side, float width, boolean rear) {
         // Small floating arms with long grasping fingers, rather than feet for walking.
         PartDefinition arm = segment.addOrReplaceChild(side > 0 ? "talon_arm_left" : "talon_arm_right",
-                obsidian().addBox(-3, -2, -3.5F, 6, 12, 7),
+                obsidian().addBox(-3, -2, -3.5F, 6, 20, 7),
                 PartPose.offsetAndRotation(side * (width / 2 - 1), 1, rear ? 3 : 0,
-                        rear ? 0.25F : -0.25F, side * 0.12F, side * -0.90F));
+                        rear ? 0.25F : -0.25F, side * 0.12F, side * -0.65F));
         arm.addOrReplaceChild("point_scale_arm", gold().addBox(-2.3F, -3, -4, 4.6F, 2, 12),
                 PartPose.offsetAndRotation(0, 3, 0, -Mth.HALF_PI, 0, 0));
         PartDefinition forearm = arm.addOrReplaceChild("forearm", obsidian()
-                        .addBox(-2.3F, -1, -2.5F, 4.6F, 10, 5),
-                PartPose.offsetAndRotation(0, 9, 0, 0.95F, 0, side * 0.32F));
-        forearm.addOrReplaceChild("bracelet", gold().addBox(-2.6F, 5.5F, -2.8F, 5.2F, 1.5F, 5.6F), PartPose.ZERO);
+                        .addBox(-2.3F, -1, -2.5F, 4.6F, 17, 5),
+                PartPose.offsetAndRotation(0, 17, 0, 0.95F, 0, side * 0.32F));
+        forearm.addOrReplaceChild("bracelet", gold().addBox(-2.6F, 12.5F, -2.8F, 5.2F, 1.5F, 5.6F), PartPose.ZERO);
         PartDefinition hand = forearm.addOrReplaceChild("hand", obsidian()
                         .addBox(-4.2F, -1, -4, 8.4F, 3.8F, 7),
-                PartPose.offsetAndRotation(0, 8, -0.5F, -0.45F, 0, side * -0.15F));
+                PartPose.offsetAndRotation(0, 15, -0.5F, -0.45F, 0, side * -0.15F));
         for (int finger = -1; finger <= 1; finger++) {
             PartDefinition digit = hand.addOrReplaceChild("finger_" + finger,
                     obsidian().addBox(-1.2F, -1, -7, 2.4F, 2.4F, 8),
@@ -311,6 +311,12 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
         var attack = DragonAnimation.pose(state.biteTicks, state.beamTicks, time);
         saddle.visible = state.tamed;
         if (!state.ridden) body.y += Mth.sin(time * 0.07F) * 0.5F;
+        if (state.dormant) {
+            body.y += 36;
+            body.y += Mth.sin(time * 0.035F) * 0.15F;
+        }
+        head.getChild("eyes").visible = !state.dormant;
+        head.getChild("pupils").visible = !state.dormant;
         float amplitude = (0.55F + movement * 0.50F) * (1 - attack.waveDamping());
         float previousYaw = 0;
         float previousPitch = 0;
@@ -325,6 +331,10 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
             segments[i].zRot = Mth.sin(phase) * 0.014F * envelope;
             // Reserve clear space around the rider's seat; the wild version has the full crest.
             segments[i].getChild("point_spine").visible = !state.tamed || i > 1;
+            if (state.dormant) {
+                segments[i].yRot = i == 0 ? 0 : 0.23F;
+                segments[i].xRot = segments[i].zRot = 0;
+            }
             previousYaw = yaw;
             previousPitch = pitch;
         }
@@ -335,10 +345,13 @@ public final class DragonModel extends EntityModel<DragonRenderState> {
                 * (state.beamTicks > 0 ? 0.08F : 1);
         head.xRot = attack.headPitch() + Mth.sin(time * 0.065F) * 0.012F * (1 - attack.brace());
         jaw.xRot = attack.jawOpening();
+        if (state.dormant) { neck.xRot = 0.025F; head.xRot = 0.025F; head.yRot = 0; jaw.xRot = 0.02F; }
         for (int i = 0; i < arms.length; i++) {
             float side = i % 2 == 0 ? 1 : -1;
             arms[i].xRot += Mth.sin(time * 0.075F - i * 0.9F) * 0.12F - attack.brace() * 0.20F;
             arms[i].zRot += side * (Mth.sin(time * 0.065F - i * 0.7F) * 0.07F - attack.brace() * 0.13F);
+            if (state.dormant) arms[i].xRot += 0.85F;
+            if (state.spiritTicks > 0) arms[i].xRot -= 1.25F;
             hands[i].xRot += Mth.sin(time * 0.09F - i) * 0.08F - attack.brace() * 0.12F;
         }
         for (int i = 0; i < mane.length; i++) {

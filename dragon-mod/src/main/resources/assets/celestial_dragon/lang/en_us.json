@@ -28,8 +28,8 @@
   "message.celestial_dragon.incubator_need_gem": "Use a celestial gem to warm the egg.",
   "message.celestial_dragon.incubator_full": "The incubator already contains an egg.",
   "screen.celestial_dragon.title": "Celestial Dragon",
-  "screen.celestial_dragon.controls": "WASD: move · Space: ascend · Ctrl: descend · Shift: dismount",
-  "screen.celestial_dragon.attacks": "Left click: bite · Right click: energy beam",
+  "screen.celestial_dragon.controls": "WASD: move \u00b7 Space: ascend \u00b7 Ctrl: descend \u00b7 Shift: dismount",
+  "screen.celestial_dragon.attacks": "Left click: bite \u00b7 Right click: energy beam",
   "itemGroup.celestial_dragon.celestial": "Celestial Dragon",
   "message.celestial_dragon.incubator.empty": "Insert a celestial egg into the incubator.",
   "message.celestial_dragon.incubator.blocked": "Clear space beside the incubator for the dragon to hatch.",
@@ -39,5 +39,12 @@
   "item.celestial_dragon.wild_dragon_spawn_egg.desc": "Creates a wild dragon when used on the ground.",
   "item.celestial_dragon.tamed_dragon_spawn_egg.desc": "Creates a dragon already tamed to the player using the egg.",
   "message.celestial_dragon.spawn_egg.creative_only": "Test egg: use in Creative mode.",
-  "message.celestial_dragon.spawn_egg.blocked": "Find a large, open and dry area to create this dragon."
+  "message.celestial_dragon.spawn_egg.blocked": "Find a large, open and dry area to create this dragon.",
+  "block.celestial_dragon.celestial_bricks": "Celestial Bricks",
+  "block.celestial_dragon.celestial_obsidian": "Gilded Celestial Obsidian",
+  "block.celestial_dragon.celestial_pillar": "Celestial Sanctuary Pillar",
+  "block.celestial_dragon.celestial_runestone": "Celestial Runestone",
+  "block.celestial_dragon.celestial_lantern": "Sanctuary Lantern",
+  "key.celestial_dragon.spirit": "Dragon Spirit Bomb",
+  "entity.celestial_dragon.spirit_orb": "Celestial Spirit Bomb"
 }

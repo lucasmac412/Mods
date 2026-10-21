@@ -38,6 +38,7 @@ public final class DragonClientGameTest implements FabricClientGameTest {
     public void runTest(ClientGameTestContext context) {
         context.getInput().resizeWindow(1280, 720);
         context.runOnClient(client -> {
+            client.options.setCameraType(CameraType.FIRST_PERSON);
             client.options.renderDistance().set(5);
             client.options.simulationDistance().set(5);
             client.options.fov().set(70);
@@ -168,15 +169,86 @@ public final class DragonClientGameTest implements FabricClientGameTest {
         connection.waitForServerboundPackets();
         double downY = server.computeOnServer(ignored -> dragon(world, dragonId).getY());
         if (downY >= upY - 0.1) throw new AssertionError("Ctrl/sprint must lower the dragon");
-        context.runOnClient(client -> client.options.setCameraType(CameraType.THIRD_PERSON_BACK));
+        context.waitTicks(10);
+        context.runOnClient(client -> {
+            if (client.options.getCameraType() != CameraType.THIRD_PERSON_BACK)
+                throw new AssertionError("Mount must select the rear chase camera automatically");
+            if (client.gameRenderer.mainCamera().position().distanceTo(client.player.getEyePosition()) < 15)
+                throw new AssertionError("Mounted camera must clear the mane and body in open air");
+        });
+        context.getInput().holdKeyFor(options -> options.keyShift, 18);
+        connection.waitForServerboundPackets();
+        if (!server.computeOnServer(ignored -> connection.getServerPlayer().isPassenger()))
+            throw new AssertionError("Holding Shift boosts and must not dismount");
         context.getInput().lookAt(0, -5);
         context.getInput().holdMouseFor(GLFW.GLFW_MOUSE_BUTTON_RIGHT, 2);
         server.waitFor(ignored -> dragon(world, dragonId).beamTicks() > 0);
         context.waitTicks(3);
         screenshot(context, "05-mounted-cyan-beam");
-        context.getInput().holdKeyFor(options -> options.keyShift, 2);
+        server.waitFor(ignored -> dragon(world, dragonId).beamTicks() == 0);
+        context.getInput().holdKeyFor(options -> options.keyJump, 20);
+        connection.waitForServerboundPackets();
+        // Aim steeply down: after actual ascent, a 60-degree ray passes beyond this small pad.
+        context.getInput().lookAt(0, 80);
+        context.getInput().pressKey(GLFW.GLFW_KEY_R);
+        server.waitFor(ignored -> dragon(world, dragonId).spiritTicks() > 0);
+        var liveOrb = server.computeOnServer(ignored -> connection.getServerLevel().getEntities(CelestialDragonMod.SPIRIT_ORB, orb -> dragonId.equals(orb.dragonId())).getFirst());
+        context.waitTicks(26);
+        screenshot(context, "19-spirit-charging");
+        context.waitTicks(32);
+        screenshot(context, "20-spirit-slow-flight");
+        String flightDiagnostic = server.computeOnServer(ignored -> "Spirit flight check: age="+liveOrb.chargeAge()+" pos="+liveOrb.position()+" rider pitch="+connection.getServerPlayer().getXRot()+" mount="+dragon(world,dragonId).position());
+        System.out.println(flightDiagnostic);
+        server.waitFor(ignored -> connection.getServerLevel().getEntities(CelestialDragonMod.SPIRIT_ORB,
+                orb -> dragonId.equals(orb.dragonId())).isEmpty(), 550);
+        int cleared = server.computeOnServer(ignored -> {
+            int count=0;
+            for(int x=-30;x<=30;x++) for(int z=-30;z<=30;z++)
+                if(connection.getServerLevel().getBlockState(new BlockPos(x,139,z)).isAir()) count++;
+            return count;
+        });
+        if(cleared < 100) throw new AssertionError("The real R-key cast must destroy the visible test platform, not expire in flight; removed="+cleared+server.computeOnServer(ignored -> "; orb age="+liveOrb.chargeAge()+" pos="+liveOrb.position()+" dragon="+dragon(world,dragonId).position()));
+        connection.waitForClientboundPackets();
+        connection.waitForChunksRender();
+        context.waitTicks(5);
+        screenshot(context, "21-spirit-impact-crater");
+        context.getInput().lookAt(0,0);
+        Vec3 plainStart=server.computeOnServer(ignored -> dragon(world,dragonId).position());
+        context.getInput().holdKeyFor(options -> options.keyUp,16);
+        connection.waitForServerboundPackets();
+        Vec3 plainEnd=server.computeOnServer(ignored -> dragon(world,dragonId).position());
+        context.getInput().holdKey(options -> options.keyShift);
+        Vec3 boostedEnd;
+        try {
+            context.getInput().holdKeyFor(options -> options.keyUp,16);
+            connection.waitForServerboundPackets();
+            boostedEnd=server.computeOnServer(ignored -> dragon(world,dragonId).position());
+            if(!server.computeOnServer(ignored -> dragon(world,dragonId).isBoosting() && connection.getServerPlayer().isPassenger()))
+                throw new AssertionError("Real W+Shift must boost without dismounting");
+            context.getInput().lookAt(0, 22);
+            context.waitTicks(3);
+            screenshot(context,"22-mounted-lightning-boost");
+        } finally { context.getInput().releaseKey(options -> options.keyShift); }
+        double normalDistance=plainEnd.subtract(plainStart).horizontalDistance();
+        double boostedDistance=boostedEnd.subtract(plainEnd).horizontalDistance();
+        if(boostedDistance < normalDistance*1.2)
+            throw new AssertionError("Shift must increase actual flight distance, not slow it through crouching: normal="+normalDistance+", boosted="+boostedDistance);
+        System.out.println("Real mounted controls passed: camera clear; flight normal="+normalDistance+", W+Shift="+boostedDistance+"; spirit crater blocks="+cleared);
+        context.getInput().holdKeyFor(options -> options.keySprint, 1);
+        context.waitTicks(1);
+        context.getInput().holdKeyFor(options -> options.keySprint, 1);
         connection.waitForServerboundPackets();
         server.waitFor(ignored -> !connection.getServerPlayer().isPassenger());
+        context.waitTicks(3);
+        context.runOnClient(client -> {
+            if(client.options.getCameraType()!=CameraType.FIRST_PERSON)throw new AssertionError("Dismount must restore the previous perspective");
+        });
+        server.runOnServer(ignored -> connection.getServerPlayer().teleportTo(connection.getServerLevel(), 24, 163, 42, Set.of(), 135, 40, false));
+        connection.waitForClientboundPackets();
+        context.getInput().lookAt(new BlockPos(0, 139, 22));
+        context.waitTicks(8);
+        connection.waitForChunksRender();
+        screenshot(context, "21-spirit-impact-crater");
     }
 
     private static CelestialDragonEntity dragon(TestSingleplayerContext world, UUID id) {

@@ -1,0 +1,202 @@
+{
+  "textures": {
+    "stone": "celestial_dragon:block/celestial_stone",
+    "dark": "minecraft:block/obsidian",
+    "gold": "minecraft:block/gold_block",
+    "light": "minecraft:block/sea_lantern",
+    "wood": "celestial_dragon:block/celestial_log",
+    "particle": "celestial_dragon:block/celestial_stone"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#dark",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#dark",
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#dark",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#dark",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#dark",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#dark",
+          "cullface": "west"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        1,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#gold",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#gold",
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#gold",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#gold",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#gold",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#gold",
+          "cullface": "west"
+        }
+      }
+    },
+    {
+      "from": [
+        15,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#gold",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#gold",
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#gold",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#gold",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#gold",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#gold",
+          "cullface": "west"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        1,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#gold",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#gold",
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#gold",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#gold",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#gold",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#gold",
+          "cullface": "west"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        15,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#gold",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#gold",
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#gold",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#gold",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#gold",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#gold",
+          "cullface": "west"
+        }
+      }
+    }
+  ]
+}

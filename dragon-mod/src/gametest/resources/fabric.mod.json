@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "celestial_dragon_gametest",
   "version": "1.0.0",
-  "name": "Dragão Celestial — testes no mundo",
+  "name": "Drag\u00e3o Celestial \u2014 testes no mundo",
   "environment": "*",
   "license": "MIT",
   "entrypoints": {
@@ -10,7 +10,8 @@
       "br.com.celestialdragon.test.DragonGameTests",
       "br.com.celestialdragon.test.DragonEntityGameTests",
       "br.com.celestialdragon.test.DragonContentEdgeGameTests",
-      "br.com.celestialdragon.test.DragonCreativeGameTests"
+      "br.com.celestialdragon.test.DragonCreativeGameTests",
+      "br.com.celestialdragon.test.DragonBossAbilityGameTests"
     ],
     "fabric-client-gametest": [
       "br.com.celestialdragon.test.DragonClientGameTest",
