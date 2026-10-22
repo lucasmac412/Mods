@@ -100,7 +100,13 @@ public:
         on_ = locomotionInput(on_, action);
         trigger_ &= ~(directionMask | quickturnMask);
     }
-    ~ScopedInput() { on_ = savedOn_; trigger_ = savedTrigger_; }
+    ~ScopedInput() {
+        constexpr auto owned = directionMask | runMask | quickturnMask;
+        constexpr auto ownedTrigger = directionMask | quickturnMask;
+        // Keep any native consumption of fire/interaction/menu input intact.
+        on_ = (on_ & ~owned) | (savedOn_ & owned);
+        trigger_ = (trigger_ & ~ownedTrigger) | (savedTrigger_ & ownedTrigger);
+    }
     ScopedInput(const ScopedInput&) = delete;
     ScopedInput& operator=(const ScopedInput&) = delete;
 };

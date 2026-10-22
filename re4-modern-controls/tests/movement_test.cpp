@@ -109,6 +109,13 @@ void aimAndInput() {
     check(on == savedOn && trigger == savedTrigger, "original input restored after native call");
     try { ScopedInput scope(on, trigger, Action::Walk); throw 123; } catch (int) {}
     check(on == savedOn && trigger == savedTrigger, "input restored even if a callback throws");
+    on = savedOn | 0x80ULL; trigger = savedTrigger | 0x80ULL;
+    {
+        ScopedInput scope(on, trigger, Action::Walk);
+        on &= ~0x80ULL; trigger &= ~0x80ULL; // Native code consumes the fire input.
+    }
+    check(on == (savedOn & ~0x80ULL) && trigger == (savedTrigger & ~0x80ULL),
+          "restoring locomotion must not resurrect native fire input");
 }
 }
 int main() {

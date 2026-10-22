@@ -65,7 +65,7 @@ re4mc::Context context(cPlayer* player) {
     c.enabled = enabled && installed;
     c.focused = hWindow && GetForegroundWindow() == hWindow;
     c.keyboardMouse = isKeyboardMouse();
-    c.blocked = bCfgMenuOpen || bConsoleOpen || bImGuiUIFocus;
+    c.blocked = bCfgMenuOpen || bConsoleOpen || bImGuiUIFocus || OptionOpenFlag();
     auto g = GlobalPtr();
     if (!g || !player) { c.mainLoop = false; return c; }
     c.mainLoop = g->Rno0_20 == 3;

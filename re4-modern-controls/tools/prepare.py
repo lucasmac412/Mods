@@ -34,7 +34,11 @@ def prepare(target):
     pending[name] = replace_once(pending[name], '    <ClCompile Include="MouseTurning.cpp" />', '    <ClCompile Include="ModernControls.cpp" />\n    <ClCompile Include="MouseTurning.cpp" />', name)
     # An experimental fork must never auto-update itself to an unrelated upstream DLL.
     name = "dllmain/dllmain.cpp"
-    pending[name] = replace_once(pending[name], '\tCreateThreadAutoClose(0, 0, (LPTHREAD_START_ROUTINE)&updateCheck, NULL, 0, NULL);', '\t// Modern Controls fork: automatic upstream DLL updates are disabled.', name)
+    pending[name] = replace_once(pending[name], '\tCreateThreadAutoClose(0, 0, (LPTHREAD_START_ROUTINE)&updateCheck, NULL, 0, NULL);',
+        '\t// This fork cannot update itself to an unrelated upstream DLL.\n'
+        '\tre4t::cfg->bNeverCheckForUpdates = true;\n'
+        '\t// ImGuiShouldAcceptInput checks this state: leave no modal input lock.\n'
+        '\tupdt.UpdateStatus = UpdateStatus::Finished;', name)
     name = "dllmain/WndProcHook.cpp"
     pending[name] = replace_once(pending[name], '\tLAACheck();', '\t// This controls-only fork never offers to rewrite the game executable.', name)
     # Replace the upstream's embedded Pro icon font with OFL-licensed Free Solid.
