@@ -22,11 +22,12 @@ void directionAndCamera() {
         for (int angle = -180; angle <= 180; angle += 15) {
             const float yaw = angle * re4mc::pi / 180;
             const float orbit = 0.7f;
-            const auto result = re4mc::faceDirection({yaw, orbit, -orbit / 3}, d);
+            const auto result = re4mc::faceDirection({yaw, orbit, -orbit / re4mc::cameraOrbitScale}, d);
             check(near(re4mc::wrap(result.playerYaw + result.cameraYaw - yaw - orbit), 0),
                   "camera world heading must not follow player turns");
-            check(near(re4mc::wrap(result.playerYaw - 3 * result.mouseX - yaw - orbit), 0),
+            check(near(re4mc::wrap(result.playerYaw - re4mc::cameraOrbitScale * result.mouseX - yaw - orbit), 0),
                   "mouse orbit must preserve the same world heading");
+            check(std::abs(result.mouseX) < 1.0f, "mouse coordinate must remain within native limits");
             const auto repeated = re4mc::faceDirection(result, d);
             check(near(re4mc::wrap(repeated.playerYaw - result.playerYaw), 0),
                   "held WASD must not rotate again each frame");

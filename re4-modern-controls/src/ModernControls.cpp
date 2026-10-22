@@ -126,7 +126,10 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
     unsigned next = 0;
     if (decision.action != re4mc::Action::Idle) {
         const auto orbit = re4mc::faceDirection(
-            {player->ang_A0.y, *fCameraPosX, *fMousePosX}, decision.direction);
+            // PadRead has already updated mouseX this tick. The camera's cached
+            // yaw can still be from the previous tick; do not discard new input.
+            {player->ang_A0.y, re4mc::wrap(-re4mc::cameraOrbitScale * *fMousePosX),
+             *fMousePosX}, decision.direction);
         player->ang_A0.y = orbit.playerYaw;
         *fCameraPosX = orbit.cameraYaw;
         *fMousePosX = orbit.mouseX;

@@ -6,6 +6,9 @@
 
 namespace re4mc {
 constexpr float pi = 3.14159265358979323846f;
+// calcDepressionRatio: ANGLE_LEFT/RIGHT_LIMIT * 127 / C_RANGE.
+// CameraImprovements uses C_RANGE=42.3, not an exact factor of three.
+constexpr float cameraOrbitScale = (pi / 3.0f) * (127.0f / 42.3f);
 struct Keys { bool forward{}, back{}, left{}, right{}, run{}; };
 struct Direction { float right{}, forward{}; bool moving{}; };
 struct XZ { float x{}, z{}; };
@@ -51,7 +54,8 @@ struct Orbit { float playerYaw{}, cameraYaw{}, mouseX{}; };
 inline Orbit faceDirection(Orbit old, Direction d) {
     const float wanted = wrap(old.playerYaw + old.cameraYaw + headingOffset(d));
     const float delta = wrap(wanted - old.playerYaw);
-    return {wanted, wrap(old.cameraYaw - delta), wrap(3 * old.mouseX + delta) / 3};
+    const float cameraYaw = wrap(old.cameraYaw - delta);
+    return {wanted, cameraYaw, -cameraYaw / cameraOrbitScale};
 }
 // Project and orthonormalize the camera on the ground plane. Pitch must not
 // make movement slower, introduce vertical motion, or accelerate diagonals.
