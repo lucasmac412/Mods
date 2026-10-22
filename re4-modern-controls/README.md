@@ -60,7 +60,7 @@ python3 -m unittest discover -s re4-modern-controls/tools -p 'test_*.py'
 
 O workflow `.github/workflows/re4-modern-controls.yml` obtém o upstream e seus submódulos na revisão fixada, aplica a extensão, executa o controlador com MSVC e compila uma DLL Win32. Não inicia o jogo nem afirma aprovação em testes de gameplay.
 
-Para compilar manualmente no Windows, use Visual Studio com ferramentas C++ x86, clone o re4_tweaks recursivamente na revisão indicada, execute `tools/prepare.py PASTA_DO_UPSTREAM` e compile a solução com `Configuration=Release`, `Platform=Win32`, `PlatformToolset=v143` e `PostBuildEventUseInBuild=false`. Essas ferramentas são para desenvolvimento; o jogador só precisa extrair o pacote compilado.
+Para compilar manualmente no Windows, use Visual Studio 2026 com ferramentas C++ x86 (toolset v145), clone o re4_tweaks recursivamente na revisão indicada, execute `tools/prepare.py PASTA_DO_UPSTREAM` e compile a solução com `Configuration=Release`, `Platform=Win32` e `PostBuildEventUseInBuild=false`. Essas ferramentas são para desenvolvimento; o jogador só precisa extrair o pacote compilado.
 
 ## Créditos
 

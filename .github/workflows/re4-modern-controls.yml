@@ -24,6 +24,13 @@ jobs:
           submodules: recursive
           path: upstream
       - uses: microsoft/setup-msbuild@v2
+      - name: Locate installed C++ toolchain
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $installation = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (!$installation) { throw 'No MSVC x86 toolchain found' }
+          "RE4_VS_PATH=$installation" >> $env:GITHUB_ENV
       - name: Prepare pinned source and test patch guards
         shell: pwsh
         run: |
@@ -34,7 +41,8 @@ jobs:
       - name: Test movement mathematics and state gates with MSVC
         shell: cmd
         run: |
-          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
+          call "%RE4_VS_PATH%\VC\Auxiliary\Build\vcvars32.bat"
+          if errorlevel 1 exit /b 1
           cl /nologo /std:c++17 /EHsc /W4 /WX /I extension\re4-modern-controls\src extension\re4-modern-controls\tests\movement_test.cpp /Fe:movement-test.exe
           if errorlevel 1 exit /b 1
           movement-test.exe
@@ -43,7 +51,7 @@ jobs:
         shell: pwsh
         working-directory: upstream
         run: |
-          msbuild re4_tweaks.sln /m /p:Configuration=Release /p:Platform=Win32 /p:PlatformToolset=v143 /p:PostBuildEventUseInBuild=false
+          msbuild re4_tweaks.sln /m /p:Configuration=Release /p:Platform=Win32 /p:PostBuildEventUseInBuild=false
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Package with instructions and notices
         shell: pwsh
