@@ -8,11 +8,20 @@
     "sha256": "9b914eae88817d63b576eab5aafde7068c7a1abae125d7cdfb034f1da43a9afc"
   },
   "LICENSE-FreeType.txt": {
-    "url": "https://raw.githubusercontent.com/freetype/freetype/VER-2-13-3/docs/FTL.TXT",
+    "url": "https://raw.githubusercontent.com/freetype/freetype/VER-2-12-1/docs/FTL.TXT",
     "sha256": "08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1"
   },
   "LICENSE-IBM-Plex.txt": {
     "url": "https://raw.githubusercontent.com/IBM/plex/master/LICENSE.txt",
     "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da"
+  },
+  "LICENSE-ImGui.txt": {
+    "url": "https://raw.githubusercontent.com/ocornut/imgui/v1.88/LICENSE.txt",
+    "sha256": "1b64b23b817e547982a86984685f5e9337695caa542753fb6f08d502d5208e38"
+  },
+  "LICENSE-miniz.txt": {
+    "url": "https://raw.githubusercontent.com/nipkownix/re4_tweaks/92c0208bd09c29c9640e13a2493b8e6bd6edd700/external/miniz/miniz.c",
+    "extraction": "Embedded license comment, beginning Copyright 2013-2014 RAD Game Tools",
+    "sha256": "53231c04993ac0c8ac965aa48e632e46552d9d41f92686d5ec45d80d0b6c9e26"
   }
 }

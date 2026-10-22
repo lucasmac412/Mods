@@ -1,0 +1,26 @@
+{
+  "status": "EXPERIMENTAL_NOT_VALIDATED_IN_GAME",
+  "file": "downloads/RE4-Movimento-Livre-v0.1.0-EXPERIMENTAL.zip",
+  "sha256": "0b2b9b91cc45b31aa35254febdd2bda457bcd4951228d73b69e7578e44f0eb83",
+  "dll_sha256": "84a727ea08fde30222957385db28024da8b430e3791ac61926c7855ed80f0cc7",
+  "machine": "x86",
+  "upstream_revision": "92c0208bd09c29c9640e13a2493b8e6bd6edd700",
+  "gameplay_tested": false,
+  "bytes": 3775358,
+  "code_commit": "d70152153894cf5223894a71ec625b7c17fa5505",
+  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/39738119156",
+  "workflow_conclusion": "success",
+  "controller_assertions_windows": 1527,
+  "controller_assertions_linux": 1527,
+  "preparation_tests": 2,
+  "animations_during_aim": "No new lower-body animation blend; sliding is possible",
+  "distribution_changes": "Same DLL as passed CI; refreshed Portuguese guide and added ImGui/miniz notices. No game executable/assets included.",
+  "ci_zip_sha256": "5951fbd82c91435f705017890d5b7487f2e3940f85f13e31eec8840e242bbd25",
+  "build_log_sha256": "2d0e332085fb75307b2dbfe9319be2045dc69c50cb753f41dac75b70b94672a0",
+  "font_awesome_free_embedded": true,
+  "files": {
+    "src/ModernControls.cpp": "8d1e0beb273bd4edfb0e101b18bfacbc2508fdf6a7d1ea0a139fc8cf24abddd2",
+    "src/ModernControls.h": "116cc022e303f72476aca4866a616306ea7727446e4718d3466becc1baaa9ee5",
+    "src/MovementCore.h": "4ac50297ac40b7f87a730f13635724ea5e611648ef4b5340461fabacd9c20f36"
+  }
+}

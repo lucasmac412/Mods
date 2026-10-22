@@ -2,7 +2,9 @@
 
 Extensão experimental do **re4_tweaks** para o Resident Evil 4 **original Steam UHD, app 254700**. Não é para o remake, para o port de 2007 ou para Minecraft.
 
-**Estado: protótipo. Os testes automáticos do controlador não equivalem a testes dentro do RE4. Não há confirmação de jogabilidade, colisão, alinhamento da câmera ou compatibilidade das animações no executável do usuário.** A compilação Windows tem uma verificação separada no GitHub Actions. Não se deve apresentar este projeto como mod finalizado.
+**Estado: protótipo com DLL Windows x86 compilada. Passaram 1.527 verificações do controlador no Windows e no Linux, mais dois testes de preparação. Isso não equivale a testes dentro do RE4. Não há confirmação de jogabilidade, colisão, alinhamento da câmera ou compatibilidade das animações no executável do usuário.** Não se deve apresentar este projeto como mod finalizado.
+
+**[Baixar o ZIP experimental para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.0-experimental/downloads/RE4-Movimento-Livre-v0.1.0-EXPERIMENTAL.zip)** · [Compilação e testes Windows](https://github.com/lucasmac412/Mods/actions/runs/39738119156). A origem e os checksums estão em `reports/windows-build.json`. Este download é independente dos mods de Minecraft.
 
 ## Controles implementados no código
 
