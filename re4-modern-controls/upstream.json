@@ -1,0 +1,22 @@
+{
+  "repository": "https://github.com/nipkownix/re4_tweaks",
+  "revision": "92c0208bd09c29c9640e13a2493b8e6bd6edd700",
+  "archive_sha256": "dfef75e9d9827a613ef8a9884a483550212cc05e920d2605f2c374a30978d5fc",
+  "license": "Zlib",
+  "source_sha256": {
+    "dllmain/dllmain.cpp": "84051a3eca304233832b0636dd32303ad5315fec20048ff3dc274913a5940f5c",
+    "dllmain/MouseTurning.cpp": "02d99a531453531a71a17d1b44e86af41c10d7b73589bd084bd13dbecf16c99d",
+    "dllmain/dllmain.vcxproj": "acba574860fc3ca73837a63157b0e92cb463a29d30b3313768cb6b743049c406",
+    "License.txt": "1459b13ca71af7eecabf65ba62549afa93e0ce3a8c2e4589eafceb7c0351c978",
+    "dllmain/WndProcHook.cpp": "37697dc57a141a075c923228eded423019439135f0823a8f8d59e8993813805a",
+    "includes/faprolight.hpp": "59a50d0c61e28ab52346aeedae381c6d4d01ef803f90958d6acaa5c40e59074a"
+  },
+  "source_normalized_sha256": {
+    "dllmain/dllmain.cpp": "84051a3eca304233832b0636dd32303ad5315fec20048ff3dc274913a5940f5c",
+    "dllmain/MouseTurning.cpp": "02d99a531453531a71a17d1b44e86af41c10d7b73589bd084bd13dbecf16c99d",
+    "dllmain/dllmain.vcxproj": "ffdbb8427ca510f5a0d202fca00f160b27a8ccea65668597ab3bcc86ed42e6a5",
+    "License.txt": "1459b13ca71af7eecabf65ba62549afa93e0ce3a8c2e4589eafceb7c0351c978",
+    "dllmain/WndProcHook.cpp": "37697dc57a141a075c923228eded423019439135f0823a8f8d59e8993813805a",
+    "includes/faprolight.hpp": "59a50d0c61e28ab52346aeedae381c6d4d01ef803f90958d6acaa5c40e59074a"
+  }
+}

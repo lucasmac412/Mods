@@ -1,0 +1,58 @@
+name: RE4 Modern Controls experimental
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 're4-modern-controls/**'
+      - '.github/workflows/re4-modern-controls.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: extension
+      - uses: actions/checkout@v4
+        with:
+          repository: nipkownix/re4_tweaks
+          ref: 92c0208bd09c29c9640e13a2493b8e6bd6edd700
+          submodules: recursive
+          path: upstream
+      - uses: microsoft/setup-msbuild@v2
+      - name: Prepare pinned source and test patch guards
+        shell: pwsh
+        run: |
+          python -m unittest discover -s extension/re4-modern-controls/tools -p 'test_*.py'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python extension/re4-modern-controls/tools/prepare.py upstream
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Test movement mathematics and state gates with MSVC
+        shell: cmd
+        run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
+          cl /nologo /std:c++17 /EHsc /W4 /WX /I extension\re4-modern-controls\src extension\re4-modern-controls\tests\movement_test.cpp /Fe:movement-test.exe
+          if errorlevel 1 exit /b 1
+          movement-test.exe
+          if errorlevel 1 exit /b 1
+      - name: Build experimental game extension
+        shell: pwsh
+        working-directory: upstream
+        run: |
+          msbuild re4_tweaks.sln /m /p:Configuration=Release /p:Platform=Win32 /p:PlatformToolset=v143 /p:PostBuildEventUseInBuild=false
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Package with instructions and notices
+        shell: pwsh
+        run: |
+          python extension/re4-modern-controls/tools/package.py upstream extension/re4-modern-controls/dist
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RE4-Modern-Controls-v0.1.0-EXPERIMENTAL-Windows
+          path: extension/re4-modern-controls/dist/*
+          if-no-files-found: error
+          retention-days: 30

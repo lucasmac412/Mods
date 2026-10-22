@@ -1,0 +1,2 @@
+third-party/LICENSE*.txt -whitespace linguist-vendored
+third-party/*.ttf binary
