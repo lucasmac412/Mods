@@ -5,6 +5,7 @@
 #include "ConsoleWnd.h"
 #include "ModernControls.h"
 #include "MovementCore.h"
+#include "NativeDiagnostics.h"
 #include <array>
 #include <cstdlib>
 #include <cstring>
@@ -68,6 +69,7 @@ re4mc::Context context(cPlayer* player) {
     c.blocked = bCfgMenuOpen || bConsoleOpen || bImGuiUIFocus || OptionOpenFlag();
     auto g = GlobalPtr();
     if (!g || !player) { c.mainLoop = false; return c; }
+    if (player != PlayerPtr()) { c.playerObject = false; return c; }
     c.mainLoop = g->Rno0_20 == 3;
     c.blocked |= (g->flags_STOP_0_170[0] & 0x92000000U) != 0; // KEY, PL, CTRL
     c.blocked |= SubScreenWk && SubScreenWk->open_flag_2C != SS_OPEN_NULL;
@@ -101,13 +103,26 @@ void setRoutine(cPlayer* player, unsigned routine) {
 }
 
 template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
+    re4mc::diagnostics::mark(1, entry); // Entering context/input collection.
     auto c = context(player);
     const auto keys = readKeys(c); // Release the input lock before calling native code.
     const auto decision = re4mc::decide(c, keys);
-    if (decision.action == re4mc::Action::Native) { originals[entry](player); return; }
+    static std::array<unsigned, 5> observations{};
+    const auto action = unsigned(decision.action);
+    const bool report = observations[action]++ < 2;
+    const auto invoke = [&](unsigned next) {
+        if (report) re4mc::diagnostics::trace("before_native", entry, action, player,
+            reinterpret_cast<const void*>(originals[next]));
+        re4mc::diagnostics::mark(2, entry);
+        originals[next](player);
+        re4mc::diagnostics::mark(3, entry);
+        if (report) re4mc::diagnostics::trace("after_native", entry, action, player,
+            reinterpret_cast<const void*>(originals[next]));
+    };
+    if (decision.action == re4mc::Action::Native) { invoke(entry); return; }
     if (decision.action == re4mc::Action::AimMove) {
         // Keep native aim, fire cadence, ammunition, reload and hit detection.
-        originals[entry](player);
+        invoke(entry);
         // A shot/interaction can exit the weapon state. Never drag another action.
         const auto after = context(player);
         if (re4mc::decide(after, keys).action != re4mc::Action::AimMove) return;
@@ -121,7 +136,8 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
         player->pos_94.z += step.z;
         return;
     }
-    if (!fMousePosX || !fCameraPosX) { originals[entry](player); return; }
+    if (!fMousePosX || !fCameraPosX) { invoke(entry); return; }
+    re4mc::diagnostics::mark(4, entry); // Input override and orbit update.
     re4mc::ScopedInput input(*keyOn, *keyTrigger, decision.action);
     unsigned next = 0;
     if (decision.action != re4mc::Action::Idle) {
@@ -136,7 +152,7 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
         next = decision.action == re4mc::Action::Run ? 3 : 1;
     }
     setRoutine(player, next);
-    originals[next](player); // Original walking/running animation and root motion.
+    invoke(next); // Original walking/running animation and root motion.
 }
 
 void readConfig() {
@@ -166,6 +182,8 @@ bool ModernControls_OwnsLocomotion() {
 
 void re4t::init::ModernControls() {
     static_assert(sizeof(void*) == 4, "RE4 Steam UHD is a 32-bit game");
+    const auto diagnosticPath = rootPath + L"re4-modern-controls-diagnostico.log";
+    re4mc::diagnostics::initialize(diagnosticPath.c_str(), g_module_handle);
     readConfig();
     if (!enabled) return;
     const auto version = GameVersion();
@@ -208,5 +226,5 @@ void re4t::init::ModernControls() {
     re4t::cfg->bResetCameraAfterUsingWeapons = false;
     re4t::cfg->bResetCameraAfterUsingKnife = false;
     re4t::cfg->bUseSprintToggle = false;
-    spd::log()->info("ModernControls -> EXPERIMENTAL 0.1.0, KB/M enabled; game validation pending");
+    spd::log()->info("ModernControls -> EXPERIMENTAL 0.1.1, KB/M enabled; native Walk/Run prologues preserved; game validation pending");
 }

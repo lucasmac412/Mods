@@ -15,6 +15,32 @@ def replace_once(text, old, new, name):
     return text.replace(old, new, 1)
 
 
+def remove_unsafe_prologues(text):
+    """Retain the game's MOV EBP,ESP / SUB ESP,imm prologues unchanged.
+
+    The old callbacks read the saved caller EBP as if it were ESP, overwrite
+    that saved value, and fail to allocate the native local stack frame.
+    MouseTurning is disabled for this controller; these entry hooks are unused.
+    """
+    start = text.index('\t// pl_R1_Walk\n')
+    end = text.index('\t// pl_R1_Back\n', start)
+    section = text[start:end]
+    fixtures = []
+    for name in ("TurnHookWalk", "TurnHookRun"):
+        prefix = '\tstruct ' + name + '\n'
+        a = section.index(prefix)
+        b = section.index('}; injector::MakeInline<' + name + '>', a)
+        fixtures.append(section[a:b + 2])
+    if section.count('regs.ebp = *(int32_t*)(regs.esp);') != 2 or \
+            section.count('*(int32_t*)(regs.esp) -= 0x8;') != 2:
+        raise ValueError("Unexpected native prologue hooks; no files changed")
+    replacement = ('\t// Modern Controls: keep Walk/Run native stack prologues intact.\n'
+                   '\t// Locomotion is handled by the dispatch controller, not these hooks.\n\n')
+    fixture = ('// Extracted test-only callbacks from pinned re4_tweaks (Zlib license).\n'
+               '// Never compile these callbacks into the game extension.\n' + '\n'.join(fixtures) + '\n')
+    return text[:start] + replacement + text[end:], fixture
+
+
 def prepare(target):
     provenance = json.loads((ROOT / "upstream.json").read_text())
     pending = {}
@@ -30,6 +56,8 @@ def prepare(target):
     name = "dllmain/MouseTurning.cpp"
     pending[name] = replace_once(pending[name], '#include "input.hpp"', '#include "input.hpp"\n#include "ModernControls.h"', name)
     pending[name] = replace_once(pending[name], 'void MouseTurn(float TurnDelayFactor = 10.0f)\n{', 'void MouseTurn(float TurnDelayFactor = 10.0f)\n{\n\tif (ModernControls_OwnsLocomotion()) return;', name)
+    pending[name], fixture = remove_unsafe_prologues(pending[name])
+    pending['LegacyPrologueHooks.h'] = fixture
     name = "dllmain/dllmain.vcxproj"
     pending[name] = replace_once(pending[name], '    <ClCompile Include="MouseTurning.cpp" />', '    <ClCompile Include="ModernControls.cpp" />\n    <ClCompile Include="MouseTurning.cpp" />', name)
     # An experimental fork must never auto-update itself to an unrelated upstream DLL.

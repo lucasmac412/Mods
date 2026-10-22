@@ -2,9 +2,9 @@
 
 Extensão experimental do **re4_tweaks** para o Resident Evil 4 **original Steam UHD, app 254700**. Não é para o remake, para o port de 2007 ou para Minecraft.
 
-**Estado: protótipo com DLL Windows x86 compilada. Passaram 1.527 verificações do controlador no Windows e no Linux, mais dois testes de preparação. Isso não equivale a testes dentro do RE4. Não há confirmação de jogabilidade, colisão, alinhamento da câmera ou compatibilidade das animações no executável do usuário.** Não se deve apresentar este projeto como mod finalizado.
+**A versão 0.1.0 apresentou crash ao começar a andar no RE4 1.1.0. Não utilize esse pacote antigo.** A 0.1.1 remove dois hooks incorretos de início das funções de caminhada/corrida e mantém a pilha nativa intacta. A validação Windows dessa correção está em andamento. Os testes automáticos não equivalem a testes dentro do RE4; jogabilidade e animações continuam experimentais.
 
-**[Baixar o ZIP experimental para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.0-experimental/downloads/RE4-Movimento-Livre-v0.1.0-EXPERIMENTAL.zip)** · [Compilação e testes Windows](https://github.com/lucasmac412/Mods/actions/runs/39738119156). A origem e os checksums estão em `reports/windows-build.json`. Este download é independente dos mods de Minecraft.
+**[Baixar o ZIP experimental 0.1.1 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.1-experimental/downloads/RE4-Movimento-Livre-v0.1.1-EXPERIMENTAL.zip)**. O link só fica disponível após a publicação do pacote validado. A origem e os checksums serão registrados em `reports/windows-build.json`. Este download é independente dos mods de Minecraft.
 
 ## Controles implementados no código
 
@@ -43,6 +43,10 @@ Use estes passos **somente com um ZIP contendo `Bin32/dinput8.dll` compilado com
 7. Comece testando num local aberto, sem inimigos. Confira W, A, S, D, diagonais, Shift, movimento da câmera e, depois, movimento com o botão de mira pressionado. Teste uma parede, um desnível e um tiro enquanto se move.
 8. Se Leon não andar, houver travamento ou algum comportamento errado, feche o jogo e preserve o arquivo **`Bin32/dinput8.log`**. Ele mostra se o controlador foi ativado ou recusou as assinaturas. Não há necessidade de enviar sua conta Steam, senha, save ou chave de produto.
 
+Ao atualizar da 0.1.0, substitua `dinput8.dll`, `dinput8.ini` e `re4-modern-controls.ini` pelos arquivos novos do ZIP. Confira no `dinput8.log` a linha `EXPERIMENTAL 0.1.1`. A correção dos hooks faz parte da DLL; mudar apenas o INI da 0.1.0 não corrige esse problema.
+
+A 0.1.1 grava também **`Bin32/re4-modern-controls-diagnostico.log`**, com as primeiras chamadas nativas, seus retornos e os registradores de eventuais exceções. Esse arquivo é local, limitado e recomeça a cada inicialização; não envia dados. Exceções registradas podem ser tratadas pelo próprio jogo e não significam necessariamente um crash. Se o jogo voltar a fechar, preserve os dois logs **antes de abri-lo novamente**.
+
 Para desativar apenas os controles novos, abra `re4-modern-controls.ini` com o Bloco de Notas, troque `Enabled = 1` por `Enabled = 0`, salve e reinicie o jogo. F1 abre as opções do re4_tweaks; não habilite MouseTurning ou reset automático de câmera durante o teste deste controlador.
 
 Para remover: com o jogo fechado, retire somente os arquivos que o pacote adicionou e restaure as cópias anteriores, se existirem. Não apague `bio4.exe`, a pasta BIO4 ou arquivos originais. Os saves não são alterados por esta extensão. Este fork também desativa atualização automática da DLL para que o updater não substitua os controles novos pela versão original do re4_tweaks.
@@ -60,7 +64,7 @@ g++ -std=c++17 -Wall -Wextra -Werror -pedantic \
 python3 -m unittest discover -s re4-modern-controls/tools -p 'test_*.py'
 ```
 
-O workflow `.github/workflows/re4-modern-controls.yml` obtém o upstream e seus submódulos na revisão fixada, aplica a extensão, executa o controlador com MSVC e compila uma DLL Win32. Não inicia o jogo nem afirma aprovação em testes de gameplay.
+O workflow `.github/workflows/re4-modern-controls.yml` obtém o upstream e seus submódulos na revisão fixada, aplica a extensão, executa o controlador com MSVC e compila uma DLL Win32. O teste `native_prologue_test.cpp` executa em x86 os callbacks antigos, extraídos do upstream apenas como fixtures de teste, mede o EBP/ESP/argumento incorretos e verifica o prólogo nativo sem esses hooks. Também verifica que o diagnóstico observa exceções sem impedir o tratamento normal. Não inicia o jogo nem afirma aprovação em testes de gameplay.
 
 Para compilar manualmente no Windows, use Visual Studio 2026 com ferramentas C++ x86 (toolset v145), clone o re4_tweaks recursivamente na revisão indicada, execute `tools/prepare.py PASTA_DO_UPSTREAM` e compile a solução com `Configuration=Release`, `Platform=Win32` e `PostBuildEventUseInBuild=false`. Essas ferramentas são para desenvolvimento; o jogador só precisa extrair o pacote compilado.
 
