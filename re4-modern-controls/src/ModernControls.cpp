@@ -76,10 +76,16 @@ re4mc::Context context(cPlayer* player) {
     c.mainLoop = g->Rno0_20 == 3;
     c.blocked |= (g->flags_STOP_0_170[0] & 0x92000000U) != 0; // KEY, PL, CTRL
     c.blocked |= SubScreenWk && SubScreenWk->open_flag_2C != SS_OPEN_NULL;
-    c.playerObject = player == PlayerPtr() && g->pl_type_4FC8 == PlayerCharacter::Leon;
+    c.playerObject = player == PlayerPtr();
+    c.character = static_cast<re4mc::Character>(g->pl_type_4FC8);
+    c.specialAction = FlagIsSet(g->flags_STATUS_0_501C, unsigned(Flags_STATUS::STA_KLAUSER_TRANSFORM)) ||
+                      FlagIsSet(g->flags_STATUS_0_501C, unsigned(Flags_STATUS::STA_PL_EM_ACTION)) ||
+                      FlagIsSet(g->flags_STATUS_0_501C, unsigned(Flags_STATUS::STA_EVENT));
     c.alive = g->playerHpCur_4FB4 > 0;
     c.routine0 = player->r_no_0_FC;
     c.routine1 = player->r_no_1_FD;
+    c.routine2 = player->r_no_2_FE;
+    c.weapon = g->weapon_no_4FC0;
     c.collisionEnabled = (player->atari_2B4.m_flag_1A & (SAT_SCA_ENABLE | SAT_OBA_ENABLE))
                       == (SAT_SCA_ENABLE | SAT_OBA_ENABLE);
     c.scoped = SubScreenWk && (SubScreenWk->scope_flag_1B0 || SubScreenWk->binocular_flag_1B1);
@@ -112,21 +118,29 @@ bool shoulderCameraAvailable() {
            !(g->flags_STOP_0_170[0] & 0x40000000U); // SPF_CAMERA
 }
 
+std::uint32_t cameraSceneKey() {
+    const auto g = GlobalPtr();
+    // Character changes can reuse both player and camera addresses.
+    return std::uint32_t(g->curRoomId_4FAC) | (std::uint32_t(g->pl_type_4FC8) << 16);
+}
+
 bool nativeHandoffAllowed(const re4mc::Context& c) {
     return c.enabled && c.keyboardMouse && c.mainLoop &&
-           c.alive && c.playerObject && c.collisionEnabled && !c.scoped &&
+           c.alive && c.playerObject && c.collisionEnabled && !c.scoped && !c.specialAction &&
+           re4mc::supportedCharacter(c.character) &&
            c.routine0 == 0 && c.routine1 <= 6 && shoulderCameraAvailable();
 }
 
 void releaseCamera(cPlayer* player, const re4mc::Context& c) {
     if (cameraFrame.belongsTo(reinterpret_cast<std::uintptr_t>(player),
                               reinterpret_cast<std::uintptr_t>(CamCtrl)) &&
-        nativeHandoffAllowed(c) && cameraFrame.sameRoom(GlobalPtr()->curRoomId_4FAC) &&
+        nativeHandoffAllowed(c) && cameraFrame.sameRoom(cameraSceneKey()) &&
         fMousePosX && fCameraPosX && std::isfinite(*fMousePosX) &&
         std::isfinite(player->ang_A0.y)) {
         // Free look uses a virtual player reference; native aiming uses Leon.
         // Face the saved view BEFORE the native raise-weapon routine zeros orbit.
-        const bool aiming = !c.blocked && c.focused && (c.aiming || c.routine1 == 6);
+        const bool aiming = c.character != re4mc::Character::Ashley &&
+                            !c.blocked && c.focused && (c.aiming || c.routine1 == 6);
         const auto handoff = cameraFrame.handoff(player->ang_A0.y, *fMousePosX, aiming);
         if (aiming) {
             player->ang_A0.y = handoff.playerYaw;
@@ -183,10 +197,10 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
     }
     const auto g = GlobalPtr();
     if (!cameraFrame.current(reinterpret_cast<std::uintptr_t>(player),
-                             reinterpret_cast<std::uintptr_t>(CamCtrl), g->curRoomId_4FAC,
+                             reinterpret_cast<std::uintptr_t>(CamCtrl), cameraSceneKey(),
                              g->frameCounter_530C)) releaseCamera(player, c);
     if (!cameraFrame.begin(reinterpret_cast<std::uintptr_t>(player),
-                           reinterpret_cast<std::uintptr_t>(CamCtrl), g->curRoomId_4FAC,
+                           reinterpret_cast<std::uintptr_t>(CamCtrl), cameraSceneKey(),
                            g->frameCounter_530C, player->ang_A0.y)) {
         invoke(entry); return;
     }
@@ -245,7 +259,7 @@ void ModernControls_UpdateCamera(CameraQuasiFPS* camera) {
     if (!shoulderCameraAvailable() || c.scoped ||
         (action != re4mc::Action::Walk && action != re4mc::Action::Run && action != re4mc::Action::Idle) ||
         !cameraFrame.current(reinterpret_cast<std::uintptr_t>(player),
-                             reinterpret_cast<std::uintptr_t>(CamCtrl), g->curRoomId_4FAC,
+                             reinterpret_cast<std::uintptr_t>(CamCtrl), cameraSceneKey(),
                              g->frameCounter_530C)) {
         releaseCamera(player, c);
         return;
@@ -256,8 +270,21 @@ void ModernControls_UpdateCamera(CameraQuasiFPS* camera) {
     }
 }
 
+bool ModernControls_UseAshleyShoulderCamera() {
+    const auto g = GlobalPtr();
+    return enabled && installed && isKeyboardMouse() && g &&
+           g->pl_type_4FC8 == PlayerCharacter::Ashley;
+}
+
 void re4t::init::ModernControls() {
     static_assert(sizeof(void*) == 4, "RE4 Steam UHD is a 32-bit game");
+    static_assert(unsigned(PlayerCharacter::Leon) == unsigned(re4mc::Character::Leon) &&
+                  unsigned(PlayerCharacter::Ashley) == unsigned(re4mc::Character::Ashley) &&
+                  unsigned(PlayerCharacter::Ada) == unsigned(re4mc::Character::Ada) &&
+                  unsigned(PlayerCharacter::HUNK) == unsigned(re4mc::Character::Hunk) &&
+                  unsigned(PlayerCharacter::Krauser) == unsigned(re4mc::Character::Krauser) &&
+                  unsigned(PlayerCharacter::Wesker) == unsigned(re4mc::Character::Wesker),
+                  "Character policy must match the PC SDK");
     readConfig();
     if (diagnosticEnabled) {
         const auto diagnosticPath = rootPath + L"re4-modern-controls-diagnostico.log";
@@ -304,5 +331,5 @@ void re4t::init::ModernControls() {
     re4t::cfg->bResetCameraAfterUsingWeapons = false;
     re4t::cfg->bResetCameraAfterUsingKnife = false;
     re4t::cfg->bUseSprintToggle = false;
-    spd::log()->info("ModernControls -> EXPERIMENTAL 0.1.3, KB/M enabled; independent camera reference; diagnostics={}; native Walk/Run prologues preserved; game validation pending", diagnosticEnabled);
+    spd::log()->info("ModernControls -> EXPERIMENTAL 0.1.4, KB/M enabled; Leon/Ashley/Ada/HUNK/Krauser/Wesker; independent camera reference; diagnostics={}; native Walk/Run prologues preserved; game validation pending", diagnosticEnabled);
 }

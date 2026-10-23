@@ -1,4 +1,4 @@
-RE4 FREE MOVEMENT 0.1.3 - KEYBOARD AND MOUSE
+RE4 FREE MOVEMENT 0.1.4 - KEYBOARD AND MOUSE
 Experimental mod for the original Resident Evil 4 Steam UHD (app 254700).
 Not for the remake or the 2007 PC release.
 
@@ -36,19 +36,32 @@ Shift + direction   Run using the game's original animation.
 Right mouse + WASD  Move slowly while aiming.
 Left mouse          Fire while aiming, using the game's fire control binding.
 
-VERSION 0.1.3
+VERSION 0.1.4
 
-The camera reference is independent of Leon's body direction. Changing WASD
-does not reset camera smoothing. Entering aim transfers the viewing direction
-to Leon. This simplified download uses exactly the same DLL and main settings
-as the full 0.1.3 package; only the packaging and documentation differ.
+Implemented character/mode support:
+- Leon: main campaign and The Mercenaries.
+- Ashley: the campaign section where you play as her.
+- Ada: Separate Ways, Assignment Ada and The Mercenaries.
+- HUNK, Krauser and Wesker: The Mercenaries.
+
+Ashley uses a shoulder camera with this keyboard/mouse controller. She stays
+weaponless. The Ashley who follows Leon is still controlled by the game.
+Melee, Krauser's transformation, Ada's grapple, reloads, item throws, puzzles,
+crouching and other special actions keep native control and animations.
+Walking while aiming/firing applies only to armed characters in normal weapon
+states. Scope aiming keeps its original controls.
+
+The camera reference is independent of the character's body direction. Changing
+WASD does not reset camera smoothing. This simplified download uses the same
+DLL and main settings as the full 0.1.4 build; documentation is consolidated.
 
 LIMITS AND TROUBLESHOOTING
 
-The new movement targets Leon in international UHD versions 1.1.0 and 1.0.6.
-Other characters, scopes and special actions keep native controls. Original
-animations are used; moving while aiming may look like sliding. Windows build
-and automated tests passed, but the new camera still needs in-game feedback.
+The extension targets international Steam UHD versions 1.1.0 and 1.0.6. Original
+animations are used; moving while aiming may look like sliding. Automated tests
+cover character/state policies, movement and camera math. They do not run RE4.
+Each character/mode still needs in-game checks: move, run, aim/fire where
+available, use special actions, take damage, open inventory and change rooms.
 
 F1 opens re4_tweaks settings. Leave MouseTurning and automatic camera resets
 disabled while using this movement mod. To disable only the new controls,

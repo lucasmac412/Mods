@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repackage the verified 0.1.3 build with a short guide and consolidated notices."""
+"""Repackage a verified Windows build with a short guide and consolidated notices."""
 import argparse
 import hashlib
 import json
@@ -7,12 +7,12 @@ from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = "RE4-Movimento-Livre-v0.1.3-Simples"
 RUNTIME = ("dinput8.dll", "dinput8.ini", "re4-modern-controls.ini")
 
 
 def simplify(source, output):
     report = json.loads((ROOT / "reports/windows-build.json").read_text())
+    package_name = Path(report["file"]).stem.replace("-EXPERIMENTAL", "-Simples")
     source_hash = hashlib.sha256(source.read_bytes()).hexdigest()
     if source_hash != report["sha256"]:
         raise ValueError("Source ZIP does not match the verified Windows build report")
@@ -39,7 +39,7 @@ def simplify(source, output):
             raise ValueError("Missing bundled license notices")
     license_parts = [
         b"RE4 FREE MOVEMENT - CONSOLIDATED LICENSES AND NOTICES\n"
-        b"All license texts below are preserved from the full 0.1.3 package.\n"
+        b"All license texts below are preserved from the verified full package.\n"
         b"Original filenames referenced in these texts identify sections below.\n"
         b"Keep this file with redistributed copies of the mod.\n\n"
     ]
@@ -47,12 +47,12 @@ def simplify(source, output):
         license_parts.extend([("\n===== " + name + " =====\n\n").encode(), data, b"\n"])
     licenses = b"".join(license_parts)
     output.mkdir(parents=True, exist_ok=True)
-    target = output / (NAME + ".zip")
+    target = output / (package_name + ".zip")
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as archive:
         for name, data in runtime.items():
-            archive.writestr(NAME + "/Bin32/" + name, data)
-        archive.writestr(NAME + "/README.txt", (ROOT / "INSTALL-EN.txt").read_bytes())
-        archive.writestr(NAME + "/LICENSES.txt", licenses)
+            archive.writestr(package_name + "/Bin32/" + name, data)
+        archive.writestr(package_name + "/README.txt", (ROOT / "INSTALL-EN.txt").read_bytes())
+        archive.writestr(package_name + "/LICENSES.txt", licenses)
     metadata = {
         "file": target.name,
         "sha256": hashlib.sha256(target.read_bytes()).hexdigest(),

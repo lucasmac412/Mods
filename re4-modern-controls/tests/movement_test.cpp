@@ -52,14 +52,14 @@ void stateGates() {
     }
     c = {}; c.aiming = true;
     check(decide(c, {true}).action == Action::Native, "let the game raise its weapon");
-    c.routine1 = 6;
+    c.routine1 = 6; c.routine2 = 1;
     check(decide(c, {true}).action == Action::AimMove, "walking while aiming");
     check(decide(c, {}).action == Action::Native, "no aim drift without a key");
     check(decide(c, {true, true, true, true}).action == Action::Native, "opposite aim keys cancel");
     c.scoped = true;
     check(decide(c, {true}).action == Action::Native, "scope keeps original control");
     for (unsigned block = 0; block < 10; ++block) {
-        c = {}; c.aiming = true; c.routine1 = 6;
+        c = {}; c.aiming = true; c.routine1 = 6; c.routine2 = 1;
         switch (block) {
         case 0: c.enabled = false; break;
         case 1: c.focused = false; break;
@@ -74,6 +74,67 @@ void stateGates() {
         }
         check(decide(c, {true}).action == Action::Native, "menu/focus/cinematic/death gate");
     }
+}
+void allCharacters() {
+    using namespace re4mc;
+    const Character characters[]{Character::Leon, Character::Ashley, Character::Ada,
+                                 Character::Hunk, Character::Krauser, Character::Wesker};
+    for (auto character : characters) {
+        Context c;
+        c.character = character;
+        for (unsigned bits = 0; bits < 16; ++bits) {
+            Keys keys{bool(bits & 1), bool(bits & 2), bool(bits & 4), bool(bits & 8)};
+            const bool moving = (keys.forward != keys.back) || (keys.left != keys.right);
+            check(decide(c, keys).action == (moving ? Action::Walk : Action::Idle),
+                  "every playable character supports camera-relative WASD and idle");
+            keys.run = true;
+            check(decide(c, keys).action == (moving ? Action::Run : Action::Idle),
+                  "every playable character uses their own native run routine");
+        }
+        for (unsigned routine = 7; routine < 256; ++routine) {
+            c.routine1 = std::uint8_t(routine);
+            check(decide(c, {true}).action == Action::Native,
+                  "melee, grappling hook, ladders, crouch and interactions remain native for every character");
+        }
+        c.routine1 = 6; c.aiming = true;
+        for (unsigned state = 0; state < 256; ++state) {
+            c.routine2 = std::uint8_t(state);
+            const bool canMove = character != Character::Ashley && (state == 1 || state == 2);
+            check(decide(c, {true}).action == (canMove ? Action::AimMove : Action::Native),
+                  "aim/fire can move; Ashley and draw/reload/holster/special weapon states stay native");
+        }
+        for (unsigned weapon : {0x13U, 0x16U, 0x17U, 0x19U, 0x1EU, 0x1FU, 0x20U, 0x29U, 0x2AU}) {
+            c.weapon = std::uint8_t(weapon); c.routine2 = 2;
+            check(decide(c, {true}).action == Action::Native, "throw animation cannot be translated by aim movement");
+            c.routine2 = 1;
+            check(decide(c, {true}).action == (character == Character::Ashley ? Action::Native : Action::AimMove),
+                  "armed characters can move before an item throw");
+        }
+        c.weapon = 2; c.routine2 = 1;
+        c.playerObject = false;
+        check(decide(c, {true}).action == Action::Native, "companion Ashley and other NPCs are never driven by WASD");
+        c.playerObject = true;
+        for (unsigned routine = 0; routine <= 6; ++routine) {
+            c.routine1 = std::uint8_t(routine);
+            c.specialAction = true;
+            check(decide(c, {true}).action == Action::Native, "transformation, scripted events and special attacks own all movement");
+            c.specialAction = false;
+            c.routine0 = 1;
+            check(decide(c, {true}).action == Action::Native, "damage owns native movement");
+            c.routine0 = 2;
+            check(decide(c, {true}).action == Action::Native, "death owns native movement");
+            c.routine0 = 0;
+        }
+    }
+    for (unsigned type = 6; type < 256; ++type) {
+        Context c; c.character = static_cast<Character>(type);
+        check(decide(c, {true}).action == Action::Native, "internal composite and unknown character identifiers keep native control");
+    }
+    // Switching characters can reuse the same memory addresses in another mode.
+    FreeCameraFrame frame;
+    check(frame.begin(1, 2, 0x101, 5, 0.4f), "Leon camera acquisition");
+    check(frame.begin(1, 2, 0x101 | (2U << 16), 6, -0.7f), "Ada reuses addresses in another character context");
+    check(near(frame.basisYaw(), -0.7f), "character switch cannot retain Leon's camera basis");
 }
 void aimAndInput() {
     using namespace re4mc;
@@ -204,7 +265,7 @@ void cameraContinuity() {
 }
 int main() {
     try {
-        directionAndCamera(); stateGates(); aimAndInput(); cameraContinuity();
+        directionAndCamera(); stateGates(); allCharacters(); aimAndInput(); cameraContinuity();
         std::cout << "PASS: " << checks << " movement assertions (no game runtime).\n";
         return EXIT_SUCCESS;
     } catch (const std::exception& e) { std::cerr << e.what() << '\n'; return EXIT_FAILURE; }

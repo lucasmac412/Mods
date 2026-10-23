@@ -12,11 +12,28 @@ constexpr float cameraOrbitScale = (pi / 3.0f) * (127.0f / 42.3f);
 struct Keys { bool forward{}, back{}, left{}, right{}, run{}; };
 struct Direction { float right{}, forward{}; bool moving{}; };
 struct XZ { float x{}, z{}; };
+enum class Character : std::uint8_t { Leon, Ashley, Ada, Hunk, Krauser, Wesker, Composite };
+inline bool supportedCharacter(Character character) {
+    switch (character) {
+    case Character::Leon: case Character::Ashley: case Character::Ada:
+    case Character::Hunk: case Character::Krauser: case Character::Wesker: return true;
+    default: return false;
+    }
+}
+inline bool thrownWeapon(std::uint8_t weapon) {
+    switch (weapon) {
+    case 0x13: case 0x16: case 0x17: case 0x19: case 0x1E:
+    case 0x1F: case 0x20: case 0x29: case 0x2A: return true;
+    default: return false;
+    }
+}
 struct Context {
     bool enabled{true}, focused{true}, keyboardMouse{true}, blocked{};
     bool mainLoop{true}, alive{true}, playerObject{true};
     bool collisionEnabled{true}, scoped{}, aiming{};
-    std::uint8_t routine0{}, routine1{};
+    bool specialAction{};
+    Character character{Character::Leon};
+    std::uint8_t routine0{}, routine1{}, routine2{}, weapon{2};
 };
 enum class Action { Native, Idle, Walk, Run, AimMove };
 struct Decision { Action action{Action::Native}; Direction direction{}; };
@@ -35,10 +52,15 @@ inline Direction direction(Keys keys) {
 inline Decision decide(const Context& c, Keys keys) {
     if (!c.enabled || !c.focused || !c.keyboardMouse || c.blocked ||
         !c.mainLoop || !c.alive || !c.playerObject || !c.collisionEnabled ||
+        !supportedCharacter(c.character) || c.specialAction || c.scoped ||
         c.routine0 != 0 || c.routine1 > 6) return {};
     const auto d = direction(keys);
     if (c.routine1 == 6) {
-        if (c.aiming && !c.scoped && d.moving) return {Action::AimMove, d};
+        // Ashley has no weapon routine. Draw/holster/reload, scripted actions
+        // and item throws keep their native positioning and animation timing.
+        const bool aimState = c.routine2 == 1 || (c.routine2 == 2 && !thrownWeapon(c.weapon));
+        if (c.character != Character::Ashley && c.aiming && aimState && d.moving)
+            return {Action::AimMove, d};
         return {};
     }
     // Let the original game enter the aiming state and handle its animations.

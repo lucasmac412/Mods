@@ -2,11 +2,18 @@
 
 Extensão experimental do **re4_tweaks** para o Resident Evil 4 **original Steam UHD, app 254700**. Não é para o remake, para o port de 2007 ou para Minecraft.
 
-**Versão 0.1.3 experimental:** substitui a correção de câmera da 0.1.2 por uma câmera com orientação independente do corpo. Virar no WASD não reescreve mais o acumulador do mouse nem força reinicializações da suavização. A direção é aplicada durante o cálculo da câmera nativa, antes da colisão e da interpolação. A entrada na mira transfere a direção da visão para Leon. Mantém a correção do crash da 0.1.1 e o diagnóstico desligado por padrão.
+**Versão 0.1.4 experimental:** amplia o movimento e a câmera independente para Ashley controlável, Ada, HUNK, Krauser e Wesker, além de Leon. O controlador usa a rotina comum de cada personagem e conserva suas animações. Mira móvel fica disponível para personagens armados nos estados normais de mira/disparo; Ashley, recarga, arremessos, transformação e ações especiais continuam com suas rotinas nativas.
 
-**[Baixar o ZIP experimental 0.1.3 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.3-experimental/downloads/RE4-Movimento-Livre-v0.1.3-EXPERIMENTAL.zip)**. [Compilação Windows aprovada](https://github.com/lucasmac412/Mods/actions/runs/39937385912): 6.472 verificações do controlador, quatro testes de preparação e regressões nativas x86 passaram. A origem e os checksums estão em `reports/windows-build.json`. O ajuste visual da câmera ainda precisa ser confirmado no jogo. Este download é independente dos mods de Minecraft.
+**[Baixar o pacote simplificado 0.1.4](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.4-experimental/downloads/RE4-Movimento-Livre-v0.1.4-Simples.zip)**. Inclui os três arquivos de instalação em `Bin32`, um `README.txt` em inglês e um `LICENSES.txt` com os avisos preservados. A compilação Windows e os checksums serão registrados nos relatórios após validação. É necessário conferir cada personagem e modo dentro do jogo; testes automáticos não garantem funcionamento visual ou de todas as interações.
 
-**[Pacote simplificado 0.1.3 com README em inglês](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.3-simples/downloads/RE4-Movimento-Livre-v0.1.3-Simples.zip):** contém somente `Bin32/dinput8.dll`, `Bin32/dinput8.ini`, `Bin32/re4-modern-controls.ini`, `README.txt` e `LICENSES.txt`. Os três arquivos de execução são idênticos aos do pacote completo aprovado. Os 18 textos de licença foram reunidos, sem alterar seu conteúdo, em um arquivo; documentos de desenvolvimento e configurações opcionais de trainer não vão nesse ZIP. O guia em inglês também está em [INSTALL-EN.txt](INSTALL-EN.txt). A verificação está em `reports/simple-package.json`.
+| Personagem | Modos contemplados pelo controlador |
+| --- | --- |
+| Leon | Campanha e The Mercenaries |
+| Ashley | Trecho da campanha em que você a controla |
+| Ada | Separate Ways, Assignment Ada e The Mercenaries |
+| HUNK, Krauser e Wesker | The Mercenaries |
+
+O guia em inglês está em [INSTALL-EN.txt](INSTALL-EN.txt); a implementação e a lista de testes de gameplay estão em [CHARACTERS-0.1.4.md](docs/CHARACTERS-0.1.4.md).
 
 ## Controles implementados no código
 
@@ -23,10 +30,10 @@ Teclado oferece oito direções por WASD; o mouse permite orientar essas direç�
 
 ## Limites desta primeira implementação
 
-- A integração se destina a Leon nas versões internacionais **1.1.0 e 1.0.6** do UHD. Não há promessa de compatibilidade com todas as versões. Versões regionais e de depuração conservam o controle original.
+- A integração se destina aos seis personagens jogáveis nas versões internacionais **1.1.0 e 1.0.6** do UHD. Não há promessa de compatibilidade com todas as versões. Versões regionais e de depuração conservam o controle original.
 - Movimento livre usa as animações nativas de caminhada e corrida, orientando o corpo na direção escolhida.
 - Movimento durante a mira ainda **não inclui uma nova mistura de animações de pernas e tronco**. Pode parecer que Leon desliza enquanto aponta a arma; essa parte exige trabalho e testes adicionais.
-- Lunetas e binóculos conservam o controle original nesta versão. Ashley, Ada e Mercenaries não recebem a nova movimentação.
+- Lunetas e binóculos conservam o controle original nesta versão. Ashley usa câmera de ombro ao jogar com este controlador de teclado/mouse. A Ashley que acompanha Leon continua sendo controlada pelo jogo.
 - Menus, inventário, console, perda de foco, morte, dano e rotinas especiais devolvem o controle ao jogo. Escadas, golpes corpo a corpo, agarrões, portas e QTEs devem ser verificados no jogo.
 - O controlador injeta deslocamento na rotina da arma, antes da etapa de colisão esperada do jogador. A ordem foi estudada com referências públicas; precisa ser confirmada na versão PC real. Não há atualização de posição em uma sobreposição gráfica, nem desativação de colisões.
 - As assinaturas e a tabela de rotinas são verificadas antes de instalar os hooks. Se não coincidirem, a extensão se desativa e registra o motivo em `dinput8.log`; os demais ajustes do re4_tweaks podem continuar ativos.
@@ -45,9 +52,9 @@ Use estes passos **somente com um ZIP contendo `Bin32/dinput8.dll` compilado com
 7. Comece testando num local aberto, sem inimigos. Confira W, A, S, D, diagonais, Shift, movimento da câmera e, depois, movimento com o botão de mira pressionado. Teste uma parede, um desnível e um tiro enquanto se move.
 8. Se Leon não andar, houver travamento ou algum comportamento errado, feche o jogo e preserve o arquivo **`Bin32/dinput8.log`**. Ele mostra se o controlador foi ativado ou recusou as assinaturas. Não há necessidade de enviar sua conta Steam, senha, save ou chave de produto.
 
-Ao atualizar de qualquer versão anterior, substitua `dinput8.dll`, `dinput8.ini` e `re4-modern-controls.ini` pelos arquivos novos do ZIP. Confira no `dinput8.log` a linha `EXPERIMENTAL 0.1.3`. A correção da câmera faz parte da DLL; mudar apenas o INI antigo não aplica a correção.
+Ao atualizar de qualquer versão anterior, substitua `dinput8.dll`, `dinput8.ini` e `re4-modern-controls.ini` pelos arquivos novos do ZIP. Confira no `dinput8.log` a linha `EXPERIMENTAL 0.1.4`. A correção da câmera faz parte da DLL; mudar apenas o INI antigo não aplica a correção.
 
-Na 0.1.3, o diagnóstico adicional fica desligado por padrão. Se for necessário investigar um novo fechamento, troque `Diagnostics = 0` por `Diagnostics = 1` em `re4-modern-controls.ini`, salve e reinicie o jogo. Depois de reproduzir o problema, preserve **`Bin32/dinput8.log`** e **`Bin32/re4-modern-controls-diagnostico.log` antes de abrir o jogo novamente**. O segundo arquivo registra localmente algumas chamadas e exceções; não envia dados. Um arquivo dessa versão anterior pode permanecer na pasta: só considere o log adicional novo depois de habilitar o diagnóstico. Exceções registradas podem ser tratadas pelo próprio jogo e não significam necessariamente um crash. Desative o diagnóstico depois da investigação.
+Na 0.1.4, o diagnóstico adicional fica desligado por padrão. Se for necessário investigar um novo fechamento, troque `Diagnostics = 0` por `Diagnostics = 1` em `re4-modern-controls.ini`, salve e reinicie o jogo. Depois de reproduzir o problema, preserve **`Bin32/dinput8.log`** e **`Bin32/re4-modern-controls-diagnostico.log` antes de abrir o jogo novamente**. O segundo arquivo registra localmente algumas chamadas e exceções; não envia dados. Um arquivo dessa versão anterior pode permanecer na pasta: só considere o log adicional novo depois de habilitar o diagnóstico. Exceções registradas podem ser tratadas pelo próprio jogo e não significam necessariamente um crash. Desative o diagnóstico depois da investigação.
 
 Para desativar apenas os controles novos, abra `re4-modern-controls.ini` com o Bloco de Notas, troque `Enabled = 1` por `Enabled = 0`, salve e reinicie o jogo. F1 abre as opções do re4_tweaks; não habilite MouseTurning ou reset automático de câmera durante o teste deste controlador.
 
@@ -77,4 +84,4 @@ Para compilar manualmente no Windows, use Visual Studio 2026 com ferramentas C++
 
 Base: [nipkownix/re4_tweaks](https://github.com/nipkownix/re4_tweaks), licença Zlib. Esta é uma alteração independente, não uma publicação oficial dos autores do re4_tweaks. A licença original está em `LICENSE-re4_tweaks.txt`; as dependências preservam suas licenças. A fonte de ícones incorporada pelo upstream é substituída por **Font Awesome Free Solid 6.7.2**, sob SIL OFL 1.1. IBM Plex também usa OFL; FreeType usa a FreeType Project License. Os textos e a origem das fontes estão em `third-party/`. Alguns ícones exclusivos da edição Pro podem não aparecer no menu F1. O código novo desta pasta usa MIT, em `LICENSE.txt`. Resident Evil é da Capcom. Nenhum executável, asset ou código reconstruído do jogo faz parte desta extensão.
 
-Para gerar novamente o pacote simplificado a partir do ZIP completo verificado: `python3 re4-modern-controls/tools/simplify_package.py downloads/RE4-Movimento-Livre-v0.1.3-EXPERIMENTAL.zip downloads`. A ferramenta confere os hashes do relatório Windows antes de reutilizar a DLL; não recompila nem altera o controlador.
+Para gerar novamente o pacote simplificado a partir do ZIP completo verificado: `python3 re4-modern-controls/tools/simplify_package.py downloads/RE4-Movimento-Livre-v0.1.4-EXPERIMENTAL.zip downloads`. A ferramenta confere os hashes do relatório Windows antes de reutilizar a DLL; não recompila nem altera o controlador.

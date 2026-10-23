@@ -45,7 +45,7 @@ inline void initialize(const wchar_t* path, HMODULE mod) {
     if (file == INVALID_HANDLE_VALUE) return;
     char line[256]{};
     _snprintf_s(line, sizeof(line), _TRUNCATE,
-        "RE4 Modern Controls 0.1.3 experimental; game=%p mod=%p\r\n"
+        "RE4 Modern Controls 0.1.4 experimental; game=%p mod=%p\r\n"
         "First-chance exceptions can be handled elsewhere; this is not a minidump.\r\n",
         static_cast<void*>(GetModuleHandleW(nullptr)), static_cast<void*>(mod));
     write(line);

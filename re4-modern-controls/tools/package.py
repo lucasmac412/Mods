@@ -10,7 +10,7 @@ import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = "RE4-Movimento-Livre-v0.1.3-EXPERIMENTAL"
+NAME = "RE4-Movimento-Livre-v0.1.4-EXPERIMENTAL"
 
 
 def package(upstream, output):

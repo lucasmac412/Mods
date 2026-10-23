@@ -48,7 +48,7 @@ def prepare(target):
         file = target / name
         if hashlib.sha256(file.read_bytes().replace(b"\r\n", b"\n")).hexdigest() != expected:
             raise ValueError(f"Wrong revision or modified file: {name}; no files changed")
-    for name in ("dllmain/dllmain.cpp", "dllmain/MouseTurning.cpp", "dllmain/dllmain.vcxproj", "dllmain/WndProcHook.cpp", "dllmain/CameraTweaks.cpp"):
+    for name in ("dllmain/dllmain.cpp", "dllmain/MouseTurning.cpp", "dllmain/dllmain.vcxproj", "dllmain/WndProcHook.cpp", "dllmain/CameraTweaks.cpp", "dllmain/Gameplay.cpp"):
         pending[name] = (target / name).read_text(encoding="utf-8-sig")
     name = "dllmain/dllmain.cpp"
     pending[name] = replace_once(pending[name], '#include "Trainer.h"', '#include "Trainer.h"\n#include "ModernControls.h"', name)
@@ -68,6 +68,16 @@ def prepare(target):
         '\t\t\tre4mc::preserveCameraFP([&]() {\n'
         '\t\t\t\tModernControls_UpdateCamera(reinterpret_cast<CameraQuasiFPS*>(regs.esi));\n'
         '\t\t\t});', name)
+    # Ashley's JP-style fixed angles are incompatible with camera-relative WASD.
+    # Select shoulder view only while this controller owns her KB/M controls.
+    name = "dllmain/Gameplay.cpp"
+    pending[name] = replace_once(pending[name], '#include "dllmain.h"',
+        '#include "dllmain.h"\n#include "ModernControls.h"', name)
+    pending[name] = replace_once(pending[name],
+        '\t\t\t\tbool unlock = *(uint32_t*)(pSys + 8) == 0 // pSys->language_8\n'
+        '\t\t\t\t\t|| re4t::cfg->bAshleyJPCameraAngles;',
+        '\t\t\t\tbool unlock = !ModernControls_UseAshleyShoulderCamera() &&\n'
+        '\t\t\t\t\t(*(uint32_t*)(pSys + 8) == 0 || re4t::cfg->bAshleyJPCameraAngles);', name)
     name = "dllmain/dllmain.vcxproj"
     pending[name] = replace_once(pending[name], '    <ClCompile Include="MouseTurning.cpp" />', '    <ClCompile Include="ModernControls.cpp" />\n    <ClCompile Include="MouseTurning.cpp" />', name)
     # An experimental fork must never auto-update itself to an unrelated upstream DLL.
