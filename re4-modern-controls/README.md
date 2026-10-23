@@ -4,7 +4,7 @@ Extensão experimental do **re4_tweaks** para o Resident Evil 4 **original Steam
 
 **Versão 0.1.4 experimental:** amplia o movimento e a câmera independente para Ashley controlável, Ada, HUNK, Krauser e Wesker, além de Leon. O controlador usa a rotina comum de cada personagem e conserva suas animações. Mira móvel fica disponível para personagens armados nos estados normais de mira/disparo; Ashley, recarga, arremessos, transformação e ações especiais continuam com suas rotinas nativas.
 
-**[Baixar o pacote simplificado 0.1.4](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.4-experimental/downloads/RE4-Movimento-Livre-v0.1.4-Simples.zip)**. Inclui os três arquivos de instalação em `Bin32`, um `README.txt` em inglês e um `LICENSES.txt` com os avisos preservados. A compilação Windows e os checksums serão registrados nos relatórios após validação. É necessário conferir cada personagem e modo dentro do jogo; testes automáticos não garantem funcionamento visual ou de todas as interações.
+**[Baixar o pacote simplificado 0.1.4](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.4-experimental/downloads/RE4-Movimento-Livre-v0.1.4-Simples.zip)**. Inclui os três arquivos de instalação em `Bin32`, um `README.txt` em inglês e um `LICENSES.txt` com os avisos preservados. [Compilação Windows aprovada](https://github.com/lucasmac412/Mods/actions/runs/39940503753): 10.187 verificações do controlador, quatro testes de preparação e regressões nativas x86 passaram. A origem e os checksums estão em `reports/windows-build.json`. É necessário conferir cada personagem e modo dentro do jogo; testes automáticos não garantem funcionamento visual ou de todas as interações.
 
 | Personagem | Modos contemplados pelo controlador |
 | --- | --- |
@@ -26,13 +26,13 @@ O guia em inglês está em [INSTALL-EN.txt](INSTALL-EN.txt); a implementação e
 | Botão direito + WASD | Deslocamento lento durante a mira |
 | Botão esquerdo durante a mira | Disparo original, preservando munição e cadência |
 
-Teclado oferece oito direções por WASD; o mouse permite orientar essas direções em qualquer ângulo no mundo. Não há emulação de controle ou programa de macro. A mira e o disparo continuam obedecendo às teclas configuradas **no próprio jogo**. Para essa disposição, configure a mira no botão direito, disparo no esquerdo e movimento em WASD. O mod lê WASD independentemente do mouse: movimentar a mira sozinho não deve fazer Leon andar.
+Teclado oferece oito direções por WASD; o mouse permite orientar essas direções em qualquer ângulo no mundo. Não há emulação de controle ou programa de macro. A mira e o disparo continuam obedecendo às teclas configuradas **no próprio jogo**. Para essa disposição, configure a mira no botão direito, disparo no esquerdo e movimento em WASD. O mod lê WASD independentemente do mouse: movimentar a mira sozinho não deve fazer o personagem andar.
 
 ## Limites desta primeira implementação
 
 - A integração se destina aos seis personagens jogáveis nas versões internacionais **1.1.0 e 1.0.6** do UHD. Não há promessa de compatibilidade com todas as versões. Versões regionais e de depuração conservam o controle original.
 - Movimento livre usa as animações nativas de caminhada e corrida, orientando o corpo na direção escolhida.
-- Movimento durante a mira ainda **não inclui uma nova mistura de animações de pernas e tronco**. Pode parecer que Leon desliza enquanto aponta a arma; essa parte exige trabalho e testes adicionais.
+- Movimento durante a mira ainda **não inclui uma nova mistura de animações de pernas e tronco**. Pode parecer que o personagem desliza enquanto aponta a arma; essa parte exige trabalho e testes adicionais.
 - Lunetas e binóculos conservam o controle original nesta versão. Ashley usa câmera de ombro ao jogar com este controlador de teclado/mouse. A Ashley que acompanha Leon continua sendo controlada pelo jogo.
 - Menus, inventário, console, perda de foco, morte, dano e rotinas especiais devolvem o controle ao jogo. Escadas, golpes corpo a corpo, agarrões, portas e QTEs devem ser verificados no jogo.
 - O controlador injeta deslocamento na rotina da arma, antes da etapa de colisão esperada do jogador. A ordem foi estudada com referências públicas; precisa ser confirmada na versão PC real. Não há atualização de posição em uma sobreposição gráfica, nem desativação de colisões.
@@ -50,7 +50,7 @@ Use estes passos **somente com um ZIP contendo `Bin32/dinput8.dll` compilado com
 5. Extraia o ZIP para uma pasta. Abra a pasta `Bin32` que veio no ZIP e copie seu **conteúdo** para a pasta `Bin32` do jogo.
 6. Abra o jogo normalmente pela Steam. Em opções de controle, use teclado/mouse com **mira Modern/Moderna**, WASD para movimento, botão direito para mirar e botão esquerdo para disparar.
 7. Comece testando num local aberto, sem inimigos. Confira W, A, S, D, diagonais, Shift, movimento da câmera e, depois, movimento com o botão de mira pressionado. Teste uma parede, um desnível e um tiro enquanto se move.
-8. Se Leon não andar, houver travamento ou algum comportamento errado, feche o jogo e preserve o arquivo **`Bin32/dinput8.log`**. Ele mostra se o controlador foi ativado ou recusou as assinaturas. Não há necessidade de enviar sua conta Steam, senha, save ou chave de produto.
+8. Se o personagem não andar, houver travamento ou algum comportamento errado, feche o jogo e preserve o arquivo **`Bin32/dinput8.log`**. Ele mostra se o controlador foi ativado ou recusou as assinaturas. Não há necessidade de enviar sua conta Steam, senha, save ou chave de produto.
 
 Ao atualizar de qualquer versão anterior, substitua `dinput8.dll`, `dinput8.ini` e `re4-modern-controls.ini` pelos arquivos novos do ZIP. Confira no `dinput8.log` a linha `EXPERIMENTAL 0.1.4`. A correção da câmera faz parte da DLL; mudar apenas o INI antigo não aplica a correção.
 

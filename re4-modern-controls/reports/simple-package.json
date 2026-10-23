@@ -1,10 +1,10 @@
 {
-  "file": "RE4-Movimento-Livre-v0.1.3-Simples.zip",
-  "sha256": "ec77fc677375dc6dd27b0ee65d55ad7d704d0a4f8ce8fdcdc82e087090d2fa4a",
-  "bytes": 3757735,
-  "source_zip_sha256": "1db6f5e324349974e861875d84e59ed983ce76d206257cba4b65df584d0e8fb7",
-  "dll_sha256": "7afc75b229dc7e568c7b767e9d22693ffaa8e109c93bb3b35fdc4e818c3b64da",
-  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/39937385912",
+  "file": "RE4-Movimento-Livre-v0.1.4-Simples.zip",
+  "sha256": "9c18eae1289633dca4152b7c2764c9117b284cfc0693bce823ba36a20d984a1f",
+  "bytes": 3758286,
+  "source_zip_sha256": "86c55ce839b75a38250031ff2c6ff51a2bc337ce8ad8d0e3e9e83b0ad2c1030b",
+  "dll_sha256": "2009e7e81be99919369e72ff9edf4bc978e80f3a3a3b146a0e3c8ed80e6cbfd6",
+  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/39940503753",
   "runtime_files_unchanged": [
     "dinput8.dll",
     "dinput8.ini",
@@ -16,5 +16,6 @@
   ],
   "all_original_license_texts_preserved": 18,
   "gameplay_tested": false,
-  "verification": "ZIP CRC passed; exact 5-file layout; 3 runtime files byte-identical to full validated build; 18 original license texts present verbatim; README matches English guide."
+  "verification": "ZIP CRC passed; exact 5-file layout; 3 runtime files byte-identical to full validated build; all 18 license texts present verbatim; English installation guide lists six playable characters and modes.",
+  "character_modes_confirmed_in_game": false
 }

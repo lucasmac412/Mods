@@ -1,17 +1,17 @@
 {
   "status": "EXPERIMENTAL_NOT_VALIDATED_IN_GAME",
-  "file": "downloads/RE4-Movimento-Livre-v0.1.3-EXPERIMENTAL.zip",
-  "sha256": "1db6f5e324349974e861875d84e59ed983ce76d206257cba4b65df584d0e8fb7",
-  "dll_sha256": "7afc75b229dc7e568c7b767e9d22693ffaa8e109c93bb3b35fdc4e818c3b64da",
+  "file": "downloads/RE4-Movimento-Livre-v0.1.4-EXPERIMENTAL.zip",
+  "sha256": "86c55ce839b75a38250031ff2c6ff51a2bc337ce8ad8d0e3e9e83b0ad2c1030b",
+  "dll_sha256": "2009e7e81be99919369e72ff9edf4bc978e80f3a3a3b146a0e3c8ed80e6cbfd6",
   "machine": "x86",
   "upstream_revision": "92c0208bd09c29c9640e13a2493b8e6bd6edd700",
   "gameplay_tested": false,
-  "bytes": 3779381,
-  "code_commit": "c647fcdf6f73fe5ffebd1c22d2a10f034a9cfa83",
-  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/39937385912",
+  "bytes": 3780072,
+  "code_commit": "f8c4601e89b2bb197a57f6832228f47f0ae30d21",
+  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/39940503753",
   "workflow_conclusion": "success",
-  "controller_assertions_windows": 6472,
-  "controller_assertions_linux_asan_ubsan": 6472,
+  "controller_assertions_windows": 10187,
+  "controller_assertions_linux_asan_ubsan": 10187,
   "preparation_tests": 4,
   "native_regressions": {
     "old_walk_and_run_frame_corruption_reproduced": true,
@@ -23,22 +23,46 @@
   "camera_regression": "Independent camera reference across simultaneous mouse input and eight WASD directions/idle at 30, 60 and 120 Hz; interpolation flag untouched; aim/native handoff preserves world yaw; room/instance/tick discontinuities invalidate stale state.",
   "camera_policy": "Native shoulder camera only; late basis update via existing camera-type hook before offsets/collision; no per-direction camera init reset or mouse-orbit compensation during locomotion.",
   "camera_correction_confirmed_in_game": false,
-  "previous_v012_user_report": "User reports camera remains unsatisfactory after 0.1.2; its per-direction reset strategy is replaced in 0.1.3.",
+  "character_support": {
+    "Leon": [
+      "Campaign",
+      "The Mercenaries"
+    ],
+    "Ashley": [
+      "Playable campaign section"
+    ],
+    "Ada": [
+      "Separate Ways",
+      "Assignment Ada",
+      "The Mercenaries"
+    ],
+    "HUNK": [
+      "The Mercenaries"
+    ],
+    "Krauser": [
+      "The Mercenaries"
+    ],
+    "Wesker": [
+      "The Mercenaries"
+    ]
+  },
+  "character_modes_confirmed_in_game": false,
+  "character_policy": "Six explicit PC SDK identifiers; player object only. Native actions, events, Krauser transformation, reload/holster/draw and throws retain original positioning. Ashley has no aim movement and selects shoulder camera with KB/M. Camera key includes character and room.",
   "new_animation_assets": false,
   "animation_limits": "Native walk/run/aim retained; no new lower-body aim blend. Fast body heading changes/sliding while aiming remain possible.",
   "diagnostics_default": false,
   "distribution_changes": "DLL, settings and notices identical to successful CI; only Portuguese guide refreshed after validation. No game executable/assets.",
-  "ci_zip_sha256": "8a5eae7740e6822d529692aadc2c6f689f2e97473f277749fbfd7378cf97a937",
-  "workflow_result_sha256": "24d84fb9d4f5fdecea421087c38600698deeabe346f0a5d8852d219fe71026cf",
+  "ci_zip_sha256": "6fcc7d396cbb8f5f2097afac670387684baddc7ad056afb1255aa7e404de94a3",
+  "workflow_result_sha256": "435dc79d1850cc6be50a6c90bf9a26d7f5a0fe503b8e0dc5a2fc2ae558b1708b",
   "build_log_available": true,
-  "build_log_sha256": "3b89b81f511eb4d360fda0037918ea3526bcac81eb92741bd7ac911e3e363c06",
+  "build_log_sha256": "2f27ec8e39c90f2a65cb8d46ebbfc4186d8cdc85fe2ab16fae05e3ec8c598dc2",
   "font_awesome_free_embedded": true,
   "files": {
     "src/CameraContinuity.h": "3d4857174d4ec9bdb1843a92fae7486265932faa51ab938ab27df62ba5a92b1b",
-    "src/ModernControls.cpp": "deaa6c06398859ab79be31d1f411d674dc44022a626efa734bc9f566ed618e58",
-    "src/ModernControls.h": "8481fc022e9f739afac8c454a683caa04e7e40853024e77a3eb896c29d071c10",
-    "src/MovementCore.h": "18efeb8d82e5bdac17d01a9725dcd85459867b8581a513899e691720c41dd27e",
+    "src/ModernControls.cpp": "c776829b1fc6336a988aedcfaa3b8b16172b8d44fe7aa51fe750ce66e3eed636",
+    "src/ModernControls.h": "bfd2877f1e5eb99b8d666b198fcc09859fce11a6092f5e46157ff1f06b878520",
+    "src/MovementCore.h": "2b421dd20eb3dbdab888872e6a0dca1a0ced97681ad9a135e5fa98c08c427bd5",
     "src/NativeCameraBoundary.h": "ba254375fbc1aa068def7ab799c9392df5d915f3b34e93ecda82eb4c66de1235",
-    "src/NativeDiagnostics.h": "c69197b753210a6dc3d3b195325f3fc969a62f037c0652dda2d2182964faf17c"
+    "src/NativeDiagnostics.h": "46c6d610a5a977bd2e21f05fef23886d6c01384bfd31c6368da6f4c9d7c8d25c"
   }
 }

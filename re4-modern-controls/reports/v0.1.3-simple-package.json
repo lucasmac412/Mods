@@ -1,0 +1,20 @@
+{
+  "file": "RE4-Movimento-Livre-v0.1.3-Simples.zip",
+  "sha256": "ec77fc677375dc6dd27b0ee65d55ad7d704d0a4f8ce8fdcdc82e087090d2fa4a",
+  "bytes": 3757735,
+  "source_zip_sha256": "1db6f5e324349974e861875d84e59ed983ce76d206257cba4b65df584d0e8fb7",
+  "dll_sha256": "7afc75b229dc7e568c7b767e9d22693ffaa8e109c93bb3b35fdc4e818c3b64da",
+  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/39937385912",
+  "runtime_files_unchanged": [
+    "dinput8.dll",
+    "dinput8.ini",
+    "re4-modern-controls.ini"
+  ],
+  "omitted_optional_settings": [
+    "re4_tweaks/trainer.ini",
+    "re4_tweaks/setting_overrides/overrides_info.txt"
+  ],
+  "all_original_license_texts_preserved": 18,
+  "gameplay_tested": false,
+  "verification": "ZIP CRC passed; exact 5-file layout; 3 runtime files byte-identical to full validated build; 18 original license texts present verbatim; README matches English guide."
+}
