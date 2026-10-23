@@ -2,9 +2,9 @@
 
 Extensão experimental do **re4_tweaks** para o Resident Evil 4 **original Steam UHD, app 254700**. Não é para o remake, para o port de 2007 ou para Minecraft.
 
-**A versão 0.1.0 apresentou crash ao começar a andar no RE4 1.1.0. Não utilize esse pacote antigo.** A 0.1.1 remove dois hooks incorretos de início das funções de caminhada/corrida e mantém a pilha nativa intacta. A validação Windows dessa correção está em andamento. Os testes automáticos não equivalem a testes dentro do RE4; jogabilidade e animações continuam experimentais.
+**A versão 0.1.0 apresentou crash ao começar a andar no RE4 1.1.0. Não utilize esse pacote antigo.** A 0.1.1 remove dois hooks incorretos de início das funções de caminhada/corrida e mantém a pilha nativa intacta. A compilação Windows, os testes do controlador, os quatro testes de preparação e a regressão nativa x86 passaram. Os testes automáticos não equivalem a testes dentro do RE4; a correção do fechamento relatado, a jogabilidade e as animações ainda precisam de confirmação no jogo.
 
-**[Baixar o ZIP experimental 0.1.1 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.1-experimental/downloads/RE4-Movimento-Livre-v0.1.1-EXPERIMENTAL.zip)**. O link só fica disponível após a publicação do pacote validado. A origem e os checksums serão registrados em `reports/windows-build.json`. Este download é independente dos mods de Minecraft.
+**[Baixar o ZIP experimental 0.1.1 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.1-experimental/downloads/RE4-Movimento-Livre-v0.1.1-EXPERIMENTAL.zip)** · [Compilação e testes Windows](https://github.com/lucasmac412/Mods/actions/runs/39740706200). A origem e os checksums estão em `reports/windows-build.json`. Este download é independente dos mods de Minecraft.
 
 ## Controles implementados no código
 
