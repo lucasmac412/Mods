@@ -1,0 +1,40 @@
+{
+  "status": "EXPERIMENTAL_NOT_VALIDATED_IN_GAME",
+  "file": "downloads/RE4-Movimento-Livre-v0.1.2-EXPERIMENTAL.zip",
+  "sha256": "c4ef4815429d1c39b7a8b5d69b4b89fe064d8239ecf8a24f4767fdb8c912ede5",
+  "dll_sha256": "d35859f4fd8e168fc0f94b995a2399f05ddea45441611d47ef1f2a9b8e041b43",
+  "machine": "x86",
+  "upstream_revision": "92c0208bd09c29c9640e13a2493b8e6bd6edd700",
+  "gameplay_tested": false,
+  "bytes": 3778583,
+  "code_commit": "088b72bdc82fa610736ca08bed2c568a85b6c8b7",
+  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/39933903467",
+  "workflow_conclusion": "success",
+  "controller_assertions_windows": 1686,
+  "controller_assertions_linux_asan_ubsan": 1686,
+  "preparation_tests": 4,
+  "native_regressions": {
+    "old_walk_and_run_frame_corruption_reproduced": true,
+    "native_prologues_repeated_calls_per_case": 64,
+    "seh_diagnostics_does_not_swallow_exceptions": true
+  },
+  "camera_regression": "Independent simulation reproduces stale lateral history at eight WASD heading changes; new coordinate-frame synchronization preserves camera world position. Same held direction does not continually reset interpolation.",
+  "camera_correction_confirmed_in_game": false,
+  "previous_v011_user_report": "User reports movement works, with camera stutters specifically on WASD direction changes.",
+  "video_reviewed": false,
+  "video_unavailable_reason": "Uploaded MP4 exceeds 32 MiB executor transfer limit.",
+  "diagnostics_default": false,
+  "distribution_changes": "Same DLL and settings as successful CI; only Portuguese guide refreshed after validation. No game executable/assets.",
+  "ci_zip_sha256": "792989103e1d5aa6abea5e491be67e1423e1ef9fd25a4ead0fa494ea47fe1d96",
+  "workflow_result_sha256": "c6f28ec2131938d21f5dcb6a1a366e1cb9e1568bbda0c55d0595ba7f02cc157d",
+  "build_log_available": true,
+  "build_log_sha256": "4384004e4c2f26ecee6edbd6d98c2885cc6d73b470ad191f4922b885bb81f64a",
+  "font_awesome_free_embedded": true,
+  "files": {
+    "src/CameraContinuity.h": "74d390b3f6ffdc938004bc5c81b31043597f27af150a41aad45f1d284417fb64",
+    "src/ModernControls.cpp": "60dc332701989ec60d46d224ce67e1481a8de3b6a35033d4341ea664958755ed",
+    "src/ModernControls.h": "116cc022e303f72476aca4866a616306ea7727446e4718d3466becc1baaa9ee5",
+    "src/MovementCore.h": "4ac50297ac40b7f87a730f13635724ea5e611648ef4b5340461fabacd9c20f36",
+    "src/NativeDiagnostics.h": "f39ef4411f197d08be814ec4d3645e9df53e1320a808ce1ed5b2fc822331c8b3"
+  }
+}
