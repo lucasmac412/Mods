@@ -1,0 +1,15 @@
+# Referência de câmera independente do personagem
+
+O jogador informou que a 0.1.2 não resolveu satisfatoriamente a câmera. Aquela versão ainda girava a referência da câmera junto com o personagem e tentava compensar com o ângulo relativo e uma reinicialização do histórico a cada troca de direção. Os testes matemáticos anteriores não confirmaram o resultado visual do motor real.
+
+A 0.1.3 remove essa estratégia. Ao assumir a locomoção, guarda uma referência de orientação da câmera independente de Leon. O mouse permanece no sistema nativo de órbita e o corpo recebe a direção dessa visão mais o deslocamento escolhido no WASD. Trocar WASD não altera o acumulador do mouse, a referência de orientação da câmera ou sua flag de reinicialização. A mesma referência permanece ativa ao parar e ao alternar caminhada/corrida.
+
+A direção de câmera é fornecida no hook de tipo de câmera que já existe no re4_tweaks, imediatamente antes do cálculo de referência e offsets. Isso ocorre depois da movimentação do personagem, em vez de depender de uma escrita antecipada durante sua rotina. O motor mantém colisões com paredes, inclinação pelo terreno, offsets, FOV e interpolação; a extensão não escreve uma posição final de câmera na renderização.
+
+O callback só atende a câmera de ombro (`r0 == 0xA`) na locomoção normal de Leon. Câmeras extras, cortes mantidos por scripts, câmera bloqueada, scopes, estados especiais, outras personagens e ausência de atualização válida da locomoção conservam a câmera nativa. Uma direção já programada pelo jogo tem prioridade. A troca de sala, instância ou sequência de atualizações invalida referências antigas.
+
+Ao começar a mirar, o controle transfere a direção da visão para Leon e zera a órbita relativa antes de chamar sua rotina nativa. A devolução por pausa/perda de foco conserva matematicamente o ângulo no mundo sem girar o ator. Cenas e ações especiais continuam responsáveis por suas próprias transições. Não há novos arquivos de animação nesta versão: as animações nativas de caminhada, corrida e mira são mantidas; o corpo ainda pode mudar de orientação rapidamente e a movimentação mirando ainda não tem mistura nova de pernas e tronco.
+
+Como o callback roda no meio de uma função nativa, seu wrapper preserva x87, registradores XMM e MXCSR, além dos registradores gerais que o injector já protege. A preparação confere o hash e as âncoras do arquivo de câmera antes de modificá-lo. Os prólogos de caminhada/corrida permanecem intactos.
+
+Os testes independentes verificam câmera e movimento simultâneos em sequências de direções a 30, 60 e 120 Hz, ausência de reinicialização de suavização, continuidade na entrada da mira/devolução, troca de sala/instância e dados inválidos. O teste nativo x86 compara o estado de ponto flutuante antes e depois de callbacks que deliberadamente o alteram. Esses testes não executam RE4 e não substituem conferir a câmera no jogo. Validar trocas rápidas de WASD, Shift, mouse durante a caminhada, parada, mirar/atirar, paredes, inventário e mudanças de sala.

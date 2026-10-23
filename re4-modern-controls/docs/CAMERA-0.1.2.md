@@ -9,3 +9,5 @@ A 0.1.2 informa a orientação atual usando o campo nativo de direção de uso �
 O diagnóstico de movimento agora exige `Diagnostics = 1`. Mesmo habilitado, chamadas comuns não forçam mais `FlushFileBuffers`; a descarga forçada fica restrita ao registro de exceções. Isso remove outra possível fonte de pausas no começo do movimento.
 
 O teste independente reproduz um salto ao misturar o histórico lateral anterior com a nova referência em oito mudanças de direção, e verifica a continuidade de posição com a correção. Inclui direção mantida, retomada após controle nativo, troca de instância, direção de cena e valores não finitos. Os testes de matemática, preparação e prólogos nativos não substituem o teste dentro do jogo: ainda é preciso conferir trocas rápidas de WASD com e sem Shift, mouse durante a caminhada, obstáculos, mirar e voltar a andar.
+
+O jogador relatou que a 0.1.2 continuou com câmera ruim. A estratégia de reinicializar o histórico na troca de WASD foi substituída na [0.1.3](CAMERA-0.1.3.md); o resultado dos testes da 0.1.2 não deve ser interpretado como aprovação visual dentro do jogo.

@@ -50,13 +50,6 @@ inline Decision decide(const Context& c, Keys keys) {
 inline float headingOffset(Direction d) {
     return d.moving ? -std::atan2(d.right, d.forward) : 0;
 }
-struct Orbit { float playerYaw{}, cameraYaw{}, mouseX{}; };
-inline Orbit faceDirection(Orbit old, Direction d) {
-    const float wanted = wrap(old.playerYaw + old.cameraYaw + headingOffset(d));
-    const float delta = wrap(wanted - old.playerYaw);
-    const float cameraYaw = wrap(old.cameraYaw - delta);
-    return {wanted, cameraYaw, -cameraYaw / cameraOrbitScale};
-}
 // Project and orthonormalize the camera on the ground plane. Pitch must not
 // make movement slower, introduce vertical motion, or accelerate diagonals.
 inline XZ aimDisplacement(Direction d, XZ forward, XZ right,

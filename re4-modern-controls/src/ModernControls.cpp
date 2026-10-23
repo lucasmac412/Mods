@@ -22,7 +22,7 @@ bool installed{};
 bool enabled{};
 bool diagnosticEnabled{};
 float aimSpeed = 35.0f;
-re4mc::CameraBasisTracker cameraBasis;
+re4mc::FreeCameraFrame cameraFrame;
 std::array<unsigned, 5> keyCodes{'W', 'S', 'A', 'D', VK_SHIFT};
 
 bool executableAddress(const void* address) {
@@ -105,15 +105,44 @@ void setRoutine(cPlayer* player, unsigned routine) {
     player->r_no_3_FF = 0;
 }
 
+bool shoulderCameraAvailable() {
+    const auto g = GlobalPtr();
+    return g && CamCtrl && (CamCtrl->be_flag_28 & 1) && CamCtrl->r0_34 == 0xA &&
+           !CamCtrl->m_pExtraCamera_250 && !(CamCtrl->m_state_flag_30 & 4) &&
+           !(g->flags_STOP_0_170[0] & 0x40000000U); // SPF_CAMERA
+}
+
+bool nativeHandoffAllowed(const re4mc::Context& c) {
+    return c.enabled && c.keyboardMouse && c.mainLoop &&
+           c.alive && c.playerObject && c.collisionEnabled && !c.scoped &&
+           c.routine0 == 0 && c.routine1 <= 6 && shoulderCameraAvailable();
+}
+
+void releaseCamera(cPlayer* player, const re4mc::Context& c) {
+    if (cameraFrame.belongsTo(reinterpret_cast<std::uintptr_t>(player),
+                              reinterpret_cast<std::uintptr_t>(CamCtrl)) &&
+        nativeHandoffAllowed(c) && cameraFrame.sameRoom(GlobalPtr()->room_no_4) &&
+        fMousePosX && fCameraPosX && std::isfinite(*fMousePosX) &&
+        std::isfinite(player->ang_A0.y)) {
+        // Free look uses a virtual player reference; native aiming uses Leon.
+        // Face the saved view BEFORE the native raise-weapon routine zeros orbit.
+        const bool aiming = !c.blocked && c.focused && (c.aiming || c.routine1 == 6);
+        const auto handoff = cameraFrame.handoff(player->ang_A0.y, *fMousePosX, aiming);
+        if (aiming) {
+            player->ang_A0.y = handoff.playerYaw;
+            if (AnalogRX_8) *AnalogRX_8 = 0;
+        }
+        *fMousePosX = handoff.mouseX;
+        *fCameraPosX = handoff.cameraYaw;
+    }
+    cameraFrame.reset();
+}
+
 template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
     re4mc::diagnostics::mark(1, entry); // Entering context/input collection.
     auto c = context(player);
     const auto keys = readKeys(c); // Release the input lock before calling native code.
     const auto decision = re4mc::decide(c, keys);
-    const bool walking = decision.action == re4mc::Action::Walk || decision.action == re4mc::Action::Run;
-    const bool cameraCanMove = CamCtrl && GlobalPtr() && !(GlobalPtr()->flags_STOP_0_170[0] & 0x40000000U);
-    const bool newCameraBasis = cameraBasis.observe(reinterpret_cast<std::uintptr_t>(player),
-                                                    decision.direction, walking && cameraCanMove);
     static std::array<unsigned, 5> observations{};
     const auto action = unsigned(decision.action);
     const bool report = observations[action]++ < 2;
@@ -126,8 +155,12 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
         if (report) re4mc::diagnostics::trace("after_native", entry, action, player,
             reinterpret_cast<const void*>(originals[next]));
     };
-    if (decision.action == re4mc::Action::Native) { invoke(entry); return; }
+    if (decision.action == re4mc::Action::Native) {
+        releaseCamera(player, c);
+        invoke(entry); return;
+    }
     if (decision.action == re4mc::Action::AimMove) {
+        releaseCamera(player, c);
         // Keep native aim, fire cadence, ammunition, reload and hit detection.
         invoke(entry);
         // A shot/interaction can exit the weapon state. Never drag another action.
@@ -143,30 +176,34 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
         player->pos_94.z += step.z;
         return;
     }
-    if (!fMousePosX || !fCameraPosX) { invoke(entry); return; }
+    if (!fMousePosX || !fCameraPosX || !std::isfinite(*fMousePosX) ||
+        !shoulderCameraAvailable() || c.scoped) {
+        releaseCamera(player, c);
+        invoke(entry); return;
+    }
+    const auto g = GlobalPtr();
+    if (!cameraFrame.current(reinterpret_cast<std::uintptr_t>(player),
+                             reinterpret_cast<std::uintptr_t>(CamCtrl), g->room_no_4,
+                             g->frameCounter_530C)) releaseCamera(player, c);
+    if (!cameraFrame.begin(reinterpret_cast<std::uintptr_t>(player),
+                           reinterpret_cast<std::uintptr_t>(CamCtrl), g->room_no_4,
+                           g->frameCounter_530C, player->ang_A0.y)) {
+        invoke(entry); return;
+    }
     re4mc::diagnostics::mark(4, entry); // Input override and orbit update.
     re4mc::ScopedInput input(*keyOn, *keyTrigger, decision.action);
     unsigned next = 0;
-    bool rebase = false;
     if (decision.action != re4mc::Action::Idle) {
-        const auto orbit = re4mc::faceDirection(
-            // PadRead has already updated mouseX this tick. The camera's cached
-            // yaw can still be from the previous tick; do not discard new input.
-            {player->ang_A0.y, re4mc::wrap(-re4mc::cameraOrbitScale * *fMousePosX),
-             *fMousePosX}, decision.direction);
-        rebase = newCameraBasis && std::abs(re4mc::wrap(orbit.playerYaw - player->ang_A0.y)) > 0.0001f;
-        player->ang_A0.y = orbit.playerYaw;
-        *fCameraPosX = orbit.cameraYaw;
-        *fMousePosX = orbit.mouseX;
+        player->ang_A0.y = cameraFrame.movementYaw(decision.direction, *fMousePosX);
         next = decision.action == re4mc::Action::Run ? 3 : 1;
     }
     setRoutine(player, next);
     invoke(next); // Original walking/running animation and root motion.
-    if (rebase && CamCtrl) {
-        const auto after = re4mc::decide(context(player), keys).action;
-        if (after == re4mc::Action::Walk || after == re4mc::Action::Run)
-            re4mc::rebaseCamera(CamCtrl->m_QuasiFPS_278, player->ang_A0.y);
-    }
+    const auto afterContext = context(player);
+    const auto after = re4mc::decide(afterContext, keys).action;
+    if ((after == re4mc::Action::Walk || after == re4mc::Action::Run || after == re4mc::Action::Idle) &&
+        shoulderCameraAvailable()) return;
+    releaseCamera(player, afterContext);
 }
 
 void readConfig() {
@@ -192,7 +229,31 @@ bool ModernControls_OwnsLocomotion() {
     auto c = context(player);
     const auto keys = readKeys(c);
     const auto action = re4mc::decide(c, keys).action;
-    return action == re4mc::Action::Walk || action == re4mc::Action::Run || action == re4mc::Action::Idle;
+    return shoulderCameraAvailable() && !c.scoped &&
+           (action == re4mc::Action::Walk || action == re4mc::Action::Run || action == re4mc::Action::Idle);
+}
+
+void ModernControls_UpdateCamera(CameraQuasiFPS* camera) {
+    // Called by the existing camera-type hook, immediately before the engine
+    // computes its shoulder basis, offsets, wall collision and interpolation.
+    auto player = PlayerPtr();
+    const auto g = GlobalPtr();
+    if (!player || !g || !CamCtrl || camera != &CamCtrl->m_QuasiFPS_278) return;
+    auto c = context(player);
+    const auto keys = readKeys(c);
+    const auto action = re4mc::decide(c, keys).action;
+    if (!shoulderCameraAvailable() || c.scoped ||
+        (action != re4mc::Action::Walk && action != re4mc::Action::Run && action != re4mc::Action::Idle) ||
+        !cameraFrame.current(reinterpret_cast<std::uintptr_t>(player),
+                             reinterpret_cast<std::uintptr_t>(CamCtrl), g->room_no_4,
+                             g->frameCounter_530C)) {
+        releaseCamera(player, c);
+        return;
+    }
+    if (!re4mc::queueCameraBasis(*camera, cameraFrame.basisYaw())) {
+        // A script queued its own direction. Do not rewrite its orbit or history.
+        cameraFrame.reset();
+    }
 }
 
 void re4t::init::ModernControls() {
@@ -243,5 +304,5 @@ void re4t::init::ModernControls() {
     re4t::cfg->bResetCameraAfterUsingWeapons = false;
     re4t::cfg->bResetCameraAfterUsingKnife = false;
     re4t::cfg->bUseSprintToggle = false;
-    spd::log()->info("ModernControls -> EXPERIMENTAL 0.1.2, KB/M enabled; camera basis synchronization enabled; diagnostics={}; native Walk/Run prologues preserved; game validation pending", diagnosticEnabled);
+    spd::log()->info("ModernControls -> EXPERIMENTAL 0.1.3, KB/M enabled; independent camera reference; diagnostics={}; native Walk/Run prologues preserved; game validation pending", diagnosticEnabled);
 }

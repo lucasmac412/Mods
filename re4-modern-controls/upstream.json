@@ -9,7 +9,8 @@
     "dllmain/dllmain.vcxproj": "acba574860fc3ca73837a63157b0e92cb463a29d30b3313768cb6b743049c406",
     "License.txt": "1459b13ca71af7eecabf65ba62549afa93e0ce3a8c2e4589eafceb7c0351c978",
     "dllmain/WndProcHook.cpp": "37697dc57a141a075c923228eded423019439135f0823a8f8d59e8993813805a",
-    "includes/faprolight.hpp": "59a50d0c61e28ab52346aeedae381c6d4d01ef803f90958d6acaa5c40e59074a"
+    "includes/faprolight.hpp": "59a50d0c61e28ab52346aeedae381c6d4d01ef803f90958d6acaa5c40e59074a",
+    "dllmain/CameraTweaks.cpp": "c581d967a399b4632007dbf4bb6b57734d352b70e1aff0e90f30498c51de42d5"
   },
   "source_normalized_sha256": {
     "dllmain/dllmain.cpp": "84051a3eca304233832b0636dd32303ad5315fec20048ff3dc274913a5940f5c",
@@ -17,6 +18,7 @@
     "dllmain/dllmain.vcxproj": "ffdbb8427ca510f5a0d202fca00f160b27a8ccea65668597ab3bcc86ed42e6a5",
     "License.txt": "1459b13ca71af7eecabf65ba62549afa93e0ce3a8c2e4589eafceb7c0351c978",
     "dllmain/WndProcHook.cpp": "37697dc57a141a075c923228eded423019439135f0823a8f8d59e8993813805a",
-    "includes/faprolight.hpp": "59a50d0c61e28ab52346aeedae381c6d4d01ef803f90958d6acaa5c40e59074a"
+    "includes/faprolight.hpp": "59a50d0c61e28ab52346aeedae381c6d4d01ef803f90958d6acaa5c40e59074a",
+    "dllmain/CameraTweaks.cpp": "c581d967a399b4632007dbf4bb6b57734d352b70e1aff0e90f30498c51de42d5"
   }
 }

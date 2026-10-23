@@ -48,7 +48,7 @@ def prepare(target):
         file = target / name
         if hashlib.sha256(file.read_bytes().replace(b"\r\n", b"\n")).hexdigest() != expected:
             raise ValueError(f"Wrong revision or modified file: {name}; no files changed")
-    for name in ("dllmain/dllmain.cpp", "dllmain/MouseTurning.cpp", "dllmain/dllmain.vcxproj", "dllmain/WndProcHook.cpp"):
+    for name in ("dllmain/dllmain.cpp", "dllmain/MouseTurning.cpp", "dllmain/dllmain.vcxproj", "dllmain/WndProcHook.cpp", "dllmain/CameraTweaks.cpp"):
         pending[name] = (target / name).read_text(encoding="utf-8-sig")
     name = "dllmain/dllmain.cpp"
     pending[name] = replace_once(pending[name], '#include "Trainer.h"', '#include "Trainer.h"\n#include "ModernControls.h"', name)
@@ -58,6 +58,16 @@ def prepare(target):
     pending[name] = replace_once(pending[name], 'void MouseTurn(float TurnDelayFactor = 10.0f)\n{', 'void MouseTurn(float TurnDelayFactor = 10.0f)\n{\n\tif (ModernControls_OwnsLocomotion()) return;', name)
     pending[name], fixture = remove_unsafe_prologues(pending[name])
     pending['LegacyPrologueHooks.h'] = fixture
+    # Extend an existing, guarded camera hook; do not patch another prologue.
+    # This runs after player movement and before native camera collision/smoothing.
+    name = "dllmain/CameraTweaks.cpp"
+    pending[name] = replace_once(pending[name], '#include "Settings.h"',
+        '#include "Settings.h"\n#include "ModernControls.h"\n#include "NativeCameraBoundary.h"', name)
+    pending[name] = replace_once(pending[name], '\t\t\tm_trans_type_1B4 = regs.eax;',
+        '\t\t\tm_trans_type_1B4 = regs.eax;\n'
+        '\t\t\tre4mc::preserveCameraFP([&]() {\n'
+        '\t\t\t\tModernControls_UpdateCamera(reinterpret_cast<CameraQuasiFPS*>(regs.esi));\n'
+        '\t\t\t});', name)
     name = "dllmain/dllmain.vcxproj"
     pending[name] = replace_once(pending[name], '    <ClCompile Include="MouseTurning.cpp" />', '    <ClCompile Include="ModernControls.cpp" />\n    <ClCompile Include="MouseTurning.cpp" />', name)
     # An experimental fork must never auto-update itself to an unrelated upstream DLL.

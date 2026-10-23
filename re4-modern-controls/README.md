@@ -2,9 +2,9 @@
 
 Extensão experimental do **re4_tweaks** para o Resident Evil 4 **original Steam UHD, app 254700**. Não é para o remake, para o port de 2007 ou para Minecraft.
 
-**Versão 0.1.2 experimental:** corrige a troca de referência da câmera ao mudar a direção no WASD e desliga o diagnóstico de movimento por padrão, evitando gravações forçadas no disco durante o controle. Mantém a correção da pilha nativa da 0.1.1. O jogador confirmou que a 0.1.1 voltou a funcionar; a correção de câmera da 0.1.2 ainda precisa ser conferida dentro do jogo.
+**Versão 0.1.3 experimental:** substitui a correção de câmera da 0.1.2 por uma câmera com orientação independente do corpo. Virar no WASD não reescreve mais o acumulador do mouse nem força reinicializações da suavização. A direção é aplicada durante o cálculo da câmera nativa, antes da colisão e da interpolação. A entrada na mira transfere a direção da visão para Leon. Mantém a correção do crash da 0.1.1 e o diagnóstico desligado por padrão.
 
-**[Baixar o ZIP experimental 0.1.2 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.2-experimental/downloads/RE4-Movimento-Livre-v0.1.2-EXPERIMENTAL.zip)**. [Compilação Windows aprovada](https://github.com/lucasmac412/Mods/actions/runs/39933903467): 1.686 verificações do controlador, quatro testes de preparação e regressões nativas x86 passaram. A origem e os checksums estão em `reports/windows-build.json`. Este download é independente dos mods de Minecraft.
+**[Baixar o ZIP experimental 0.1.3 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.3-experimental/downloads/RE4-Movimento-Livre-v0.1.3-EXPERIMENTAL.zip)**. A compilação Windows e os checksums serão registrados em `reports/windows-build.json` após a validação. O ajuste visual da câmera ainda precisa ser confirmado no jogo. Este download é independente dos mods de Minecraft.
 
 ## Controles implementados no código
 
@@ -43,9 +43,9 @@ Use estes passos **somente com um ZIP contendo `Bin32/dinput8.dll` compilado com
 7. Comece testando num local aberto, sem inimigos. Confira W, A, S, D, diagonais, Shift, movimento da câmera e, depois, movimento com o botão de mira pressionado. Teste uma parede, um desnível e um tiro enquanto se move.
 8. Se Leon não andar, houver travamento ou algum comportamento errado, feche o jogo e preserve o arquivo **`Bin32/dinput8.log`**. Ele mostra se o controlador foi ativado ou recusou as assinaturas. Não há necessidade de enviar sua conta Steam, senha, save ou chave de produto.
 
-Ao atualizar da 0.1.0 ou 0.1.1, substitua `dinput8.dll`, `dinput8.ini` e `re4-modern-controls.ini` pelos arquivos novos do ZIP. Confira no `dinput8.log` a linha `EXPERIMENTAL 0.1.2`. A correção da câmera faz parte da DLL; mudar apenas o INI antigo não aplica a correção.
+Ao atualizar de qualquer versão anterior, substitua `dinput8.dll`, `dinput8.ini` e `re4-modern-controls.ini` pelos arquivos novos do ZIP. Confira no `dinput8.log` a linha `EXPERIMENTAL 0.1.3`. A correção da câmera faz parte da DLL; mudar apenas o INI antigo não aplica a correção.
 
-Na 0.1.2, o diagnóstico adicional fica desligado por padrão. Se for necessário investigar um novo fechamento, troque `Diagnostics = 0` por `Diagnostics = 1` em `re4-modern-controls.ini`, salve e reinicie o jogo. Depois de reproduzir o problema, preserve **`Bin32/dinput8.log`** e **`Bin32/re4-modern-controls-diagnostico.log` antes de abrir o jogo novamente**. O segundo arquivo registra localmente algumas chamadas e exceções; não envia dados. Um arquivo dessa versão anterior pode permanecer na pasta: só considere o log adicional novo depois de habilitar o diagnóstico. Exceções registradas podem ser tratadas pelo próprio jogo e não significam necessariamente um crash. Desative o diagnóstico depois da investigação.
+Na 0.1.3, o diagnóstico adicional fica desligado por padrão. Se for necessário investigar um novo fechamento, troque `Diagnostics = 0` por `Diagnostics = 1` em `re4-modern-controls.ini`, salve e reinicie o jogo. Depois de reproduzir o problema, preserve **`Bin32/dinput8.log`** e **`Bin32/re4-modern-controls-diagnostico.log` antes de abrir o jogo novamente**. O segundo arquivo registra localmente algumas chamadas e exceções; não envia dados. Um arquivo dessa versão anterior pode permanecer na pasta: só considere o log adicional novo depois de habilitar o diagnóstico. Exceções registradas podem ser tratadas pelo próprio jogo e não significam necessariamente um crash. Desative o diagnóstico depois da investigação.
 
 Para desativar apenas os controles novos, abra `re4-modern-controls.ini` com o Bloco de Notas, troque `Enabled = 1` por `Enabled = 0`, salve e reinicie o jogo. F1 abre as opções do re4_tweaks; não habilite MouseTurning ou reset automático de câmera durante o teste deste controlador.
 
@@ -64,9 +64,10 @@ g++ -std=c++17 -Wall -Wextra -Werror -pedantic \
 python3 -m unittest discover -s re4-modern-controls/tools -p 'test_*.py'
 ```
 
-O teste do controlador inclui uma simulação da mistura incorreta de coordenadas da câmera ao virar no WASD, verifica sua correção e preserva a interpolação normal quando a direção permanece pressionada. Também verifica que câmeras de cenas e dados inválidos não sejam sobrescritos. Essa simulação não reproduz todo o motor do jogo.
+O teste do controlador verifica mudanças contínuas entre as oito direções, parada e movimento simultâneo do mouse em simulações a 30, 60 e 120 Hz. Confere que o corpo pode virar sem modificar a referência da câmera, que a suavização nativa não é reinicializada e que a direção é preservada na entrada da mira e na devolução ao controle nativo. Inclui mudança de sala, instância e interrupção do contador de quadros. Essa simulação não reproduz todo o motor do jogo.
 
-O workflow `.github/workflows/re4-modern-controls.yml` obtém o upstream e seus submódulos na revisão fixada, aplica a extensão, executa o controlador com MSVC e compila uma DLL Win32. O teste `native_prologue_test.cpp` executa em x86 os callbacks antigos, extraídos do upstream apenas como fixtures de teste, mede o EBP/ESP/argumento incorretos e verifica o prólogo nativo sem esses hooks. Também verifica que o diagnóstico observa exceções sem impedir o tratamento normal. Não inicia o jogo nem afirma aprovação em testes de gameplay.
+O workflow `.github/workflows/re4-modern-controls.yml` obtém o upstream e seus submódulos na revisão fixada, aplica a extensão, executa o controlador com MSVC e compila uma DLL Win32. O teste `native_prologue_test.cpp` executa em x86 os callbacks antigos, extraídos do upstream apenas como fixtures, mede o EBP/ESP/argumento incorretos e verifica o prólogo nativo sem esses hooks. Também verifica que o diagnóstico observa exceções sem impedir o tratamento normal. `native_camera_test.cpp` verifica a preservação de x87, XMM0–7 e MXCSR no callback que a nova câmera adiciona ao hook existente. Não inicia o jogo nem afirma aprovação em testes de gameplay.
+
 
 Para compilar manualmente no Windows, use Visual Studio 2026 com ferramentas C++ x86 (toolset v145), clone o re4_tweaks recursivamente na revisão indicada, execute `tools/prepare.py PASTA_DO_UPSTREAM` e compile a solução com `Configuration=Release`, `Platform=Win32` e `PostBuildEventUseInBuild=false`. Essas ferramentas são para desenvolvimento; o jogador só precisa extrair o pacote compilado.
 
