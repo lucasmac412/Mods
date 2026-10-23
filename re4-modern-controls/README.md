@@ -4,7 +4,7 @@ Extensão experimental do **re4_tweaks** para o Resident Evil 4 **original Steam
 
 **Versão 0.1.2 experimental:** corrige a troca de referência da câmera ao mudar a direção no WASD e desliga o diagnóstico de movimento por padrão, evitando gravações forçadas no disco durante o controle. Mantém a correção da pilha nativa da 0.1.1. O jogador confirmou que a 0.1.1 voltou a funcionar; a correção de câmera da 0.1.2 ainda precisa ser conferida dentro do jogo.
 
-**[Baixar o ZIP experimental 0.1.2 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.2-experimental/downloads/RE4-Movimento-Livre-v0.1.2-EXPERIMENTAL.zip)**. A origem, a compilação Windows e os checksums serão registrados em `reports/windows-build.json` após a validação. Este download é independente dos mods de Minecraft.
+**[Baixar o ZIP experimental 0.1.2 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.2-experimental/downloads/RE4-Movimento-Livre-v0.1.2-EXPERIMENTAL.zip)**. [Compilação Windows aprovada](https://github.com/lucasmac412/Mods/actions/runs/39933903467): 1.686 verificações do controlador, quatro testes de preparação e regressões nativas x86 passaram. A origem e os checksums estão em `reports/windows-build.json`. Este download é independente dos mods de Minecraft.
 
 ## Controles implementados no código
 

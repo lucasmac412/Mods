@@ -1,0 +1,34 @@
+{
+  "status": "EXPERIMENTAL_NOT_VALIDATED_IN_GAME",
+  "file": "downloads/RE4-Movimento-Livre-v0.1.1-EXPERIMENTAL.zip",
+  "sha256": "a2cbc41c850afbb00bca7830f97c5f99173daefb2bc6f747e7a896bd966bf425",
+  "dll_sha256": "9c6ff5797409385d342cf097559c60799d15fc11307a6105890ca8378967b713",
+  "machine": "x86",
+  "upstream_revision": "92c0208bd09c29c9640e13a2493b8e6bd6edd700",
+  "gameplay_tested": false,
+  "bytes": 3777147,
+  "code_commit": "2ea92a04d050102850bed8e50a402cd9566f717a",
+  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/39740706200",
+  "workflow_conclusion": "success",
+  "controller_assertions_windows": 1527,
+  "preparation_tests": 4,
+  "native_regressions": {
+    "old_walk_and_run_frame_corruption_reproduced": true,
+    "native_prologues_repeated_calls_per_case": 64,
+    "seh_diagnostics_does_not_swallow_exceptions": true,
+    "result": "passed Windows x86 workflow step"
+  },
+  "user_reported_crash_resolution_confirmed_in_game": false,
+  "animations_during_aim": "No new lower-body animation blend; sliding is possible",
+  "distribution_changes": "Same DLL as passed CI; Portuguese guide refreshed after validation. No game executable/assets included.",
+  "ci_zip_sha256": "b756d9789a46f8672b9e5c1a290e2e595c030f3b6fc85613c74165dc222a87d5",
+  "workflow_result_sha256": "3d665130941e783d78f91afe97d31aa62e76c21a753f778bc9b678cad60332be",
+  "build_log_available": false,
+  "font_awesome_free_embedded": true,
+  "files": {
+    "src/ModernControls.cpp": "67f1073aba96d0b737c6b6d517a8b3d4b3a2485fbf6345f22355820bfbe90e37",
+    "src/ModernControls.h": "116cc022e303f72476aca4866a616306ea7727446e4718d3466becc1baaa9ee5",
+    "src/MovementCore.h": "4ac50297ac40b7f87a730f13635724ea5e611648ef4b5340461fabacd9c20f36",
+    "src/NativeDiagnostics.h": "d558778292706041a4fbb9ca2e610dc75a897ffefac711ca194f9f54bd12c788"
+  }
+}
