@@ -1,0 +1,70 @@
+RE4 FREE MOVEMENT 0.1.3 - KEYBOARD AND MOUSE
+Experimental mod for the original Resident Evil 4 Steam UHD (app 254700).
+Not for the remake or the 2007 PC release.
+
+INSTALL / UPDATE
+
+1. Close Resident Evil 4.
+2. Right-click the downloaded ZIP and choose "Extract All".
+3. In Steam, right-click Resident Evil 4 (2005), then choose:
+   Manage > Browse local files.
+4. Open the game's Bin32 folder. It should contain bio4.exe.
+   Do not replace or delete bio4.exe.
+5. Back up any existing copies of these files somewhere outside the game:
+     dinput8.dll
+     dinput8.ini
+     re4-modern-controls.ini
+6. Open the Bin32 folder INSIDE this extracted mod package. Copy all three
+   files listed above into the GAME'S Bin32 folder. Choose "Replace" when asked.
+   Copy the files themselves, not another Bin32 folder inside the game's Bin32.
+7. Launch the game through Steam. Select keyboard/mouse controls and Modern
+   mouse aiming. Set movement to WASD, aiming to the right mouse button and
+   firing to the left mouse button in the game's control settings.
+8. Load your game and test in an open area: walk, change directions, move the
+   mouse, run, then aim and walk. Check movement near a wall as well.
+
+No compiler, PowerShell command or additional application is needed.
+This DLL already includes a modified re4_tweaks base; do not install a separate
+re4_tweaks DLL over it. Keep README.txt and LICENSES.txt with your download;
+they do not need to be copied into the game's Bin32 folder.
+
+CONTROLS
+
+W / A / S / D       Move relative to the camera, including diagonals.
+Mouse               Look around; aim when the weapon is raised.
+Shift + direction   Run using the game's original animation.
+Right mouse + WASD  Move slowly while aiming.
+Left mouse          Fire while aiming, using the game's fire control binding.
+
+VERSION 0.1.3
+
+The camera reference is independent of Leon's body direction. Changing WASD
+does not reset camera smoothing. Entering aim transfers the viewing direction
+to Leon. This simplified download uses exactly the same DLL and main settings
+as the full 0.1.3 package; only the packaging and documentation differ.
+
+LIMITS AND TROUBLESHOOTING
+
+The new movement targets Leon in international UHD versions 1.1.0 and 1.0.6.
+Other characters, scopes and special actions keep native controls. Original
+animations are used; moving while aiming may look like sliding. Windows build
+and automated tests passed, but the new camera still needs in-game feedback.
+
+F1 opens re4_tweaks settings. Leave MouseTurning and automatic camera resets
+disabled while using this movement mod. To disable only the new controls,
+open re4-modern-controls.ini, set Enabled = 0, save, and restart the game.
+
+If something goes wrong, close the game and keep Bin32/dinput8.log. The mod may
+create logs and a re4_tweaks settings folder while running; this is normal.
+
+UNINSTALL
+
+Close the game. Remove the three files this package installed, or restore
+their backups if you had earlier versions. Do not delete original game files
+or saves. There is no need to reinstall the game to remove these files.
+
+CREDITS AND LICENSES
+
+Independent experimental extension based on nipkownix/re4_tweaks (Zlib).
+All bundled copyright notices and license texts are collected in LICENSES.txt.
+Source and build information: https://github.com/lucasmac412/Mods

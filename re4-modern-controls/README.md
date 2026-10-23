@@ -6,6 +6,8 @@ Extensão experimental do **re4_tweaks** para o Resident Evil 4 **original Steam
 
 **[Baixar o ZIP experimental 0.1.3 para Windows](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.3-experimental/downloads/RE4-Movimento-Livre-v0.1.3-EXPERIMENTAL.zip)**. [Compilação Windows aprovada](https://github.com/lucasmac412/Mods/actions/runs/39937385912): 6.472 verificações do controlador, quatro testes de preparação e regressões nativas x86 passaram. A origem e os checksums estão em `reports/windows-build.json`. O ajuste visual da câmera ainda precisa ser confirmado no jogo. Este download é independente dos mods de Minecraft.
 
+**[Pacote simplificado 0.1.3 com README em inglês](https://raw.githubusercontent.com/lucasmac412/Mods/re4-controles-v0.1.3-simples/downloads/RE4-Movimento-Livre-v0.1.3-Simples.zip):** contém somente `Bin32/dinput8.dll`, `Bin32/dinput8.ini`, `Bin32/re4-modern-controls.ini`, `README.txt` e `LICENSES.txt`. Os três arquivos de execução são idênticos aos do pacote completo aprovado. Os 18 textos de licença foram reunidos, sem alterar seu conteúdo, em um arquivo; documentos de desenvolvimento e configurações opcionais de trainer não vão nesse ZIP. O guia em inglês também está em [INSTALL-EN.txt](INSTALL-EN.txt). A verificação está em `reports/simple-package.json`.
+
 ## Controles implementados no código
 
 | Entrada | Comportamento pretendido |
@@ -74,3 +76,5 @@ Para compilar manualmente no Windows, use Visual Studio 2026 com ferramentas C++
 ## Créditos
 
 Base: [nipkownix/re4_tweaks](https://github.com/nipkownix/re4_tweaks), licença Zlib. Esta é uma alteração independente, não uma publicação oficial dos autores do re4_tweaks. A licença original está em `LICENSE-re4_tweaks.txt`; as dependências preservam suas licenças. A fonte de ícones incorporada pelo upstream é substituída por **Font Awesome Free Solid 6.7.2**, sob SIL OFL 1.1. IBM Plex também usa OFL; FreeType usa a FreeType Project License. Os textos e a origem das fontes estão em `third-party/`. Alguns ícones exclusivos da edição Pro podem não aparecer no menu F1. O código novo desta pasta usa MIT, em `LICENSE.txt`. Resident Evil é da Capcom. Nenhum executável, asset ou código reconstruído do jogo faz parte desta extensão.
+
+Para gerar novamente o pacote simplificado a partir do ZIP completo verificado: `python3 re4-modern-controls/tools/simplify_package.py downloads/RE4-Movimento-Livre-v0.1.3-EXPERIMENTAL.zip downloads`. A ferramenta confere os hashes do relatório Windows antes de reutilizar a DLL; não recompila nem altera o controlador.
