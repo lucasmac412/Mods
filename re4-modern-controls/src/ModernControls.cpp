@@ -121,7 +121,7 @@ bool nativeHandoffAllowed(const re4mc::Context& c) {
 void releaseCamera(cPlayer* player, const re4mc::Context& c) {
     if (cameraFrame.belongsTo(reinterpret_cast<std::uintptr_t>(player),
                               reinterpret_cast<std::uintptr_t>(CamCtrl)) &&
-        nativeHandoffAllowed(c) && cameraFrame.sameRoom(GlobalPtr()->room_no_4) &&
+        nativeHandoffAllowed(c) && cameraFrame.sameRoom(GlobalPtr()->curRoomId_4FAC) &&
         fMousePosX && fCameraPosX && std::isfinite(*fMousePosX) &&
         std::isfinite(player->ang_A0.y)) {
         // Free look uses a virtual player reference; native aiming uses Leon.
@@ -183,10 +183,10 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
     }
     const auto g = GlobalPtr();
     if (!cameraFrame.current(reinterpret_cast<std::uintptr_t>(player),
-                             reinterpret_cast<std::uintptr_t>(CamCtrl), g->room_no_4,
+                             reinterpret_cast<std::uintptr_t>(CamCtrl), g->curRoomId_4FAC,
                              g->frameCounter_530C)) releaseCamera(player, c);
     if (!cameraFrame.begin(reinterpret_cast<std::uintptr_t>(player),
-                           reinterpret_cast<std::uintptr_t>(CamCtrl), g->room_no_4,
+                           reinterpret_cast<std::uintptr_t>(CamCtrl), g->curRoomId_4FAC,
                            g->frameCounter_530C, player->ang_A0.y)) {
         invoke(entry); return;
     }
@@ -245,7 +245,7 @@ void ModernControls_UpdateCamera(CameraQuasiFPS* camera) {
     if (!shoulderCameraAvailable() || c.scoped ||
         (action != re4mc::Action::Walk && action != re4mc::Action::Run && action != re4mc::Action::Idle) ||
         !cameraFrame.current(reinterpret_cast<std::uintptr_t>(player),
-                             reinterpret_cast<std::uintptr_t>(CamCtrl), g->room_no_4,
+                             reinterpret_cast<std::uintptr_t>(CamCtrl), g->curRoomId_4FAC,
                              g->frameCounter_530C)) {
         releaseCamera(player, c);
         return;
