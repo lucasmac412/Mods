@@ -12,7 +12,7 @@ A 0.1.1 deixa os prólogos originais de Walk/Run intactos. Esses dois hooks de M
 
 O mesmo executável valida o novo diagnóstico local: uma exceção tratada por SEH continua sendo tratada normalmente, enquanto o arquivo registra código, EIP/ESP/EBP e etapa. As primeiras chamadas e retornos de cada ação são registrados com limite; o arquivo é truncado a cada inicialização. Não é um minidump nem coleta de entradas de texto.
 
-A [compilação Windows 39740706200](https://github.com/lucasmac412/Mods/actions/runs/39740706200) passou: preparação, controlador, regressões de prólogo/diagnóstico, DLL Win32 e empacotamento. A DLL publicada é a mesma que saiu desse build; o guia em português foi atualizado após a conclusão. A origem e os checksums estão em `../reports/windows-build.json`.
+A [compilação Windows 39740706200](https://github.com/lucasmac412/Mods/actions/runs/39740706200) passou: preparação, controlador, regressões de prólogo/diagnóstico, DLL Win32 e empacotamento. A DLL publicada é a mesma que saiu desse build; o guia em português foi atualizado após a conclusão. A origem e os checksums estão em `../reports/v0.1.1-windows-build.json`.
 
 Etapas do diagnóstico: `1` coleta de contexto/entrada; `2` chamada nativa em andamento; `3` chamada nativa retornou; `4` ajuste de entrada/câmera. Ações: `0` nativa, `1` parado, `2` caminhada, `3` corrida, `4` deslocamento durante mira. Exceções de primeira chance podem ser tratadas por outras rotinas e não são, por si, prova de crash.
 

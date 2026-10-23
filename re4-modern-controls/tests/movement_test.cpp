@@ -1,4 +1,5 @@
 #include "MovementCore.h"
+#include "CameraContinuity.h"
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -117,10 +118,73 @@ void aimAndInput() {
     check(on == (savedOn & ~0x80ULL) && trigger == (savedTrigger & ~0x80ULL),
           "restoring locomotion must not resurrect native fire input");
 }
+void cameraContinuity() {
+    using namespace re4mc;
+    CameraBasisTracker tracker;
+    const auto w = direction({true});
+    const auto a = direction({false, false, true});
+    check(tracker.observe(1, w, true), "entering locomotion initializes the camera basis");
+    for (int frame = 0; frame < 120; ++frame)
+        check(!tracker.observe(1, w, true), "held WASD must retain ordinary mouse interpolation");
+    check(tracker.observe(1, a, true), "W to A requires a new camera basis");
+    check(!tracker.observe(1, a, true), "a direction change is handled once");
+    check(!tracker.observe(1, a, false), "aim/menu/cinematic must not modify the camera");
+    check(tracker.observe(1, a, true), "returning from native control rearms synchronization");
+    check(tracker.observe(2, a, true), "a different player instance cannot reuse camera state");
+    check(!tracker.observe(2, {}, true), "idle does not reset camera smoothing");
+    check(tracker.observe(2, a, true), "restarting after idle rearms synchronization");
+    check(!tracker.observe(0, w, true), "null owner cannot queue a camera correction");
+
+    struct Camera {
+        struct Vec { float x{}, y{}, z{}; } m_pl_dir_16C;
+        unsigned char m_init_flag_1B6{};
+        float pitch{0.3f}, fov{60}, position{123};
+    };
+    const auto rotate = [](XZ point, float yaw) {
+        return XZ{std::cos(yaw) * point.x + std::sin(yaw) * point.z,
+                  -std::sin(yaw) * point.x + std::cos(yaw) * point.z};
+    };
+    const XZ worldCamera{400, -2000};
+    unsigned oldJolts{};
+    for (int degrees : {-180, -135, -90, -45, 45, 90, 135, 180}) {
+        const float yaw = degrees * pi / 180;
+        Camera camera;
+        check(rebaseCamera(camera, yaw), "valid locomotion transition queues a camera correction");
+        // Independently model native lateral history in player space. An old
+        // shoulder offset must not be blended after rotating that space.
+        const auto goal = rotate(worldCamera, -yaw);
+        const XZ oldBlended{0.6f * worldCamera.x + 0.4f * goal.x, goal.z};
+        const auto oldWorld = rotate(oldBlended, yaw);
+        if (std::hypot(oldWorld.x - worldCamera.x, oldWorld.z - worldCamera.z) > 100)
+            ++oldJolts;
+        const auto local = camera.m_init_flag_1B6 ? goal : oldBlended;
+        // Native one-shot forward direction selects the *current* actor basis,
+        // even when the previous camera matrix is stale for this update.
+        const float cameraYaw = std::atan2(camera.m_pl_dir_16C.x, camera.m_pl_dir_16C.z);
+        const auto actual = rotate(local, cameraYaw);
+        check(std::hypot(actual.x - worldCamera.x, actual.z - worldCamera.z) < 0.002f,
+              "WASD changes must retain the camera's world position across coordinate frames");
+        check(camera.pitch == 0.3f && camera.fov == 60 && camera.position == 123,
+              "rebase cannot alter pitch, FOV or translation");
+    }
+    check(oldJolts >= 6, "fixture must reproduce the old camera jump before checking the fix");
+    Camera scripted;
+    scripted.m_pl_dir_16C = {0, 1, 0};
+    check(!rebaseCamera(scripted, 0.4f) && scripted.m_pl_dir_16C.y == 1 &&
+          scripted.m_init_flag_1B6 == 0, "scripted camera direction takes precedence");
+    for (float bad : {std::numeric_limits<float>::infinity(), std::numeric_limits<float>::quiet_NaN()}) {
+        Camera invalid;
+        check(!rebaseCamera(invalid, bad) && invalid.m_init_flag_1B6 == 0,
+              "nonfinite actor yaw cannot reach the camera");
+        invalid.m_pl_dir_16C.x = bad;
+        check(!rebaseCamera(invalid, 0) && invalid.m_init_flag_1B6 == 0,
+              "nonfinite native direction must remain untouched");
+    }
+}
 }
 int main() {
     try {
-        directionAndCamera(); stateGates(); aimAndInput();
+        directionAndCamera(); stateGates(); aimAndInput(); cameraContinuity();
         std::cout << "PASS: " << checks << " movement assertions (no game runtime).\n";
         return EXIT_SUCCESS;
     } catch (const std::exception& e) { std::cerr << e.what() << '\n'; return EXIT_FAILURE; }

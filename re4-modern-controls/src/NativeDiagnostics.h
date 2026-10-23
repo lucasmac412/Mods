@@ -8,6 +8,7 @@ inline HANDLE file = INVALID_HANDLE_VALUE;
 inline PVOID exceptionHandler{};
 inline volatile LONG phase{}, entry{}, handling{}, exceptionCount{};
 inline void mark(LONG next, LONG routine) {
+    if (file == INVALID_HANDLE_VALUE) return;
     InterlockedExchange(&entry, routine);
     InterlockedExchange(&phase, next);
 }
@@ -17,7 +18,6 @@ inline void write(const char* text) {
     while (text[length]) ++length;
     DWORD written{};
     WriteFile(file, text, length, &written, nullptr);
-    FlushFileBuffers(file);
 }
 inline LONG CALLBACK onException(EXCEPTION_POINTERS* error) {
     const auto code = error->ExceptionRecord->ExceptionCode;
@@ -33,6 +33,7 @@ inline LONG CALLBACK onException(EXCEPTION_POINTERS* error) {
         InterlockedCompareExchange(&phase, 0, 0), InterlockedCompareExchange(&entry, 0, 0),
         GetCurrentThreadId());
     write(line);
+    if (file != INVALID_HANDLE_VALUE) FlushFileBuffers(file);
     InterlockedExchange(&handling, 0);
     // Observation only. Never swallow an exception or retry an invalid instruction.
     return EXCEPTION_CONTINUE_SEARCH;
@@ -44,7 +45,7 @@ inline void initialize(const wchar_t* path, HMODULE mod) {
     if (file == INVALID_HANDLE_VALUE) return;
     char line[256]{};
     _snprintf_s(line, sizeof(line), _TRUNCATE,
-        "RE4 Modern Controls 0.1.1 experimental; game=%p mod=%p\r\n"
+        "RE4 Modern Controls 0.1.2 experimental; game=%p mod=%p\r\n"
         "First-chance exceptions can be handled elsewhere; this is not a minidump.\r\n",
         static_cast<void*>(GetModuleHandleW(nullptr)), static_cast<void*>(mod));
     write(line);
@@ -52,6 +53,7 @@ inline void initialize(const wchar_t* path, HMODULE mod) {
 }
 inline void trace(const char* message, unsigned routine, unsigned action,
                   const void* player, const void* target) {
+    if (file == INVALID_HANDLE_VALUE) return;
     char line[320]{};
     _snprintf_s(line, sizeof(line), _TRUNCATE,
         "%s entry=%u action=%u player=%p native=%p\r\n", message, routine, action, player, target);

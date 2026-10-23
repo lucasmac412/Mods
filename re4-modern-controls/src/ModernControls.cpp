@@ -5,6 +5,7 @@
 #include "ConsoleWnd.h"
 #include "ModernControls.h"
 #include "MovementCore.h"
+#include "CameraContinuity.h"
 #include "NativeDiagnostics.h"
 #include <array>
 #include <cstdlib>
@@ -19,7 +20,9 @@ std::uint64_t* keyOn{};
 std::uint64_t* keyTrigger{};
 bool installed{};
 bool enabled{};
+bool diagnosticEnabled{};
 float aimSpeed = 35.0f;
+re4mc::CameraBasisTracker cameraBasis;
 std::array<unsigned, 5> keyCodes{'W', 'S', 'A', 'D', VK_SHIFT};
 
 bool executableAddress(const void* address) {
@@ -107,6 +110,10 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
     auto c = context(player);
     const auto keys = readKeys(c); // Release the input lock before calling native code.
     const auto decision = re4mc::decide(c, keys);
+    const bool walking = decision.action == re4mc::Action::Walk || decision.action == re4mc::Action::Run;
+    const bool cameraCanMove = CamCtrl && GlobalPtr() && !(GlobalPtr()->flags_STOP_0_170[0] & 0x40000000U);
+    const bool newCameraBasis = cameraBasis.observe(reinterpret_cast<std::uintptr_t>(player),
+                                                    decision.direction, walking && cameraCanMove);
     static std::array<unsigned, 5> observations{};
     const auto action = unsigned(decision.action);
     const bool report = observations[action]++ < 2;
@@ -140,12 +147,14 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
     re4mc::diagnostics::mark(4, entry); // Input override and orbit update.
     re4mc::ScopedInput input(*keyOn, *keyTrigger, decision.action);
     unsigned next = 0;
+    bool rebase = false;
     if (decision.action != re4mc::Action::Idle) {
         const auto orbit = re4mc::faceDirection(
             // PadRead has already updated mouseX this tick. The camera's cached
             // yaw can still be from the previous tick; do not discard new input.
             {player->ang_A0.y, re4mc::wrap(-re4mc::cameraOrbitScale * *fMousePosX),
              *fMousePosX}, decision.direction);
+        rebase = newCameraBasis && std::abs(re4mc::wrap(orbit.playerYaw - player->ang_A0.y)) > 0.0001f;
         player->ang_A0.y = orbit.playerYaw;
         *fCameraPosX = orbit.cameraYaw;
         *fMousePosX = orbit.mouseX;
@@ -153,11 +162,17 @@ template<unsigned entry> void __cdecl dispatch(cPlayer* player) {
     }
     setRoutine(player, next);
     invoke(next); // Original walking/running animation and root motion.
+    if (rebase && CamCtrl) {
+        const auto after = re4mc::decide(context(player), keys).action;
+        if (after == re4mc::Action::Walk || after == re4mc::Action::Run)
+            re4mc::rebaseCamera(CamCtrl->m_QuasiFPS_278, player->ang_A0.y);
+    }
 }
 
 void readConfig() {
     const auto path = rootPath + L"re4-modern-controls.ini";
     enabled = GetPrivateProfileIntW(L"CONTROLS", L"Enabled", 1, path.c_str()) != 0;
+    diagnosticEnabled = GetPrivateProfileIntW(L"CONTROLS", L"Diagnostics", 0, path.c_str()) != 0;
     wchar_t number[80]{};
     GetPrivateProfileStringW(L"CONTROLS", L"AimMoveUnitsPerTick", L"35", number, 80, path.c_str());
     wchar_t* end{};
@@ -182,9 +197,11 @@ bool ModernControls_OwnsLocomotion() {
 
 void re4t::init::ModernControls() {
     static_assert(sizeof(void*) == 4, "RE4 Steam UHD is a 32-bit game");
-    const auto diagnosticPath = rootPath + L"re4-modern-controls-diagnostico.log";
-    re4mc::diagnostics::initialize(diagnosticPath.c_str(), g_module_handle);
     readConfig();
+    if (diagnosticEnabled) {
+        const auto diagnosticPath = rootPath + L"re4-modern-controls-diagnostico.log";
+        re4mc::diagnostics::initialize(diagnosticPath.c_str(), g_module_handle);
+    }
     if (!enabled) return;
     const auto version = GameVersion();
     if (version != "1.1.0" && version != "1.0.6") {
@@ -226,5 +243,5 @@ void re4t::init::ModernControls() {
     re4t::cfg->bResetCameraAfterUsingWeapons = false;
     re4t::cfg->bResetCameraAfterUsingKnife = false;
     re4t::cfg->bUseSprintToggle = false;
-    spd::log()->info("ModernControls -> EXPERIMENTAL 0.1.1, KB/M enabled; native Walk/Run prologues preserved; game validation pending");
+    spd::log()->info("ModernControls -> EXPERIMENTAL 0.1.2, KB/M enabled; camera basis synchronization enabled; diagnostics={}; native Walk/Run prologues preserved; game validation pending", diagnosticEnabled);
 }
