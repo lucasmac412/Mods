@@ -192,6 +192,12 @@ O [relatório de recompensas](docs/rewards-v030-validation.json) identifica o
 código compilado e distingue esses testes de uma partida real, ainda pendente.
 O ZIP completo preserva a DLL exata dessa compilação.
 
+A [rodada ampliada de testes](docs/TESTES-RECOMPENSAS-030.md) também passou:
+DLL exata do download com o Harmony incluído, cancelamentos, erros parciais,
+outros patches e rejeição de referências incompatíveis. O pacote continua
+0.3.0 e não precisa ser substituído por causa dessa rodada de validação.
+A confirmação em uma partida real permanece pendente.
+
 Histórico: a [compilação 0.2.1](https://github.com/lucasmac412/Mods/actions/runs/40070297591)
 passou sem avisos: 5.641 verificações de regras/busca/interação, 4.309 do
 adaptador de caravana e 764 de referências/IL/recursos. A correção ainda exige

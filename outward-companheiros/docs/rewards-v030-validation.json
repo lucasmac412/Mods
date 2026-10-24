@@ -25,5 +25,37 @@
   "pluginSha256": "ffe6d706ab1b7674f881e9d327d23c0a7a9dea92d6692e56f38025693757d5ae",
   "completeZipSha256": "655a505ca2ba0e2120d71b7872b86bc42ff12b1a1b668538b9ddc2ac845f8f3b",
   "liveSoloVerified": false,
-  "liveCoopVerified": false
+  "liveCoopVerified": false,
+  "extendedValidation": {
+    "date": "2026-10-24",
+    "testsSourceCommit": "f4bf9ef25a08b2588531da177da868218d841f0b",
+    "windowsCi": "https://github.com/lucasmac412/Mods/actions/runs/40137508098",
+    "result": "success",
+    "checks": {
+      "rulesAndSearch": 5641,
+      "caravanStandIn": 4309,
+      "rewardCallbacks": 1876,
+      "rewardRealHarmonyWindowsStandIn": 1887,
+      "deContractsIlResources": 815,
+      "exactPublishedBinaryBundledHarmonyAndDeReferences": 73,
+      "incompatibleEnumReference": 4,
+      "inaccessibleSelectorReference": 4
+    },
+    "testedPublishedPluginSha256": "ffe6d706ab1b7674f881e9d327d23c0a7a9dea92d6692e56f38025693757d5ae",
+    "testedPublishedZipSha256": "655a505ca2ba0e2120d71b7872b86bc42ff12b1a1b668538b9ddc2ac845f8f3b",
+    "publishedPackageChanged": false,
+    "productionSourceChanged": false,
+    "binaryTestUsesRecompiledPlugin": false,
+    "binaryTestUsesBundledHarmony": true,
+    "binaryTestGameReferencesUnmodified": true,
+    "negativeContractTestsUseTemporaryModifiedReferenceCopies": true,
+    "strippedReferenceMethodBodyAsserted": true,
+    "bepInExDoorstopStartupTested": false,
+    "unityMonoRuntimeTested": false,
+    "liveGameTested": false,
+    "photonNetworkTested": false,
+    "partialDeliveryLimit": "A simulated failure on the guest after the host receives is propagated without replay; no automatic recovery or transaction across PCs is provided.",
+    "harnessPreparationFix": "Initial fixture generation lacked Unity reference resolution; fixed only the test tool and reran successfully. Published binary integration had already passed.",
+    "report": "TESTES-RECOMPENSAS-030.md"
+  }
 }

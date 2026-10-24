@@ -68,6 +68,11 @@ aprovado por compilação ou pelos testes de substitutos.
 
 ## Recompensas 0.3.0: validação real ainda pendente
 
+A rodada adicional de testes da DLL publicada passou no Windows. Consulte
+[TESTES-RECOMPENSAS-030.md](TESTES-RECOMPENSAS-030.md) para resultados,
+falhas parciais, verificação do pacote e limites. Isso não aprova os passos
+em jogo abaixo.
+
 Testes automatizados: mesmas funções Before/Finish do plugin, incluindo entrega
 simulada para 1, 2 e 4 destinatários, anfitrião/instigador/todos, valores desconhecidos,
 configuração desligada, ações reutilizadas, execução aninhada e restauração após
