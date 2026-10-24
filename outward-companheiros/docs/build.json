@@ -1,0 +1,32 @@
+{
+  "version": "0.1.0",
+  "status": "EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST",
+  "game": "Outward Definitive Edition Steam - Mono",
+  "reference": "Outward.GameLibs 2022.5.18-r.0 / Unity 2020.3.26",
+  "requirements": [
+    "Windows x64",
+    "BepInExPack_Outward 5.4.19 with mono_fix",
+    "same plugin on every PC"
+  ],
+  "sideLoaderRequired": false,
+  "soloGameplayVerified": false,
+  "coopGameplayVerified": false,
+  "nativeTransactionUsed": true,
+  "customNetworkProtocol": false,
+  "zip": "Outward-Companheiros-v0.1.0-Experimental.zip",
+  "bytes": 147050,
+  "sha256": "2075e2da54a9b6363f4296bbdd7176b9f8e884c6cf64de6d40948044d88c7254",
+  "pluginSha256": "85783fb6cbf30cd889100c2166c80206041e788a8ee202aec35c70047148383f",
+  "entries": [
+    "BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll",
+    "LEIA-ME-PRIMEIRO.txt",
+    "LICENSES.txt"
+  ],
+  "sourceCommit": "9c6af9024dacb9688eca0432ac66603b5e45b8e2",
+  "ciRun": "https://github.com/lucasmac412/Mods/actions/runs/40064989947",
+  "checks": {
+    "rules": 2898,
+    "productionAdapterStandIns": 4309,
+    "referenceILResources": 95
+  }
+}

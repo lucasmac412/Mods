@@ -84,6 +84,12 @@ encaixes DE e rejeita acessos diretos a membros privados das referências
 publicizadas. Verifica também os sete PNGs embutidos e suas assinaturas.
 Os resultados ficam na [ação de compilação](https://github.com/lucasmac412/Mods/actions/workflows/outward.yml).
 
+A [compilação Windows desta entrega](https://github.com/lucasmac412/Mods/actions/runs/40064989947)
+passou sem avisos: 2.898 verificações de regras, 4.309 do adaptador contra
+substitutos e 95 de referências/IL/recursos. O [relatório do pacote](docs/build.json)
+registra origem e SHA-256, mantendo os testes de partida solo/cooperativa
+explicitamente como **não realizados**.
+
 Não há patches de inventário, escrita de arquivos do jogo, protocolo de
 teleporte paralelo ou alteração dos RPCs de cobrança/transição. A lista de
 rotas é produzida quando o diálogo nativo a pede, tanto no anfitrião quanto

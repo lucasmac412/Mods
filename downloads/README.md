@@ -1,5 +1,7 @@
 # Instalar Luma com Ollama e voz
 
+Também disponível: [Companheiros de Aurai 0.1.0 experimental para Outward Definitive Edition](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.1.0-experimental/downloads/Outward-Companheiros-v0.1.0-Experimental.zip), com marcadores de jogadores no mapa e caravanas entre cidades. [Guia para os dois computadores](../outward-companheiros/README.md). Requer a versão Steam Mono e BepInExPack_Outward; o carregador é instalado separadamente. Compilação e verificações passaram; partidas reais solo e cooperativas ainda não foram testadas.
+
 Também disponível: **[Dragão Celestial 0.3.4 experimental](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.4-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.4-Experimental.zip)**, um mod independente, com dois JARs e instruções. Siga o [passo a passo do dragão](../docs/INSTALAR-DRAGAO.md). Não precisa de Luma ou Ollama. Para reconstruir esse pacote após compilar `dragon-mod`, execute `python3 scripts/package-dragon.py`.
 
 A 0.3.4 inclui rugidos graves de cerca de 6,8 segundos, mordidas com som curto e animação sincronizada ao dano e uma lanterna rúnica com três texturas próprias. Inclui OUVIR-SONS.html para ouvir os efeitos no navegador. Preserva a Genki Dama destrutiva, o sono, o voo, a câmera e as correções dos ovos e pilares.
