@@ -1,7 +1,7 @@
 {
-  "package": "Outward-Companheiros-v0.2.1-Completo",
+  "package": "Outward-Companheiros-v0.3.0-Completo",
   "folder": "transfere pro jogo",
-  "pluginVersion": "0.2.1",
+  "pluginVersion": "0.3.0",
   "status": "EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST",
   "game": "Outward Definitive Edition Steam Mono / Windows x64",
   "requiresSteamMonoSelection": true,
@@ -11,10 +11,10 @@
   "installScriptsIncluded": false,
   "soloGameplayVerified": false,
   "coopGameplayVerified": false,
-  "zip": "Outward-Companheiros-v0.2.1-Completo.zip",
-  "bytes": 2148339,
-  "sha256": "ecd2d46ca752d61ed599b3aee0d8889db3861a46e99d8f3bda6c21ef32daec18",
-  "pluginSha256": "394ac31e6a6b702a86706819aa25448d17d4d9ec308c94d068891d29076af559",
+  "zip": "Outward-Companheiros-v0.3.0-Completo.zip",
+  "bytes": 2149835,
+  "sha256": "655a505ca2ba0e2120d71b7872b86bc42ff12b1a1b668538b9ddc2ac845f8f3b",
+  "pluginSha256": "ffe6d706ab1b7674f881e9d327d23c0a7a9dea92d6692e56f38025693757d5ae",
   "sources": [
     {
       "component": "BepInExPack_Outward 5.4.19",
@@ -23,8 +23,8 @@
     },
     {
       "component": "Tested plugin ZIP",
-      "url": "https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.2.1-experimental/downloads/Outward-Companheiros-v0.2.1-Experimental.zip",
-      "sha256": "e2431af95ff04cb588d70190fd2fe1491474a78a97a82bb1871077d84d325889"
+      "url": "https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.3.0-experimental/downloads/Outward-Companheiros-v0.3.0-Experimental.zip",
+      "sha256": "5c802424b47bcfb1e68585b94592a216bbd21865cee66c44992788a3d98c2fa4"
     }
   ],
   "runtimeFilesUnchanged": true,
@@ -97,13 +97,13 @@
     },
     {
       "path": "BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll",
-      "bytes": 172544,
-      "sha256": "394ac31e6a6b702a86706819aa25448d17d4d9ec308c94d068891d29076af559"
+      "bytes": 174592,
+      "sha256": "ffe6d706ab1b7674f881e9d327d23c0a7a9dea92d6692e56f38025693757d5ae"
     },
     {
       "path": "LEIA-ME-COMPANHEIROS.txt",
-      "bytes": 5107,
-      "sha256": "8cb9c58df8283fdfa881cadee924c968f6ecab6d7e37e854c8c50de0dc1e4a5d"
+      "bytes": 6680,
+      "sha256": "2621d7fa4be1d92113d8f5849ae1bdc90089565e01370b85de874f6558b6d3ef"
     },
     {
       "path": "LICENCAS-COMPANHEIROS.txt",
@@ -146,17 +146,13 @@
       "sha256": "cf9dd372ca0ddbe01153502c49f8f756197bb260001792fe766f6c0242dc7fc0"
     }
   ],
-  "pluginBuildRun": "https://github.com/lucasmac412/Mods/actions/runs/40070297591",
-  "inventoryAndChestSearch": true,
-  "focusAndTabReturnFix": true,
-  "packagingValidation": [
-    "input ZIP SHA-256",
-    "byte-identical DLLs",
-    "Windows x64 proxy PE",
-    "managed CLR headers",
-    "ZIP CRC",
-    "extraction and content-copy simulation",
-    "Doorstop preloader and mono_fix path resolution",
-    "plugin timestamp preserved and newer than 0.2.0"
-  ]
+  "windowsCi": "https://github.com/lucasmac412/Mods/actions/runs/40136746561",
+  "buildSourceCommit": "9f667188f95d369b1fc1d33605d10a7fc9a257d8",
+  "checks": {
+    "rulesAndSearch": 5641,
+    "caravanStandIn": 4309,
+    "rewardCallbacks": 1857,
+    "rewardRealHarmonyWindowsStandIn": 1857,
+    "deContractsIlResources": 815
+  }
 }

@@ -45,7 +45,7 @@ Abram Outward Definitive Edition uma vez pela Steam e fechem o jogo.
 A pasta BepInEx deve ganhar o arquivo LogOutput.log.
 
 4. INSTALAR ESTE MOD
-Extraiam também o ZIP Outward-Companheiros-v0.2.1-Experimental.zip.
+Extraiam também o ZIP Outward-Companheiros-v0.3.0-Experimental.zip.
 Abram a pasta extraída até enxergarem BepInEx e este LEIA-ME.
 Copiem a pasta BepInEx do mod para dentro de Outward_Defed.
 Aceitem MESCLAR as pastas. O pacote do mod só adiciona a própria DLL.

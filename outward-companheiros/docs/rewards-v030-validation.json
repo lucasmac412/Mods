@@ -1,0 +1,29 @@
+{
+  "version": "0.3.0",
+  "sourceCommit": "9f667188f95d369b1fc1d33605d10a7fc9a257d8",
+  "windowsCi": "https://github.com/lucasmac412/Mods/actions/runs/40136746561",
+  "compilationWarnings": 0,
+  "compilationErrors": 0,
+  "automatedChecks": {
+    "rulesAndSearch": 5641,
+    "caravanStandIn": 4309,
+    "rewardCallbacks": 1857,
+    "rewardRealHarmonyWindowsStandIn": 1857,
+    "deContractsIlResources": 815
+  },
+  "realHarmonyDetourVerified": true,
+  "harmonyTestTarget": "Controlled stand-in GiveReward on Windows .NET Framework 4.7.2, not the Outward process",
+  "scope": "Temporary Host/Instigator -> Everyone selector on native GiveReward only; no reward replay or extra RPCs; selector restored by finalizer",
+  "knownLimits": [
+    "No live Outward/Unity/Photon test",
+    "No offline, retroactive or unspawned character delivery",
+    "No campaign or Steam achievement synchronization",
+    "No loot or building resource duplication",
+    "Native skill restrictions remain",
+    "Scripted exchanges using GiveReward also share their reward at unchanged cost"
+  ],
+  "pluginSha256": "ffe6d706ab1b7674f881e9d327d23c0a7a9dea92d6692e56f38025693757d5ae",
+  "completeZipSha256": "655a505ca2ba0e2120d71b7872b86bc42ff12b1a1b668538b9ddc2ac845f8f3b",
+  "liveSoloVerified": false,
+  "liveCoopVerified": false
+}

@@ -1,5 +1,5 @@
 {
-  "version": "0.2.1",
+  "version": "0.3.0",
   "status": "EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST",
   "game": "Outward Definitive Edition Steam - Mono",
   "reference": "Outward.GameLibs 2022.5.18-r.0 / Unity 2020.3.26",
@@ -13,22 +13,23 @@
   "coopGameplayVerified": false,
   "nativeTransactionUsed": true,
   "customNetworkProtocol": false,
-  "zip": "Outward-Companheiros-v0.2.1-Experimental.zip",
-  "bytes": 155612,
-  "sha256": "e2431af95ff04cb588d70190fd2fe1491474a78a97a82bb1871077d84d325889",
-  "pluginSha256": "394ac31e6a6b702a86706819aa25448d17d4d9ec308c94d068891d29076af559",
+  "zip": "Outward-Companheiros-v0.3.0-Experimental.zip",
+  "bytes": 157046,
+  "sha256": "5c802424b47bcfb1e68585b94592a216bbd21865cee66c44992788a3d98c2fa4",
+  "pluginSha256": "ffe6d706ab1b7674f881e9d327d23c0a7a9dea92d6692e56f38025693757d5ae",
   "entries": [
     "BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll",
     "LEIA-ME-PRIMEIRO.txt",
     "LICENSES.txt"
   ],
-  "sourceCommit": "802924bb85bc7c4035989f13afccd462e8093e50",
-  "ciRun": "https://github.com/lucasmac412/Mods/actions/runs/40070297591",
+  "buildSourceCommit": "9f667188f95d369b1fc1d33605d10a7fc9a257d8",
+  "windowsCi": "https://github.com/lucasmac412/Mods/actions/runs/40136746561",
   "checks": {
-    "rulesSearchAndInteraction": 5641,
-    "productionAdapterStandIns": 4309,
-    "referenceILResources": 764
+    "rulesAndSearch": 5641,
+    "caravanStandIn": 4309,
+    "rewardCallbacks": 1857,
+    "rewardRealHarmonyWindowsStandIn": 1857,
+    "deContractsIlResources": 815
   },
-  "inventoryAndChestSearch": true,
-  "focusAndTabReturnFix": true
+  "packagingNote": "Windows CI DLL unchanged; plugin ZIP repacked with corrected version in installation guide."
 }

@@ -18,8 +18,8 @@ FOLDER = 'transfere pro jogo'
 LOADER_URL = 'https://gcdn.thunderstore.io/live/repository/packages/BepInEx-BepInExPack_Outward-5.4.19.zip'
 LOADER_SHA = 'ae703fcdfd33e65defb8b4e441fbc4d388a8223c0cc251ad791361a0dd6ce35b'
 PLUGIN_URL = 'https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.3.0-experimental/downloads/Outward-Companheiros-v0.3.0-Experimental.zip'
-PLUGIN_ZIP_SHA = 'e2431af95ff04cb588d70190fd2fe1491474a78a97a82bb1871077d84d325889'
-PLUGIN_DLL_SHA = '394ac31e6a6b702a86706819aa25448d17d4d9ec308c94d068891d29076af559'
+PLUGIN_ZIP_SHA = '5c802424b47bcfb1e68585b94592a216bbd21865cee66c44992788a3d98c2fa4'
+PLUGIN_DLL_SHA = 'ffe6d706ab1b7674f881e9d327d23c0a7a9dea92d6692e56f38025693757d5ae'
 PLUGIN_PATH = 'BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll'
 CORE = ('0Harmony', '0Harmony20', 'BepInEx', 'BepInEx.Harmony', 'BepInEx.Preloader',
         'HarmonyXInterop', 'Mono.Cecil', 'Mono.Cecil.Mdb', 'Mono.Cecil.Pdb',
