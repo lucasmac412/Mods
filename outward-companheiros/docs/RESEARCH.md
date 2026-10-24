@@ -12,6 +12,10 @@
   Nenhuma DLL desse mod foi incluída. Retratos e overlay são originais.
 - [Instalação Mono DE](https://github.com/cybensis/OutwardVR#installation):
   confirma `default-mono` e a pasta `Outward_Defed`. Não usamos o mod VR.
+- `BepInExPack_Outward 5.4.19`, ZIP publicado pelo mantenedor BepInEx no
+  Thunderstore, foi inspecionado: traz o `mono_fix` e configura o Doorstop
+  com `dllSearchPathOverride=mono_fix`. O guia indica esse pacote específico,
+  não o BepInEx genérico sem as bibliotecas de Reflection.Emit do Outward.
 - Comparação local com uma assembly legada disponível publicamente em
   `lasyan3/OutwardMods` ajudou a entender a caravana, sem copiar código do jogo
   ou desse autor para o plugin. O legado não prova o comportamento DE atual.

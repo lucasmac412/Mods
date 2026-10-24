@@ -25,7 +25,7 @@ def main():
     report={'version':'0.1.0','status':'EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST',
         'game':'Outward Definitive Edition Steam - Mono',
         'reference':'Outward.GameLibs 2022.5.18-r.0 / Unity 2020.3.26',
-        'requirements':['Windows x64','BepInEx 5.4.21+ (guide: 5.4.23.6)','same plugin on every PC'],
+        'requirements':['Windows x64','BepInExPack_Outward 5.4.19 with mono_fix','same plugin on every PC'],
         'sideLoaderRequired':False,'soloGameplayVerified':False,'coopGameplayVerified':False,
         'nativeTransactionUsed':True,'customNetworkProtocol':False,
         'zip':target.name,'bytes':target.stat().st_size,'sha256':checksum,

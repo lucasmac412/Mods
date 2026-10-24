@@ -21,10 +21,13 @@ o BepInEx oficial é um download separado.
    Selecionem **`default-mono - Public default branch (mono)`** e aguardem a atualização.
 2. Em **Arquivos instalados → Explorar**, abram **`Outward_Defed`**.
    Deve haver **`Outward Definitive Edition.exe`** nessa pasta.
-3. Se ainda não usam BepInEx, baixem o [BepInEx oficial Windows x64 5.4.23.6](https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.6/BepInEx_win_x64_5.4.23.6.zip).
-   Extraiam o ZIP e copiem seu conteúdo para `Outward_Defed`. Abram a
+3. Se ainda não usam BepInEx, baixem o [BepInExPack_Outward 5.4.19 para Windows x64](https://gcdn.thunderstore.io/live/repository/packages/BepInEx-BepInExPack_Outward-5.4.19.zip).
+   Extraiam o ZIP, abram a pasta **`BepInExPack_Outward`** e copiem seu
+   conteúdo (`BepInEx`, **`mono_fix`**, `winhttp.dll` e `doorstop_config.ini`)
+   para `Outward_Defed`. Abram a
    Definitive Edition uma vez pela Steam e fechem: deve aparecer
-   `BepInEx/LogOutput.log`. **Mantenham BepInEx 5 existente se já funciona.**
+   `BepInEx/LogOutput.log`. **Mantenham BepInEx 5 existente se já funciona com
+   o `mono_fix` do Outward.** O pacote genérico sem esse ajuste não é o indicado.
 4. Baixem o [ZIP do mod](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.1.0-experimental/downloads/Outward-Companheiros-v0.1.0-Experimental.zip),
    usem **Extrair tudo** e abram a pasta extraída até ver `BepInEx`.
    Copiem essa pasta para `Outward_Defed`, mesclando as pastas.
@@ -64,7 +67,7 @@ Façam o primeiro teste em uma cópia dos saves, sozinhos e juntos.
 
 Requer .NET SDK 8. Referências públicas fixadas para DE:
 `Outward.GameLibs 2022.5.18-r.0`, `UnityEngine.Modules 2020.3.26`,
-`BepInEx.BaseLib 5.4.21`, `HarmonyX 2.9.0`. As bibliotecas do jogo e do
+`BepInEx.BaseLib 5.4.19`, `HarmonyX 2.9.0`. As bibliotecas do jogo e do
 carregador **não são distribuídas no ZIP do mod**.
 
 ```sh

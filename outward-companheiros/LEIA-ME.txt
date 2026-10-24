@@ -26,14 +26,20 @@ a pasta Outward Definitive Edition_Data.
 Se já usam mods por r2modman, vejam a alternativa no final deste arquivo.
 
 3. INSTALAR O CARREGADOR BEPINEX (UMA VEZ EM CADA PC)
-Se BepInEx 5 já funciona nessa instalação Mono, mantenham o carregador existente.
-Caso não tenham nenhum mod, baixem o ZIP OFICIAL Windows x64:
-https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.6/BepInEx_win_x64_5.4.23.6.zip
+Se BepInEx 5 já funciona nessa instalação Mono com o mono_fix do Outward,
+mantenham o carregador existente. Caso não tenham nenhum mod, baixem o pacote
+ESPECÍFICO DO OUTWARD, BepInExPack_Outward 5.4.19 para Windows x64:
+https://gcdn.thunderstore.io/live/repository/packages/BepInEx-BepInExPack_Outward-5.4.19.zip
+Página do pacote: https://thunderstore.io/c/outward/p/BepInEx/BepInExPack_Outward/
 
 No Chrome, o arquivo fica normalmente em Downloads.
 Botão direito no ZIP > Extrair tudo.
-Copiem BepInEx, winhttp.dll, doorstop_config.ini e .doorstop_version
+Abram a pasta BepInExPack_Outward que veio dentro do ZIP.
+Copiem o CONTEÚDO dela: BepInEx, mono_fix, winhttp.dll e doorstop_config.ini
 para Outward_Defed, ao lado de Outward Definitive Edition.exe.
+Não copiem a pasta BepInExPack_Outward inteira como mais uma subpasta.
+Não troquem esse carregador pelo pacote genérico sem mono_fix: o Outward
+precisa dessas bibliotecas para recursos de modificação em tempo de execução.
 Não usem BepInEx 6, x86 ou uma versão para outro sistema operacional.
 Abram Outward Definitive Edition uma vez pela Steam e fechem o jogo.
 A pasta BepInEx deve ganhar o arquivo LogOutput.log.
@@ -49,6 +55,8 @@ Outward_Defed
   Outward Definitive Edition.exe
   winhttp.dll
   doorstop_config.ini
+  mono_fix
+    mscorlib.dll
   BepInEx
     core
       BepInEx.dll
