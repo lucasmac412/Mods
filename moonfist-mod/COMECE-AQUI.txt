@@ -1,5 +1,14 @@
-PUNHOS DA LUA AZUL — v0.1.0 experimental
+PUNHOS DA LUA AZUL — v0.1.1 experimental
 Minecraft Java 26.2 · Fabric Loader 0.19.5 ou superior · Java 25
+
+NOVIDADES DA 0.1.1
+Coreografia refeita: preparação, impacto e recuperação; ombros acompanham
+o tronco; transições suaves entre posturas, guarda e golpes; nova movimentação
+das mãos em primeira pessoa. O relógio visual não reinicia a cada pacote.
+
+ATUALIZAR DA 0.1.0
+Feche o Minecraft. Retire moonfist-combat-0.1.0-experimental.jar da pasta mods
+e coloque moonfist-combat-0.1.1-experimental.jar. Mantenha só uma versão.
 
 INSTALAR NO WINDOWS (sem programação)
 1. Feche o Minecraft.
@@ -79,6 +88,6 @@ Não sobreponha este mod a Better Combat, Epic Fight ou mods que substituem
 as mesmas animações/controles: essa combinação não foi validada.
 
 REMOÇÃO
-Feche o jogo e retire moonfist-combat-0.1.0-experimental.jar da pasta mods.
+Feche o jogo e retire moonfist-combat-0.1.1-experimental.jar da pasta mods.
 Não remova Fabric API se seus outros mods precisam dele.
 Como em qualquer mod de conteúdo, guarde uma cópia do mundo antes de testar.

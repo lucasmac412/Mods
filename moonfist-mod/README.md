@@ -2,6 +2,10 @@
 
 Mod independente de artes marciais para Minecraft Java **26.2**, Fabric Loader **0.19.5+**, Fabric API **0.161.0+26.2** e Java **25**. A instalação e os controles estão em [COMECE-AQUI.txt](COMECE-AQUI.txt).
 
+A **0.1.1** refaz a coreografia dos golpes com fases de preparação, impacto, continuação do movimento e recuperação. O peito e os ombros giram juntos; os chutes usam transferência de peso e contrapeso dos braços. Guarda, troca de postura e combos recebem transições de dois ticks, calculadas por tempo, sem depender do FPS. O relógio visual não reinicia a cada atualização periódica do servidor. As mãos em primeira pessoa usam a mesma coreografia.
+
+[Ver captura animada no Minecraft](https://raw.githubusercontent.com/lucasmac412/Mods/moonfist-v0.1.1-experimental/docs/moonfist/animacoes-v011.gif).
+
 As luvas compactas ativam três posturas, nove golpes leves encadeáveis, três golpes pesados, onda de choque, oito Cortes do Vazio, esquiva com rolamento, guarda, aparo com contra-ataque fortalecido, stamina, foco, postura dos inimigos e fixação de alvo. A câmera sobre o ombro mantém colisão com blocos; F5 continua disponível. Animações próprias usam interpolação por quadro para o modelo humanoide e para as luvas, em primeira e terceira pessoa. Os efeitos combinam geometria luminosa e partículas limitadas.
 
 As decisões de combate, custos, recargas, alvos, linha de visão e dano são calculados pelo servidor. Um golpe não ganha dano extra com FPS alto ou repetição de pacotes. Os oito cortes usam um tipo de dano próprio que ignora apenas a janela de imunidade entre impactos; armadura continua funcionando. Nenhum golpe quebra blocos.

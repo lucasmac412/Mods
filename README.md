@@ -1,6 +1,6 @@
 # Luma — Companhia de aventura
 
-**Novo mod independente: [Punhos da Lua Azul — combate lunar](moonfist-mod/README.md).** Artes marciais com três posturas, combos, esquiva, aparo, stamina, ondas de choque e Cortes do Vazio para Fabric 26.2. [Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/moonfist-v0.1.0-experimental/downloads/Punhos-da-Lua-Azul-Fabric-26.2-v0.1.0-Experimental.zip) · [Instalação e controles](moonfist-mod/COMECE-AQUI.txt).
+**Novo mod independente: [Punhos da Lua Azul — combate lunar](moonfist-mod/README.md).** Artes marciais com três posturas, combos, esquiva, aparo, stamina, ondas de choque e Cortes do Vazio para Fabric 26.2. [Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/moonfist-v0.1.1-experimental/downloads/Punhos-da-Lua-Azul-Fabric-26.2-v0.1.1-Experimental.zip) · [Instalação e controles](moonfist-mod/COMECE-AQUI.txt).
 
 **Novo mod independente: [Dragão Celestial — ouro e obsidiana](dragon-mod/README.md).** Dragão chinês montável, voo, mordida, raio de energia, bosque, ninhos e incubação. [Baixar o pacote pronto do dragão](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.5-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.5-Experimental.zip) · [Instalar passo a passo](docs/INSTALAR-DRAGAO.md).
 

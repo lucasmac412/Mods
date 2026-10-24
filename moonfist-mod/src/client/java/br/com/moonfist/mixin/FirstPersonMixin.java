@@ -24,14 +24,17 @@ public abstract class FirstPersonMixin {
     private void moonfist$hands(float partial,PoseStack pose,SubmitNodeCollector collector,LocalPlayer player,int light,CallbackInfo ci) {
         if(!CombatControls.active(Minecraft.getInstance()))return;
         var s=CombatView.get(player.getId());if(s==null)s=CombatView.idle(player.getId());
-        Move move=Move.byId(s.move());float a=CombatView.age(player.getId(),partial),strike=CombatPose.strike(move,a);
+        float[] motion=CombatView.pose(player.getId(),partial);
+        float[] rest=br.com.moonfist.animation.MartialMotion.stance(s.stance(),0);
         for(var arm:HumanoidArm.values()) {
-            boolean left=arm==HumanoidArm.LEFT;float sign=left?-1:1;
-            boolean punch=move==Move.JAB||move==Move.PALM?left:!left;
-            float push=punch?strike:0;
-            pose.pushPose();pose.translate(sign*(-.06+push*.10),s.guard()?.18:.1,-push*.42);
-            pose.mulPose(Axis.ZP.rotationDegrees(sign*(s.guard()?18:push*-15)));
-            pose.mulPose(Axis.XP.rotationDegrees(-push*18));
+            boolean left=arm==HumanoidArm.LEFT;float sign=left?-1:1;int j=left?3:0;
+            float extension=Math.max(-.5f,Math.min(1.1f,rest[j]-motion[j]));
+            float yaw=motion[j+1]-rest[j+1],roll=motion[j+2]-rest[j+2];
+            pose.pushPose();
+            pose.translate(sign*(-.06+extension*.09)+yaw*.09,.1+extension*.08+motion[12]*.08,-extension*.48);
+            pose.mulPose(Axis.YP.rotation(yaw*.38f));
+            pose.mulPose(Axis.ZP.rotation(roll*.5f-sign*extension*.12f));
+            pose.mulPose(Axis.XP.rotation((motion[j]-rest[j])*.32f));
             moonfist$arm(pose,collector,light,0,0,arm);pose.popPose();
         }
         ci.cancel();

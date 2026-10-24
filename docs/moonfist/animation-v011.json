@@ -1,0 +1,17 @@
+{
+  "version": "0.1.1-experimental",
+  "unitTests": 13,
+  "serverTestsIncludingVanilla": 10,
+  "clientTestPassed": true,
+  "dragonLoaded": "0.3.5-experimental",
+  "previewFrames": 80,
+  "preview": "Real Minecraft client screenshots at 10 fps; automated capture is not a performance benchmark.",
+  "motionChecks": [
+    "all moves and stances finite",
+    "continuous keyframe boundaries",
+    "return to stance",
+    "impact timing",
+    "one-direction full spins"
+  ],
+  "gifSha256": "158d3b8d426deb1f0cd260555600c2e6da35d8db7e9e38b6277d10405d217a7a"
+}

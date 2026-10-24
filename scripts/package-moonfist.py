@@ -4,14 +4,15 @@ from pathlib import Path
 import hashlib,io,json,subprocess,zipfile
 import xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parent.parent
-VERSION='0.1.0-experimental'
-NAME='Punhos-da-Lua-Azul-Fabric-26.2-v0.1.0-Experimental.zip'
+VERSION='0.1.1-experimental'
+NAME='Punhos-da-Lua-Azul-Fabric-26.2-v0.1.1-Experimental.zip'
 FABRIC_SHA='e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a'
 def sha(blob):return hashlib.sha256(blob).hexdigest()
 def main():
-    unit=ET.parse(ROOT/'moonfist-mod/build/test-results/test/TEST-br.com.moonfist.CombatStateTest.xml').getroot()
+    units=[ET.parse(p).getroot() for p in (ROOT/'moonfist-mod/build/test-results/test').glob('TEST-*.xml')]
+    unit_count=sum(int(u.get('tests','0')) for u in units)
     server=ET.parse(ROOT/'moonfist-mod/build/test-results/gametest.xml').getroot()
-    if int(unit.get('failures','0')) or int(unit.get('errors','0')) or int(unit.get('tests','0'))<10 or server.findall('.//failure') or len(server.findall('.//testcase'))<10:
+    if any(int(u.get('failures','0')) or int(u.get('errors','0')) for u in units) or unit_count<13 or server.findall('.//failure') or len(server.findall('.//testcase'))<10:
         raise SystemExit('Required combat tests did not pass.')
     jar_name=f'moonfist-combat-{VERSION}.jar'
     mod=(ROOT/'moonfist-mod/build/libs'/jar_name).read_bytes()
@@ -54,7 +55,7 @@ def main():
         assert sorted(n for n in z.namelist() if n.endswith('.jar'))==sorted(['mods/'+jar_name,'mods/fabric-api-0.161.0+26.2.jar'])
         for line in z.read('SHA256SUMS.txt').decode().splitlines():
             digest,name=line.split('  ',1);assert sha(z.read(name))==digest,name
-    report={'version':VERSION,'minecraft':'26.2','sourceCommit':source,'package':NAME,'bytes':out.stat().st_size,'sha256':sha(out.read_bytes()),'jarSha256':sha(mod),'fabricApiSha256':sha(fabric),'unitTests':int(unit.get('tests')),'serverCombatTests':len(server.findall('.//testcase'))-1,'files':{k:sha(v) for k,v in sorted(entries.items())}}
+    report={'version':VERSION,'minecraft':'26.2','sourceCommit':source,'package':NAME,'bytes':out.stat().st_size,'sha256':sha(out.read_bytes()),'jarSha256':sha(mod),'fabricApiSha256':sha(fabric),'unitTests':unit_count,'serverCombatTests':len(server.findall('.//testcase'))-1,'files':{k:sha(v) for k,v in sorted(entries.items())}}
     (ROOT/'downloads'/NAME.replace('.zip','.json')).write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:v for k,v in report.items() if k!='files'},ensure_ascii=False,indent=2))
 if __name__=='__main__':main()

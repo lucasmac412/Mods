@@ -15,7 +15,6 @@ public abstract class HumanoidPoseMixin {
     @Inject(method="setupAnim(Lnet/minecraft/client/renderer/entity/state/HumanoidRenderState;)V",at=@At("TAIL"))
     private void moonfist$pose(HumanoidRenderState state,CallbackInfo ci) {
         var info=(FighterRenderInfo)state;if(!info.moonfist$active())return;
-        var combat=CombatView.get(info.moonfist$id());if(combat==null)combat=CombatView.idle(info.moonfist$id());
-        CombatPose.apply((HumanoidModel<?>)(Object)this,combat,CombatView.age(info.moonfist$id(),info.moonfist$partial()));
+        CombatPose.apply((HumanoidModel<?>)(Object)this,CombatView.pose(info.moonfist$id(),info.moonfist$partial()));
     }
 }

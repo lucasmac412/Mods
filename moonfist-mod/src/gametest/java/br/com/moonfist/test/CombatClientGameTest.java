@@ -91,6 +91,25 @@ public final class CombatClientGameTest implements FabricClientGameTest {
                 npc.snapTo(0,161,-.8,180,0);CombatService.session(npc).state.cancel();CombatService.session(npc).state.stamina=100;npc.setNoAi(false);
             });
             server.waitFor(ignored->conn.getServerPlayer().getHealth()<20,180);image(c,"10-survival-duel");
+            server.runOnServer(ignored->{
+                var p=conn.getServerPlayer();p.setGameMode(GameType.CREATIVE);p.setItemInHand(InteractionHand.MAIN_HAND,ItemStack.EMPTY);
+                p.teleportTo(conn.getServerLevel(),3,161,-4,Set.of(),35,0,false);
+                var npc=(br.com.moonfist.entity.LunarDisciple)conn.getServerLevel().getEntity(target);
+                npc.setNoAi(true);npc.snapTo(0,161,0,180,0);npc.setYHeadRot(180);npc.yBodyRot=180;
+            });
+            c.waitTicks(45);c.runOnClient(mc->mc.options.setCameraType(CameraType.FIRST_PERSON));
+            c.getInput().lookAt(new BlockPos(0,162,0));c.getInput().pressKey(GLFW.GLFW_KEY_F1);
+            int frame=0;
+            for(Move move:new Move[]{Move.JAB,Move.HOOK,Move.SPIN_KICK,Move.POWER_HEAVY,Move.DODGE,Move.VOID}){
+                server.runOnServer(ignored->{
+                    var npc=(br.com.moonfist.entity.LunarDisciple)conn.getServerLevel().getEntity(target);
+                    var state=CombatService.session(npc).state;state.cancel();state.stamina=100;state.focus=100;state.voidCooldown=0;
+                    state.stance=move==Move.HOOK||move==Move.SPIN_KICK?1:move==Move.POWER_HEAVY?2:0;
+                    state.combo=move==Move.HOOK?1:move==Move.SPIN_KICK?2:0;state.comboGrace=22;
+                    CombatService.request(npc,move==Move.POWER_HEAVY?CombatState.Input.HEAVY:move==Move.DODGE?CombatState.Input.DODGE:move==Move.VOID?CombatState.Input.VOID:CombatState.Input.LIGHT);
+                });
+                for(int tick=0;tick<move.duration+4;tick+=2){c.waitTicks(2);image(c,String.format(java.util.Locale.ROOT,"motion-%03d",frame++));}
+            }
             System.out.println("MOONFIST CLIENT PASS: real mouse damage, stance, lock, guard, dodge, wave, Caps special, first-person render, menus and vanilla eggs");
         }
     }

@@ -31,12 +31,9 @@ public abstract class LivingRenderMixin {
     @Inject(method="setupRotations",at=@At("TAIL"))
     private void moonfist$roll(LivingEntityRenderState state,PoseStack pose,float bodyRot,float scale,CallbackInfo ci) {
         if(!(state instanceof FighterRenderInfo info)||!info.moonfist$active())return;
-        var combat=CombatView.get(info.moonfist$id());if(combat==null)return;
-        if(Move.byId(combat.move())==Move.SPIN_KICK){
-            pose.mulPose(Axis.YP.rotationDegrees(-360*CombatPose.smooth(CombatView.age(info.moonfist$id(),info.moonfist$partial())/Move.SPIN_KICK.duration)));return;
-        }
-        if(Move.byId(combat.move())!=Move.DODGE)return;
-        float phase=CombatPose.smooth(CombatView.age(info.moonfist$id(),info.moonfist$partial())/Move.DODGE.duration);
-        pose.translate(0,.75,0);pose.mulPose(Axis.XP.rotationDegrees(-360*phase));pose.translate(0,-.75,0);
+        float[] p=CombatView.pose(info.moonfist$id(),info.moonfist$partial());
+        pose.translate(0,p[br.com.moonfist.animation.MartialMotion.HEIGHT],0);
+        pose.mulPose(Axis.YP.rotation(p[br.com.moonfist.animation.MartialMotion.TURN]));
+        pose.translate(0,.75,0);pose.mulPose(Axis.XP.rotation(p[br.com.moonfist.animation.MartialMotion.ROLL]));pose.translate(0,-.75,0);
     }
 }
