@@ -43,6 +43,8 @@ g++ -std=c++17 -Wall -Wextra -Werror -pedantic -fsanitize=address,undefined \
 
 O workflow `.github/workflows/nioh-luvas.yml` verifica a geração, executa os testes em MSVC x64, compila o inspetor com runtime estático, faz uma autoinspeção nativa e compara o hash com o cálculo independente em Python. Chrome ou Edge executa o especial da prévia e produz uma captura. Nenhuma dessas verificações carrega o Nioh.
 
-Resultados locais iniciais: 4.138 verificações da simulação e 445 do parser PE passaram com ASan/UBSan. O resultado da compilação Windows e o escopo das verificações serão registrados em `reports/build.json` após a execução. Esses números não representam centenas de funcionalidades jogáveis nem confirmação de compatibilidade com o jogo.
+Resultados locais iniciais: 4.138 verificações da simulação e 445 do parser PE passaram com ASan/UBSan. [Compilação Windows aprovada](https://github.com/lucasmac412/Mods/actions/runs/40051862492): os mesmos testes passaram em MSVC x64, o inspetor passou na autoinspeção nativa e a prévia foi executada em Chrome/Edge headless. Escopo e hashes em `reports/build.json`. Esses números não representam centenas de funcionalidades jogáveis nem confirmação de compatibilidade com o jogo.
 
 Código original sob MIT. Referências técnicas e limitações em [RESEARCH.md](docs/RESEARCH.md). Não inclui código ou assets dos jogos/animes usados como inspiração.
+
+[Captura da prévia no navegador](docs/caps-preview.png) — representação independente, não é uma captura do Nioh.

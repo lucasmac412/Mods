@@ -1,0 +1,30 @@
+{
+  "status": "PROTOTYPE_NO_GAME_INTEGRATION",
+  "file": "downloads/Nioh-Luvas-Prototipo-v0.1.0.zip",
+  "sha256": "813c51b08c2e1fd95bca4e236d92ef7036cd66020c3f16275af3ee65b904697e",
+  "inspector_sha256": "f87018651d29fd1a6f5ae15834f847660f35cfc1b22dab9d5bec96350b9df5f4",
+  "gameplay_tested": false,
+  "game_category_created": false,
+  "files": {
+    "Nioh-Inspecionar.exe": "f87018651d29fd1a6f5ae15834f847660f35cfc1b22dab9d5bec96350b9df5f4",
+    "Previa.html": "7b3081a2a80f45d70b8bbeec6d3137092484becbafd0fd8cfa9a92c77dc12ac4",
+    "LEIA-ME.txt": "1ae1f35b9a6aca0c37f1ab0b60403e0b839bf42ea15f53c7f87864531f39edf8",
+    "LICENSE.txt": "bbac2a9f172b12b6bddf20ad295c3d8d8cf33d33a90335dc0771a48e0d3d5e2b"
+  },
+  "bytes": 173393,
+  "code_commit": "bb6f59e433d27eaad545a1786a18edca3597ebd6",
+  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/40051862492",
+  "workflow_conclusion": "success",
+  "combat_assertions_windows": 4138,
+  "pe_assertions_windows": 445,
+  "combat_assertions_linux_asan_ubsan": 4138,
+  "pe_assertions_linux_asan_ubsan": 445,
+  "inspector_native_self_test": "passed: independently compared file SHA-256 and read-only own-process .text hash",
+  "browser_test": "passed: Chrome/Edge headless keyboard Caps Lock edge, 8 cuts, Ki and cooldown; screenshot rendered",
+  "authoring_clips": 7,
+  "authoring_model_game_ready": false,
+  "game_runtime_bindings": "unresolved",
+  "game_installation_required_for_next_investigation": true,
+  "distribution": "Byte-identical ZIP from successful Windows CI. Inspector and standalone preview only, not a playable mod.",
+  "build_log_sha256": "2be3a200b94f315843c41a35dca0b70fcf9ccebe64bce45be0008da6fd663349"
+}
