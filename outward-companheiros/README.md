@@ -131,6 +131,11 @@ encaixes de inventário/baú, reconhecimento de entrada de texto e ausência
 de chamadas de alteração de inventário ou rede nas classes de busca.
 Os testes de partida solo/cooperativa permanecem **não realizados**.
 
+A [compilação Windows 0.2.0](https://github.com/lucasmac412/Mods/actions/runs/40068656959)
+passou sem avisos: 5.319 verificações de regras/busca, 4.309 do adaptador de
+caravana e 646 de referências, IL e recursos. O pacote completo também passou
+pela conferência de hashes, extração e cópia do conteúdo para o layout de instalação.
+
 Não há patches de inventário, escrita de arquivos do jogo, protocolo de
 teleporte paralelo ou alteração dos RPCs de cobrança/transição. A lista de
 rotas é produzida quando o diálogo nativo a pede, tanto no anfitrião quanto

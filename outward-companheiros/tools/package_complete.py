@@ -13,13 +13,13 @@ import urllib.request
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'Outward-Companheiros-v0.1.0-Completo'
+NAME = 'Outward-Companheiros-v0.2.0-Completo'
 FOLDER = 'transfere pro jogo'
 LOADER_URL = 'https://gcdn.thunderstore.io/live/repository/packages/BepInEx-BepInExPack_Outward-5.4.19.zip'
 LOADER_SHA = 'ae703fcdfd33e65defb8b4e441fbc4d388a8223c0cc251ad791361a0dd6ce35b'
-PLUGIN_URL = 'https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.1.0-experimental/downloads/Outward-Companheiros-v0.1.0-Experimental.zip'
-PLUGIN_ZIP_SHA = '2075e2da54a9b6363f4296bbdd7176b9f8e884c6cf64de6d40948044d88c7254'
-PLUGIN_DLL_SHA = '85783fb6cbf30cd889100c2166c80206041e788a8ee202aec35c70047148383f'
+PLUGIN_URL = 'https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.2.0-experimental/downloads/Outward-Companheiros-v0.2.0-Experimental.zip'
+PLUGIN_ZIP_SHA = '7fa22f002fe7ce938653bc62d41bcbbb08b8f835301aee993e68b7d4c9905270'
+PLUGIN_DLL_SHA = '8eca84504d0328039c9719bedcbe0038f0c5c28b82b61df55320fc3e4600dc4b'
 PLUGIN_PATH = 'BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll'
 CORE = ('0Harmony', '0Harmony20', 'BepInEx', 'BepInEx.Harmony', 'BepInEx.Preloader',
         'HarmonyXInterop', 'Mono.Cecil', 'Mono.Cecil.Mdb', 'Mono.Cecil.Pdb',
@@ -105,7 +105,9 @@ def build(loader_bytes, plugin_bytes, output):
     require('dllsearchpathoverride=mono_fix' in config, 'Outward mono_fix disabled')
     require('enabled=true' in config, 'Doorstop is not enabled')
     guide = payload['LEIA-ME-COMPANHEIROS.txt'].decode('utf-8-sig')
-    require(all(n in guide for n in ['transfere pro jogo', 'default-mono', 'Outward_Defed', 'DOIS computadores', 'experiment', 'não foi testado']), 'Guide misses prerequisite or status')
+    flat_guide = ' '.join(guide.split()).casefold()
+    missing = [n for n in ['transfere pro jogo', 'default-mono', 'Outward_Defed', 'DOIS computadores', 'experimental', 'não foi testado'] if n.casefold() not in flat_guide]
+    require(not missing, 'Guide misses prerequisite or status: ' + ', '.join(missing))
 
     output.mkdir(parents=True, exist_ok=True)
     target = output/(NAME+'.zip')
@@ -125,7 +127,7 @@ def build(loader_bytes, plugin_bytes, output):
     digest = sha(target.read_bytes())
     (output/(NAME+'-SHA256.txt')).write_text(digest+'  '+target.name+'\n', encoding='ascii')
     report = {
-        'package': NAME, 'folder': FOLDER, 'pluginVersion': '0.1.0',
+        'package': NAME, 'folder': FOLDER, 'pluginVersion': '0.2.0',
         'status': 'EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST',
         'game': 'Outward Definitive Edition Steam Mono / Windows x64',
         'requiresSteamMonoSelection': True, 'loaderIncluded': True, 'monoFixIncluded': True,
