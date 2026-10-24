@@ -22,8 +22,9 @@ namespace Companheiros
             var receiver = AccessTools.Field(typeof(GiveReward), "RewardReceiver");
             if (target == null || target.ReturnType != typeof(void) || target.IsStatic
                 || receiver == null || !receiver.IsPublic || receiver.FieldType != typeof(GiveReward.Receiver)
-                || (int)GiveReward.Receiver.Host != 0 || (int)GiveReward.Receiver.Instigator != 1
-                || (int)GiveReward.Receiver.Everyone != 2)
+                || Convert.ToInt32(Enum.Parse(typeof(GiveReward.Receiver), "Host")) != 0
+                || Convert.ToInt32(Enum.Parse(typeof(GiveReward.Receiver), "Instigator")) != 1
+                || Convert.ToInt32(Enum.Parse(typeof(GiveReward.Receiver), "Everyone")) != 2)
                 throw new MissingMemberException("GiveReward DE: incompatible reward contract; sharing not installed.");
 
             enabled = isEnabled ?? throw new ArgumentNullException(nameof(isEnabled));
