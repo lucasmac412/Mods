@@ -21,6 +21,7 @@ jobs:
           $index | ConvertTo-Json -Depth 20 | Write-Output
           $base = ($index.resources | Where-Object { $_.'@type' -like 'PackageBaseAddress*' } | Select-Object -First 1).'@id'
           $base = $base.TrimEnd('/') + '/'
+          Invoke-WebRequest "${base}unityengine.modules/2020.3.26/unityengine.modules.2020.3.26.nupkg" -OutFile 'outward-references/unity.nupkg'
           foreach ($pkg in @('outward.gamelibs','bepinex.baselib','unityengine.modules')) {
             $versions = Invoke-RestMethod "$base$pkg/index.json"
             $versions | ConvertTo-Json -Depth 20 | Set-Content "outward-references/$pkg.json"
