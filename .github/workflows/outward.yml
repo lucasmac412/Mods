@@ -20,6 +20,7 @@ jobs:
           $index | ConvertTo-Json -Depth 20 | Set-Content outward-references/index.json
           $index | ConvertTo-Json -Depth 20 | Write-Output
           $base = ($index.resources | Where-Object { $_.'@type' -like 'PackageBaseAddress*' } | Select-Object -First 1).'@id'
+          $base = $base.TrimEnd('/') + '/'
           foreach ($pkg in @('outward.gamelibs','bepinex.baselib','unityengine.modules')) {
             $versions = Invoke-RestMethod "$base$pkg/index.json"
             $versions | ConvertTo-Json -Depth 20 | Set-Content "outward-references/$pkg.json"
