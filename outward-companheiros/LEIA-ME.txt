@@ -1,0 +1,126 @@
+COMPANHEIROS DE AURAI 0.1.0 - EXPERIMENTAL
+Outward Definitive Edition da Steam / Windows 64 bits / versão Mono
+
+LEIA ISTO PRIMEIRO
+O pacote contém o mod compilado. Ainda não foi testado dentro de uma partida
+real de Outward, sozinho ou em cooperativo. As verificações automáticas de
+código e compatibilidade não substituem esse teste.
+
+VOCÊ E SEU IRMÃO PRECISAM FAZER A MESMA INSTALAÇÃO EM CADA COMPUTADOR.
+Não exige SideLoader. Exige BepInEx 5, instalado separadamente abaixo.
+Não é um mod para Minecraft, Nioh, Outward 2 ou Outward original.
+
+1. PREPARAR A EDIÇÃO CORRETA
+Fechem o jogo nos dois computadores.
+Na Steam: Biblioteca > botão direito em Outward > Propriedades > Betas.
+Escolham: default-mono - Public default branch (mono).
+Esperem a Steam terminar qualquer atualização nos dois computadores.
+Ao iniciar, escolham Outward Definitive Edition, caso a Steam pergunte.
+
+2. ENCONTRAR A PASTA CERTA
+Steam > Outward > Propriedades > Arquivos instalados > Explorar.
+Entrem na pasta Outward_Defed.
+Ela deve conter Outward Definitive Edition.exe e
+a pasta Outward Definitive Edition_Data.
+É NESTA PASTA que o carregador e o mod devem ficar.
+Se já usam mods por r2modman, vejam a alternativa no final deste arquivo.
+
+3. INSTALAR O CARREGADOR BEPINEX (UMA VEZ EM CADA PC)
+Se BepInEx 5 já funciona nessa instalação Mono, mantenham o carregador existente.
+Caso não tenham nenhum mod, baixem o ZIP OFICIAL Windows x64:
+https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.6/BepInEx_win_x64_5.4.23.6.zip
+
+No Chrome, o arquivo fica normalmente em Downloads.
+Botão direito no ZIP > Extrair tudo.
+Copiem BepInEx, winhttp.dll, doorstop_config.ini e .doorstop_version
+para Outward_Defed, ao lado de Outward Definitive Edition.exe.
+Não usem BepInEx 6, x86 ou uma versão para outro sistema operacional.
+Abram Outward Definitive Edition uma vez pela Steam e fechem o jogo.
+A pasta BepInEx deve ganhar o arquivo LogOutput.log.
+
+4. INSTALAR ESTE MOD
+Extraiam também o ZIP Outward-Companheiros-v0.1.0-Experimental.zip.
+Abram a pasta extraída até enxergarem BepInEx e este LEIA-ME.
+Copiem a pasta BepInEx do mod para dentro de Outward_Defed.
+Aceitem MESCLAR as pastas. O pacote do mod só adiciona a própria DLL.
+
+O resultado deve ser exatamente:
+Outward_Defed
+  Outward Definitive Edition.exe
+  winhttp.dll
+  doorstop_config.ini
+  BepInEx
+    core
+      BepInEx.dll
+    plugins
+      CompanheirosAurai
+        Outward.Companheiros.dll
+
+Evitem BepInEx/BepInEx ou uma pasta extra com o nome inteiro do ZIP dentro
+de plugins. Não copiem nenhuma DLL para a pasta Managed do jogo.
+
+5. USAR O MAPA
+Iniciem a Definitive Edition normalmente pela Steam.
+Entrem no personagem e apertem M para abrir o mapa normal.
+Em locais com mapa calibrado aparecem retratos de aventureiros, nomes e
+setas de direção. As cores são escolhidas pela identidade do personagem.
+O dono daquele mapa recebe a indicação VOCÊ.
+A lista COMPANHEIROS mostra os jogadores conectados; rolem nela com o mouse
+se houver muitos. Personagens caídos e jogadores carregando têm indicação.
+Quem sai da sessão desaparece da lista.
+
+Em interiores/locais sem mapa calibrado, a lista continua funcionando;
+o mod não inventa uma posição em um mapa de outra região.
+Os retratos são desenhos estilizados, não fotos ou modelos 3D dos personagens.
+
+6. VIAJAR ENTRE CIDADES
+Nas cidades, falem com o Caravaneiro Soroboriano, o NPC da viagem a Harmattan.
+Escolham a opção normal de viajar e a cidade de destino.
+O mod amplia a lista dessa conversa; não há uma tecla nova de teleporte.
+
+Destinos: Cierzo, Berg, Monsoon, Levant e Harmattan.
+Nova Sirocco também entra quando a caravana dela é liberada pela história.
+Não é possível viajar para a própria cidade ou para cidades bloqueadas por
+eventos da campanha. Caravanas no campo conservam o funcionamento original.
+
+CUSTO FIXO: 200 moedas de PRATA + 3 rações de viagem POR VIAGEM DO GRUPO.
+Quem inicia/contrata paga; o mod não cobra outra vez de cada participante.
+Este preço fixo não recebe desconto de facção nas novas rotas do mod.
+Como na viagem normal, passam 3 dias no jogo, incluindo prazos de missões.
+
+SOZINHO: leve o dinheiro e as 3 rações e use o caravaneiro normalmente.
+JUNTOS: os dois precisam estar perto do mesmo NPC, prontos para viajar,
+sem combate ou outra condição que impeça a viagem normal. Quem contrata
+precisa carregar todo o pagamento. O jogo usa sua transição cooperativa
+normal para levar o grupo ao mesmo destino; o mod não teleporta só um jogador.
+
+Façam o primeiro teste com uma cópia dos saves, pois esta versão é experimental.
+Verifiquem uma viagem sozinhos e outra com vocês dois antes de continuar
+a campanha com o mod. Não foi possível validar essas partidas neste ambiente.
+
+7. SE NÃO APARECER
+Verifiquem o mesmo arquivo nos dois PCs, a beta Mono e a edição Definitive.
+Abram Outward_Defed/BepInEx/LogOutput.log e procurem Companheiros de Aurai.
+Se não existir LogOutput.log, o problema é anterior ao mod: carregador,
+edição ou pasta de instalação incorretos.
+Se houver erro, enviem esse log e descrevam se foi no anfitrião ou convidado.
+Mapas sem calibração mostram somente a lista, com uma explicação no painel.
+Se não conseguirem viajar, confiram as rações, prata, proximidade de todos
+e restrições da campanha que também afetam a caravana original.
+
+DESATIVAR / DESINSTALAR
+Com o jogo fechado, removam apenas a pasta BepInEx/plugins/CompanheirosAurai.
+Se houver outros mods, deixem o carregador e os arquivos desses mods no lugar.
+O arquivo BepInEx/config/lucasmac412.outward.companheiros.cfg é criado
+na primeira execução. Nele, MarcadoresNoMapa e CaravanasEntreCidades
+permitem ligar/desligar as duas funções separadamente.
+
+SE JÁ USAM R2MODMAN
+Não misturem duas instalações manuais/gerenciadas. No perfil de Outward com
+BepInExPack_Outward já instalado, usem Settings > Browse profile folder.
+Copiem CompanheirosAurai para BepInEx/plugins desse perfil e iniciem pelo
+Start modded do gerenciador, com a Steam configurada para a Definitive Mono.
+Vocês dois precisam repetir isso nos respectivos perfis.
+
+CÓDIGO E GUIA ON-LINE
+https://github.com/lucasmac412/Mods/tree/main/outward-companheiros

@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../src/Policy.cs" Link="Policy.cs" />
+    <Compile Include="../../src/Caravan.cs" Link="Caravan.cs" />
+  </ItemGroup>
+</Project>

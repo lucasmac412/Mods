@@ -1,6 +1,14 @@
 name: Outward DE - build and checks
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'outward-companheiros/**'
+      - '.github/workflows/outward.yml'
+  pull_request:
+    paths:
+      - 'outward-companheiros/**'
+      - '.github/workflows/outward.yml'
 permissions:
   contents: read
 jobs:
@@ -12,28 +20,21 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-      - name: Inspect published development references
+      - name: Build DE plugin against pinned development references
+        run: dotnet build outward-companheiros/src/Outward.Companheiros.csproj -c Release
+      - name: Rules tests - every route and story-gate combination
+        run: dotnet run --project outward-companheiros/tests/Tests.csproj -c Release
+      - name: Production caravan adapter against controlled stand-ins
+        run: dotnet run --project outward-companheiros/tests/Adapter/Adapter.csproj -c Release
+      - name: Check DE contracts, private access and embedded portraits
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force outward-references | Out-Null
-          $index = Invoke-RestMethod 'https://nuget.bepinex.dev/v3/index.json'
-          $index | ConvertTo-Json -Depth 20 | Set-Content outward-references/index.json
-          $index | ConvertTo-Json -Depth 20 | Write-Output
-          $base = ($index.resources | Where-Object { $_.'@type' -like 'PackageBaseAddress*' } | Select-Object -First 1).'@id'
-          $base = $base.TrimEnd('/') + '/'
-          Invoke-WebRequest "${base}unityengine.modules/2020.3.26/unityengine.modules.2020.3.26.nupkg" -OutFile 'outward-references/unity.nupkg'
-          foreach ($pkg in @('outward.gamelibs','bepinex.baselib','unityengine.modules')) {
-            $versions = Invoke-RestMethod "$base$pkg/index.json"
-            $versions | ConvertTo-Json -Depth 20 | Set-Content "outward-references/$pkg.json"
-            $versions | ConvertTo-Json -Depth 20 | Write-Output
-            if (!$versions.versions) { continue }
-            $version = $versions.versions[-1]
-            if ($pkg -eq 'outward.gamelibs') {
-              Invoke-WebRequest "$base$pkg/$version/$pkg.$version.nupkg" -OutFile "outward-references/$pkg.nupkg"
-            }
-          }
+          $game = "$env:USERPROFILE/.nuget/packages/outward.gamelibs/2022.5.18-r.0/lib/net472/Assembly-CSharp.dll"
+          dotnet run --project outward-companheiros/tools/Contracts/Contracts.csproj -c Release -- "$game" outward-companheiros/src/bin/Release/net472/Outward.Companheiros.dll
+      - name: Package plugin and beginner guide only
+        run: python outward-companheiros/tools/package.py
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
-          name: Outward-development-references
-          path: outward-references/*
+          name: Outward-Companheiros-v0.1.0-Windows
+          path: outward-companheiros/dist/*
+          if-no-files-found: error

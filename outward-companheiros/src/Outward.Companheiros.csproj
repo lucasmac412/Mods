@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>Outward.Companheiros</AssemblyName>
+    <RootNamespace>Companheiros</RootNamespace>
+    <LangVersion>9.0</LangVersion>
+    <Version>0.1.0</Version>
+    <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>none</DebugType>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(LocalReferences)' == ''">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.BaseLib" Version="5.4.21" PrivateAssets="all" />
+    <PackageReference Include="HarmonyX" Version="2.9.0" PrivateAssets="all" />
+    <PackageReference Include="Outward.GameLibs" Version="2022.5.18-r.0" PrivateAssets="all" />
+    <PackageReference Include="UnityEngine.Modules" Version="2020.3.26" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(LocalReferences)' != ''">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <Reference Include="$(LocalReferences)/*.dll"><Private>false</Private></Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../assets/player-*.png" LogicalName="Companheiros.%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>
