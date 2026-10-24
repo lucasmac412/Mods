@@ -3,7 +3,10 @@ using System.IO;
 using System.Linq;
 using Mono.Cecil;
 
-if (args.Length!=2) throw new ArgumentException("<reference Assembly-CSharp.dll> <temporary fixtures directory>");
+if (args.Length!=3) throw new ArgumentException("<reference Assembly-CSharp.dll> <temporary fixtures directory> <Unity reference directory>");
+using var resolver = new DefaultAssemblyResolver();
+resolver.AddSearchDirectory(Path.GetDirectoryName(args[0]));
+resolver.AddSearchDirectory(args[2]);
 // TEST ONLY: alter copies of public development metadata, never game files.
 foreach (string scenario in new[] { "enum-changed", "private-selector" })
 {
@@ -11,7 +14,7 @@ foreach (string scenario in new[] { "enum-changed", "private-selector" })
     Directory.CreateDirectory(directory);
     foreach(string path in Directory.GetFiles(Path.GetDirectoryName(args[0]),"*.dll"))
         File.Copy(path,Path.Combine(directory,Path.GetFileName(path)),true);
-    using var game=AssemblyDefinition.ReadAssembly(args[0]);
+    using var game=AssemblyDefinition.ReadAssembly(args[0], new ReaderParameters { AssemblyResolver=resolver });
     var type=game.MainModule.GetType("NodeCanvas.Tasks.Actions.GiveReward");
     if(scenario=="enum-changed")
         type.NestedTypes.Single(t=>t.Name=="Receiver").Fields.Single(f=>f.Name=="Everyone").Constant=3;

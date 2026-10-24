@@ -51,7 +51,7 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           & outward-companheiros/tests/PackageSmoke/bin/Release/net472/PackageSmoke.exe "$zip" "$game" "$unity"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          dotnet run --project outward-companheiros/tools/RewardFixtures/RewardFixtures.csproj -c Release -- "$game" "$fixtures"
+          dotnet run --project outward-companheiros/tools/RewardFixtures/RewardFixtures.csproj -c Release -- "$game" "$fixtures" "$unity"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           foreach ($case in @("enum-changed", "private-selector")) {
             & outward-companheiros/tests/PackageSmoke/bin/Release/net472/PackageSmoke.exe "$zip" "$fixtures/$case/Assembly-CSharp.dll" "$unity" reject
