@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " IA",
+    "SLS",
+    "AI "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "A": "minecraft:amethyst_shard",
+    "S": "minecraft:string",
+    "L": "minecraft:lapis_lazuli"
+  },
+  "result": {
+    "id": "moonfist:lunar_fists",
+    "count": 1
+  }
+}

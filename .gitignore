@@ -7,3 +7,4 @@ runs/
 .vscode/
 .env
 *.log
+__pycache__/

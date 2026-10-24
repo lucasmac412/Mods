@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "moonfist:item/disciple_spawn_egg"
+  }
+}

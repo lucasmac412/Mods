@@ -1,0 +1,7 @@
+{
+  "required":true,
+  "package":"br.com.moonfist.mixin",
+  "compatibilityLevel":"JAVA_25",
+  "client":["CombatInputMixin","CombatCameraMixin","HumanoidInfoMixin","HumanoidPoseMixin","LivingRenderMixin","HeldItemMixin","FirstPersonMixin","FirstPersonGloveMixin"],
+  "injectors":{"defaultRequire":1}
+}

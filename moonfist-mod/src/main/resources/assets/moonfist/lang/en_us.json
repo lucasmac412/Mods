@@ -1,0 +1,13 @@
+{
+  "item.moonfist.lunar_fists": "Azure Moon Fists",
+  "item.moonfist.disciple_spawn_egg": "Lunar Disciple Seal",
+  "entity.moonfist.lunar_disciple": "Lunar Disciple",
+  "key.moonfist.dodge": "Fists: dodge",
+  "key.moonfist.guard": "Fists: guard / parry",
+  "key.moonfist.lock": "Fists: lock / unlock target",
+  "key.moonfist.stance": "Fists: change stance",
+  "key.moonfist.wave": "Fists: shockwave",
+  "key.moonfist.void": "Fists: Void Cuts",
+  "death.attack.moonfist": "%1$s was defeated by %2$s’s fists",
+  "death.attack.moonfist.item": "%1$s was defeated by %2$s using %3$s"
+}

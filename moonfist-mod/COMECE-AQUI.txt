@@ -1,0 +1,84 @@
+PUNHOS DA LUA AZUL — v0.1.0 experimental
+Minecraft Java 26.2 · Fabric Loader 0.19.5 ou superior · Java 25
+
+INSTALAR NO WINDOWS (sem programação)
+1. Feche o Minecraft.
+2. No Chrome, baixe o ZIP e clique com o botão direito > Extrair tudo.
+3. Aperte Windows + R, digite %appdata%\.minecraft e pressione Enter.
+4. Abra a pasta mods. Se não existir, crie uma pasta chamada mods.
+5. Copie os arquivos .jar que estão na pasta mods deste pacote para essa pasta.
+   Se já tiver fabric-api-0.161.0+26.2.jar, mantenha só uma cópia.
+   Mantenha seus outros mods: este pacote adiciona as luvas separadamente.
+6. Abra o launcher e escolha seu perfil Fabric do Minecraft 26.2.
+7. Para experimentar: crie um mundo Criativo, abra o inventário e a aba
+   Punhos da Lua Azul. Pegue as luvas e o Selo do Discípulo Lunar.
+8. Coloque as luvas na mão principal e DEIXE A OUTRA MÃO VAZIA.
+   A câmera muda para terceira pessoa. F5 continua trocando a câmera.
+9. Use o selo no chão para invocar um adversário. Ele só ataca no Survival.
+   Prefira uma área aberta para o primeiro duelo. Não use dificuldade Pacífico.
+
+Se você usa CurseForge, Prism ou outra instalação, abra a pasta dessa
+instância pelo launcher. Ela pode ser diferente de %appdata%\.minecraft.
+O pacote não inclui o jogo nem instala o Fabric Loader. Se seu perfil
+Fabric 26.2 já funciona com nosso dragão, use esse mesmo perfil.
+
+CONTROLES (apenas com luvas equipadas e outra mão vazia)
+Mouse esquerdo: golpe leve; clique no final do golpe para emendar o combo.
+Mouse direito: golpe pesado da postura atual.
+WASD: movimento normal.
+Alt esquerdo + WASD: esquiva na direção escolhida.
+Alt sem WASD: esquiva para trás. Custa stamina; não cancela golpe em curso.
+Segurar G: defender. Se levantar a guarda pouco antes do impacto, apara.
+Solte G antes de atacar. Após aparar, seu próximo golpe fica mais forte.
+C: fixar/soltar um alvo visível. A câmera acompanha a mira desse alvo.
+Z: alternar Fluxo, Lua e Impacto (três combos e três golpes pesados).
+R: onda de choque. Requer 22 stamina; recarga de 2,5 segundos.
+Caps Lock: Cortes do Vazio, com oito cortes de energia na área à frente.
+          Requer 60 foco e 35 stamina; recarga de 12 segundos.
+
+Os controles podem ser alterados em Opções > Controles > Teclas.
+A barra verde-azulada é a stamina; a rosa é o foco.
+Acertar golpes, aparar e esquivar no momento certo gera foco.
+A barra dourada sob o alvo fixado é a postura: ao quebrá-la, ele cambaleia.
+A guarda protege a frente. Sem stamina suficiente, ela quebra.
+A esquiva protege por uma janela curta contra ataques, não contra quedas,
+fogo ou outros perigos do ambiente. Não há modo de invencibilidade.
+Troque de item para voltar a minerar, usar blocos ou jogar normalmente.
+Enquanto montado, os controles das luvas ficam desativados.
+
+COMANDOS OPCIONAIS (com cheats ou permissão de operador)
+/punhos kit          — receber as luvas
+/punhos treino       — criar um alvo imóvel que não morre pelos seus golpes
+/punhos desafiante   — invocar o Discípulo Lunar
+
+JOGAR EM SURVIVAL
+Fabrique as luvas na bancada. Cada letra é um item; pontos são espaços vazios.
+. I A
+S L S
+A I .
+I = barra de ferro; A = fragmento de ametista;
+S = linha; L = lápis-lazúli.
+
+Selo do Discípulo: papel no centro, quatro fragmentos de ametista
+acima, abaixo, à esquerda e à direita. Use o selo no chão.
+O adversário tem 100 de vida e usa golpes do mesmo sistema.
+Não nasce naturalmente no mundo nesta versão.
+
+JOGAR COM OUTRAS PESSOAS
+Todos os jogadores e o servidor precisam do mesmo mod e do Fabric API.
+No solo, o servidor já é aberto pelo próprio jogo.
+Nesta primeira versão, os golpes das luvas preservam outros jogadores
+(PvP desativado), equipes aliadas e animais domesticados.
+
+SOBRE ESTA VERSÃO
+É uma primeira versão experimental jogável, inspirada em artes marciais
+sobrenaturais e combate com stamina. O modelo continua no estilo cúbico
+do Minecraft. Não inclui personagens, sons ou animações extraídos de Nioh,
+Demon Slayer ou Devil May Cry. Não exige outros mods de combate.
+Não sobreponha este mod a Better Combat, Epic Fight ou mods que substituem
+as mesmas animações/controles: essa combinação não foi validada.
+
+REMOÇÃO
+Feche o jogo e retire moonfist-combat-0.1.0-experimental.jar da pasta mods.
+Não remova Fabric API se seus outros mods precisam dele.
+Como em qualquer mod de conteúdo, guarde uma cópia do mundo antes de testar.

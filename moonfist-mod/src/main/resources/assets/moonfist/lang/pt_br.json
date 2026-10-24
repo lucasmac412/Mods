@@ -1,0 +1,13 @@
+{
+  "item.moonfist.lunar_fists": "Punhos da Lua Azul",
+  "item.moonfist.disciple_spawn_egg": "Selo do Discípulo Lunar",
+  "entity.moonfist.lunar_disciple": "Discípulo Lunar",
+  "key.moonfist.dodge": "Punhos: esquivar",
+  "key.moonfist.guard": "Punhos: defender / aparar",
+  "key.moonfist.lock": "Punhos: fixar / soltar alvo",
+  "key.moonfist.stance": "Punhos: mudar postura",
+  "key.moonfist.wave": "Punhos: onda de choque",
+  "key.moonfist.void": "Punhos: Cortes do Vazio",
+  "death.attack.moonfist": "%1$s foi vencido pelos punhos de %2$s",
+  "death.attack.moonfist.item": "%1$s foi vencido por %2$s usando %3$s"
+}

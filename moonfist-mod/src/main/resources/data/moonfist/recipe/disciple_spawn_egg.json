@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "APA",
+    " A "
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "P": "minecraft:paper"
+  },
+  "result": {
+    "id": "moonfist:disciple_spawn_egg",
+    "count": 1
+  }
+}

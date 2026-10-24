@@ -1,0 +1,65 @@
+{
+  "version": "0.1.0-experimental",
+  "minecraft": "26.2",
+  "loader": "0.19.5",
+  "fabricApi": "0.161.0+26.2",
+  "java": 25,
+  "unit": {
+    "passed": 10,
+    "cases": [
+      "comboExpiresAfterRecovery()",
+      "guardBreakAndRiposteAreEarned()",
+      "regenHasDelayAndCapsAtOneHundred()",
+      "repeatedGuardHeartbeatsDoNotRenewParryWindow()",
+      "hitWindowsAndLedgerSeparateAllEightCuts()",
+      "dodgeHasShortBoundedInvulnerability()",
+      "cannotSpendMissingStaminaOrCancelCommitment()",
+      "focusAndCooldownCannotBeBypassedByUnequipping()",
+      "buffersOnlyOneLateInputAndChargesWhenItStarts()",
+      "threeDistinctCombosAndHeavyAttacks()"
+    ]
+  },
+  "server": {
+    "passed": 10,
+    "includesVanillaAlwaysPass": true,
+    "cases": [
+      "moonfist_gametest:combat_game_tests_jab_has_windup_and_single_hit",
+      "moonfist_gametest:combat_game_tests_every_stance_and_heavy_uses_its_authored_damage",
+      "moonfist_gametest:combat_game_tests_void_cuts_apply_eight_real_damage_stages",
+      "moonfist_gametest:combat_game_tests_walls_block_both_melee_and_shockwaves",
+      "moonfist_gametest:combat_game_tests_shockwave_has_range_and_does_not_hit_twice",
+      "moonfist_gametest:combat_game_tests_frontal_parry_creates_riposte_and_stops_enemy",
+      "minecraft:always_pass",
+      "moonfist_gametest:combat_game_tests_dodging_does_not_protect_against_environment",
+      "moonfist_gametest:combat_game_tests_unequipping_cancels_and_malformed_packets_do_nothing",
+      "moonfist_gametest:combat_game_tests_disciple_spawn_and_cooperative_safety"
+    ]
+  },
+  "client": {
+    "passed": true,
+    "renderer": "llvmpipe / Mesa OpenGL 4.5 / Xvfb",
+    "alsoLoaded": "celestial_dragon 0.3.4-experimental",
+    "checks": [
+      "mouse click damages entity on server",
+      "stance key",
+      "target lock",
+      "held guard",
+      "dodge moves actual player",
+      "shockwave key and cooldown",
+      "Caps Lock special and cooldown",
+      "first-person rendering",
+      "pause menu",
+      "vanilla cow egg after unequipping gloves",
+      "disciple damages survival player"
+    ]
+  },
+  "screenshots": {
+    "01-stance-and-hud.png": "2bf4af96613d6059db029c35dd21319e7c7f43905d352de03d8a49624be0c995",
+    "04-directional-dodge.png": "4624dbc198185959293c347210eefc8774050b0354c4932eb63a88e536d3aea1",
+    "05-shockwave.png": "3674e454b5ce717edcb9e76491d047e1772c48d844d847dede9a026294d83a0d",
+    "07-eight-void-cuts.png": "d00659febfd931ba59e4d9dfeb66d50cdce0998fa184b6526f851b97ce288b59",
+    "08-first-person-compact-gloves.png": "d78eeb544852d3991a0064305cb25367dace0d6fd8e13b6f98f9111131bdb9b4",
+    "09-vanilla-eggs-still-work.png": "0fba1d2651c01133c63bfd3b0e5748509ef799fca1bcabdfa018b97761dbb4d6",
+    "10-survival-duel.png": "9999748d25250ecb736b1db3d41fe47ba223508d6a959408e556655c8308b1ab"
+  }
+}
