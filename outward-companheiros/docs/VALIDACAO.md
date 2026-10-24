@@ -26,6 +26,24 @@ Em uma cópia do mundo/personagens, com o mesmo plugin nos dois PCs:
 10. Desligar as duas opções separadamente e remover o plugin com o jogo
     fechado; verificar que os saves e demais mods continuam carregando.
 
+## Busca 0.2.0: validação em interface real pendente
+
+- Abrir inventário, baú de casa e baú de saque: barra alinhada, sem cobrir
+  títulos, dinheiro, itens ou botões; verificar também outras resoluções.
+- Buscar `pocao`, `POÇÃO` e duas palavras; verificar categorias, bolsos e mochila.
+- Digitar letras que seriam atalhos de inventário/menu: não devem ativar ações.
+  Enter sai do campo; × limpa; clicar fora devolve o controle aos itens.
+- Nenhum resultado deve manter o baú aberto e o botão × acessível.
+- Mover pilhas/itens entre baú e inventário com busca ativa e observar a
+  atualização dos resultados; × deve restaurar a lista completa da categoria.
+- Pegar tudo com busca ativa deve exibir a mensagem sem mover itens.
+  Com campo limpo, deve funcionar normalmente.
+- Fechar/reabrir e alternar baús: limpar consulta e restaurar altura da lista,
+  sem acumular barras ou diminuir o painel a cada abertura.
+- Os dois jogadores buscam termos diferentes ao mesmo tempo. Verificar que
+  os termos e resultados ficam locais, com as transferências nativas preservadas.
+- Desativar BuscaNoInventarioEBaus: lista completa e layout restaurados.
+
 Registrar versão do jogo, papel (anfitrião/convidado), cidade, reprodução e
 `BepInEx/LogOutput.log` se algo falhar. Nenhum desses itens está marcado como
 aprovado por compilação ou pelos testes de substitutos.

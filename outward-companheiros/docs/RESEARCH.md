@@ -48,3 +48,38 @@ objetos criados por este mod (ConditionalWeakTable), preservando outras viagens.
 
 Ficam pendentes as validações da UI e das viagens dentro do executável Steam,
 especialmente início pelo convidado, transição e atualização dos eventos.
+
+## Busca 0.2.0
+
+As assinaturas DE de `InventoryContentDisplay`, `StashPanel`,
+`EnvironmentItemDisplay`, `ContainerDisplay` e `ItemListDisplay` foram
+conferidas nas referências publicizadas. O fluxo legado ajudou a identificar
+que `ItemListDisplay.MatchFilter(Item)` é consultado tanto nos itens novos
+quanto nos displays reaproveitados. Nenhuma implementação do jogo foi copiada.
+
+O postfix compõe o resultado nativo com a consulta local da lista. O mod não
+remove UIDs de inventários nem substitui arrays de itens. A atualização usa
+`ContainerDisplay.Refresh()` sobre o recipiente real, incluindo alterações
+que chegam pelo cooperativo. A busca compõe filtros de categoria e mantém
+pilhas, ordenação, peso, dinheiro e movimentação no código nativo.
+
+Há uma barra para bolsos/mochila, outra para o baú de casa e outra para o
+painel de recipientes/saque. As consultas são por instância de painel. As
+listas/queries não são sincronizadas entre jogadores. Os nomes vêm de
+`Item.Name`, no idioma instalado. Há debounce de 70 ms, limite de 64 caracteres
+e cache limitado; a comparação é ordinal após remoção de acentos e caixa.
+
+A UI reserva 57 unidades do topo do viewport e restaura o offset ao fechar.
+Usa InputField real, a fonte do painel, fundo escuro e moldura dourada, com
+limpar e contagem de ícones/grupos. O foco passa pelo CharacterUI do dono;
+os getters de entrada de texto/menu são protegidos enquanto se digita. Uma
+guarda impede que o foco automático em um item roube o caret durante a edição.
+
+`Pegar tudo` nativo ignora filtros de apresentação, então essa ação é bloqueada
+nas listas com consulta ativa com uma mensagem para limpar a busca. O mod
+também preserva `EnvironmentItemDisplay.IsEmpty=false` se há itens reais
+ocultos pela pesquisa, evitando interpretar zero resultados como recipiente
+fisicamente vazio. Não reimplementa transferência ou RPCs.
+
+O alinhamento real, o foco e o comportamento dos controles continuam pendentes
+de validação dentro do executável Steam, conforme VALIDACAO.md.

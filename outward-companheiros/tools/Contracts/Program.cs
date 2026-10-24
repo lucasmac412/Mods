@@ -18,7 +18,13 @@ internal static class Program
             ("MerchantFastTravel","AllPlayersInProximity",0), ("MerchantFastTravel","CanFastTravel",2),
             ("MerchantFastTravel","ProceedFastTravel",2), ("TravelData","GetRealSilverCost",0),
             ("MapWorldMarker","CalculateMapPosition",3), ("CharacterManager","SendMerchantFastTravel",2),
-            ("CharacterManager","SendMerchantFastTravelRPC",5)
+            ("CharacterManager","SendMerchantFastTravelRPC",5),
+            ("InventoryContentDisplay","Show",0), ("StashPanel","Show",0),
+            ("EnvironmentItemDisplay","Show",0), ("EnvironmentItemDisplay","Show",1),
+            ("ItemListDisplay","MatchFilter",1), ("ContainerDisplay","Refresh",0),
+            ("ContainerDisplay","TakeAllItems",1), ("Panel","OnHide",0),
+            ("CharacterUI","get_IsInputFieldFocused",0), ("CharacterUI","get_IgnoreMenuInputs",0),
+            ("EnvironmentItemDisplay","get_IsEmpty",0), ("CharacterUI","SetSelectedGameObject",1)
         };
         foreach(var (type,name,count) in required)
         {
@@ -27,11 +33,14 @@ internal static class Program
         }
         foreach(var (type,name) in new[] { ("MapDisplay","m_zoomLevelSmooth"),("MapDisplay","m_currentMapSceneID"),
             ("MapDisplay","m_currentAreaHasMap"),("MapDisplay","WorldMapMarkers"),
-            ("TravelData","From"),("TravelData","Destination"),("TravelData","RationCost"),("TravelData","SilverCost") })
+            ("TravelData","From"),("TravelData","Destination"),("TravelData","RationCost"),("TravelData","SilverCost"),
+            ("InventoryContentDisplay","m_pouchDisplay"),("InventoryContentDisplay","m_bagDisplay"),
+            ("InventoryContentDisplay","m_inventoriesScrollRect"),("StashPanel","m_stashInventory"),
+            ("EnvironmentItemDisplay","m_containerDisplayList"),("EnvironmentItemDisplay","m_inventoriesScrollRect") })
             Check(game.MainModule.GetType(type).Fields.Any(f=>f.Name==name),"Missing field "+type+"."+name);
         // A build against publicized references can compile illegal direct private accesses.
         // Reject those by checking the development assembly's Publicized attributes.
-        foreach(var type in plugin.MainModule.Types)
+        foreach(var type in plugin.MainModule.GetTypes())
         foreach(var method in type.Methods.Where(m=>m.HasBody))
         foreach(var instruction in method.Body.Instructions)
         {
@@ -45,7 +54,8 @@ internal static class Program
             if(instruction.Operand is MethodReference call && call.DeclaringType.Scope.Name=="Assembly-CSharp")
             {
                 var owner=game.MainModule.GetType(call.DeclaringType.FullName);
-                var actual=owner?.Methods.FirstOrDefault(m=>m.Name==call.Name&&m.Parameters.Count==call.Parameters.Count);
+                var actual=owner?.Methods.FirstOrDefault(m=>m.Name==call.Name
+                    && m.Parameters.Select(p=>p.ParameterType.FullName).SequenceEqual(call.Parameters.Select(p=>p.ParameterType.FullName)));
                 Check(actual!=null && !actual.CustomAttributes.Any(a=>a.AttributeType.Name=="PublicizedAttribute"),
                     "Unsafe direct publicized method access: "+call.FullName);
             }
@@ -62,6 +72,22 @@ internal static class Program
         }
         Check(plugin.MainModule.AssemblyReferences.All(r=>r.Name!="SideLoader"),"No additional SideLoader dependency");
         Check(plugin.MainModule.RuntimeVersion=="v4.0.30319","Mono-compatible CLR version");
+        Check(plugin.Name.Version==new Version(0,2,0,0),"Plugin package version 0.2.0");
+        foreach(var (type,name) in new[] { ("ItemListDisplay","MatchFilter"),("CharacterUI","get_IgnoreMenuInputs"),
+            ("CharacterUI","get_IsInputFieldFocused"),("EnvironmentItemDisplay","get_IsEmpty") })
+            Check(game.MainModule.GetType(type).Methods.Any(m=>m.Name==name&&m.ReturnType.FullName=="System.Boolean"),
+                "Expected Boolean Harmony result: "+type+"."+name);
+        Check(plugin.MainModule.GetType("Companheiros.SearchInputField").BaseType.FullName=="UnityEngine.UI.InputField","Real native-recognisable text input");
+        foreach(var type in plugin.MainModule.GetTypes().Where(t=>t.FullName.Contains("Search")))
+        foreach(var method in type.Methods.Where(m=>m.HasBody))
+        foreach(var instruction in method.Body.Instructions)
+        if(instruction.Operand is MethodReference call)
+        {
+            // Search may rebuild UI, not move/remove inventory or send multiplayer packets.
+            Check(!(call.DeclaringType.Name=="ItemContainer" && call.Name!="get_IsEmpty")
+                && call.DeclaringType.Name!="CharacterInventory" && call.DeclaringType.Name!="RPCManager"
+                && call.DeclaringType.Name!="PhotonView", "Unexpected data/network access in search: "+call.FullName);
+        }
         Console.WriteLine(checks+" DE reference/IL/resource checks passed; this does NOT execute the game.");
     }
 }

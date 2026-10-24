@@ -1,4 +1,4 @@
-COMPANHEIROS DE AURAI 0.1.0 - EXPERIMENTAL
+COMPANHEIROS DE AURAI 0.2.0 - EXPERIMENTAL
 Outward Definitive Edition da Steam / Windows 64 bits / versão Mono
 
 LEIA ISTO PRIMEIRO
@@ -45,7 +45,7 @@ Abram Outward Definitive Edition uma vez pela Steam e fechem o jogo.
 A pasta BepInEx deve ganhar o arquivo LogOutput.log.
 
 4. INSTALAR ESTE MOD
-Extraiam também o ZIP Outward-Companheiros-v0.1.0-Experimental.zip.
+Extraiam também o ZIP Outward-Companheiros-v0.2.0-Experimental.zip.
 Abram a pasta extraída até enxergarem BepInEx e este LEIA-ME.
 Copiem a pasta BepInEx do mod para dentro de Outward_Defed.
 Aceitem MESCLAR as pastas. O pacote do mod só adiciona a própria DLL.
@@ -80,6 +80,18 @@ Quem sai da sessão desaparece da lista.
 Em interiores/locais sem mapa calibrado, a lista continua funcionando;
 o mod não inventa uma posição em um mapa de outra região.
 Os retratos são desenhos estilizados, não fotos ou modelos 3D dos personagens.
+
+BUSCA NOVA NO INVENTÁRIO E NOS BAÚS (0.2.0)
+Clique na barra BUSCAR ITENS, digite parte do nome e aguarde o filtro.
+"pocao" encontra "Poção"; não precisa acertar maiúsculas ou acentos.
+Várias palavras precisam aparecer no nome. A busca respeita a categoria;
+selecione Todos para procurar em todo o inventário.
+O inventário e o baú têm barras separadas, com pesquisas independentes.
+A barra também aparece em recipientes de saque abertos.
+× limpa a busca; Enter encerra a digitação. Fechar o painel limpa a pesquisa.
+Cada jogador pesquisa na própria tela, sem alterar a busca do outro.
+Pegar tudo fica bloqueado durante a busca: limpe o campo antes de usar essa
+ação para não recolher itens ocultos. Mover itens individualmente continua normal.
 
 6. VIAJAR ENTRE CIDADES
 Nas cidades, falem com o Caravaneiro Soroboriano, o NPC da viagem a Harmattan.
@@ -122,6 +134,7 @@ Se houver outros mods, deixem o carregador e os arquivos desses mods no lugar.
 O arquivo BepInEx/config/lucasmac412.outward.companheiros.cfg é criado
 na primeira execução. Nele, MarcadoresNoMapa e CaravanasEntreCidades
 permitem ligar/desligar as duas funções separadamente.
+BuscaNoInventarioEBaus liga/desliga a barra de pesquisa.
 
 SE JÁ USAM R2MODMAN
 Não misturem duas instalações manuais/gerenciadas. No perfil de Outward com

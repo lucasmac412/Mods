@@ -3,5 +3,8 @@
     <OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors><Nullable>enable</Nullable>
   </PropertyGroup>
-  <ItemGroup><Compile Remove="Adapter/**/*.cs" /><Compile Include="../src/Policy.cs" Link="Policy.cs" /></ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Adapter/**/*.cs" /><Compile Include="../src/Policy.cs" Link="Policy.cs" />
+    <Compile Include="../src/ItemSearchQuery.cs" Link="ItemSearchQuery.cs" />
+  </ItemGroup>
 </Project>

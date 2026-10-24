@@ -35,6 +35,6 @@ jobs:
         run: python outward-companheiros/tools/package.py
       - uses: actions/upload-artifact@v4
         with:
-          name: Outward-Companheiros-v0.1.0-Windows
+          name: Outward-Companheiros-v0.2.0-Windows
           path: outward-companheiros/dist/*
           if-no-files-found: error

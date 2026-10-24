@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Globalization;
 using Companheiros;
 
 internal static class Program
@@ -40,7 +41,51 @@ internal static class Program
         Check(Policy.DisplayName(new string('a',200)).Length==32,"Bounded labels");
         Check(!Policy.DisplayName("joão\r\n\t irmão").Any(char.IsControl),"No multiline injection");
         Check(Policy.DisplayName("<color=red>irmão</color>").Contains("<"),"Plain text; UI richText disabled");
-        Console.WriteLine(checks + " checks passed: route gates, solo/host/guest parity, marker identity and labels.");
+        SearchChecks();
+        Console.WriteLine(checks + " checks passed: routes, marker identity, accent-insensitive search, native filter composition and independent queries.");
         Console.WriteLine("These are executable rules tests, NOT a live Outward multiplayer session.");
+    }
+
+    private static void SearchChecks()
+    {
+        var query = new ItemSearchQuery();
+        Check(query.IsEmpty && query.Matches(true,"Espada de Ferro"),"Default inventory unfiltered");
+        Check(!query.Matches(false,"Espada de Ferro"),"Empty query never bypasses a native category/permission filter");
+        query.Set("POCAO");
+        Check(query.Matches(true,"Grande Poção de Vida"),"Case and accent insensitive");
+        Check(query.Matches(true,"Poça\u0303o de Mana"),"Decomposed accents");
+        Check(!query.Matches(true,"Espada de Ferro"),"Nonmatching item hidden");
+        Check(!query.Matches(false,"Poção de Vida"),"Search cannot resurrect a native-filtered item");
+        Check(!query.Matches(true,""),"Unnamed item cannot match an active query");
+        query.Set("  vida\tGRANDE\u00a0");
+        Check(query.Matches(true,"Grande Poção de Vida"),"All words, any order, Unicode whitespace");
+        Check(!query.Matches(true,"Pequena Poção de Vida"),"All search terms required");
+        query.Set("pocao mana");
+        Check(!query.Matches(true,"Grande Poção de Vida"),"Different second term");
+        query.Set("[.*]");
+        Check(!query.Matches(true,"Qualquer item"),"No regex/wildcard interpretation");
+        Check(query.Matches(true,"Item [.*] especial"),"Punctuation remains literal");
+        query.Set("rações");Check(query.Matches(true,"Racoes de Viagem"),"Accented query against plain label");
+        query.Set("flecha");
+        var culture=CultureInfo.CurrentCulture;
+        try { CultureInfo.CurrentCulture=new CultureInfo("tr-TR");Check(query.Matches(true,"FLECHA DE FERRO"),"Invariant matching under another OS culture"); }
+        finally { CultureInfo.CurrentCulture=culture; }
+        query.Set("\ud800pocao\udc00");Check(query.Matches(true,"Poção"),"Malformed UTF-16 cannot crash normalization");
+        query.Set(new string('x',ItemSearchQuery.Limit)+"nao existe");
+        Check(query.Matches(true,new string('x',ItemSearchQuery.Limit)),"Bounded query");
+        query.Set(" \t\r\n");
+        Check(query.IsEmpty&&query.Matches(true,"Antes oculto"),"Clearing restores previously hidden items");
+        Check(!query.Matches(false,"Antes oculto"),"Clearing preserves native exclusions");
+        var chest=new ItemSearchQuery();var inventory=new ItemSearchQuery();
+        chest.Set("pocao");inventory.Set("ferro");
+        Check(chest.Matches(true,"Poção")&&!inventory.Matches(true,"Poção"),"Chest and inventory queries independent");
+        chest.Set("");Check(inventory.Matches(true,"Espada de Ferro")&&!inventory.Matches(true,"Poção"),"Clearing chest does not clear inventory");
+        query.Set("ferro");
+        for(int i=0;i<1200;i++)
+        {
+            Check(query.Matches(true,"Ferro "+i),"Bounded cache churn keeps matching");
+            Check(!query.Matches(true,"Madeira "+i),"Bounded cache churn keeps exclusions");
+        }
+        query.Set("madeira");Check(query.Matches(true,"Madeira 1199"),"Cached names survive query changes");
     }
 }

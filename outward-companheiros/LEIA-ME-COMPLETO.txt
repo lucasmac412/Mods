@@ -1,4 +1,4 @@
-COMPANHEIROS DE AURAI - PACOTE COMPLETO 0.1.0 EXPERIMENTAL
+COMPANHEIROS DE AURAI - PACOTE COMPLETO 0.2.0 EXPERIMENTAL
 Outward Definitive Edition / Steam / Windows 64 bits
 
 ESTA PASTA JÁ CONTÉM O MOD E O CARREGADOR BEPINEX COM O MONO_FIX.
@@ -59,6 +59,18 @@ BepInEx carrega automaticamente. Não existe um programa extra para você abrir.
 Não precisa executar nada como administrador ou usar PowerShell.
 
 O QUE O MOD FAZ
+Busca no inventário e nos baús: clique na barra dourada BUSCAR ITENS e digite
+parte do nome exibido no seu idioma. "pocao" encontra "Poção", sem precisar
+de acento ou maiúsculas. Várias palavras procuram todos os termos no nome.
+O botão × limpa a busca e mostra novamente os itens da categoria atual.
+Enter encerra a digitação. Ao fechar o painel, a pesquisa é limpa.
+Para procurar em todas as categorias do inventário, selecione Todos.
+O inventário e o baú aberto têm pesquisas independentes; a busca é local
+e não muda o que seu irmão está vendo. Também há busca em recipientes de saque.
+A contagem indica grupos/ícones visíveis, não a quantidade de cada pilha.
+Para usar Pegar tudo, limpe a busca primeiro; assim itens ocultos não são
+recolhidos por engano. A seleção e a transferência individual continuam normais.
+
 M: mapa normal com retratos, nomes e direção dos jogadores conectados,
 nas áreas com mapa calibrado. A lista também mostra quem está carregando
 ou está caído. Em locais sem mapa calibrado aparece somente a lista.
@@ -76,10 +88,10 @@ Depois, criem/entrem na partida como vocês já fazem normalmente.
 O modo solo usa os mesmos arquivos e não precisa de outra instalação.
 
 ESTADO DOS TESTES
-Esta é a mesma DLL 0.1.0 experimental anteriormente publicada; a instalação
-foi reunida em uma só pasta. A compilação e as verificações automáticas
-passaram, mas o mod ainda não foi testado dentro de partidas reais solo ou
-cooperativas. Faça o primeiro teste numa cópia dos saves.
+Esta versão 0.2.0 adiciona a busca e preserva o mapa e as caravanas.
+A compilação e as verificações automáticas passaram, mas o mod ainda
+não foi testado dentro de partidas reais solo ou cooperativas.
+Faça o primeiro teste numa cópia dos saves.
 
 SE NÃO CARREGAR
 Confira se winhttp.dll ficou ao lado de Outward Definitive Edition.exe,
