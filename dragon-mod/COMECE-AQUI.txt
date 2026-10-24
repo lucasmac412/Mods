@@ -1,7 +1,10 @@
 DRAGÃO CELESTIAL — OURO E OBSIDIANA
-Minecraft Java Edition 26.2 | Fabric | versão 0.3.4-experimental
+Minecraft Java Edition 26.2 | Fabric | versão 0.3.5-experimental
 
-NOVO NA 0.3.4
+NOVO NA 0.3.5
+O Bosque Celestial voltou à raridade original. Leia os detalhes abaixo.
+
+RECURSOS PRESERVADOS DA 0.3.4
 Dois rugidos mais graves e prolongados, com cerca de 6,8 segundos cada.
 Mordidas curtas e secas, com o impacto no início do arquivo de som.
 Mandíbula menos exagerada: fecha no tick do dano e volta suavemente ao repouso.
@@ -31,11 +34,12 @@ O guardião dorme enrolado no santuário, respirando baixinho. Entre em Sobreviv
 A aba do Criativo reúne todos os 17 itens e os dois ovos de criação.
 Para ver a arena nova, use um mundo novo ou regiões ainda não geradas.
 
-VERSÃO DE TESTES: BOSQUE CELESTIAL MUITO COMUM
-Agora há um centro de bosque e ninho por região de 256 x 256 blocos,
-36 vezes mais centros por área do que na versão 0.1.0.
-Cada bosque mantém raio de 192 blocos e pode se unir aos bosques vizinhos.
-Essa frequência é temporária para facilitar nossos testes.
+BOSQUE CELESTIAL RARO NOVAMENTE
+Há um centro de bosque e ninho por região de 1.536 x 1.536 blocos,
+a mesma distribuição original da versão 0.1.0. São 36 vezes menos centros
+por área do que nas versões de testes 0.1.1 a 0.3.4.
+Cada bosque mantém raio de 192 blocos; os bosques ficam separados.
+A mudança vale em regiões novas. Biomas e ninhos já gerados não são removidos.
 
 Você não precisa programar, instalar Ollama ou instalar a Luma para usar este mod.
 Não funciona no Bedrock, celular, console, Forge ou NeoForge.
@@ -54,18 +58,18 @@ No Launcher: Instalações > perfil Fabric > Editar > Diretório do jogo.
 Se o diretório estiver vazio, no Windows aperte Windows+R e abra:
 %APPDATA%\.minecraft
 Crie a pasta mods se ela não existir. Copie para ela os dois arquivos:
-- celestial-dragon-0.3.4-experimental.jar
+- celestial-dragon-0.3.5-experimental.jar
 - fabric-api-0.161.0+26.2.jar
 Se já houver Fabric API ou este mod, mantenha somente uma versão de cada.
-Se estiver atualizando da 0.3.3 ou de qualquer versão anterior, retire o JAR antigo do dragão da pasta mods e coloque
-celestial-dragon-0.3.4-experimental.jar. O Fabric API continua o mesmo.
+Se estiver atualizando da 0.3.4 ou de qualquer versão anterior, retire o JAR antigo do dragão da pasta mods e coloque
+celestial-dragon-0.3.5-experimental.jar. O Fabric API continua o mesmo.
 O mod é independente da Luma. Se usar os dois, basta um Fabric API compatível.
 
 3. COMECE NUM MUNDO NOVO
 Faça backup dos mundos importantes antes de experimentar.
 Abra o perfil Fabric 26.2. Crie um mundo novo; comandos ajudam a localizar o bioma.
 A geração só aparece em regiões novas, não altera as que você já explorou.
-O aumento da frequência também só vale em regiões novas; prefira um mundo novo.
+A raridade nova só vale em regiões novas; não é necessário apagar seu mundo.
 O dragão selvagem e outros animais são perigosos: comece em Criativo para aprender.
 
 TESTE RÁPIDO NO CRIATIVO
@@ -84,7 +88,7 @@ Para obter por comando:
 4. ENCONTRE O NINHO
 Procure o Bosque Celestial, com solo, madeira e rochas diferentes.
 Cada centro de geração tem um ninho gigante, com um dragão selvagem e um ovo.
-Como os bosques agora podem se unir, uma área celestial extensa pode ter vários ninhos.
+Os bosques novos ficam separados. Bosques extensos das versões antigas permanecem.
 Com comandos ativados, use:
 /locate biome celestial_dragon:celestial_grove
 /locate structure celestial_dragon:dragon_nest

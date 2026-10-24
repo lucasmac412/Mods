@@ -4,7 +4,7 @@ Ambiente de desenvolvimento Linux x86_64, JDK 25, Minecraft Java 26.2, Fabric Lo
 
 A versão **0.3.4** prolonga os dois rugidos para cerca de 6,8 segundos, baixa seu tom e substitui as duas mordidas por impactos curtos. A mandíbula abre menos de 45 graus, fecha no quinto tick, junto ao dano, e retorna gradualmente ao repouso. O pescoço se desloca menos de 0,3 bloco; a cabeça mantém a direção do golpe. A Lanterna rúnica celestial recebe três texturas próprias e opacas de 32 × 32, com modelo cúbico de seis faces, sem camadas sobrepostas nem animação de textura. Seu registro continua `celestial_dragon:celestial_lantern`; os 17 itens e os blocos já colocados são preservados. Mantém as demais mecânicas da 0.3.3.
 
-A frequência de testes da 0.1.1 foi preservada: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São 36 vezes mais centros por área do que na 0.1.0; bosques vizinhos podem se unir. Essa geração só aparece em regiões novas do Overworld. Prefira um mundo novo para testar.
+**Bioma raro novamente na 0.3.5:** a distribuição original foi restaurada: um centro de bosque e ninho por região de **1.536 × 1.536 blocos**, com raio de 192 blocos. São **36 vezes menos centros por área** do que nas versões de testes 0.1.1–0.3.4. Os bosques ficam separados. A redução vale para regiões ainda não geradas; bosques e ninhos já existentes continuam no mundo.
 
 ## Resultados desta versão
 
@@ -13,6 +13,12 @@ Em **21 de outubro de 2026**, passaram **7 testes JUnit**, **31 GameTests de ser
 No teste com entradas reais, a Genki Dama acionada por R removeu **480 blocos da superfície** da plataforma. Em duas janelas de 16 ticks, W percorreu cerca de **11,15 blocos** e W + Shift cerca de **25,08 blocos**, mantendo o jogador montado. Isso confirma a aceleração nesse cenário; não é uma medição de desempenho no computador do jogador.
 
 Os três novos testes JUnit verificam mandíbula fechada no tick do dano, limites de abertura e deslocamento sem saltos e recuperação sem acumular transformações entre ataques.
+
+## Raridade restaurada na 0.3.5
+
+Build aprovado com **7 testes JUnit** e **31 testes do servidor** (inclui o teste padrão `minecraft:always_pass`). A seleção real de biomas encontrou **3152/65536 amostras celestiais: 4,81%** de uma grade de 8.192 × 8.192 blocos, com passo de 32 blocos. A separação e o espaçamento voltaram aos valores da 0.1.0, compartilhados pelo bioma e pelo ninho. [Relatório desta revisão](dragao/rarity-v035.json).
+
+A comparação binária dos JARs 0.3.4 e 0.3.5 encontra somente três entradas alteradas: os metadados da versão e as classes de distribuição do bioma e dos ninhos (o compilador incorpora as constantes nas duas classes). Sons, texturas, animações e combate mantêm os mesmos bytes. Os testes gráficos descritos abaixo são das revisões anteriores; não foram repetidos nesta alteração de frequência. Regiões já geradas não são reescritas nem apagadas.
 
 ## Servidor e configuração
 
@@ -24,7 +30,7 @@ O comando `./gradlew --no-daemon -p dragon-mod build` compila as partes de servi
 - O ninho gigante contém um ovo completo e um guardião selvagem, sem duplicação ao reprocessar a mesma estrutura.
 - Os dois ovos de criação produzem as versões selvagem e domada com o dono correto, não funcionam em Sobrevivência e esperam uma área desobstruída. Dispensers apenas devolvem esses ovos como itens.
 - A aba do Criativo contém todos os 17 itens registrados, sem duplicatas, e permite encontrá-los na busca.
-- O bioma é registrado no Overworld, cobre mais de 98% da grade de amostragem na frequência de testes e preserva a seleção do Nether.
+- O bioma é registrado no Overworld e, na 0.3.5, deve cobrir entre 4% e 6% da grade de amostragem de 8.192 × 8.192 blocos; o teste usa a seleção real de biomas, verifica o alinhamento do ninho e preserva a seleção do Nether.
 - Dono, animais domados, dragões do mesmo dono e membros da equipe do dono ficam protegidos da mordida e do raio.
 - Paredes interrompem o raio; o ataque não destrói blocos, não passa de 35 blocos e causa um único acerto por alvo em cada disparo.
 - A mordida não causa dano durante a preparação e acerta no quinto tick. O raio carrega por dez ticks antes de causar dano e não atinge novos alvos durante a recuperação. Um golpe não começa durante a animação do outro.
@@ -89,7 +95,7 @@ São **15 OGG mono em 44.100 Hz**, registrados em 12 eventos (11 do dragão e um
 
 ## Limites desta versão
 
-É uma versão experimental com frequência de bioma aumentada para testes. As verificações cobrem cenários definidos; não comprovam um aumento específico de FPS nem compatibilidade com todos os mods, biomas de terceiros ou todas as sementes. A reação acrescentada às criaturas usa a IA de objetivos do Minecraft; chefes e criaturas de outros mods que usam sistemas próprios podem se comportar de outra maneira. Itens, blocos e entidades sem comportamento de criatura não passam a atacar.
+É uma versão experimental com a frequência original rara do bioma restaurada na 0.3.5. As verificações cobrem cenários definidos; não comprovam um aumento específico de FPS nem compatibilidade com todos os mods, biomas de terceiros ou todas as sementes. A reação acrescentada às criaturas usa a IA de objetivos do Minecraft; chefes e criaturas de outros mods que usam sistemas próprios podem se comportar de outra maneira. Itens, blocos e entidades sem comportamento de criatura não passam a atacar.
 
 Não houve teste de desempenho na RTX 4060 do jogador, de instalação no Windows nem de uma sessão multiplayer entre computadores reais. O teste gráfico utiliza renderização por software na nuvem. Os ataques e as configurações são decididos pelo servidor; isso também é exercitado pelos testes, mas não substitui uma partida multiplayer real.
 

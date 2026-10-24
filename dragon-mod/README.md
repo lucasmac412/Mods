@@ -1,14 +1,14 @@
 # Dragão Celestial — Ouro e Obsidiana
 
-Mod independente para **Minecraft Java Edition 26.2 + Fabric**, versão **0.3.4-experimental**. Adiciona um dragão chinês negro e dourado, voo montado, mordida, raio de energia, o Bosque Celestial, ninhos gigantes, ovos coletáveis e uma incubadora. Pode ser instalado sem a Luma.
+Mod independente para **Minecraft Java Edition 26.2 + Fabric**, versão **0.3.5-experimental**. Adiciona um dragão chinês negro e dourado, voo montado, mordida, raio de energia, o Bosque Celestial, ninhos gigantes, ovos coletáveis e uma incubadora. Pode ser instalado sem a Luma.
 
-**[Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.4-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.4-Experimental.zip)** · **[Instalação passo a passo](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.4-experimental/docs/INSTALAR-DRAGAO.md)** · **[Ver o movimento no jogo](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.4-experimental/docs/dragao/ondulacao.gif)**
+**[Baixar o pacote pronto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.5-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.5-Experimental.zip)** · **[Instalação passo a passo](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.5-experimental/docs/INSTALAR-DRAGAO.md)** · **[Ver o movimento no jogo](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.5-experimental/docs/dragao/ondulacao.gif)**
 
 O ZIP contém o JAR do dragão e o Fabric API compatível. Instale Minecraft 26.2, Fabric Loader 0.19.5 ou superior compatível e Java 25. Copie os dois JARs para a pasta `mods` do perfil Fabric. No multiplayer, instale os mesmos arquivos no servidor e nos clientes. Esta é uma versão experimental; faça uma cópia do mundo antes de usá-la e prefira um mundo novo para explorar a geração.
 
-**Bioma comum para testes:** o Bosque Celestial continua muito comum, como na 0.1.1. Há um centro de bosque e ninho por região de **256 × 256 blocos**, em vez de 1.536 × 1.536 na 0.1.0: **36 vezes mais centros por área**. O raio continua em 192 blocos, então bosques vizinhos podem se unir em áreas extensas. Essa frequência é temporária durante o desenvolvimento; o equilíbrio final será definido depois.
+**Bioma raro novamente na 0.3.5:** a distribuição original foi restaurada: um centro de bosque e ninho por região de **1.536 × 1.536 blocos**, com raio de 192 blocos. São **36 vezes menos centros por área** do que nas versões de testes 0.1.1–0.3.4. Os bosques ficam separados. A redução vale para regiões ainda não geradas; bosques e ninhos já existentes continuam no mundo.
 
-[Veja as garras de perto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.4-experimental/docs/dragao/14-garras-ombro.png) · [Escamas pontudas](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.4-experimental/docs/dragao/15-escamas-costas.png).
+[Veja as garras de perto](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.5-experimental/docs/dragao/14-garras-ombro.png) · [Escamas pontudas](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.5-experimental/docs/dragao/15-escamas-costas.png).
 
 A **0.3.4 traz dois rugidos mais graves e prolongados, de aproximadamente 6,8 segundos**, e duas mordidas curtas com impacto no início do som. A mandíbula abre menos, fecha no tick do dano e retorna gradualmente ao repouso; o deslocamento do pescoço foi reduzido. A **Lanterna rúnica celestial** agora usa três texturas próprias de obsidiana, dourado e cristal luminoso, em vez da textura de lanterna do mar. Mantém o mesmo identificador: os blocos já colocados recebem o novo visual ao atualizar, sem recriar o mundo. O áudio continua sob CC BY-SA 3.0, com créditos no pacote. O ZIP também inclui **OUVIR-SONS.html**: abra no Chrome para ouvir cada som sem iniciar o jogo.
 
@@ -20,9 +20,9 @@ A nova arena do ninho mede **113 blocos de diâmetro**, com oito torres, anéis 
 
 O guardião natural começa **dormindo enrolado**, imóvel em sua plataforma. Visitas em Criativo ou Espectador não o despertam. A entrada de um jogador em Sobrevivência ou Aventura no interior da arena o acorda; atacá-lo também o acorda. Surge a barra de chefe no topo da tela para jogadores próximos. O estado de sono é salvo com o mundo; durante o repouso há respiração discreta. O dragão criado pelo ovo selvagem do Criativo não gera uma arena ao redor de si.
 
-Estas correções funcionam no mundo atual. O visual dos blocos muda ao atualizar o mod; os apoios antigos são reparados com o guardião presente. A arena maior introduzida na 0.3.0 continua aparecendo somente em regiões geradas com essa estrutura; mundos da 0.1.x ou 0.2.x precisam de regiões novas para encontrá-la. Cliente e servidor precisam usar a mesma versão 0.3.4.
+Estas correções funcionam no mundo atual. O visual dos blocos muda ao atualizar o mod; os apoios antigos são reparados com o guardião presente. A arena maior introduzida na 0.3.0 continua aparecendo somente em regiões geradas com essa estrutura; mundos da 0.1.x ou 0.2.x precisam de regiões novas para encontrá-la. Cliente e servidor precisam usar a mesma versão 0.3.5.
 
-Para atualizar da 0.3.3 ou de qualquer versão anterior, feche o jogo e substitua o JAR antigo por `celestial-dragon-0.3.4-experimental.jar`; mantenha apenas uma versão do dragão na pasta `mods`. O Fabric API continua o mesmo. Para ver a geração mais comum, crie um mundo novo ou explore regiões ainda não geradas: áreas já exploradas não são refeitas.
+Para atualizar da 0.3.4 ou de qualquer versão anterior, feche o jogo e substitua o JAR antigo por `celestial-dragon-0.3.5-experimental.jar`; mantenha apenas uma versão do dragão na pasta `mods`. O Fabric API continua o mesmo. Para encontrar a geração rara, explore regiões ainda não geradas ou crie outro mundo: áreas já exploradas não são refeitas e seus ninhos existentes não são removidos.
 
 ## Testar pelo Criativo
 
@@ -99,6 +99,6 @@ Com JDK 25 instalado, execute a partir da raiz deste repositório:
 ./gradlew -p dragon-mod runGameTest
 ```
 
-No Windows, use `gradlew.bat -p dragon-mod build`. O mod instalável fica em `dragon-mod/build/libs/celestial-dragon-0.3.4-experimental.jar`; o arquivo `-sources.jar` contém o código-fonte e não deve ser instalado como mod.
+No Windows, use `gradlew.bat -p dragon-mod build`. O mod instalável fica em `dragon-mod/build/libs/celestial-dragon-0.3.5-experimental.jar`; o arquivo `-sources.jar` contém o código-fonte e não deve ser instalado como mod.
 
-A suíte do servidor verifica configuração, ovos, incubação, combate e proteção de aliados. Os testes gráficos verificam modelo, menu, controles montados, uso dos ovos normais do Minecraft e geração em mundo Normal com recarga. Veja os [resultados, capturas reais e limites](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.4-experimental/docs/TESTES-DRAGAO.md). A execução na nuvem validou os onze efeitos do dragão no motor OpenAL com saída digital gravada; a reprodução física no computador do jogador ainda precisa ser conferida.
+A suíte do servidor verifica configuração, ovos, incubação, combate e proteção de aliados. Os testes gráficos verificam modelo, menu, controles montados, uso dos ovos normais do Minecraft e geração em mundo Normal com recarga. Veja os [resultados, capturas reais e limites](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.5-experimental/docs/TESTES-DRAGAO.md). A execução na nuvem validou os onze efeitos do dragão no motor OpenAL com saída digital gravada; a reprodução física no computador do jogador ainda precisa ser conferida.

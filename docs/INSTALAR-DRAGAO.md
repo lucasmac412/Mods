@@ -2,9 +2,9 @@
 
 Este guia é para **Minecraft Java Edition no computador**, versão **26.2**. O Dragão Celestial é um mod Fabric independente da Luma.
 
-**[Baixar Dragao-Celestial-Fabric-26.2-v0.3.4-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.4-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.4-Experimental.zip)**
+**[Baixar Dragao-Celestial-Fabric-26.2-v0.3.5-Experimental.zip](https://raw.githubusercontent.com/lucasmac412/Mods/dragao-v0.3.5-experimental/downloads/Dragao-Celestial-Fabric-26.2-v0.3.5-Experimental.zip)**
 
-**Bioma comum para testes:** como na versão 0.1.1, enquanto desenvolvemos e testamos o mod, o Bosque Celestial está muito comum: um centro de bosque e ninho por região de **256 × 256 blocos**, com raio de 192 blocos. São **36 vezes mais centros por área** do que na 0.1.0, e bosques vizinhos podem se unir. Essa frequência é temporária para facilitar os testes.
+**Bioma raro novamente na 0.3.5:** a distribuição original foi restaurada: um centro de bosque e ninho por região de **1.536 × 1.536 blocos**, com raio de 192 blocos. São **36 vezes menos centros por área** do que nas versões de testes 0.1.1–0.3.4. Os bosques ficam separados. A redução vale para regiões ainda não geradas; bosques e ninhos já existentes continuam no mundo.
 
 A **0.3.4 traz dois rugidos mais graves e prolongados, de aproximadamente 6,8 segundos**, e duas mordidas curtas com impacto no início do som. A mandíbula abre menos, fecha no tick do dano e retorna gradualmente ao repouso; o deslocamento do pescoço foi reduzido. A **Lanterna rúnica celestial** agora usa três texturas próprias de obsidiana, dourado e cristal luminoso, em vez da textura de lanterna do mar. Mantém o mesmo identificador: os blocos já colocados recebem o novo visual ao atualizar, sem recriar o mundo. O áudio continua sob CC BY-SA 3.0, com créditos no pacote. O ZIP também inclui **OUVIR-SONS.html**: abra no Chrome para ouvir cada som sem iniciar o jogo.
 
@@ -16,7 +16,7 @@ A nova arena do ninho mede **113 blocos de diâmetro**, com oito torres, anéis 
 
 O guardião natural começa **dormindo enrolado**, imóvel em sua plataforma. Visitas em Criativo ou Espectador não o despertam. A entrada de um jogador em Sobrevivência ou Aventura no interior da arena o acorda; atacá-lo também o acorda. Surge a barra de chefe no topo da tela para jogadores próximos. O estado de sono é salvo com o mundo; durante o repouso há respiração discreta. O dragão criado pelo ovo selvagem do Criativo não gera uma arena ao redor de si.
 
-Estas correções funcionam no mundo atual. O visual dos blocos muda ao atualizar o mod; os apoios antigos são reparados com o guardião presente. A arena maior introduzida na 0.3.0 continua aparecendo somente em regiões geradas com essa estrutura; mundos da 0.1.x ou 0.2.x precisam de regiões novas para encontrá-la. Cliente e servidor precisam usar a mesma versão 0.3.4.
+Estas correções funcionam no mundo atual. O visual dos blocos muda ao atualizar o mod; os apoios antigos são reparados com o guardião presente. A arena maior introduzida na 0.3.0 continua aparecendo somente em regiões geradas com essa estrutura; mundos da 0.1.x ou 0.2.x precisam de regiões novas para encontrá-la. Cliente e servidor precisam usar a mesma versão 0.3.5.
 
 ## 1. Baixe e extraia o pacote
 
@@ -24,10 +24,10 @@ Abra o link acima. No navegador, `Ctrl + J` mostra os downloads. Localize o ZIP 
 
 | Arquivo | Função |
 | --- | --- |
-| `celestial-dragon-0.3.4-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
+| `celestial-dragon-0.3.5-experimental.jar` | Dragão, bosque, ninho, ovo e incubadora. |
 | `fabric-api-0.161.0+26.2.jar` | Dependência usada pelo mod. |
 
-Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.4-experimental/dragon-mod/README.md).
+Esses JARs ficam na pasta `mods` do pacote. Você vai copiá-los para o jogo no passo 4. Mantenha os JARs fechados; não é necessário executá-los ou descompactá-los. Um ZIP que contém apenas `src`, `gradle` e arquivos de programação é o código-fonte, e precisa ser compilado conforme o [README do projeto](https://github.com/lucasmac412/Mods/blob/dragao-v0.3.5-experimental/dragon-mod/README.md).
 
 ## 2. Abra o Minecraft Java 26.2 uma vez
 
@@ -66,14 +66,14 @@ No Windows, pressione `Windows + R`, cole `%APPDATA%\.minecraft` e aperte Enter 
 4. Se já houver outra versão do Dragão Celestial ou do Fabric API, guarde a versão substituída fora de `mods`. Deixe uma única versão de cada mod.
 5. Abra o Launcher, selecione **Fabric 26.2** e clique em **Jogar**.
 
-**Se você já usa a 0.3.1 ou qualquer versão anterior:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.3.4-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
+**Se você já usa a 0.3.4 ou qualquer versão anterior:** feche o jogo, mova o JAR antigo do dragão para fora de `mods` e coloque `celestial-dragon-0.3.5-experimental.jar` no lugar. Nunca deixe duas versões do dragão juntas. O Fabric API não mudou; mantenha uma única cópia compatível.
 
 O resultado deve ser parecido com:
 
 ```text
 .minecraft/
   mods/
-    celestial-dragon-0.3.4-experimental.jar
+    celestial-dragon-0.3.5-experimental.jar
     fabric-api-0.161.0+26.2.jar
 ```
 
@@ -105,9 +105,9 @@ O **Ovo celestial** de três blocos e a incubadora continuam disponíveis para t
 
 ## 6. Encontre um ninho
 
-Para o primeiro teste, crie um **mundo novo em Criativo, com comandos ativados**. O Bosque Celestial aparece com muita frequência no Overworld, com árvores, solo, rochas e minério próprios. Cada centro de geração contém um ninho gigante com um dragão selvagem e um ovo. Como bosques vizinhos podem se unir, uma área celestial extensa pode conter vários ninhos. Os dragões selvagens surgem nesses ninhos.
+O Bosque Celestial é raro no Overworld, com árvores, solo, rochas e minério próprios. Há um centro de geração por região de 1.536 × 1.536 blocos; cada centro contém um ninho gigante com um dragão selvagem e um ovo. Para localizá-lo rapidamente em um mundo de teste, ative comandos e use `/locate` abaixo.
 
-O aumento da frequência não modifica áreas já exploradas. Se atualizar um mundo antigo, viaje para regiões ainda não geradas; criar um mundo novo é a forma mais simples de experimentar esta versão.
+A redução da frequência não modifica áreas já exploradas nem remove ninhos ou dragões existentes. Para encontrar a distribuição rara, viaje para regiões ainda não geradas ou crie um mundo novo.
 
 Abra o chat com `T`, digite uma linha e pressione Enter:
 

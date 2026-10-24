@@ -1,0 +1,25 @@
+{
+  "version": "0.3.5-experimental",
+  "spacingChunks": 96,
+  "separationChunks": 48,
+  "regionBlocks": 1536,
+  "groveRadiusBlocks": 192,
+  "densityComparedToTesting": "1/36 centers per area",
+  "sampledBiomeSelection": {
+    "celestialSamples": 3152,
+    "totalSamples": 65536,
+    "coverage": 0.048095703125,
+    "gridBlocks": 8192,
+    "stepBlocks": 32
+  },
+  "unitTestsPassed": 7,
+  "serverTestsPassedIncludingVanillaAlwaysPass": 31,
+  "changedJarEntriesComparedTo034": [
+    "br/com/celestialdragon/world/CelestialNestPlacement.class",
+    "br/com/celestialdragon/world/GroveLayout.class",
+    "fabric.mod.json"
+  ],
+  "jarSha256": "68c8d6e78ce8ec052599ff6f10f643a984b9c4a3f15f7fed4ddfcba42e1704f4",
+  "existingChunks": "unchanged; no removal or conversion",
+  "clientGraphicsRerun": false
+}
