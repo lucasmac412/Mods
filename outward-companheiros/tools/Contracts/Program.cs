@@ -26,7 +26,13 @@ internal static class Program
             ("CharacterUI","get_IsInputFieldFocused",0), ("CharacterUI","get_IgnoreMenuInputs",0),
             ("EnvironmentItemDisplay","get_IsEmpty",0), ("CharacterUI","SetSelectedGameObject",1),
             ("UIElement","OnEnable",0), ("UIElement","get_StartDone",0), ("CharacterUI","get_EventSystemCurrentSelectedGo",0),
-            ("Panel","get_Hidding",0)
+            ("Panel","get_Hidding",0),
+            ("NodeCanvas.Tasks.Actions.GiveReward","OnExecute",0),
+            ("CharacterInventory","ReceiveMoneyReward",1),
+            ("CharacterInventory","ReceiveItemReward",3),
+            ("CharacterInventory","ReceiveSkillReward",1),
+            ("RPCManager","SendMoneyReward",2), ("RPCManager","SendItemReward",4),
+            ("RPCManager","SendSkillReward",2)
         };
         foreach(var (type,name,count) in required)
         {
@@ -80,7 +86,7 @@ internal static class Program
         }
         Check(plugin.MainModule.AssemblyReferences.All(r=>r.Name!="SideLoader"),"No additional SideLoader dependency");
         Check(plugin.MainModule.RuntimeVersion=="v4.0.30319","Mono-compatible CLR version");
-        Check(plugin.Name.Version==new Version(0,2,1,0),"Plugin package version 0.2.1");
+        Check(plugin.Name.Version==new Version(0,3,0,0),"Plugin package version 0.3.0");
         foreach(var (type,name) in new[] { ("ItemListDisplay","MatchFilter"),("CharacterUI","get_IgnoreMenuInputs"),
             ("CharacterUI","get_IsInputFieldFocused"),("EnvironmentItemDisplay","get_IsEmpty") })
             Check(game.MainModule.GetType(type).Methods.Any(m=>m.Name==name&&m.ReturnType.FullName=="System.Boolean"),
@@ -103,6 +109,31 @@ internal static class Program
                 && call.DeclaringType.Name!="CharacterInventory" && call.DeclaringType.Name!="RPCManager"
                 && call.DeclaringType.Name!="PhotonView", "Unexpected data/network access in search: "+call.FullName);
         }
+        var reward = game.MainModule.GetType("NodeCanvas.Tasks.Actions.GiveReward");
+        var receiver = reward.Fields.Single(f=>f.Name=="RewardReceiver");
+        Check(receiver.IsPublic && !receiver.CustomAttributes.Any(a=>a.AttributeType.Name=="PublicizedAttribute"),
+            "Reward selector genuinely public in DE");
+        var selector = reward.NestedTypes.Single(t=>t.Name=="Receiver");
+        Check(receiver.FieldType.FullName==selector.FullName,"Exact reward selector type");
+        foreach (var pair in new[] { ("Host",0), ("Instigator",1), ("Everyone",2) })
+            Check(selector.Fields.Any(f=>f.Name==pair.Item1&&f.HasConstant&&Convert.ToInt32(f.Constant)==pair.Item2),
+                "DE receiver enum contract: "+pair.Item1);
+        Check(reward.Methods.Single(m=>m.Name=="OnExecute").ReturnType.FullName=="System.Void", "Synchronous void reward action");
+        var sharing = plugin.MainModule.GetType("Companheiros.RewardSharing");
+        Check(sharing!=null,"Reward sharing included in shipped DLL");
+        foreach (var method in sharing.Methods.Where(m=>m.HasBody))
+        foreach (var instruction in method.Body.Instructions)
+        {
+            if (instruction.Operand is MethodReference call)
+                Check(call.DeclaringType.Name!="CharacterInventory"&&call.DeclaringType.Name!="RPCManager"
+                    &&call.DeclaringType.Name!="PhotonView"&&call.Name!="OnExecute",
+                    "Reward patch must not deliver, replay or broadcast rewards: "+call.FullName);
+            if (instruction.OpCode.Code==Mono.Cecil.Cil.Code.Stfld && instruction.Operand is FieldReference field
+                && field.DeclaringType.Scope.Name=="Assembly-CSharp")
+                Check(field.DeclaringType.FullName==reward.FullName&&field.Name=="RewardReceiver",
+                    "Only native reward recipient may be written");
+        }
+        Check(sharing.Methods.Any(m=>m.Name=="Finish"),"Selector cleanup finalizer present");
         Console.WriteLine(checks+" DE reference/IL/resource checks passed; this does NOT execute the game.");
     }
 }

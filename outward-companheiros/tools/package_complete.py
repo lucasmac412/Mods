@@ -13,11 +13,11 @@ import urllib.request
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'Outward-Companheiros-v0.2.1-Completo'
+NAME = 'Outward-Companheiros-v0.3.0-Completo'
 FOLDER = 'transfere pro jogo'
 LOADER_URL = 'https://gcdn.thunderstore.io/live/repository/packages/BepInEx-BepInExPack_Outward-5.4.19.zip'
 LOADER_SHA = 'ae703fcdfd33e65defb8b4e441fbc4d388a8223c0cc251ad791361a0dd6ce35b'
-PLUGIN_URL = 'https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.2.1-experimental/downloads/Outward-Companheiros-v0.2.1-Experimental.zip'
+PLUGIN_URL = 'https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.3.0-experimental/downloads/Outward-Companheiros-v0.3.0-Experimental.zip'
 PLUGIN_ZIP_SHA = 'e2431af95ff04cb588d70190fd2fe1491474a78a97a82bb1871077d84d325889'
 PLUGIN_DLL_SHA = '394ac31e6a6b702a86706819aa25448d17d4d9ec308c94d068891d29076af559'
 PLUGIN_PATH = 'BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll'
@@ -129,7 +129,7 @@ def build(loader_bytes, plugin_bytes, output):
     digest = sha(target.read_bytes())
     (output/(NAME+'-SHA256.txt')).write_text(digest+'  '+target.name+'\n', encoding='ascii')
     report = {
-        'package': NAME, 'folder': FOLDER, 'pluginVersion': '0.2.1',
+        'package': NAME, 'folder': FOLDER, 'pluginVersion': '0.3.0',
         'status': 'EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST',
         'game': 'Outward Definitive Edition Steam Mono / Windows x64',
         'requiresSteamMonoSelection': True, 'loaderIncluded': True, 'monoFixIncluded': True,

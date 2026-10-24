@@ -1,6 +1,7 @@
 # Companheiros de Aurai — Outward Definitive Edition
 
 Mod **experimental compilado** para a edição Steam **Mono**, Windows x64.
+Compartilha **recompensas de missões e diálogos** entre os jogadores conectados.
 Adiciona uma **barra de busca no inventário e nos baús**, retratos com nome e
 direção no mapa normal (**M**) e viagens do Caravaneiro Soroboriano entre cidades.
 A tarifa é **200 pratas +
@@ -14,7 +15,7 @@ testes de regras e testes com substitutos controlados não são testes do jogo.
 
 ## Instalação para você e seu irmão
 
-**[Baixar pacote completo 0.2.1 — uma pasta para copiar](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-completo-v0.2.1/downloads/Outward-Companheiros-v0.2.1-Completo.zip)**
+**[Baixar pacote completo 0.3.0 — uma pasta para copiar](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-completo-v0.3.0/downloads/Outward-Companheiros-v0.3.0-Completo.zip)**
 
 Este pacote reúne o mod e o carregador BepInExPack_Outward com `mono_fix`.
 Não precisa baixar o carregador separadamente, usar PowerShell ou abrir instalador.
@@ -28,8 +29,10 @@ Não precisa baixar o carregador separadamente, usar PowerShell ou abrir instala
    Abram a **Definitive Edition pela Steam** normalmente. Repitam nos **dois PCs**.
 
 O [guia do pacote completo](LEIA-ME-COMPLETO.txt) também vai dentro da pasta.
-A versão experimental **0.2.1** corrige a saída do campo de busca e a barra
-que desaparecia ao trocar de aba na 0.2.0. Mantém mapa, caravanas e pesquisa.
+A versão experimental **0.3.0** acrescenta recompensas compartilhadas. Mantém
+mapa, caravanas e a correção da busca da 0.2.1. Para atualizar, fechem o jogo
+nos dois PCs e substituam `BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll`;
+não deixem uma segunda cópia antiga do plugin em outra pasta.
 A versão Mono ainda precisa ser selecionada na Steam.
 Se já usam r2modman ou outro gerenciador, mantenham a instalação do gerenciador
 e usem o pacote só do plugin descrito abaixo.
@@ -51,7 +54,7 @@ o BepInEx oficial é um download separado.
    Definitive Edition uma vez pela Steam e fechem: deve aparecer
    `BepInEx/LogOutput.log`. **Mantenham BepInEx 5 existente se já funciona com
    o `mono_fix` do Outward.** O pacote genérico sem esse ajuste não é o indicado.
-4. Baixem o [ZIP do mod](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.2.1-experimental/downloads/Outward-Companheiros-v0.2.1-Experimental.zip),
+4. Baixem o [ZIP do mod](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.3.0-experimental/downloads/Outward-Companheiros-v0.3.0-Experimental.zip),
    usem **Extrair tudo** e abram a pasta extraída até ver `BepInEx`.
    Copiem essa pasta para `Outward_Defed`, mesclando as pastas.
 5. Confiram o caminho final:
@@ -60,6 +63,43 @@ o BepInEx oficial é um download separado.
 
 O [passo a passo completo](LEIA-ME.txt) está também dentro do ZIP, incluindo
 instalação com r2modman, resolução de problemas e desinstalação. Não exige SideLoader.
+
+## Recompensas para você e seu irmão — 0.3.0
+
+Ativo por padrão, sem tecla ou comando. Com os dois na partida, uma recompensa
+nativa de missão/diálogo de **120 pratas + 2 itens** passa a entregar
+**120 pratas + 2 itens para cada jogador**, sem dividir a quantia. Habilidades
+que a ação `GiveReward` concede seguem o desbloqueio nativo de cada personagem.
+Inclui recompensas antes destinadas ao anfitrião ou a quem iniciou a conversa.
+Recompensas já coletivas passam uma única vez pelo mesmo código do jogo.
+Solo continua com um destinatário. Não há distância adicional exigida pelo mod.
+
+- Vale para recompensas **novas**, com os personagens conectados e carregados.
+  Não recupera missões já entregues, nem reserva prêmios para quem está offline.
+- Cobre prata, itens e habilidades entregues pelo sistema `GiveReward`.
+  Não duplica baús, corpos, itens no chão, compras normais, trocas entre players
+  ou habilidades compradas no menu de treinamento. Uma troca por diálogo que
+  use `GiveReward` também terá sua recompensa compartilhada; o custo original
+  desse diálogo permanece como no jogo.
+- Não copia a campanha para o save do convidado, eventos de facção, conquistas
+  Steam ou recursos coletivos da construção de Nova Sirocco. Recompensas de
+  outros mods que não usam esse sistema não têm cobertura garantida.
+- A ação original roda uma vez. O mod altera temporariamente seu destinatário
+  para `Everyone` e restaura a seleção mesmo se houver erro. Não reenvia RPCs,
+  reexecuta missões ou observa o inventário para gerar cópias.
+- Não combinem com outro mod de compartilhamento de recompensas: ele pode
+  acrescentar uma segunda entrega fora deste fluxo.
+
+Em `BepInEx/config/lucasmac412.outward.companheiros.cfg`, a opção
+`RecompensasParaTodos = true` liga a função. Para desligar, fechem o jogo,
+alterem para `false` nos dois PCs e iniciem novamente. Instalações existentes
+recebem a nova opção automaticamente. O log deve conter `Recompensas: GiveReward DE integrado`;
+isso confirma o carregamento do encaixe, não a entrega numa partida real.
+
+**Limite da validação:** os testes cobrem os callbacks reais do plugin, inclusive
+restauração após erro, e a instalação do patch Harmony em um substituto controlado
+no Windows. As assinaturas DE são conferidas separadamente. Não executamos
+Outward/Photon aqui, portanto não há garantia de todas as missões sem teste real.
 
 ## Como usar
 
@@ -99,7 +139,7 @@ O mod não aumenta o limite de jogadores do jogo; se outro mod o aumentar,
 a lista não tem um limite fixo de duas pessoas.
 
 Na primeira execução é criado `BepInEx/config/lucasmac412.outward.companheiros.cfg`:
-`MarcadoresNoMapa`, `CaravanasEntreCidades` e `BuscaNoInventarioEBaus`
+`MarcadoresNoMapa`, `CaravanasEntreCidades`, `BuscaNoInventarioEBaus` e `RecompensasParaTodos`
 ligam/desligam as funções.
 Façam o primeiro teste em uma cópia dos saves, sozinhos e juntos.
 
@@ -115,6 +155,10 @@ DLLs; o pacote anterior contém apenas o plugin.
 dotnet build src/Outward.Companheiros.csproj -c Release
 dotnet run --project tests/Tests.csproj -c Release
 dotnet run --project tests/Adapter/Adapter.csproj -c Release
+dotnet run --project tests/Rewards/Rewards.csproj -c Release -f net8.0
+# Windows: testa o patch real HarmonyX em um substituto, sem Outward
+dotnet build tests/Rewards/Rewards.csproj -c Release -f net472
+./tests/Rewards/bin/Release/net472/Rewards.exe
 dotnet run --project tools/Contracts/Contracts.csproj -c Release -- /caminho/Assembly-CSharp.dll src/bin/Release/net472/Outward.Companheiros.dll
 python3 tools/package.py
 # Reúne os dois ZIPs publicados, conferindo os SHA-256 fixados:
@@ -140,7 +184,7 @@ retorno de aba e cem ciclos de mostrar/ocultar sem acumular margem. Os
 contratos rejeitam os patches de captura forçada e veto de seleção da 0.2.0.
 Os resultados da compilação Windows estão nos relatórios de entrega.
 
-A [compilação 0.2.1](https://github.com/lucasmac412/Mods/actions/runs/40070297591)
+Histórico: a [compilação 0.2.1](https://github.com/lucasmac412/Mods/actions/runs/40070297591)
 passou sem avisos: 5.641 verificações de regras/busca/interação, 4.309 do
 adaptador de caravana e 764 de referências/IL/recursos. A correção ainda exige
 confirmação dentro do jogo, incluindo baús.

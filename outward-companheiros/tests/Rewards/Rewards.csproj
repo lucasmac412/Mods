@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFrameworks>net8.0;net472</TargetFrameworks>
+    <LangVersion>9.0</LangVersion><TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(LocalReferences)' == ''">
+    <PackageReference Include="HarmonyX" Version="2.9.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(LocalReferences)' != ''">
+    <Reference Include="0Harmony"><HintPath>$(LocalReferences)/0Harmony.dll</HintPath></Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup><Compile Include="../../src/RewardSharing.cs" Link="RewardSharing.cs" /></ItemGroup>
+</Project>

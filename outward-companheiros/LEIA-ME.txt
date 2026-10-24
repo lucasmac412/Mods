@@ -1,4 +1,4 @@
-COMPANHEIROS DE AURAI 0.2.1 - EXPERIMENTAL
+COMPANHEIROS DE AURAI 0.3.0 - EXPERIMENTAL
 Outward Definitive Edition da Steam / Windows 64 bits / versão Mono
 
 LEIA ISTO PRIMEIRO
@@ -146,3 +146,29 @@ Vocês dois precisam repetir isso nos respectivos perfis.
 
 CÓDIGO E GUIA ON-LINE
 https://github.com/lucasmac412/Mods/tree/main/outward-companheiros
+
+RECOMPENSAS COMPARTILHADAS (NOVIDADE 0.3.0)
+Não precisa apertar nada. Entrem na mesma partida com os personagens carregados
+antes de entregar a próxima missão. Prata, itens e habilidades concedidos pelo
+sistema nativo de recompensas de missões/diálogos passam a ir para todos.
+Exemplo: recompensa de 120 pratas e 2 itens = 120 pratas e 2 itens para cada um.
+Não divide a recompensa do anfitrião. Solo mantém uma única entrega.
+
+Não recupera recompensas antigas nem entrega a quem estava desconectado.
+Não copia a campanha para o save do convidado, não duplica saque de baús/corpos,
+itens no chão, compras normais ou trocas entre jogadores. Recursos de construção
+continuam pertencendo ao mundo. Habilidades compradas no menu do treinador
+continuam individuais; as que são recompensas usam o desbloqueio do próprio jogo.
+Trocas por diálogo que usem o mesmo sistema de recompensa também compartilham
+a entrega, mantendo o custo original. Não use junto com outro mod de recompensas.
+
+Para desligar: com o jogo fechado, abra no Bloco de Notas
+BepInEx/config/lucasmac412.outward.companheiros.cfg
+e mude RecompensasParaTodos = true para RecompensasParaTodos = false nos dois PCs.
+A opção aparece automaticamente depois da primeira abertura desta versão.
+
+PARA ATUALIZAR DA 0.2.1
+Fechem o jogo nos dois PCs. Substituam o arquivo
+BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll pelo novo.
+Não deixem outra cópia antiga desse plugin em BepInEx/plugins.
+Mapa, busca e caravana continuam incluídos. Não precisa criar outro personagem.

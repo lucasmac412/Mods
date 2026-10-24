@@ -3,7 +3,7 @@ import hashlib,json,sys,zipfile
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
-NAME='Outward-Companheiros-v0.2.1-Experimental'
+NAME='Outward-Companheiros-v0.3.0-Experimental'
 
 def main():
     dll=Path(sys.argv[1]) if len(sys.argv)>1 else ROOT/'src/bin/Release/net472/Outward.Companheiros.dll'
@@ -23,7 +23,7 @@ def main():
         assert z.testzip() is None and len(z.namelist())==3
     checksum=hashlib.sha256(target.read_bytes()).hexdigest()
     (output/(NAME+'-SHA256.txt')).write_text(checksum+'  '+target.name+'\n',encoding='ascii')
-    report={'version':'0.2.1','status':'EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST',
+    report={'version':'0.3.0','status':'EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST',
         'game':'Outward Definitive Edition Steam - Mono',
         'reference':'Outward.GameLibs 2022.5.18-r.0 / Unity 2020.3.26',
         'requirements':['Windows x64','BepInExPack_Outward 5.4.19 with mono_fix','same plugin on every PC'],

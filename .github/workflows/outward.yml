@@ -26,6 +26,15 @@ jobs:
         run: dotnet run --project outward-companheiros/tests/Tests.csproj -c Release
       - name: Production caravan adapter against controlled stand-ins
         run: dotnet run --project outward-companheiros/tests/Adapter/Adapter.csproj -c Release
+      - name: Reward sharing - production callbacks and real HarmonyX detours
+        shell: pwsh
+        run: |
+          dotnet run --project outward-companheiros/tests/Rewards/Rewards.csproj -c Release -f net8.0
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          dotnet build outward-companheiros/tests/Rewards/Rewards.csproj -c Release -f net472
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & outward-companheiros/tests/Rewards/bin/Release/net472/Rewards.exe
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Check DE contracts, private access and embedded portraits
         shell: pwsh
         run: |
@@ -35,6 +44,6 @@ jobs:
         run: python outward-companheiros/tools/package.py
       - uses: actions/upload-artifact@v4
         with:
-          name: Outward-Companheiros-v0.2.1-Windows
+          name: Outward-Companheiros-v0.3.0-Windows
           path: outward-companheiros/dist/*
           if-no-files-found: error

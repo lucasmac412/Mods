@@ -11,9 +11,9 @@ namespace Companheiros
     public sealed class Plugin : BaseUnityPlugin
     {
         public const string Guid = "lucasmac412.outward.companheiros";
-        public const string Version = "0.2.1";
+        public const string Version = "0.3.0";
         internal static Plugin Instance;
-        internal ConfigEntry<bool> MapEnabled, TravelEnabled, SearchEnabled;
+        internal ConfigEntry<bool> MapEnabled, TravelEnabled, SearchEnabled, RewardsEnabled;
         internal MapOverlay Overlay;
         internal InventorySearch Search;
         private Harmony harmony;
@@ -25,7 +25,14 @@ namespace Companheiros
             MapEnabled = Config.Bind("Geral", "MarcadoresNoMapa", true, "Mostrar aventureiros conectados no mapa M.");
             TravelEnabled = Config.Bind("Geral", "CaravanasEntreCidades", true, "200 pratas e 3 rações por viagem, pelo contratante. Instale nos dois PCs.");
             SearchEnabled = Config.Bind("Geral", "BuscaNoInventarioEBaus", true, "Barra de busca local no inventário, baús e recipientes. Não altera itens.");
+            RewardsEnabled = Config.Bind("Geral", "RecompensasParaTodos", true, "Compartilha recompensas de missões/diálogos (prata, itens e habilidades) via GiveReward nativo. Instale nos dois PCs. Sem recompensas retroativas ou cópias de saque/compras de lojas.");
             harmony = new Harmony(Guid);
+            try
+            {
+                RewardSharing.Install(harmony, () => RewardsEnabled.Value);
+                Logger.LogInfo("Recompensas: GiveReward DE integrado; destinatários = todos; entrega/rede nativas, sem repetir a ação.");
+            }
+            catch (Exception e) { Warn("rewards-load", e); }
             try
             {
                 // Both references are publicized development assemblies. All non-public game
@@ -154,6 +161,7 @@ namespace Companheiros
         }
         private void OnDestroy()
         {
+            RewardSharing.Disable();
             Search?.Dispose();
             Overlay?.Dispose();
             harmony?.UnpatchSelf();

@@ -65,3 +65,30 @@ binário, mas os passos acima ainda exigem teste real do usuário.
 Registrar versão do jogo, papel (anfitrião/convidado), cidade, reprodução e
 `BepInEx/LogOutput.log` se algo falhar. Nenhum desses itens está marcado como
 aprovado por compilação ou pelos testes de substitutos.
+
+## Recompensas 0.3.0: validação real ainda pendente
+
+Testes automatizados: mesmas funções Before/Finish do plugin, incluindo entrega
+simulada para 1, 2 e 4 destinatários, anfitrião/instigador/todos, valores desconhecidos,
+configuração desligada, ações reutilizadas, execução aninhada e restauração após
+exceção. O alvo net472 executa HarmonyX de verdade em um substituto controlado.
+Não simula fielmente Unity, inventário real, persistência ou tráfego Photon.
+
+Na primeira próxima missão, com cópia dos saves e mod 0.3.0 nos dois PCs:
+
+1. Ambos conectados e carregados. Anotar a prata e os itens antes da entrega.
+2. Anfitrião entrega: conferir o acréscimo integral nos dois inventários,
+   sem duplicação no anfitrião. Conferir notificação nativa no convidado.
+3. Em outra recompensa, convidado inicia a conversa; conferir os dois.
+4. Missão que concede habilidade/passiva: conferir aprendizado nos dois,
+   inclusive se um já conhecia a habilidade. Restrições nativas permanecem.
+5. Recompensa já coletiva: apenas uma entrega para cada personagem.
+6. Salvar, sair e carregar: prêmio permanece, sem nova entrega ao reconectar.
+7. Solo: uma recompensa normal. Compras de loja, saque de baú e transferências
+   entre players não geram cópias para outra pessoa.
+8. Desligar RecompensasParaTodos nos dois PCs: comportamento original.
+
+Nenhum desses passos de jogo está marcado como aprovado automaticamente.
+Não reexecute repetidamente uma entrega que falhou no meio: o mod não tenta
+compensar uma transação parcialmente realizada pelo jogo. Para diagnóstico,
+informar nome da missão, quem falou com o NPC e enviar os logs dos dois PCs.

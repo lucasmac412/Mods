@@ -108,3 +108,25 @@ de saída/retorno e reserva/restauração da margem.
 
 Os testes e inspeção de IL verificam esses caminhos e a remoção dos patches
 anteriores. Não reproduzem uma sessão real de Unity/Outward neste ambiente.
+
+## Recompensas compartilhadas 0.3.0
+
+- Nas referências DE fixadas, `NodeCanvas.Tasks.Actions.GiveReward` expõe
+  publicamente `RewardReceiver` (`Host=0`, `Instigator=1`, `Everyone=2`),
+  `SilverAmount` e `ItemReward`; `OnExecute()` é uma ação síncrona void.
+- O comportamento de `Everyone` e as entregas `ReceiveMoneyReward`,
+  `ReceiveItemReward`, `ReceiveSkillReward` foram estudados na assembly legada
+  já utilizada na pesquisa. A entrega a um player remoto usa os RPCs nativos.
+  Os métodos equivalentes são conferidos nas referências DE, mas as referências
+  têm corpos removidos: isso NÃO prova o comportamento do executável DE atual.
+- O mod comunitário histórico [SharedCoopRewards 2.2](https://github.com/Aestras/Outward-Mods/blob/1aea908927ee73c59ccd75830781cb736e2cadc7/__LEGACY/__SMALL%20MODS/SharedCoopRewards/src/Hooks.cs)
+  também usa o seletor `Everyone` para compartilhamento. Foi consultado como
+  evidência de API; nenhuma DLL, geração de loot, SideLoader ou código desse
+  mod foi incorporado. Nosso patch restaura o seletor com finalizer.
+- A implementação original deste repositório muda apenas a seleção temporária
+  de destinatários. Não replica inventários nem intercepta a recepção de RPCs.
+  Um `GiveReward` já coletivo permanece coletivo, sem segunda execução.
+- Recursos de construção têm outra ação (`GiveRewardBuildingResource`) e
+  pertencem ao mundo; não são multiplicados por participante. Eventos de missão,
+  conquistas e conteúdos fora de `GiveReward` não são considerados recompensas
+  pessoais por esta implementação.
