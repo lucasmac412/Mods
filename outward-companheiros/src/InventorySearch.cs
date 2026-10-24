@@ -12,6 +12,8 @@ namespace Companheiros
     {
         private readonly Dictionary<UIElement, SearchBar> bars = new Dictionary<UIElement, SearchBar>();
         private readonly Dictionary<ItemListDisplay, SearchBar> lists = new Dictionary<ItemListDisplay, SearchBar>();
+        private readonly HashSet<UIElement> owners = new HashSet<UIElement>();
+        private readonly Dictionary<UIElement, float> retryAfter = new Dictionary<UIElement, float>();
         private static readonly FieldInfo Pouch = Field(typeof(InventoryContentDisplay), "m_pouchDisplay");
         private static readonly FieldInfo Bag = Field(typeof(InventoryContentDisplay), "m_bagDisplay");
         private static readonly FieldInfo InventoryScroll = Field(typeof(InventoryContentDisplay), "m_inventoriesScrollRect");
@@ -20,6 +22,12 @@ namespace Companheiros
         private static readonly FieldInfo LootScroll = Field(typeof(EnvironmentItemDisplay), "m_inventoriesScrollRect");
         private static FieldInfo Field(Type type, string name)
         { return AccessTools.Field(type, name) ?? throw new MissingFieldException(type.Name, name); }
+
+        internal void Track(UIElement owner)
+        {
+            if (owner && (owner is InventoryContentDisplay || owner is StashPanel || owner is EnvironmentItemDisplay))
+                owners.Add(owner);
+        }
 
         internal void Show(InventoryContentDisplay owner)
         {
@@ -43,7 +51,8 @@ namespace Companheiros
         }
         private void Attach(UIElement owner, Func<ContainerDisplay[]> getLists, ScrollRect scroll, RectTransform fallback, string placeholder)
         {
-            if (!Plugin.Instance.SearchEnabled.Value || !owner) return;
+            Track(owner);
+            if (!Plugin.Instance.SearchEnabled.Value || !owner || !owner.StartDone) return;
             if (!bars.TryGetValue(owner, out var bar))
             {
                 // For panes without ScrollRect, reserve space above their actual item grid,
@@ -59,7 +68,7 @@ namespace Companheiros
                 bar = new SearchBar(owner, getLists, viewport, placeholder);
                 bars.Add(owner, bar);
             }
-            bar.Show(); Bind(bar);
+            if (bar.ViewportVisible) { bar.Show(); Bind(bar); }
         }
         private void Bind(SearchBar bar)
         {
@@ -77,15 +86,6 @@ namespace Companheiros
             if (!native || !Plugin.Instance.SearchEnabled.Value || !lists.TryGetValue(list, out var bar) || !bar.Active) return native;
             return bar.Query.Matches(native, item ? item.Name : null);
         }
-        internal bool Focused(CharacterUI ui)
-        {
-            if (!ui) return false;
-            return bars.Values.Any(b => b.Active && b.Owner.CharacterUI == ui && b.CapturingText);
-        }
-        internal bool Editing(CharacterUI ui)
-        {
-            return ui && bars.Values.Any(b => b.Active && b.Owner.CharacterUI == ui && b.Input && b.Input.isFocused);
-        }
         internal bool CanTakeAll(ContainerDisplay list)
         {
             if (!list || !lists.TryGetValue(list, out var bar) || !bar.Active || bar.Query.IsEmpty) return true;
@@ -100,23 +100,54 @@ namespace Companheiros
         { if (list && lists.TryGetValue(list, out var bar)) bar.CountDirty = true; }
         internal void Tick()
         {
-            foreach (var pair in bars.ToArray())
+            foreach (var owner in owners.ToArray())
             {
-                var bar = pair.Value;
-                if (!pair.Key || !bar.Exists)
+                if (retryAfter.TryGetValue(owner, out float time) && Time.unscaledTime < time) continue;
+                try
                 {
-                    Hidden(pair.Key); bar.Dispose(); bars.Remove(pair.Key);
-                    foreach (var key in lists.Where(p => p.Value == bar).Select(p => p.Key).ToArray()) lists.Remove(key);
+                    if (!owner)
+                    { Remove(owner); owners.Remove(owner); retryAfter.Remove(owner); continue; }
+                    bool visible = Plugin.Instance.SearchEnabled.Value && owner.StartDone && owner.IsDisplayed
+                        && owner.gameObject.activeInHierarchy && (!(owner is Panel panel) || !panel.Hidding);
+                    if (!visible)
+                    {
+                        bars.TryGetValue(owner, out var active);
+                        bool restoreItems = !Plugin.Instance.SearchEnabled.Value && active != null && active.Active;
+                        Hidden(owner);
+                        if (restoreItems) active.RefreshVisible();
+                        continue;
+                    }
+                    if (!bars.TryGetValue(owner, out var bar) || !bar.Exists)
+                    {
+                        Remove(owner);
+                        if (owner is InventoryContentDisplay inventory) Show(inventory);
+                        else if (owner is StashPanel stash) Show(stash);
+                        else if (owner is EnvironmentItemDisplay loot) Show(loot);
+                        if (!bars.TryGetValue(owner, out bar)) continue;
+                    }
+                    if (!bar.ViewportVisible) { Hidden(owner); continue; }
+                    // Reconcile visibility, including tab returns that only re-enable a GO
+                    // and never call InventoryContentDisplay.Show again.
+                    bar.Show(); Bind(bar); bar.Tick();
                 }
-                else if (!Plugin.Instance.SearchEnabled.Value || !pair.Key.IsDisplayed || !pair.Key.gameObject.activeInHierarchy)
-                    Hidden(pair.Key);
-                else if (bar.Active)
-                { Bind(bar); bar.Tick(); }
+                catch (Exception e)
+                {
+                    Plugin.Instance.Warn("search-panel-" + (owner ? owner.GetInstanceID().ToString() : "destroyed"), e);
+                    // One transitioning pane must not permanently disable every search bar.
+                    retryAfter[owner] = Time.unscaledTime + 1f;
+                    try { Remove(owner); } catch (Exception cleanup) { Plugin.Instance.Warn("search-panel-cleanup", cleanup); }
+                }
             }
+        }
+        private void Remove(UIElement owner)
+        {
+            if (!bars.TryGetValue(owner, out var bar)) return;
+            foreach (var key in lists.Where(p => p.Value == bar).Select(p => p.Key).ToArray()) lists.Remove(key);
+            bars.Remove(owner); bar.Dispose();
         }
         public void Dispose()
         {
-            lists.Clear(); foreach (var bar in bars.Values) bar.Dispose(); bars.Clear();
+            lists.Clear(); foreach (var bar in bars.Values) bar.Dispose(); bars.Clear(); owners.Clear(); retryAfter.Clear();
         }
     }
 }

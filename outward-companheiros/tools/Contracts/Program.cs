@@ -24,7 +24,9 @@ internal static class Program
             ("ItemListDisplay","MatchFilter",1), ("ContainerDisplay","Refresh",0),
             ("ContainerDisplay","TakeAllItems",1), ("Panel","OnHide",0),
             ("CharacterUI","get_IsInputFieldFocused",0), ("CharacterUI","get_IgnoreMenuInputs",0),
-            ("EnvironmentItemDisplay","get_IsEmpty",0), ("CharacterUI","SetSelectedGameObject",1)
+            ("EnvironmentItemDisplay","get_IsEmpty",0), ("CharacterUI","SetSelectedGameObject",1),
+            ("UIElement","OnEnable",0), ("UIElement","get_StartDone",0), ("CharacterUI","get_EventSystemCurrentSelectedGo",0),
+            ("Panel","get_Hidding",0)
         };
         foreach(var (type,name,count) in required)
         {
@@ -36,8 +38,14 @@ internal static class Program
             ("TravelData","From"),("TravelData","Destination"),("TravelData","RationCost"),("TravelData","SilverCost"),
             ("InventoryContentDisplay","m_pouchDisplay"),("InventoryContentDisplay","m_bagDisplay"),
             ("InventoryContentDisplay","m_inventoriesScrollRect"),("StashPanel","m_stashInventory"),
-            ("EnvironmentItemDisplay","m_containerDisplayList"),("EnvironmentItemDisplay","m_inventoriesScrollRect") })
+            ("EnvironmentItemDisplay","m_containerDisplayList"),("EnvironmentItemDisplay","m_inventoriesScrollRect"),
+            ("CharacterUI","m_selectedInputField"),("CharacterUI","m_isInputFieldFocused"),("CharacterUI","m_inputFieldUnfocusTime") })
             Check(game.MainModule.GetType(type).Fields.Any(f=>f.Name==name),"Missing field "+type+"."+name);
+        using(var ui=AssemblyDefinition.ReadAssembly(Path.Combine(Path.GetDirectoryName(args[0]),"UnityEngine.UI.dll")))
+        {
+            Check(ui.MainModule.GetType("UnityEngine.UI.InputField").Fields.Any(f=>f.Name=="m_ShouldActivateNextUpdate"&&f.FieldType.FullName=="System.Boolean"),
+                "Search can cancel pending InputField activation without forcing a read-only property");
+        }
         // A build against publicized references can compile illegal direct private accesses.
         // Reject those by checking the development assembly's Publicized attributes.
         foreach(var type in plugin.MainModule.GetTypes())
@@ -72,12 +80,19 @@ internal static class Program
         }
         Check(plugin.MainModule.AssemblyReferences.All(r=>r.Name!="SideLoader"),"No additional SideLoader dependency");
         Check(plugin.MainModule.RuntimeVersion=="v4.0.30319","Mono-compatible CLR version");
-        Check(plugin.Name.Version==new Version(0,2,0,0),"Plugin package version 0.2.0");
+        Check(plugin.Name.Version==new Version(0,2,1,0),"Plugin package version 0.2.1");
         foreach(var (type,name) in new[] { ("ItemListDisplay","MatchFilter"),("CharacterUI","get_IgnoreMenuInputs"),
             ("CharacterUI","get_IsInputFieldFocused"),("EnvironmentItemDisplay","get_IsEmpty") })
             Check(game.MainModule.GetType(type).Methods.Any(m=>m.Name==name&&m.ReturnType.FullName=="System.Boolean"),
                 "Expected Boolean Harmony result: "+type+"."+name);
         Check(plugin.MainModule.GetType("Companheiros.SearchInputField").BaseType.FullName=="UnityEngine.UI.InputField","Real native-recognisable text input");
+        var main=plugin.MainModule.GetType("Companheiros.Plugin");
+        var patchStrings=main.Methods.Where(m=>m.HasBody).SelectMany(m=>m.Body.Instructions).Select(i=>i.Operand).OfType<string>().ToArray();
+        Check(!patchStrings.Contains("get_IgnoreMenuInputs")&&!patchStrings.Contains("get_IsInputFieldFocused"),"No forced native input-capture getter overrides");
+        Check(!patchStrings.Contains("SetSelectedGameObject"),"No selection-veto patch that can trap the caret");
+        Check(patchStrings.Contains("OnEnable"),"Re-enabled tabs are tracked");
+        var tick=plugin.MainModule.GetType("Companheiros.InventorySearch").Methods.Single(m=>m.Name=="Tick");
+        Check(tick.Body.Instructions.Any(i=>i.Operand is MethodReference c&&c.DeclaringType.Name=="SearchBar"&&c.Name=="Show"),"Visible tab automatically re-shows a hidden bar");
         foreach(var type in plugin.MainModule.GetTypes().Where(t=>t.FullName.Contains("Search")))
         foreach(var method in type.Methods.Where(m=>m.HasBody))
         foreach(var instruction in method.Body.Instructions)

@@ -42,7 +42,8 @@ internal static class Program
         Check(!Policy.DisplayName("joão\r\n\t irmão").Any(char.IsControl),"No multiline injection");
         Check(Policy.DisplayName("<color=red>irmão</color>").Contains("<"),"Plain text; UI richText disabled");
         SearchChecks();
-        Console.WriteLine(checks + " checks passed: routes, marker identity, accent-insensitive search, native filter composition and independent queries.");
+        InteractionChecks();
+        Console.WriteLine(checks + " checks passed: routes, search, focus escape paths, tab return and idempotent layout transitions.");
         Console.WriteLine("These are executable rules tests, NOT a live Outward multiplayer session.");
     }
 
@@ -87,5 +88,49 @@ internal static class Program
             Check(!query.Matches(true,"Madeira "+i),"Bounded cache churn keeps exclusions");
         }
         query.Set("madeira");Check(query.Matches(true,"Madeira 1199"),"Cached names survive query changes");
+    }
+
+    private static void InteractionChecks()
+    {
+        var state=new SearchInteractionState();
+        Check(!state.Visible&&!state.Editing,"New bar captures no input");
+        Check(state.Show()&&state.Visible&&!state.Editing,"Showing bar does not force editing");
+        Check(!state.Show(),"Already visible bar does not reserve layout twice");
+        for(int exit=0;exit<3;exit++)
+        {
+            state.BeginEdit();
+            Check(state.Editing,"Explicit text selection starts edit");
+            bool key=exit<2, outside=exit==2;
+            Check(state.ShouldRelease(true,true,key,outside),"Escape, Enter and outside clicks can always release captured text");
+            state.EndEdit();
+            Check(!state.Editing&&state.Visible,"Ending typing keeps the search bar visible");
+            Check(!state.ShouldRelease(false,false,false,false),"Released field does not keep capturing actions");
+        }
+        state.BeginEdit();
+        Check(state.ShouldRelease(false,true,true,false),"Escape releases even if native focused state is inconsistent");
+        state.EndEdit();
+        state.BeginEdit();
+        Check(state.ShouldRelease(true,false,false,false),"Selection moving to an item/tab releases stale native focus");
+        state.EndEdit();
+        state.BeginEdit();
+        Check(!state.ShouldRelease(true,true,false,false),"Ordinary typing stays focused");
+        Check(state.Hide()&&!state.Visible&&!state.Editing,"Tab exit ends typing and hides bar");
+        state.BeginEdit();Check(!state.Editing,"Hidden bar cannot capture input");
+        Check(state.Show()&&state.Visible&&!state.Editing,"Returning to inventory restores the bar without capturing keyboard");
+        var chest=new SearchInteractionState();chest.Show();chest.BeginEdit();
+        state.EndEdit();Check(chest.Editing,"Other panel's focus state is independent");
+        chest.Hide();state.Hide();
+        int reserved=0;
+        for(int i=0;i<100;i++)
+        {
+            if(state.Show()) reserved+=57;
+            if(state.Show()) reserved+=57;
+            Check(state.Visible&&reserved==57,"Tab return reserves exactly one bar height");
+            state.BeginEdit();state.EndEdit();
+            Check(state.Visible,"OK/Enter does not hide bar");
+            if(state.Hide())reserved-=57;
+            if(state.Hide())reserved-=57;
+            Check(reserved==0&&!state.Editing,"Repeated tab/close cycles restore layout once and release focus");
+        }
     }
 }

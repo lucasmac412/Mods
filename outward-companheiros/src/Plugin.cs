@@ -7,10 +7,11 @@ using HarmonyLib;
 namespace Companheiros
 {
     [BepInPlugin(Guid, "Companheiros de Aurai", Version)]
+    [UnityEngine.DefaultExecutionOrder(-10000)]
     public sealed class Plugin : BaseUnityPlugin
     {
         public const string Guid = "lucasmac412.outward.companheiros";
-        public const string Version = "0.2.0";
+        public const string Version = "0.2.1";
         internal static Plugin Instance;
         internal ConfigEntry<bool> MapEnabled, TravelEnabled, SearchEnabled;
         internal MapOverlay Overlay;
@@ -57,6 +58,8 @@ namespace Companheiros
                 Require(typeof(EnvironmentItemDisplay), "m_containerDisplayList", typeof(System.Collections.Generic.List<ContainerDisplay>));
                 Require(typeof(EnvironmentItemDisplay), "m_inventoriesScrollRect", typeof(UnityEngine.UI.ScrollRect));
                 Search = new InventorySearch();
+                SearchFocus.Validate();
+                Patch(typeof(UIElement), "OnEnable", Type.EmptyTypes, nameof(SearchPanelEnabled));
                 Patch(typeof(InventoryContentDisplay), "Show", Type.EmptyTypes, nameof(InventoryShown));
                 Patch(typeof(StashPanel), "Show", Type.EmptyTypes, nameof(StashShown));
                 Patch(typeof(EnvironmentItemDisplay), "Show", Type.EmptyTypes, nameof(LootShown));
@@ -64,15 +67,10 @@ namespace Companheiros
                 Patch(typeof(Panel), "OnHide", Type.EmptyTypes, nameof(SearchPanelHidden));
                 Patch(typeof(ItemListDisplay), "MatchFilter", new[] { typeof(Item) }, nameof(SearchMatch));
                 Patch(typeof(ContainerDisplay), "Refresh", Type.EmptyTypes, nameof(SearchListRefreshed));
-                Patch(typeof(CharacterUI), "get_IsInputFieldFocused", Type.EmptyTypes, nameof(SearchTyping));
-                Patch(typeof(CharacterUI), "get_IgnoreMenuInputs", Type.EmptyTypes, nameof(SearchTyping));
                 Patch(typeof(EnvironmentItemDisplay), "get_IsEmpty", Type.EmptyTypes, nameof(SearchLootEmpty));
                 var takeAll = AccessTools.Method(typeof(ContainerDisplay), "TakeAllItems", new[] { typeof(ContainerDisplay) });
                 if (takeAll == null) throw new MissingMethodException("ContainerDisplay.TakeAllItems");
                 harmony.Patch(takeAll, prefix: new HarmonyMethod(typeof(Plugin), nameof(SearchTakeAll)));
-                var select = AccessTools.Method(typeof(CharacterUI), "SetSelectedGameObject", new[] { typeof(UnityEngine.GameObject) });
-                if (select == null) throw new MissingMethodException("CharacterUI.SetSelectedGameObject");
-                harmony.Patch(select, prefix: new HarmonyMethod(typeof(Plugin), nameof(SearchKeepTyping)));
                 Logger.LogInfo("Busca: inventário, baús e recipientes; filtro local com fonte nativa e moldura dourada.");
             }
             catch (Exception e) { Search?.Dispose(); Search = null; Warn("search-load", e); }
@@ -138,28 +136,21 @@ namespace Companheiros
             try { Instance?.Search?.Hidden(__instance); }
             catch (Exception e) { Instance?.Warn("search-hide", e); }
         }
+        private static void SearchPanelEnabled(UIElement __instance) { Instance?.Search?.Track(__instance); }
         private static void SearchMatch(ItemListDisplay __instance, Item __0, ref bool __result)
         {
             try { if (Instance?.Search != null) __result = Instance.Search.Match(__instance, __0, __result); }
             catch (Exception e) { Instance?.Warn("search-filter", e); }
         }
         private static void SearchListRefreshed(ContainerDisplay __instance) { Instance?.Search?.Refreshed(__instance); }
-        private static void SearchTyping(CharacterUI __instance, ref bool __result)
-        { if (Instance?.Search?.Focused(__instance) == true) __result = true; }
         private static void SearchLootEmpty(EnvironmentItemDisplay __instance, ref bool __result)
         { if (__result && Instance?.Search?.HasHiddenLoot(__instance) == true) __result = false; }
         private static bool SearchTakeAll(ContainerDisplay __0)
         { return Instance?.Search?.CanTakeAll(__0) ?? true; }
-        private static bool SearchKeepTyping(CharacterUI __instance, UnityEngine.GameObject __0)
-        {
-            // Native delayed item focus must not steal the caret. A mouse click outside
-            // deselects InputField first, so ordinary item clicks continue normally.
-            return !__0 || !__0.GetComponent<ItemDisplay>() || Instance?.Search?.Editing(__instance) != true;
-        }
         private void Update()
         {
             try { Search?.Tick(); }
-            catch (Exception e) { Warn("search-update", e); Search?.Dispose(); Search = null; }
+            catch (Exception e) { Warn("search-update", e); }
         }
         private void OnDestroy()
         {

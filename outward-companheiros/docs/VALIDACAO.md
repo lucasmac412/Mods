@@ -44,6 +44,24 @@ Em uma cópia do mundo/personagens, com o mesmo plugin nos dois PCs:
   os termos e resultados ficam locais, com as transferências nativas preservadas.
 - Desativar BuscaNoInventarioEBaus: lista completa e layout restaurados.
 
+## Regressão relatada na 0.2.0 / correção 0.2.1
+
+Relato do usuário: campo aparece e recebe texto no inventário, mas prende o
+foco; trocar de aba permite sair, porém voltar não restaura a barra.
+
+Na 0.2.1, testar primeiro no inventário:
+
+1. Digitar, sair por Enter, Esc e OK; clicar fora e num item; cada saída deve
+   soltar o teclado sem reativar a edição no quadro seguinte.
+2. Clicar no botão nativo de fechar o inventário enquanto edita. Reabrir.
+3. Trocar de aba enquanto edita e voltar ao inventário diversas vezes:
+   barra presente, sem edição automática, sem redução cumulativa da lista.
+4. Repetir em baú de casa e recipiente de saque. Essa parte não foi confirmada
+   no jogo na versão anterior.
+
+Há testes executáveis do estado de interação e da reconciliação prevista no
+binário, mas os passos acima ainda exigem teste real do usuário.
+
 Registrar versão do jogo, papel (anfitrião/convidado), cidade, reprodução e
 `BepInEx/LogOutput.log` se algo falhar. Nenhum desses itens está marcado como
 aprovado por compilação ou pelos testes de substitutos.

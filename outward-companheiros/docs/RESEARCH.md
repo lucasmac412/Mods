@@ -71,9 +71,7 @@ e cache limitado; a comparação é ordinal após remoção de acentos e caixa.
 
 A UI reserva 57 unidades do topo do viewport e restaura o offset ao fechar.
 Usa InputField real, a fonte do painel, fundo escuro e moldura dourada, com
-limpar e contagem de ícones/grupos. O foco passa pelo CharacterUI do dono;
-os getters de entrada de texto/menu são protegidos enquanto se digita. Uma
-guarda impede que o foco automático em um item roube o caret durante a edição.
+limpar e contagem de ícones/grupos. O foco passa pelo CharacterUI do dono.
 
 `Pegar tudo` nativo ignora filtros de apresentação, então essa ação é bloqueada
 nas listas com consulta ativa com uma mensagem para limpar a busca. O mod
@@ -83,3 +81,30 @@ fisicamente vazio. Não reimplementa transferência ou RPCs.
 
 O alinhamento real, o foco e o comportamento dos controles continuam pendentes
 de validação dentro do executável Steam, conforme VALIDACAO.md.
+
+## Correção 0.2.1 a partir do relato no jogo
+
+Na 0.2.0 o usuário conseguiu clicar e escrever no inventário, mas não sair
+do campo ou fechar o inventário normalmente. Trocar de aba o liberava, porém
+a barra não reaparecia. Baús ainda não haviam sido testados por ele.
+
+O código tinha dois problemas correspondentes: veto a seleção de itens e
+getters forçados de captura de texto, além de Tick que só atualizava barras
+já ativas, sem reexibir as ocultadas. A 0.2.1 remove esses patches. Não veta
+CharacterUI.SetSelectedGameObject nem força IgnoreMenuInputs/IsInputFieldFocused.
+
+A saída é explícita por Enter, Esc, clique fora, OK e ×. Cancela a ativação
+pendente do InputField e limpa os flags nativos somente quando pertencem à
+busca; outros campos de texto são preservados. Esses membros de UI são
+consultados/escritos por reflexão, sem acesso direto a membros publicizados.
+Há proteção contra reentrada de onEndEdit e liberação de foco ao ocultar.
+
+OnEnable registra os painéis. Tick reconcilia a visibilidade dos donos,
+inclusive quando a volta à aba não chama Show. Mostrar/ocultar é idempotente,
+e um erro num painel tem nova tentativa, em vez de desabilitar toda a busca.
+Refresh não roda no fechamento de painéis em transição; roda ao voltar com
+listas inicializadas. SearchInteractionState é usado no runtime e nos testes
+de saída/retorno e reserva/restauração da margem.
+
+Os testes e inspeção de IL verificam esses caminhos e a remoção dos patches
+anteriores. Não reproduzem uma sessão real de Unity/Outward neste ambiente.

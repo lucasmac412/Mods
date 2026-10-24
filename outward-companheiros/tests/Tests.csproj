@@ -6,5 +6,6 @@
   <ItemGroup>
     <Compile Remove="Adapter/**/*.cs" /><Compile Include="../src/Policy.cs" Link="Policy.cs" />
     <Compile Include="../src/ItemSearchQuery.cs" Link="ItemSearchQuery.cs" />
+    <Compile Include="../src/SearchInteractionState.cs" Link="SearchInteractionState.cs" />
   </ItemGroup>
 </Project>

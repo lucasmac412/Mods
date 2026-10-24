@@ -14,7 +14,7 @@ testes de regras e testes com substitutos controlados não são testes do jogo.
 
 ## Instalação para você e seu irmão
 
-**[Baixar pacote completo 0.2.0 — uma pasta para copiar](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-completo-v0.2.0/downloads/Outward-Companheiros-v0.2.0-Completo.zip)**
+**[Baixar pacote completo 0.2.1 — uma pasta para copiar](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-completo-v0.2.1/downloads/Outward-Companheiros-v0.2.1-Completo.zip)**
 
 Este pacote reúne o mod e o carregador BepInExPack_Outward com `mono_fix`.
 Não precisa baixar o carregador separadamente, usar PowerShell ou abrir instalador.
@@ -28,8 +28,9 @@ Não precisa baixar o carregador separadamente, usar PowerShell ou abrir instala
    Abram a **Definitive Edition pela Steam** normalmente. Repitam nos **dois PCs**.
 
 O [guia do pacote completo](LEIA-ME-COMPLETO.txt) também vai dentro da pasta.
-A versão experimental **0.2.0** acrescenta busca ao mapa e às caravanas da
-0.1.0. A versão Mono ainda precisa ser selecionada na Steam.
+A versão experimental **0.2.1** corrige a saída do campo de busca e a barra
+que desaparecia ao trocar de aba na 0.2.0. Mantém mapa, caravanas e pesquisa.
+A versão Mono ainda precisa ser selecionada na Steam.
 Se já usam r2modman ou outro gerenciador, mantenham a instalação do gerenciador
 e usem o pacote só do plugin descrito abaixo.
 
@@ -50,7 +51,7 @@ o BepInEx oficial é um download separado.
    Definitive Edition uma vez pela Steam e fechem: deve aparecer
    `BepInEx/LogOutput.log`. **Mantenham BepInEx 5 existente se já funciona com
    o `mono_fix` do Outward.** O pacote genérico sem esse ajuste não é o indicado.
-4. Baixem o [ZIP do mod](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.2.0-experimental/downloads/Outward-Companheiros-v0.2.0-Experimental.zip),
+4. Baixem o [ZIP do mod](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.2.1-experimental/downloads/Outward-Companheiros-v0.2.1-Experimental.zip),
    usem **Extrair tudo** e abram a pasta extraída até ver `BepInEx`.
    Copiem essa pasta para `Outward_Defed`, mesclando as pastas.
 5. Confiram o caminho final:
@@ -68,8 +69,11 @@ instalação com r2modman, resolução de problemas e desinstalação. Não exig
   `pocao` encontra `Poção`; `vida grande` encontra `Grande Poção de Vida`.
   O inventário e o baú usam campos independentes. A busca respeita a categoria
   selecionada; escolham **Todos** para procurar em todo o inventário.
-- **Limpar:** **×** mostra novamente os itens da categoria. **Enter** encerra
-  a digitação; fechar o painel limpa o texto. A contagem é de ícones/grupos
+- **Sair do campo:** **Enter**, **Esc**, **OK** ou clicar fora encerram a
+  edição. **×** limpa a busca e solta o teclado. O botão de fechar inventário
+  e as outras abas seguem a seleção normal do jogo. Voltar à aba reexibe a barra.
+- **Limpar:** **×** mostra novamente os itens da categoria; fechar o painel
+  limpa o texto. A contagem é de ícones/grupos
   visíveis. Cada jogador tem sua própria pesquisa, sem sincronizar o texto
   com os outros. A busca não altera os itens armazenados.
 - **Pegar tudo:** limpem a busca antes de usar essa ação. Com busca ativa ela
@@ -131,10 +135,10 @@ encaixes de inventário/baú, reconhecimento de entrada de texto e ausência
 de chamadas de alteração de inventário ou rede nas classes de busca.
 Os testes de partida solo/cooperativa permanecem **não realizados**.
 
-A [compilação Windows 0.2.0](https://github.com/lucasmac412/Mods/actions/runs/40068656959)
-passou sem avisos: 5.319 verificações de regras/busca, 4.309 do adaptador de
-caravana e 646 de referências, IL e recursos. O pacote completo também passou
-pela conferência de hashes, extração e cópia do conteúdo para o layout de instalação.
+A versão 0.2.1 inclui testes de saída por teclado/clique, perda de seleção,
+retorno de aba e cem ciclos de mostrar/ocultar sem acumular margem. Os
+contratos rejeitam os patches de captura forçada e veto de seleção da 0.2.0.
+Os resultados da compilação Windows estão nos relatórios de entrega.
 
 Não há patches de inventário, escrita de arquivos do jogo, protocolo de
 teleporte paralelo ou alteração dos RPCs de cobrança/transição. A lista de
