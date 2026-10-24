@@ -1,0 +1,22 @@
+{
+  "version": "0.1.1-experimental",
+  "minecraft": "26.2",
+  "sourceCommit": "14798cad6145e6e96df1f6b2e248b37ee11c55c0",
+  "package": "Punhos-da-Lua-Azul-Fabric-26.2-v0.1.1-Experimental.zip",
+  "bytes": 2643487,
+  "sha256": "f1a9c3e03ac233aee04e7e96de85dd670c4d12cbf73c49b75a6a6cc3ac9fd9f7",
+  "jarSha256": "3d6cbb206a8d74848c9e2c41b7ae405541bc177258196eb3672f3291ff460c8a",
+  "fabricApiSha256": "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a",
+  "unitTests": 13,
+  "serverCombatTests": 9,
+  "files": {
+    "COMECE-AQUI.txt": "6de75d8b659659726e664cba2c0740b5c19a967c7370a86bba319fbafcf989ea",
+    "SHA256SUMS.txt": "69512d68b4d38ee343e52421dee4bccefdd015ecfd543e81467586eb635e01da",
+    "VERSAO.txt": "394f2126f1a7d37e4bc93d21e1078480a49cb5b70e99494a79a19024f108f7cc",
+    "licenses/CREDITOS.txt": "a782721fd02a180fc95bf86c6742ee0b18f1e80fa15334229decfcb3ef30e9b6",
+    "licenses/LICENSE-MIT.txt": "4febe71256140834924b5f1299ebcd5e4df8ac83890dfc7a73617c43163e77ac",
+    "licenses/LICENSE-fabric-api.txt": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+    "mods/fabric-api-0.161.0+26.2.jar": "e5b858ceb13290c274e31cb888ff5a1a40cb91067e7ffab0b5b775aec51e216a",
+    "mods/moonfist-combat-0.1.1-experimental.jar": "3d6cbb206a8d74848c9e2c41b7ae405541bc177258196eb3672f3291ff460c8a"
+  }
+}

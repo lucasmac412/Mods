@@ -4,7 +4,7 @@ A 0.1.1 substitui as poses por coreografias com preparação, extensão no tick 
 
 Passaram **13 testes JUnit**, **9 testes de combate do servidor + o teste vanilla** e o teste de cliente real com **Dragão Celestial 0.3.5** carregado. Os três testes novos verificam todas as posturas e movimentos: valores finitos, continuidade, recuperação, sincronização do jab com o dano e giros em um único sentido. [Relatório](moonfist/animation-v011.json).
 
-[Prévia animada capturada no cliente Minecraft](moonfist/animacoes-v011.gif): o Discípulo executa soco, gancho, chute giratório, pesado, esquiva e especial. São 80 capturas automáticas apresentadas a 10 quadros/s; os intervalos de captura não constituem uma medição de fluidez ou FPS. O modelo continua usando os membros cúbicos do Minecraft. A qualidade artística e o conforto precisam da avaliação do jogador; não há garantia de satisfação estética.
+[Prévia animada capturada no cliente Minecraft](moonfist/animacoes-v011.gif): o Discípulo executa soco, gancho, chute giratório, pesado, esquiva e especial. São 80 capturas automáticas apresentadas a 10 quadros/s; os intervalos de captura não constituem uma medição de fluidez ou FPS. O modelo continua usando os membros cúbicos do Minecraft. A qualidade artística e o conforto ainda precisam da avaliação do jogador.
 
 As informações e capturas abaixo registram a versão inicial; os cenários de controles, dano, menus e ovos foram repetidos na 0.1.1.
 
