@@ -13,13 +13,13 @@ import urllib.request
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-NAME = 'Outward-Companheiros-v0.2.0-Completo'
+NAME = 'Outward-Companheiros-v0.2.1-Completo'
 FOLDER = 'transfere pro jogo'
 LOADER_URL = 'https://gcdn.thunderstore.io/live/repository/packages/BepInEx-BepInExPack_Outward-5.4.19.zip'
 LOADER_SHA = 'ae703fcdfd33e65defb8b4e441fbc4d388a8223c0cc251ad791361a0dd6ce35b'
-PLUGIN_URL = 'https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.2.0-experimental/downloads/Outward-Companheiros-v0.2.0-Experimental.zip'
-PLUGIN_ZIP_SHA = '7fa22f002fe7ce938653bc62d41bcbbb08b8f835301aee993e68b7d4c9905270'
-PLUGIN_DLL_SHA = '8eca84504d0328039c9719bedcbe0038f0c5c28b82b61df55320fc3e4600dc4b'
+PLUGIN_URL = 'https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.2.1-experimental/downloads/Outward-Companheiros-v0.2.1-Experimental.zip'
+PLUGIN_ZIP_SHA = 'e2431af95ff04cb588d70190fd2fe1491474a78a97a82bb1871077d84d325889'
+PLUGIN_DLL_SHA = '394ac31e6a6b702a86706819aa25448d17d4d9ec308c94d068891d29076af559'
 PLUGIN_PATH = 'BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll'
 CORE = ('0Harmony', '0Harmony20', 'BepInEx', 'BepInEx.Harmony', 'BepInEx.Preloader',
         'HarmonyXInterop', 'Mono.Cecil', 'Mono.Cecil.Mdb', 'Mono.Cecil.Pdb',
@@ -106,14 +106,16 @@ def build(loader_bytes, plugin_bytes, output):
     require('enabled=true' in config, 'Doorstop is not enabled')
     guide = payload['LEIA-ME-COMPANHEIROS.txt'].decode('utf-8-sig')
     flat_guide = ' '.join(guide.split()).casefold()
-    missing = [n for n in ['transfere pro jogo', 'default-mono', 'Outward_Defed', 'DOIS computadores', 'experimental', 'não foi testado'] if n.casefold() not in flat_guide]
+    missing = [n for n in ['transfere pro jogo', 'default-mono', 'Outward_Defed', 'DOIS computadores', 'experimental'] if n.casefold() not in flat_guide]
     require(not missing, 'Guide misses prerequisite or status: ' + ', '.join(missing))
+    require('não foi testado' in flat_guide or 'não foi testada' in flat_guide, 'Guide must state live game validation is pending')
 
     output.mkdir(parents=True, exist_ok=True)
     target = output/(NAME+'.zip')
     with zipfile.ZipFile(target, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for name, data in sorted(payload.items()):
-            info = zipfile.ZipInfo(FOLDER+'/'+name, date_time=(2026,1,1,0,0,0))
+            stamp = plugin.getinfo(matches[0]).date_time if name == PLUGIN_PATH else (2026,1,1,0,0,0)
+            info = zipfile.ZipInfo(FOLDER+'/'+name, date_time=stamp)
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o100644 << 16
             z.writestr(info, data)
@@ -127,7 +129,7 @@ def build(loader_bytes, plugin_bytes, output):
     digest = sha(target.read_bytes())
     (output/(NAME+'-SHA256.txt')).write_text(digest+'  '+target.name+'\n', encoding='ascii')
     report = {
-        'package': NAME, 'folder': FOLDER, 'pluginVersion': '0.2.0',
+        'package': NAME, 'folder': FOLDER, 'pluginVersion': '0.2.1',
         'status': 'EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST',
         'game': 'Outward Definitive Edition Steam Mono / Windows x64',
         'requiresSteamMonoSelection': True, 'loaderIncluded': True, 'monoFixIncluded': True,

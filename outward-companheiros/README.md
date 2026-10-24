@@ -140,6 +140,11 @@ retorno de aba e cem ciclos de mostrar/ocultar sem acumular margem. Os
 contratos rejeitam os patches de captura forçada e veto de seleção da 0.2.0.
 Os resultados da compilação Windows estão nos relatórios de entrega.
 
+A [compilação 0.2.1](https://github.com/lucasmac412/Mods/actions/runs/40070297591)
+passou sem avisos: 5.641 verificações de regras/busca/interação, 4.309 do
+adaptador de caravana e 764 de referências/IL/recursos. A correção ainda exige
+confirmação dentro do jogo, incluindo baús.
+
 Não há patches de inventário, escrita de arquivos do jogo, protocolo de
 teleporte paralelo ou alteração dos RPCs de cobrança/transição. A lista de
 rotas é produzida quando o diálogo nativo a pede, tanto no anfitrião quanto
