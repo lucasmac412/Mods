@@ -1,0 +1,159 @@
+{
+  "package": "Outward-Companheiros-v0.1.0-Completo",
+  "folder": "transfere pro jogo",
+  "pluginVersion": "0.1.0",
+  "status": "EXPERIMENTAL_COMPILED_NO_LIVE_GAME_TEST",
+  "game": "Outward Definitive Edition Steam Mono / Windows x64",
+  "requiresSteamMonoSelection": true,
+  "loaderIncluded": true,
+  "monoFixIncluded": true,
+  "separateLoaderDownloadRequired": false,
+  "installScriptsIncluded": false,
+  "soloGameplayVerified": false,
+  "coopGameplayVerified": false,
+  "zip": "Outward-Companheiros-v0.1.0-Completo.zip",
+  "bytes": 2139765,
+  "sha256": "7ca4e9b1d85cf047d83df30ae6b1f084fa2d1d3d728d8f80ef2f9dcb1f5a6ace",
+  "pluginSha256": "85783fb6cbf30cd889100c2166c80206041e788a8ee202aec35c70047148383f",
+  "sources": [
+    {
+      "component": "BepInExPack_Outward 5.4.19",
+      "url": "https://gcdn.thunderstore.io/live/repository/packages/BepInEx-BepInExPack_Outward-5.4.19.zip",
+      "sha256": "ae703fcdfd33e65defb8b4e441fbc4d388a8223c0cc251ad791361a0dd6ce35b"
+    },
+    {
+      "component": "Tested plugin ZIP",
+      "url": "https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-v0.1.0-experimental/downloads/Outward-Companheiros-v0.1.0-Experimental.zip",
+      "sha256": "2075e2da54a9b6363f4296bbdd7176b9f8e884c6cf64de6d40948044d88c7254"
+    }
+  ],
+  "runtimeFilesUnchanged": true,
+  "omittedUpstreamDocumentation": "XML API docs, external manifest and icon; upstream README retained in license file",
+  "files": [
+    {
+      "path": "BepInEx/config/BepInEx.cfg",
+      "bytes": 5002,
+      "sha256": "7040a6830376f897e409392ca8b72cda73793f1674eb8de374df57e771d18ac2"
+    },
+    {
+      "path": "BepInEx/core/0Harmony.dll",
+      "bytes": 204800,
+      "sha256": "1a21cc03424fc82c3dd1346905d16494536b9595ae4162228d99fb7c285c1031"
+    },
+    {
+      "path": "BepInEx/core/0Harmony20.dll",
+      "bytes": 111616,
+      "sha256": "ec6227f1616d67c54d9ceb0280e95e1f1de3c7024c5e491c64766b373ad5e558"
+    },
+    {
+      "path": "BepInEx/core/BepInEx.Harmony.dll",
+      "bytes": 5632,
+      "sha256": "d0739c4a13f369094cb164c205ee4cca5392bdd7241b9f242ee13f0d4c0b1856"
+    },
+    {
+      "path": "BepInEx/core/BepInEx.Preloader.dll",
+      "bytes": 42496,
+      "sha256": "f8b9ea254a26db4ee432fe18746bd1c0f4b787e9a926b2336ced8605f42d1b71"
+    },
+    {
+      "path": "BepInEx/core/BepInEx.dll",
+      "bytes": 116224,
+      "sha256": "dca5efa7fbfbd40b39da0ec43f5ad4585f56816d70da53f2270ee40f9bb1772c"
+    },
+    {
+      "path": "BepInEx/core/HarmonyXInterop.dll",
+      "bytes": 23552,
+      "sha256": "9ec81af708f9e3385f42c9006ac19e41e5b64d29e0799926ed38ad502594f658"
+    },
+    {
+      "path": "BepInEx/core/Mono.Cecil.Mdb.dll",
+      "bytes": 43008,
+      "sha256": "5896d1898f616701fff18f3b2c71e6b844d2390ef9f41e1c5fccce8cb27c698e"
+    },
+    {
+      "path": "BepInEx/core/Mono.Cecil.Pdb.dll",
+      "bytes": 86528,
+      "sha256": "174db44a067f58561510af746f3caeb032037762c57a31c8d9ee32db25174984"
+    },
+    {
+      "path": "BepInEx/core/Mono.Cecil.Rocks.dll",
+      "bytes": 27648,
+      "sha256": "54ac539fb5ddc8b44c0e9acd0fcb7324f89d1a072edf8ebc1b06dd691e3d3927"
+    },
+    {
+      "path": "BepInEx/core/Mono.Cecil.dll",
+      "bytes": 339456,
+      "sha256": "7ae470288fff4a402899c254d0a76cefef55877f5c54f96e83c797cc5bb6e2f6"
+    },
+    {
+      "path": "BepInEx/core/MonoMod.RuntimeDetour.dll",
+      "bytes": 105984,
+      "sha256": "40e49bb314391cd7bddc2644f8553eeba92c194b940836b103df16955c464e0c"
+    },
+    {
+      "path": "BepInEx/core/MonoMod.Utils.dll",
+      "bytes": 187904,
+      "sha256": "9d1495f147ac93c4f81f84538c1a326e8f8a6aefc78d6289d798f3ce1162c5e9"
+    },
+    {
+      "path": "BepInEx/plugins/CompanheirosAurai/Outward.Companheiros.dll",
+      "bytes": 153088,
+      "sha256": "85783fb6cbf30cd889100c2166c80206041e788a8ee202aec35c70047148383f"
+    },
+    {
+      "path": "LEIA-ME-COMPANHEIROS.txt",
+      "bytes": 4190,
+      "sha256": "c0d01bd504a9c36113c4a0be62c8501c6730340f66f25a94728c946fb520fc50"
+    },
+    {
+      "path": "LICENCAS-COMPANHEIROS.txt",
+      "bytes": 94633,
+      "sha256": "0d3dabb964f56242378daab50b07f8e6239e9bc8d22f46fa5925ed6e6cb3db02"
+    },
+    {
+      "path": "doorstop_config.ini",
+      "bytes": 898,
+      "sha256": "1cfba8c709893f64cc938c1e61af676562bdfcef9589519b273ee767f49e9062"
+    },
+    {
+      "path": "mono_fix/System.Reflection.Emit.ILGeneration.dll",
+      "bytes": 4608,
+      "sha256": "c062cf871c125ca000930fcd2729afa111dff71203c500e000a0934a90d7a55d"
+    },
+    {
+      "path": "mono_fix/System.Reflection.Emit.Lightweight.dll",
+      "bytes": 4608,
+      "sha256": "08924131f3a0e433ae7eeb7fda17e6fc0bf1df283ed935fb5363304d15db05af"
+    },
+    {
+      "path": "mono_fix/System.Reflection.Emit.dll",
+      "bytes": 4608,
+      "sha256": "2a150682dab01b4aaba3a3764376f6a827f017f0c899a8b80a2f3677b8c8833a"
+    },
+    {
+      "path": "mono_fix/System.Reflection.dll",
+      "bytes": 5632,
+      "sha256": "add0c7788b57ed229a9bf6c2f13cfdbcd30a86aa593a4c871a7c03959db65e7a"
+    },
+    {
+      "path": "mono_fix/mscorlib.dll",
+      "bytes": 3931648,
+      "sha256": "82b5fce64dc2482e55c5d36c2bfb1d795efed4bd83b830789fc8635840aaf673"
+    },
+    {
+      "path": "winhttp.dll",
+      "bytes": 25088,
+      "sha256": "cf9dd372ca0ddbe01153502c49f8f756197bb260001792fe766f6c0242dc7fc0"
+    }
+  ],
+  "pluginBuildRun": "https://github.com/lucasmac412/Mods/actions/runs/40064989947",
+  "packagingValidation": [
+    "input ZIP SHA-256",
+    "byte-identical DLLs",
+    "Windows x64 proxy PE",
+    "managed CLR headers",
+    "ZIP CRC",
+    "extraction and content-copy simulation",
+    "Doorstop preloader and mono_fix path resolution"
+  ]
+}

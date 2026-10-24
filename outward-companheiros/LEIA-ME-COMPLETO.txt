@@ -1,0 +1,96 @@
+COMPANHEIROS DE AURAI - PACOTE COMPLETO 0.1.0 EXPERIMENTAL
+Outward Definitive Edition / Steam / Windows 64 bits
+
+ESTA PASTA JÁ CONTÉM O MOD E O CARREGADOR BEPINEX COM O MONO_FIX.
+Você não precisa baixar outro pacote, executar comandos ou abrir instaladores.
+Você e seu irmão precisam seguir os passos nos DOIS computadores.
+
+1. SELECIONE MONO NA STEAM (UMA VEZ EM CADA COMPUTADOR)
+Feche o jogo. Na Biblioteca da Steam, clique com o botão direito em Outward.
+Vá em Propriedades > Betas e selecione:
+default-mono - Public default branch (mono)
+Espere a Steam concluir a atualização. Isso continua sendo a Definitive Edition.
+Esta escolha na Steam não pode ser substituída por copiar arquivos.
+
+2. ENCONTRE A PASTA CERTA
+Na Steam: Outward > Propriedades > Arquivos instalados > Explorar.
+Abra a pasta Outward_Defed.
+Ela deve conter Outward Definitive Edition.exe.
+
+3. TRANSFIRA OS ARQUIVOS
+Extraia o ZIP antes de copiar: botão direito > Extrair tudo.
+Abra a pasta chamada "transfere pro jogo".
+Selecione TUDO que está DENTRO dela e copie para Outward_Defed,
+ao lado de Outward Definitive Edition.exe. Mescle as pastas BepInEx se pedido.
+
+Copie o CONTEÚDO de "transfere pro jogo", não a pasta fechada inteira.
+Não coloque o ZIP dentro do jogo.
+
+A pasta do jogo deve ficar assim:
+
+Outward_Defed
+  Outward Definitive Edition.exe  <- já existia; não vem neste pacote
+  Outward Definitive Edition_Data <- já existia; não vem neste pacote
+  winhttp.dll
+  doorstop_config.ini
+  mono_fix
+    mscorlib.dll
+    ... demais DLLs do mono_fix
+  BepInEx
+    core
+      ... DLLs do carregador
+    config
+      BepInEx.cfg
+    plugins
+      CompanheirosAurai
+        Outward.Companheiros.dll
+
+Os dois arquivos .txt de instruções/licenças também podem ficar ali.
+Não precisa abri-los para o mod carregar.
+
+Se você já usa outros mods por um gerenciador, continue usando a instalação
+do gerenciador; este pacote completo é para copiar na instalação manual.
+Se já personalizou BepInEx/config/BepInEx.cfg, mantenha sua configuração atual
+quando o Windows perguntar sobre esse arquivo.
+
+4. ABRA O JOGO
+Inicie pela Steam e escolha Outward Definitive Edition, se ela perguntar.
+BepInEx carrega automaticamente. Não existe um programa extra para você abrir.
+Não precisa executar nada como administrador ou usar PowerShell.
+
+O QUE O MOD FAZ
+M: mapa normal com retratos, nomes e direção dos jogadores conectados,
+nas áreas com mapa calibrado. A lista também mostra quem está carregando
+ou está caído. Em locais sem mapa calibrado aparece somente a lista.
+
+Viagem: fale com o Caravaneiro Soroboriano DENTRO de uma cidade e escolha
+o destino na conversa normal. A viagem custa 200 pratas e 3 rações para
+o grupo inteiro, pagos por quem contrata. O tempo avança 3 dias no jogo.
+Todos precisam estar perto do NPC e em condições de viajar.
+Cidades bloqueadas pela campanha continuam bloqueadas. Nova Sirocco entra
+quando sua caravana for liberada. Funciona pelo sistema nativo de viagem.
+
+PARA JOGAR COM SEU IRMÃO
+Os dois precisam da Definitive Edition Mono e dos arquivos deste mesmo pacote.
+Depois, criem/entrem na partida como vocês já fazem normalmente.
+O modo solo usa os mesmos arquivos e não precisa de outra instalação.
+
+ESTADO DOS TESTES
+Esta é a mesma DLL 0.1.0 experimental anteriormente publicada; a instalação
+foi reunida em uma só pasta. A compilação e as verificações automáticas
+passaram, mas o mod ainda não foi testado dentro de partidas reais solo ou
+cooperativas. Faça o primeiro teste numa cópia dos saves.
+
+SE NÃO CARREGAR
+Confira se winhttp.dll ficou ao lado de Outward Definitive Edition.exe,
+se a beta é default-mono e se você abriu a Definitive Edition.
+O log aparece em Outward_Defed/BepInEx/LogOutput.log.
+Se houver erro, envie esse log e diga se aconteceu no anfitrião ou convidado.
+
+PARA REMOVER SÓ ESTE MOD
+Feche o jogo e remova BepInEx/plugins/CompanheirosAurai.
+Se você usa outros mods, deixe os arquivos do carregador no lugar.
+
+ORIGEM E GUIA
+Código e instruções: https://github.com/lucasmac412/Mods/tree/main/outward-companheiros
+Licenças e origem do carregador: LICENCAS-COMPANHEIROS.txt, nesta mesma pasta.

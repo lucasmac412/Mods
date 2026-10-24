@@ -13,8 +13,29 @@ testes de regras e testes com substitutos controlados não são testes do jogo.
 
 ## Instalação para você e seu irmão
 
+**[Baixar pacote completo — uma pasta para copiar](https://raw.githubusercontent.com/lucasmac412/Mods/outward-companheiros-completo-v0.1.0/downloads/Outward-Companheiros-v0.1.0-Completo.zip)**
+
+Este pacote reúne o mod e o carregador BepInExPack_Outward com `mono_fix`.
+Não precisa baixar o carregador separadamente, usar PowerShell ou abrir instalador.
+
+1. Com o jogo fechado, na Steam: **Outward → Propriedades → Betas →
+   `default-mono - Public default branch (mono)`**. Aguardem a atualização.
+2. Extraiam o ZIP e abram a pasta **`transfere pro jogo`**.
+3. Na Steam: **Outward → Propriedades → Arquivos instalados → Explorar**.
+   Abram **`Outward_Defed`**, onde fica `Outward Definitive Edition.exe`.
+4. Copiem **tudo que está dentro** de `transfere pro jogo` para `Outward_Defed`.
+   Abram a **Definitive Edition pela Steam** normalmente. Repitam nos **dois PCs**.
+
+O [guia do pacote completo](LEIA-ME-COMPLETO.txt) também vai dentro da pasta.
+É a mesma DLL experimental 0.1.0, com instalação reunida; não altera o estado
+dos testes no jogo. A versão Mono ainda precisa ser selecionada na Steam.
+Se já usam r2modman ou outro gerenciador, mantenham a instalação do gerenciador
+e usem o pacote só do plugin descrito abaixo.
+
+### Alternativa: pacote somente do plugin
+
 Repitam os passos **nos dois computadores**. Não precisa programar ou usar
-PowerShell. O ZIP do mod contém somente a própria DLL, o guia e as licenças;
+PowerShell. O ZIP anterior somente do mod contém a própria DLL, o guia e as licenças;
 o BepInEx oficial é um download separado.
 
 1. Fechem o jogo. Na Steam, botão direito em **Outward → Propriedades → Betas**.
@@ -67,8 +88,9 @@ Façam o primeiro teste em uma cópia dos saves, sozinhos e juntos.
 
 Requer .NET SDK 8. Referências públicas fixadas para DE:
 `Outward.GameLibs 2022.5.18-r.0`, `UnityEngine.Modules 2020.3.26`,
-`BepInEx.BaseLib 5.4.19`, `HarmonyX 2.9.0`. As bibliotecas do jogo e do
-carregador **não são distribuídas no ZIP do mod**.
+`BepInEx.BaseLib 5.4.19`, `HarmonyX 2.9.0`. Bibliotecas do jogo não são
+distribuídas. O pacote completo inclui o carregador oficial sem modificar suas
+DLLs; o pacote anterior contém apenas o plugin.
 
 ```sh
 dotnet build src/Outward.Companheiros.csproj -c Release
@@ -76,6 +98,8 @@ dotnet run --project tests/Tests.csproj -c Release
 dotnet run --project tests/Adapter/Adapter.csproj -c Release
 dotnet run --project tools/Contracts/Contracts.csproj -c Release -- /caminho/Assembly-CSharp.dll src/bin/Release/net472/Outward.Companheiros.dll
 python3 tools/package.py
+# Reúne os dois ZIPs publicados, conferindo os SHA-256 fixados:
+python3 tools/package_complete.py
 ```
 
 `tests/Adapter` executa o **mesmo `Caravan.cs`** do plugin contra substitutos
@@ -97,3 +121,6 @@ no convidado, evitando depender da lista de um único destino da caravana.
 
 O teste real pendente está descrito em [VALIDACAO.md](docs/VALIDACAO.md).
 Pesquisa e licenças: [RESEARCH.md](docs/RESEARCH.md), [LICENSES.txt](LICENSES.txt).
+O pacote completo preserva as licenças dos componentes em
+[LICENSES-COMPLETO.txt](LICENSES-COMPLETO.txt), com origem e versões registradas
+no [relatório do pacote completo](docs/build-completo.json).
