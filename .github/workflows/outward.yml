@@ -40,6 +40,23 @@ jobs:
         run: |
           $game = "$env:USERPROFILE/.nuget/packages/outward.gamelibs/2022.5.18-r.0/lib/net472/Assembly-CSharp.dll"
           dotnet run --project outward-companheiros/tools/Contracts/Contracts.csproj -c Release -- "$game" outward-companheiros/src/bin/Release/net472/Outward.Companheiros.dll
+      - name: Exact published package - bundled Harmony and DE contract integration
+        shell: pwsh
+        run: |
+          $game = "$env:USERPROFILE/.nuget/packages/outward.gamelibs/2022.5.18-r.0/lib/net472/Assembly-CSharp.dll"
+          $unity = "$env:USERPROFILE/.nuget/packages/unityengine.modules/2020.3.26/lib/net35"
+          $zip = "downloads/Outward-Companheiros-v0.3.0-Completo.zip"
+          $fixtures = "$env:RUNNER_TEMP/outward-reward-fixtures"
+          dotnet build outward-companheiros/tests/PackageSmoke/PackageSmoke.csproj -c Release
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & outward-companheiros/tests/PackageSmoke/bin/Release/net472/PackageSmoke.exe "$zip" "$game" "$unity"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          dotnet run --project outward-companheiros/tools/RewardFixtures/RewardFixtures.csproj -c Release -- "$game" "$fixtures"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          foreach ($case in @("enum-changed", "private-selector")) {
+            & outward-companheiros/tests/PackageSmoke/bin/Release/net472/PackageSmoke.exe "$zip" "$fixtures/$case/Assembly-CSharp.dll" "$unity" reject
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
       - name: Package plugin and beginner guide only
         run: python outward-companheiros/tools/package.py
       - uses: actions/upload-artifact@v4
