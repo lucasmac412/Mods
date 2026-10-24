@@ -1,0 +1,62 @@
+PUNHOS DA LUA AZUL - PROTOTIPO 0.1.0
+
+ESTE PACOTE AINDA NAO INSTALA UMA ARMA NO NIOH.
+Inclui uma previa interativa e uma ferramenta para identificar sua instalacao.
+A categoria de arma, os golpes, o dano e os efeitos ainda nao estao integrados
+ao jogo. Nao copie estes arquivos para a pasta do Nioh para instalar as luvas.
+
+COMO VER A PREVIA
+
+1. Extraia o ZIP para uma pasta, por exemplo, na Area de Trabalho.
+2. Abra Previa.html com o Google Chrome.
+3. Escolha postura baixa, media ou alta com os botoes ou teclas 1, 2 e 3.
+4. Use os botoes de golpe ou clique esquerdo/direito na cena.
+5. Aperte Caps Lock para ver os oito Cortes do Vazio, com brilho e efeitos.
+6. Arraste a cena para girar a camera. Ajuste o brilho com a barra lateral.
+
+Os atalhos atuam somente na pagina. O alvo, o Ki e o dano sao simulados.
+O boneco e as animacoes sao de autoria, nao sao o personagem ou assets do Nioh.
+
+COMO IDENTIFICAR A INSTALACAO PARA A PROXIMA ETAPA
+
+1. Na Steam, clique com o botao direito em Nioh: Complete Edition.
+2. Escolha Gerenciar > Explorar arquivos locais. Localize nioh.exe.
+3. Abra o Nioh normalmente e deixe no menu inicial.
+4. Na pasta extraida deste pacote, abra Nioh-Inspecionar.exe.
+5. Quando aparecer a janela de selecao, escolha o nioh.exe da pasta do jogo.
+6. Escolha onde salvar Nioh-Diagnostico.json, por exemplo, na Area de Trabalho.
+7. Anexe esse arquivo JSON na conversa para continuarmos a integracao.
+
+Nao precisa usar PowerShell, instalar compilador ou Cheat Engine.
+Se voce cancelar uma janela, a ferramenta simplesmente termina.
+Se o relatorio disser que o jogo nao estava aberto, abra o Nioh, deixe no menu
+e repita. Se houver erro, envie o texto da mensagem junto com o relatorio.
+
+O QUE A FERRAMENTA FAZ
+
+Le a versao e o SHA-256 de nioh.exe, metadados PE x64, nomes/tamanhos de arquivos
+de dados na pasta do jogo e nomes de modulos carregados. Com o jogo aberto e
+acesso de leitura disponivel, calcula o SHA-256 da secao de codigo em memoria.
+Nao salva uma copia da memoria nem do executavel. O relatorio nao inclui o
+caminho absoluto da instalacao, nome da conta Steam ou conteudo de saves.
+
+Nao altera memoria, arquivos originais ou saves, nao injeta DLLs e nao acessa
+a internet. Apenas grava o relatorio JSON no local que voce escolher.
+O relatorio ajuda a identificar a versao; nao garante, por si so, que todos os
+sistemas de uma categoria nova possam ser adicionados ao jogo.
+
+ESTADO DO PROJETO
+
+Pronto fora do jogo: projeto dos golpes, simulacao de custos de Ki/recarga,
+ondas de choque, brilho configuravel, especial no Caps Lock e sete clips de
+animacao em um rig original de autoria.
+
+Pendente no Nioh: categoria no inventario/equipamento, conversao para o formato
+e esqueleto nativos, registro de animacoes/efeitos, colisao e dano usando o motor,
+consumo nativo de Ki, cancelamentos e testes reais em combate.
+
+As armas originais nao foram substituidas. Nenhum executavel, animacao ou asset
+do jogo faz parte deste pacote. Para remover, apague a pasta extraida.
+
+Codigo e registros do desenvolvimento:
+https://github.com/lucasmac412/Mods/tree/main/nioh-luvas

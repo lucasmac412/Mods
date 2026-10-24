@@ -1,0 +1,8 @@
+build/
+dist/
+__pycache__/
+*.exe
+*.obj
+*.pdb
+*.ilk
+Nioh-Diagnostico.json

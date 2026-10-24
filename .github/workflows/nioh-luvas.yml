@@ -1,0 +1,73 @@
+name: Nioh gloves authoring prototype and inspector
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'nioh-luvas/**'
+      - '.github/workflows/nioh-luvas.yml'
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - name: Locate C++ toolchain
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $installation = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          if (!$installation) { throw 'Missing MSVC toolchain' }
+          "NIOH_VS_PATH=$installation" >> $env:GITHUB_ENV
+      - name: Generate and verify original authoring assets
+        run: |
+          python nioh-luvas/tools/generate.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python nioh-luvas/tools/model.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python nioh-luvas/tools/verify.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git diff --exit-code -- nioh-luvas/src/Moves.generated.h nioh-luvas/preview/Previa.html nioh-luvas/assets/Punhos-Lua-Azul-authoring.glb
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Test combat simulation and bounded PE parser
+        shell: cmd
+        run: |
+          call "%NIOH_VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
+          if errorlevel 1 exit /b 1
+          cl /nologo /std:c++17 /EHsc /W4 /WX /utf-8 /I nioh-luvas\src nioh-luvas\tests\combat_test.cpp /Fe:combat-test.exe
+          if errorlevel 1 exit /b 1
+          combat-test.exe
+          if errorlevel 1 exit /b 1
+          cl /nologo /std:c++17 /EHsc /W4 /WX /utf-8 /I nioh-luvas\src nioh-luvas\tests\pe_test.cpp /Fe:pe-test.exe
+          if errorlevel 1 exit /b 1
+          pe-test.exe
+          if errorlevel 1 exit /b 1
+      - name: Build standalone read-only Windows inspector
+        shell: cmd
+        run: |
+          call "%NIOH_VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
+          if errorlevel 1 exit /b 1
+          cl /nologo /std:c++17 /EHsc /O2 /MT /W4 /WX /utf-8 /DUNICODE /D_UNICODE nioh-luvas\src\Inspect.cpp /Fe:Nioh-Inspecionar.exe /link /SUBSYSTEM:WINDOWS
+          if errorlevel 1 exit /b 1
+      - name: Self-test native file hashing and runtime read-only inspection
+        shell: pwsh
+        run: |
+          $probe = Start-Process -FilePath .\Nioh-Inspecionar.exe -ArgumentList '/self-test' -Wait -PassThru
+          if ($probe.ExitCode -ne 0) { throw "Inspector self-test failed: $($probe.ExitCode)" }
+          python nioh-luvas/tools/verify.py --inspector Nioh-Inspecionar.exe --report inspector-self-test.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Verify the interactive preview in Chrome or Edge
+        run: |
+          python nioh-luvas/tools/browser_check.py nioh-luvas/dist/browser
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Package prototype with clear status and instructions
+        run: |
+          python nioh-luvas/tools/package.py Nioh-Inspecionar.exe nioh-luvas/dist
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Nioh-Luvas-Prototipo-v0.1.0-Windows
+          path: nioh-luvas/dist/
+          if-no-files-found: error
+          retention-days: 30
