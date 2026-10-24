@@ -48,3 +48,7 @@ Resultados locais iniciais: 4.138 verificações da simulação e 445 do parser 
 Código original sob MIT. Referências técnicas e limitações em [RESEARCH.md](docs/RESEARCH.md). Não inclui código ou assets dos jogos/animes usados como inspiração.
 
 [Captura da prévia no navegador](docs/caps-preview.png) — representação independente, não é uma captura do Nioh.
+
+## Vídeo da prévia
+
+[Assistir ou baixar MP4 — aproximadamente 24 segundos](https://raw.githubusercontent.com/lucasmac412/Mods/nioh-luvas-video-v0.1.0/downloads/Nioh-Luvas-Previa-v0.1.0.mp4). Mostra as três posturas, ondas e especial no Caps Lock, com repetição em câmera lenta. É uma gravação da prévia independente, sem áudio; não mostra uma categoria instalada ou gameplay do Nioh. Vídeo H.264 1280×720, 30 fps; hashes e origem em `reports/video.json`.

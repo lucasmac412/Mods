@@ -1,0 +1,50 @@
+{
+  "width": 1280,
+  "height": 720,
+  "target_fps": 30,
+  "rendered_frames": 712,
+  "scenes": [
+    {
+      "scene": "Luvas compactas e aura",
+      "hits": 0
+    },
+    {
+      "scene": "Postura baixa",
+      "hits": 3
+    },
+    {
+      "scene": "Postura média",
+      "hits": 4
+    },
+    {
+      "scene": "Postura alta",
+      "hits": 3
+    },
+    {
+      "scene": "Caps Lock · Cortes do Vazio",
+      "hits": 8
+    },
+    {
+      "scene": "Especial em câmera lenta",
+      "hits": 8
+    },
+    {
+      "scene": "Protótipo de combate",
+      "hits": 0
+    }
+  ],
+  "source": "actual standalone browser preview",
+  "nioh_gameplay": false,
+  "audio": false,
+  "file": "downloads/Nioh-Luvas-Previa-v0.1.0.mp4",
+  "sha256": "5a4e99801105ff501329ea6d87716249e009568ce1a8678029118b60e2490234",
+  "bytes": 1537984,
+  "workflow_run": "https://github.com/lucasmac412/Mods/actions/runs/40052463785",
+  "code_commit": "f1e1bc34df09674b054ec7ba4217e6c75a1be9ba",
+  "workflow_conclusion": "success",
+  "source_webm_sha256": "ec0b78b842c495d6bcfaf03e43e80135288b65c113f49b70f86dd6454588a3ef",
+  "encoding": "ffmpeg libx264, CRF 20, yuv420p, 30 fps, faststart; no audio",
+  "duration_seconds": 23.533333,
+  "full_decode_check": "passed",
+  "source_description": "Recorded actual original standalone canvas prototype; not Nioh gameplay or generated game footage."
+}
