@@ -1,0 +1,33 @@
+name: Outward DE - build and checks
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-2025
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Inspect published development references
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force outward-references | Out-Null
+          $index = Invoke-RestMethod 'https://nuget.bepinex.dev/v3/index.json'
+          $index | ConvertTo-Json -Depth 20 | Set-Content outward-references/index.json
+          $base = ($index.resources | Where-Object { $_.'@type' -like 'PackageBaseAddress*' } | Select-Object -First 1).'@id'
+          foreach ($pkg in @('outward.gamelibs','bepinex.baselib','unityengine.modules')) {
+            $versions = Invoke-RestMethod "$base$pkg/index.json"
+            $versions | ConvertTo-Json -Depth 20 | Set-Content "outward-references/$pkg.json"
+            $version = $versions.versions[-1]
+            if ($pkg -eq 'outward.gamelibs') {
+              Invoke-WebRequest "$base$pkg/$version/$pkg.$version.nupkg" -OutFile "outward-references/$pkg.nupkg"
+            }
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Outward-development-references
+          path: outward-references/*
