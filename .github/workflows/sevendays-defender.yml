@@ -1,0 +1,79 @@
+name: 7 Days - Microsoft Defender audit
+on:
+  workflow_dispatch:
+    inputs:
+      candidate:
+        description: Optional repository path of a candidate ZIP to scan
+        required: false
+        default: ''
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: windows-2022
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Restore the reported sample for analysis only
+        shell: python
+        run: |
+          import pathlib, subprocess
+          target = pathlib.Path('av-audit/reported')
+          target.mkdir(parents=True)
+          path = 'downloads/7Days-Crafting-dos-Baus-3.4-v0.2.0-Experimental.zip'
+          with (target/'reported.zip').open('wb') as stream:
+              subprocess.run(['git','show','588d47f:'+path], stdout=stream, check=True)
+      - name: Scan without running the mod
+        shell: pwsh
+        env:
+          CANDIDATE: ${{ inputs.candidate }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force av-report | Out-Null
+          Start-Transcript -Path av-report/defender.txt
+          try {
+            Get-Service WinDefend | Format-List Name,Status,StartType
+            if ((Get-Service WinDefend).Status -ne 'Running') {
+              Set-Service WinDefend -StartupType Automatic
+              Start-Service WinDefend
+            }
+            Update-MpSignature
+            Get-MpComputerStatus | Select-Object AMServiceEnabled,AntivirusEnabled,AMProductVersion,AMEngineVersion,AntivirusSignatureVersion,AntivirusSignatureLastUpdated | Format-List
+            $engine = (Get-MpComputerStatus)
+            if (-not $engine.AMServiceEnabled -or -not $engine.AntivirusEnabled) { throw 'Defender is not active; this is NOT a clean result.' }
+            $scanner = Get-ChildItem "$env:ProgramData/Microsoft/Windows Defender/Platform/*/MpCmdRun.exe" | Sort-Object FullName -Descending | Select-Object -First 1
+            if (-not $scanner) { $scanner = Get-Item "$env:ProgramFiles/Windows Defender/MpCmdRun.exe" }
+            $targets = @('av-audit/reported/reported.zip')
+            if ($env:CANDIDATE) {
+              $root = (Get-Location).Path + [IO.Path]::DirectorySeparatorChar
+              $path = [IO.Path]::GetFullPath((Join-Path $root $env:CANDIDATE))
+              if (-not $path.StartsWith($root) -or -not (Test-Path -LiteralPath $path)) { throw 'Invalid candidate path' }
+              $targets += $path
+            }
+            $results = @()
+            foreach ($target in $targets) {
+              $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $target).Hash
+              & $scanner.FullName -Scan -ScanType 3 -File (Resolve-Path -LiteralPath $target).Path
+              $exit = $LASTEXITCODE
+              $results += [pscustomobject]@{path=$target;sha256=$hash;exitCode=$exit}
+              if (Test-Path -LiteralPath $target) {
+                $expanded = Join-Path 'av-audit/expanded' ([IO.Path]::GetFileNameWithoutExtension($target))
+                Expand-Archive -LiteralPath $target -DestinationPath $expanded -Force
+                Get-ChildItem $expanded -File -Recurse | Get-FileHash -Algorithm SHA256 | Format-Table -AutoSize
+                & $scanner.FullName -Scan -ScanType 3 -File (Resolve-Path $expanded).Path
+                $results += [pscustomobject]@{path=$expanded;sha256='individual hashes in transcript';exitCode=$LASTEXITCODE}
+              }
+            }
+            $results | ConvertTo-Json | Set-Content av-report/results.json
+            Get-MpThreatDetection | Select-Object ThreatID,ThreatStatusID,Resources,InitialDetectionTime,ActionSuccess | ConvertTo-Json -Depth 4 | Set-Content av-report/detections.json
+            Get-MpThreat | Select-Object ThreatID,ThreatName,IsActive | ConvertTo-Json | Set-Content av-report/threats.json
+            if ($results.Where({$_.exitCode -ne 0}).Count -gt 0) { throw 'Scanner returned a detection or error; inspect the report.' }
+          } finally { Stop-Transcript }
+      - name: Upload text evidence only, never samples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: defender-evidence
+          path: av-report/
