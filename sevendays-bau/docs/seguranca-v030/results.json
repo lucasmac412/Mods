@@ -1,0 +1,22 @@
+[
+  {
+    "path": "C:\\ProgramData\\ModSecurityAudit\\40518155922\\reported.zip",
+    "sha256": "3F6253DEA37E48624C74577D9F109D8121A99F503B5AA2B1EB2F6F4A9A757A06",
+    "exitCode": 0
+  },
+  {
+    "path": "C:\\ProgramData\\ModSecurityAudit\\40518155922\\reported",
+    "sha256": "individual hashes in transcript",
+    "exitCode": 0
+  },
+  {
+    "path": "C:\\ProgramData\\ModSecurityAudit\\40518155922\\candidate.zip",
+    "sha256": "2882A59FA0B444A0BEA94ECF32FC24A4CD21292F35C7EBE2B5C27C4E7B929184",
+    "exitCode": 0
+  },
+  {
+    "path": "C:\\ProgramData\\ModSecurityAudit\\40518155922\\candidate",
+    "sha256": "individual hashes in transcript",
+    "exitCode": 0
+  }
+]

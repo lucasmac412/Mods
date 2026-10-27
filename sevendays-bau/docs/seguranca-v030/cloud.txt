@@ -1,0 +1,6 @@
+---------------------------- MpCmdRunShowNetworkInfo() ------------------------------
+MpIsConnectedToInternet(): hr = 0, fIsConnectToInternet: true
+MpIsPaidNetwork(): hr = 0x1 (0 - S_OK, paid; 1 - S_FALSE, not paid; other - failure)
+-------------------------------------------------------------------------------------
+Last Successful MAPS connection: [10/27/2026 2:08:17 PM]
+ValidateMapsConnection successfully established a connection to MAPS

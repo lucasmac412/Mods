@@ -1,0 +1,16 @@
+C:\ProgramData\ModSecurityAudit\40518155922\reported.zip [\Device\HarddiskVolume4\ProgramData\ModSecurityAudit\40518155922\reported.zip] is not excluded. Exit code is 1.
+Scan starting...
+Scan finished.
+Scanning C:\ProgramData\ModSecurityAudit\40518155922\reported.zip found no threats.
+C:\ProgramData\ModSecurityAudit\40518155922\reported [\Device\HarddiskVolume4\ProgramData\ModSecurityAudit\40518155922\reported] is not excluded. Exit code is 1.
+Scan starting...
+Scan finished.
+Scanning C:\ProgramData\ModSecurityAudit\40518155922\reported found no threats.
+C:\ProgramData\ModSecurityAudit\40518155922\candidate.zip [\Device\HarddiskVolume4\ProgramData\ModSecurityAudit\40518155922\candidate.zip] is not excluded. Exit code is 1.
+Scan starting...
+Scan finished.
+Scanning C:\ProgramData\ModSecurityAudit\40518155922\candidate.zip found no threats.
+C:\ProgramData\ModSecurityAudit\40518155922\candidate [\Device\HarddiskVolume4\ProgramData\ModSecurityAudit\40518155922\candidate] is not excluded. Exit code is 1.
+Scan starting...
+Scan finished.
+Scanning C:\ProgramData\ModSecurityAudit\40518155922\candidate found no threats.

@@ -1,0 +1,44 @@
+{
+  "reported_archive_sha256": "3f6253dea37e48624c74577d9f109d8121a99f503b5aa2b1eb2f6f4a9a757a06",
+  "candidate_archive_sha256": "2882a59fa0b444a0bea94ecf32fc24a4cd21292f35c7ebe2b5c27c4e7b929184",
+  "candidate_build": {
+    "source_commit": "8a40b4a0b85eb08815b8e5f518743cf47e649e99",
+    "informational_version_revision": "7eefae71b3264a9f699163aaa367b2a75c20dc48",
+    "sdk": "8.0.426",
+    "dll_sha256": "fbb536e00f6dabdd52b4e69ddcaf79b534c1688fbe2eb741b109541e0929d614",
+    "independent_rebuild_identical": true,
+    "source_files": {
+      "src/AssemblyInfo.cs": "cc6fe3a0b57044714bdd06c6680d6a90f6e623085569c585ecc93bab493329f8",
+      "src/Client.cs": "3316cf514437eb41990f4af3d357b48b729ed2ae059cb12f0ac665a3da35741d",
+      "src/CraftingDosBaus.csproj": "c733fa2497ae5bcc3bd043cd2ebd21bc2dff833081acec9b6b6eb9e0533f4e4b",
+      "src/CraftingPolicy.cs": "d4f0380afd4bf4176e70e87fbfccdb10484f0b6ff63646e583dc82331af18fa5",
+      "src/DepositNetwork.cs": "b4e90700c3c019097b51337b8324e8774a7c7ba172a6cbdc12431142bf3b1399",
+      "src/DepositPlan.cs": "34684177f591a0c1db72b8c4028e88ccc5e7e6371fe919c854bddf4b6d209965",
+      "src/DepositServer.cs": "5f3a70c97655df70f93bbeaf594cba323bcb2a5fff97d26c1d7ac42425072046",
+      "src/Hooks.cs": "cd929d3aac69f6dcbd5be889ffc31b9479dd116e13ba94656dfecc66f42eafd7",
+      "src/Network.cs": "6e3da62a4dfb56d450cf48c1f2c378c57bcace3a2dfc0017c7751724365f862c",
+      "src/Plugin.cs": "96de971946bfa466c95c6a0549b7219f453521d92db7ab23be05870137ca6a8e",
+      "src/QuickStore.cs": "249adb01daeac13f06ee8fda5e302c05cd18442c0359a2381c884a6374df653f",
+      "src/Server.cs": "0d7aab6e618be4ccf09f09453f696a086696fd476437ab96f627da9ad0d2c43e",
+      "src/WithdrawalPlan.cs": "baa7971c675acca3156fa7bd6d92617417b2fd286bd51b0b4408182199b3c163"
+    }
+  },
+  "reported_dll_rebuilt_from_commit": "588d47f",
+  "reported_dll_independent_rebuild_sha256": "29b18825f3199c51ebd421ea3e949ab383fb4abe6eb3937e58835b4a27815b3a",
+  "reported_archive_contents": {
+    "LEIA-ME.txt": "0577fc099f428a2671ec922f277ad95502b61801200f52f2f21d743561b60fb6",
+    "LICENCA.txt": "4febe71256140834924b5f1299ebcd5e4df8ac83890dfc7a73617c43163e77ac",
+    "transfere pro jogo/Mods/CraftingDosBaus/CraftingDosBaus.dll": "29b18825f3199c51ebd421ea3e949ab383fb4abe6eb3937e58835b4a27815b3a",
+    "transfere pro jogo/Mods/CraftingDosBaus/ModInfo.xml": "e4b83b7b02b8c40d63a46a4313b826cbf16747932f0348224194da4590293b39",
+    "transfere pro jogo/Mods/CraftingDosBaus/config.json": "dde2ac94688cd82a8aae1d311dfaffd854ebd6451eb9592442d80d88b51254ee",
+    "transfere pro jogo/Mods/CraftingDosBaus/Config/XUi_InGame/windows.xml": "6817ad6529dc9ccfab0f258053f70a809b1e330c8a07561aafe080fa084c026a"
+  },
+  "candidate_archive_contents": {
+    "LEIA-ME.txt": "92691ba951c8e180d5137da0e9f063de0b1f0e23c4024e109f542de3410c37c2",
+    "LICENCA.txt": "4febe71256140834924b5f1299ebcd5e4df8ac83890dfc7a73617c43163e77ac",
+    "transfere pro jogo/Mods/CraftingDosBaus/CraftingDosBaus.dll": "fbb536e00f6dabdd52b4e69ddcaf79b534c1688fbe2eb741b109541e0929d614",
+    "transfere pro jogo/Mods/CraftingDosBaus/ModInfo.xml": "2fae97ddbc4b9e45abc0e13a7981cac1a825e87b32b8af286e524332e30ddc41",
+    "transfere pro jogo/Mods/CraftingDosBaus/config.json": "dde2ac94688cd82a8aae1d311dfaffd854ebd6451eb9592442d80d88b51254ee",
+    "transfere pro jogo/Mods/CraftingDosBaus/Config/XUi_InGame/windows.xml": "6817ad6529dc9ccfab0f258053f70a809b1e330c8a07561aafe080fa084c026a"
+  }
+}
