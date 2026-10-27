@@ -1,0 +1,136 @@
+2026-10-27T08:39:12 0.000 INF Version: V 3.4.0 (b6) Compatibility Version: V 3.4.0, Build: LinuxServer 64 Bit
+2026-10-27T08:39:38 26.193 INF [BAUS-PROBE] OK all Harmony hooks installed in native engine
+2026-10-27T08:39:38 26.193 INF [BAUS-PROBE] OK custom packet registered by game: 190
+2026-10-27T08:39:38 26.193 INF [BAUS-PROBE] OK real resource registry loaded
+2026-10-27T08:39:38 26.196 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 1
+2026-10-27T08:39:38 26.197 INF [BAUS-PROBE] OK authorized wallet included 1
+2026-10-27T08:39:38 26.200 INF [BAUS-PROBE] OK native HasItems patched 1
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK native backpack debited 1
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK remote balance debited 1
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 1
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 2
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK authorized wallet included 2
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK native HasItems patched 2
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK native backpack debited 2
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK remote balance debited 2
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 2
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 3
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK authorized wallet included 3
+2026-10-27T08:39:38 26.202 INF [BAUS-PROBE] OK native HasItems patched 3
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 3
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 3
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 3
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 4
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 4
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 4
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 4
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 4
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 4
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 5
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 5
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 5
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 5
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 5
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 5
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 6
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 6
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 6
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 6
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 6
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 6
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 7
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 7
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 7
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 7
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 7
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 7
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 8
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 8
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 8
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 8
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 8
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 8
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 9
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 9
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 9
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 9
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 9
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 9
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 10
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 10
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 10
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 10
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 10
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 10
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 11
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 11
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 11
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 11
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 11
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 11
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 12
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 12
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 12
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 12
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 12
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 12
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 13
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 13
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 13
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 13
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 13
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 13
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 14
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 14
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 14
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 14
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 14
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 14
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 15
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 15
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 15
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 15
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 15
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 15
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 16
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 16
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 16
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 16
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 16
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 16
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 17
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 17
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 17
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 17
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 17
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 17
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 18
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 18
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 18
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 18
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 18
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 18
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 19
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 19
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 19
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 19
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 19
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 19
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK outside crafting ignores virtual stock 20
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK authorized wallet included 20
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native HasItems patched 20
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native backpack debited 20
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK remote balance debited 20
+2026-10-27T08:39:38 26.203 INF [BAUS-PROBE] OK native cancellation keeps full actual ingredients 20
+2026-10-27T08:39:38 26.204 INF [BAUS-PROBE] OK native workstation sees authorized ingredients
+2026-10-27T08:39:38 26.204 INF [BAUS-PROBE] OK native workstation consumes local and remote exactly
+2026-10-27T08:39:38 26.204 INF [BAUS-PROBE] OK native workstation preserves refund and updates backend
+2026-10-27T08:39:38 26.204 INF [BAUS-PROBE] OK native forge item ids
+2026-10-27T08:39:38 26.209 INF [BAUS-PROBE] OK forge requests physical iron by real material weight
+2026-10-27T08:39:38 26.209 INF [BAUS-PROBE] OK forge planner does not mutate stock/input
+2026-10-27T08:39:38 26.209 INF [BAUS-PROBE] OK already loaded ore not requested twice
+2026-10-27T08:39:38 26.210 INF [BAUS-PROBE] OK full smelting slots prevent withdrawal
+2026-10-27T08:39:38 26.211 INF [BAUS-PROBE] OK native protocol package id
+2026-10-27T08:39:38 26.211 INF [BAUS-PROBE] OK native packet fields
+2026-10-27T08:39:38 26.212 INF [BAUS-PROBE] OK real ItemStack binary roundtrip
+2026-10-27T08:39:38 26.212 INF [BAUS-PROBE] PASS checks=134

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework><LangVersion>latest</LangVersion>
+    <AssemblyName>CraftingDosBaus</AssemblyName><Version>0.1.0</Version>
+    <DebugType>none</DebugType><Deterministic>true</Deterministic><TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GameRoot Condition="'$(GameRoot)' == ''">/workspace/.cache/sevendays-research/server-v34</GameRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <Reference Include="$(GameRoot)/7DaysToDieServer_Data/Managed/*.dll" Exclude="$(GameRoot)/7DaysToDieServer_Data/Managed/System*.dll;$(GameRoot)/7DaysToDieServer_Data/Managed/mscorlib.dll;$(GameRoot)/7DaysToDieServer_Data/Managed/netstandard.dll"><Private>false</Private></Reference>
+    <Reference Include="$(GameRoot)/Mods/0_TFP_Harmony/0Harmony.dll"><Private>false</Private></Reference>
+  </ItemGroup>
+  <Target Name="ValidateGameReferences" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(GameRoot)/7DaysToDieServer_Data/Managed/Assembly-CSharp.dll')" Text="Informe -p:GameRoot=/caminho/do/servidor/oficial/3.4 com suas DLLs locais." />
+    <Error Condition="!Exists('$(GameRoot)/Mods/0_TFP_Harmony/0Harmony.dll')" Text="Harmony do servidor oficial não encontrado em GameRoot/Mods/0_TFP_Harmony." />
+  </Target>
+</Project>

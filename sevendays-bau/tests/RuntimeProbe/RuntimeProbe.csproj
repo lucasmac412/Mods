@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework><LangVersion>latest</LangVersion>
+    <AssemblyName>CraftingDosBaus.RuntimeProbe</AssemblyName><DebugType>none</DebugType>
+    <GameRoot Condition="'$(GameRoot)' == ''">/workspace/.cache/sevendays-research/server-v34</GameRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <ProjectReference Include="../../src/CraftingDosBaus.csproj" />
+    <Reference Include="$(GameRoot)/7DaysToDieServer_Data/Managed/*.dll" Exclude="$(GameRoot)/7DaysToDieServer_Data/Managed/System*.dll;$(GameRoot)/7DaysToDieServer_Data/Managed/mscorlib.dll;$(GameRoot)/7DaysToDieServer_Data/Managed/netstandard.dll"><Private>false</Private></Reference>
+    <Reference Include="$(GameRoot)/Mods/0_TFP_Harmony/0Harmony.dll"><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

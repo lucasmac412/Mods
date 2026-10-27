@@ -1,0 +1,99 @@
+CRAFTING DOS BAÚS — 7 Days to Die 3.4.0 (b6)
+Versão 0.1.0 EXPERIMENTAL — alcance padrão: 50 metros
+
+O QUE FAZ
+As receitas do personagem e das estações podem usar ingredientes dos baús
+próximos sem você movê-los para a mochila. O alcance é medido a partir do
+jogador, em todas as direções, incluindo altura. Primeiro são usados os
+ingredientes disponíveis no local de fabricação; o restante vem dos baús.
+O servidor confere e desconta os materiais, coordenando pedidos simultâneos.
+
+INSTALAÇÃO — VOCÊ E TODOS OS AMIGOS PRECISAM INSTALAR
+1. Fechem o jogo. Guardem uma cópia do save antes de experimentar esta versão.
+2. Na Steam: Biblioteca > botão direito em 7 Days to Die > Gerenciar >
+   Explorar arquivos locais. Deixe essa pasta aberta.
+3. Extraia o ZIP usando "Extrair tudo". Não abra o mod direto dentro do ZIP.
+4. Abra a pasta "transfere pro jogo" do pacote e copie a pasta Mods para
+   a pasta do jogo aberta pela Steam. Una as pastas se o Windows perguntar.
+   Não apague os outros mods nem a pasta 0_TFP_Harmony do próprio jogo.
+5. Confira se ficou exatamente assim:
+   7 Days To Die\Mods\CraftingDosBaus\CraftingDosBaus.dll
+   7 Days To Die\Mods\CraftingDosBaus\ModInfo.xml
+   7 Days To Die\Mods\CraftingDosBaus\config.json
+6. Na Steam, clique em Jogar e escolha abrir o launcher/inicializador.
+   Desmarque "Use EasyAntiCheat (EAC)" e inicie o jogo por ele.
+   Mods de código como este exigem EAC desativado. Todos precisam fazer isso.
+7. O anfitrião abre a partida e os amigos entram normalmente, todos na 3.4.0
+   e com a mesma versão deste mod. Não basta apenas o anfitrião instalar.
+
+Não precisa de BepInEx, instalador, PowerShell ou programa adicional.
+O mod usa a biblioteca Harmony fornecida pelo jogo. Se 0_TFP_Harmony estiver
+faltando, restaure os arquivos do jogo pela verificação de integridade da Steam.
+
+SERVIDOR DEDICADO
+Instale a mesma pasta Mods\CraftingDosBaus no servidor e em cada cliente.
+No serverconfig.xml, configure a propriedade EACEnabled com value="false".
+Reinicie o servidor. O alcance usado é o do config.json do anfitrião/servidor.
+Um servidor de terceiros precisa permitir e instalar este mod também.
+
+COMO USAR
+- Coloque os materiais em um baú construído/possuído pelos jogadores, até 50 m.
+- Feche o baú: recipientes abertos por qualquer jogador ficam fora da busca.
+- Abra a fabricação do personagem ou uma estação e selecione a receita.
+- Aguarde cerca de um segundo para os materiais próximos aparecerem nas contas.
+- Clique em fabricar normalmente. Um aviso "Usando ingredientes dos baús..."
+  aparece enquanto o servidor confirma a retirada.
+- Amigos precisam ter acesso ao baú: deixe o baú compartilhado destrancado ou
+  conceda acesso pelas permissões do jogo. O mod não abre baús privados à força.
+- Slots bloqueados, equipamentos com modificações instaladas e recipientes
+  naturais de saque não são usados. Só baús carregados no mundo são consultados.
+
+FORJA
+A forja continua precisando fundir a matéria-prima e consumir combustível.
+Se faltarem materiais fundidos, tente fabricar a receita: o mod busca ferro,
+argila, latão, chumbo, pedra, vidro quebrado ou areia nos baús e abastece os
+slots de entrada disponíveis. Ligue a forja, espere fundir e clique em fabricar
+novamente. Materiais já nos slots aguardando fundição não são pedidos de novo.
+Não transforma minério instantaneamente, não abastece combustível sozinho e
+não derrete armas, ferramentas ou objetos valiosos automaticamente.
+
+O QUE CONTINUA IGUAL
+Receitas desbloqueadas, revistas/perícias, ferramentas exigidas, tempo de
+produção, combustível, limite da fila e regras de cancelamento continuam
+valendo. O mod atende a fabricação por receitas; não movimenta materiais para
+reparo manual, melhoria de blocos, recarga de armas ou compra em comerciantes.
+Se a interface for fechada antes da resposta ou a fila não aceitar a receita,
+os materiais retirados voltam para a mochila; o excesso cai ao lado do jogador.
+
+ALTERAR O ALCANCE
+Com a partida fechada, abra Mods\CraftingDosBaus\config.json no Bloco de Notas.
+Altere somente o número em "AlcanceMetros": 50. Intervalo permitido: 1 a 100.
+O valor do anfitrião/servidor é o que conta no multiplayer. Reinicie após editar.
+
+TESTES E LIMITES DESTA PRIMEIRA VERSÃO
+Compilado contra as bibliotecas oficiais da 3.4.0 (b6).
+Passou em 1.681 verificações automatizadas de retirada, permissões, alcance,
+repetição de mensagens, reversão de falhas e disputa pelo último ingrediente.
+Também passou em 134 verificações dentro do servidor oficial 3.4: carregamento
+do mod, patches, consumo nativo da mochila/estação, planejamento da forja e
+serialização real de pacotes. Os testes de estação usam uma interface de teste.
+Ainda não foi validado em uma sessão com jogadores reais nem na interface
+gráfica do cliente Steam. Por isso o pacote é experimental.
+Não há recuperação persistente de uma retirada interrompida por queda do jogo,
+desconexão ou desligamento durante a confirmação. Espere a fabricação entrar
+na fila antes de sair. Outros mods que alterem crafting/rede podem conflitar.
+
+SE NÃO FUNCIONAR
+Confira a versão 3.4.0, EAC desativado em todos, mod no servidor E nos clientes,
+baú fechado, materiais desbloqueados e distância menor que 50 m.
+Confira se não ficou Mods\Mods\CraftingDosBaus por engano.
+No console/log, procure [CraftingDosBaus]. A mensagem de ativação informa 50 m.
+Se aparecer "Não foi possível ativar", envie esse trecho do log para diagnóstico.
+Não mude apenas o número da versão para tentar usar o mod em outra atualização.
+
+DESINSTALAR
+Feche o jogo e remova somente Mods\CraftingDosBaus em todos os computadores.
+Não remova 0_TFP_Harmony. O mod não cria itens ou blocos novos no save.
+
+CÓDIGO E RELATÓRIO DE TESTES
+https://github.com/lucasmac412/Mods/tree/main/sevendays-bau
