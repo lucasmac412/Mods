@@ -1,5 +1,9 @@
 # Investigação do alerta do Defender
 
+**Distribuição suspensa novamente.** O usuário relatou `Trojan:Script/Ulthar.A!ml` também ao tentar baixar a versão **0.3.0**. O ZIP e a tag dessa versão foram retirados da distribuição atual. As verificações descritas abaixo não resolveram nem explicaram a detecção no computador do usuário. Nenhuma versão anterior é recomendada como alternativa.
+
+Para continuar o diagnóstico, faltam os detalhes da detecção real: caminho em “Itens afetados”, ação tomada pelo Defender, horário e versão das assinaturas. Não restaure a quarentena, não desative a proteção e não tente outro navegador como forma de contornar o bloqueio. A causa permanece não confirmada; ainda não há um arquivo identificado como malware que tenha sido removido do código.
+
 Em 27/10/2026, o usuário informou `Trojan:Script/Ulthar.A!ml` ao baixar a versão 0.2.0. O download foi bloqueado antes de instalar. **Não há confirmação da causa nem classificação oficial como falso positivo.**
 
 ## Retirada do pacote anterior
@@ -24,7 +28,7 @@ A [primeira execução](https://github.com/lucasmac412/Mods/actions/runs/4051486
 
 O fluxo foi corrigido para remover essas exclusões apenas na VM descartável de análise, habilitar varredura de arquivos compactados e MAPS, atualizar assinaturas, verificar a conexão de nuvem e exigir que os alvos não estejam excluídos. A DLL nunca é executada no job de antivírus. As análises incluem ZIP e conteúdo extraído, marca de origem da Internet e conferência de registros de detecção mesmo quando o scanner retorna zero.
 
-## Resultado válido e versão 0.3.0
+## Resultado histórico da análise da versão 0.3.0 — insuficiente para resolver o incidente
 
 A [análise final no Windows Server 2022](https://github.com/lucasmac412/Mods/actions/runs/40518155922), com proteção em tempo real, IOAV e monitoramento de comportamento ativos, terminou com sucesso. Ela confirmou o resultado da [varredura personalizada anterior](https://github.com/lucasmac412/Mods/actions/runs/40516898782). O Microsoft Defender informou **“found no threats”** nas quatro varreduras: ZIP relatado, conteúdo extraído dele, ZIP 0.3.0 e conteúdo extraído da nova versão. Não houve registros em `Get-MpThreatDetection` nem em `Get-MpThreat`.
 
@@ -35,7 +39,7 @@ A [análise final no Windows Server 2022](https://github.com/lucasmac412/Mods/ac
 - ZIPs marcados com origem da Internet. A DLL foi apenas analisada pelo antivírus, não executada nesse job.
 - O teste é uma varredura personalizada na VM; não reproduz integralmente o Chrome, SmartScreen, políticas locais ou o ambiente do usuário.
 
-**Isso não comprova que o alerta original era falso positivo e não garante ausência de novas detecções.** Não foi identificado malware específico para “remover”. A nova versão contém as alterações funcionais solicitadas e o mesmo ZIP analisado é o publicado. O pacote anterior permanece retirado.
+**Isso não comprova que o alerta original era falso positivo.** Não foi identificado malware específico para “remover”. O ZIP analisado era idêntico ao publicado, mas foi novamente sinalizado no ambiente do usuário e agora também está retirado. As funcionalidades permanecem no código-fonte; a distribuição de binários está suspensa enquanto a causa é investigada.
 
 ZIP 0.3.0 SHA-256: `2882a59fa0b444a0bea94ecf32fc24a4cd21292f35c7ebe2b5c27c4e7b929184`.
 DLL 0.3.0 SHA-256: `fbb536e00f6dabdd52b4e69ddcaf79b534c1688fbe2eb741b109541e0929d614`.

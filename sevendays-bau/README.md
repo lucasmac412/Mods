@@ -1,5 +1,7 @@
 # Crafting dos Baús e Guardar Semelhantes — 7 Days to Die 3.4
 
+**Downloads suspensos:** o Defender voltou a sinalizar `Trojan:Script/Ulthar.A!ml` na versão 0.3.0. Seu pacote foi retirado. Os resultados do ambiente de teste não explicaram o alerta no computador do usuário. Não instale cópias anteriores nem ignore a proteção. [Estado da investigação](docs/SEGURANCA.md).
+
 Versão **0.3.0 experimental**, para **V3.4.0 (b6)**. Fabricação do personagem e bancadas usam ingredientes dos baús até **50 metros**, **exceto forja e betoneira**, que mantêm contagem e consumo originais. Bancada, fogueira e estação de química são permitidas; combustível, ferramentas e tempos continuam nativos.
 
 **A versão 0.2.0 foi retirada após um alerta do Defender.** Consulte o [relatório de segurança](docs/SEGURANCA.md). Não ignore alertas nem crie exclusões.

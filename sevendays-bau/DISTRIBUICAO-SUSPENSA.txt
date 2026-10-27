@@ -1,0 +1,6 @@
+Distribuição suspensa após nova detecção Trojan:Script/Ulthar.A!ml na versão 0.3.0.
+Não publicar outra recompilação ou reempacotamento como solução para o alerta.
+A análise do Windows de teste não reproduziu a detecção do usuário e não resolve
+essa divergência. É necessário investigar a detecção real antes de liberar
+novos binários. Consulte docs/SEGURANCA.md. Não recomendar versões anteriores,
+exclusões do Defender ou restauração de quarentena como alternativa.

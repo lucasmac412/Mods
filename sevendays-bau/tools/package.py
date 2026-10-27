@@ -6,6 +6,8 @@ import zipfile
 
 root = Path(__file__).resolve().parents[1]
 repo = root.parent
+if (root / 'DISTRIBUICAO-SUSPENSA.txt').exists():
+    raise SystemExit('Distribuição suspensa: detecção do Defender não resolvida. Consulte sevendays-bau/docs/SEGURANCA.md.')
 name = '7Days-Crafting-dos-Baus-3.4-v0.3.0-Experimental'
 output = repo / 'downloads' / (name + '.zip')
 files = {
