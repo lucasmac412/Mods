@@ -6,7 +6,7 @@ import zipfile
 
 root = Path(__file__).resolve().parents[1]
 repo = root.parent
-name = '7Days-Crafting-dos-Baus-3.4-v0.1.0-Experimental'
+name = '7Days-Crafting-dos-Baus-3.4-v0.2.0-Experimental'
 output = repo / 'downloads' / (name + '.zip')
 files = {
     'LEIA-ME.txt': root / 'LEIA-ME.txt',
@@ -14,6 +14,7 @@ files = {
     'transfere pro jogo/Mods/CraftingDosBaus/CraftingDosBaus.dll': root / 'src/bin/Release/net48/CraftingDosBaus.dll',
     'transfere pro jogo/Mods/CraftingDosBaus/ModInfo.xml': root / 'ModInfo.xml',
     'transfere pro jogo/Mods/CraftingDosBaus/config.json': root / 'config.json',
+    'transfere pro jogo/Mods/CraftingDosBaus/Config/XUi_InGame/windows.xml': root / 'Config/XUi_InGame/windows.xml',
 }
 output.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:

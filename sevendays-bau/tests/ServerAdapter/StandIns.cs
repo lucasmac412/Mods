@@ -25,12 +25,14 @@ public class TEFeatureStorage {
  public ItemStackGrid ItemGrid=new ItemStackGrid();public int Modified;public bool FailAlways,FailOnce;
  public void SetModified(){Modified++;if(FailAlways||FailOnce){FailOnce=false;throw new IOException("injected persistence notification failure");}}
 }
-public class ItemStackGrid {public bool PlayerOwned=true;public ItemStack[] items=Array.Empty<ItemStack>();public HashSet<int> Locked=new HashSet<int>();public bool IsSlotLocked(int i)=>Locked.Contains(i);}
+public class ItemStackGrid {public bool PlayerOwned=true;public ItemStack[] items=Array.Empty<ItemStack>();public HashSet<int> Locked=new HashSet<int>();public bool IsSlotLocked(int i)=>Locked.Contains(i);public void SetItems(ItemStack[] value,bool fire=true){items=ItemStack.Clone(value);}}
 public class TEFeatureLockable {public bool Locked;public string Owner;public bool IsLocked()=>Locked;public bool IsUserAllowed(Platform.PlatformUserIdentifierAbs p)=>p.CombinedString==Owner;}
 public class LockManager {public static LockManager Instance=new LockManager();public bool IsLockedServer(TileEntityComposite t)=>t.Busy;}
-public class ItemValue {public int type;public bool HasModSlots,Modded;public bool HasMods()=>Modded;public ItemValue Clone()=>(ItemValue)MemberwiseClone();}
+public class ItemClass {public int MaxCount=100;}
+public class ItemValue {public ItemClass ItemClass=new ItemClass();public int Meta;public bool Equals(ItemValue other)=>other!=null&&type==other.type&&Meta==other.Meta;public int type;public bool HasModSlots,Modded;public bool HasMods()=>Modded;public ItemValue Clone()=>(ItemValue)MemberwiseClone();}
 public class ItemStack {
  public ItemValue itemValue=new ItemValue();public int count;
+ public bool CanStackWith(ItemStack other,bool partial=false)=>itemValue.type==other.itemValue.type&&count<itemValue.ItemClass.MaxCount;
  public bool IsEmpty()=>count<=0||itemValue.type==0;public void Clear(){count=0;itemValue=new ItemValue();}
  public ItemStack Clone()=>new ItemStack{itemValue=itemValue.Clone(),count=count};
  public static ItemStack[] Clone(IList<ItemStack> items){var a=new ItemStack[items.Count];for(int i=0;i<a.Length;i++)a[i]=items[i].Clone();return a;}
@@ -47,7 +49,8 @@ public class PooledBinaryWriter:BinaryWriter{public PooledBinaryWriter(Stream s)
 public class ClientInfo {
  public int entityId;public Platform.PlatformUserIdentifierAbs InternalId;
  public List<CraftingDosBaus.NetPackageCraftingDosBaus> Replies=new List<CraftingDosBaus.NetPackageCraftingDosBaus>();
- public void SendPackage(NetPackage p)=>Replies.Add((CraftingDosBaus.NetPackageCraftingDosBaus)p);
+ public List<CraftingDosBaus.NetPackageGuardarNosBaus> Deposits=new List<CraftingDosBaus.NetPackageGuardarNosBaus>();
+ public void SendPackage(NetPackage p){if(p is CraftingDosBaus.NetPackageCraftingDosBaus c)Replies.Add(c);else Deposits.Add((CraftingDosBaus.NetPackageGuardarNosBaus)p);}
 }
 public class ConnectionManager{public bool IsServer=true; public void SendToServer(NetPackage p,bool flush){}}
 public class SingletonMonoBehaviour<T> where T:new(){public static T Instance=new T();}
@@ -55,5 +58,6 @@ public static class NetPackageManager {public static T GetPackage<T>() where T:N
 public static class Log {public static void Error(string s){} }
 namespace CraftingDosBaus {
  internal static class Plugin{internal static bool Ready=true;internal static Settings Config=new Settings();internal sealed class Settings{public int AlcanceMetros=50;}}
+ internal static class QuickStore{internal static readonly List<NetPackageGuardarNosBaus> Replies=new List<NetPackageGuardarNosBaus>();internal static void Receive(NetPackageGuardarNosBaus p)=>Replies.Add(p);}
  internal static class Client{internal static readonly List<NetPackageCraftingDosBaus> Replies=new List<NetPackageCraftingDosBaus>();internal static void Receive(NetPackageCraftingDosBaus p)=>Replies.Add(p);}
 }

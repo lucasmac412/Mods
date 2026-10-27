@@ -28,14 +28,14 @@ namespace CraftingDosBaus
                 ModEvents.GameUpdate.RegisterHandler(Update);
                 ModEvents.WorldShuttingDown.RegisterHandler(Shutdown);
                 Ready=true;
-                Log.Out("[CraftingDosBaus] 0.1.0: 3.4, alcance "+Config.AlcanceMetros+" m, retirada autorizada pelo servidor.");
+                Log.Out("[CraftingDosBaus] 0.2.0: 3.4, alcance "+Config.AlcanceMetros+" m, retirada autorizada pelo servidor.");
             }
             catch(Exception e) { Log.Error("[CraftingDosBaus] Não foi possível ativar: "+e); }
         }
         private static void Update(ref ModEvents.SGameUpdateData data)
-        { if(Ready) Client.Tick(); }
+        { if(Ready) {Client.Tick(); QuickStore.Tick();} }
         private static void Shutdown(ref ModEvents.SWorldShuttingDownData data)
-        { Client.Reset(); Server.Reset(); }
+        { Client.Reset(); QuickStore.Reset(); Server.Reset(); DepositServer.Reset(); }
         public sealed class Settings
         { public bool Ativado=true; public int AlcanceMetros=50; }
     }

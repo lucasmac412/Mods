@@ -55,6 +55,7 @@ static class Test {
   var wire=new NetPackageCraftingDosBaus().Setup(NetPackageCraftingDosBaus.Withdraw,2,Guid.NewGuid().ToString("N"),new List<ItemStack>{Item(5,12)});
   using(var ms=new MemoryStream()){wire.write(new PooledBinaryWriter(ms));ms.Position=0;var copy=new NetPackageCraftingDosBaus();copy.read(new PooledBinaryReader(ms));Check(copy.Id==wire.Id&&copy.Player==2&&copy.Stacks[0].count==12,"Packet round trip");}
   Console.WriteLine(checks+" server/planner/wire checks passed using production Server.cs + Network.cs + WithdrawalPlan.cs and controlled game stand-ins.");
+  DepositTests.Run();
   Console.WriteLine("Not a real Steam multiplayer/Unity client test.");
  }
 }

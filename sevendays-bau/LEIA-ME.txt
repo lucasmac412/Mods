@@ -1,12 +1,12 @@
 CRAFTING DOS BAÚS — 7 Days to Die 3.4.0 (b6)
-Versão 0.1.0 EXPERIMENTAL — alcance padrão: 50 metros
+Versão 0.2.0 EXPERIMENTAL — alcance padrão: 50 metros
 
-O QUE FAZ
-As receitas do personagem e das estações podem usar ingredientes dos baús
-próximos sem você movê-los para a mochila. O alcance é medido a partir do
-jogador, em todas as direções, incluindo altura. Primeiro são usados os
-ingredientes disponíveis no local de fabricação; o restante vem dos baús.
-O servidor confere e desconta os materiais, coordenando pedidos simultâneos.
+O QUE MUDOU NA 0.2.0
+- Forja, betoneira, bancada, fogueira e estação de química voltaram ao
+  funcionamento original. O mod NÃO busca ingredientes nem abastece estações.
+- A fabricação do PERSONAGEM continua usando ingredientes dos baús até 50 m.
+- Novo botão "Guardar nos baús" no cabeçalho do inventário: guarda os itens
+  da mochila E DA BARRA RÁPIDA que já existam em baús próximos.
 
 INSTALAÇÃO — VOCÊ E TODOS OS AMIGOS PRECISAM INSTALAR
 1. Fechem o jogo. Guardem uma cópia do save antes de experimentar esta versão.
@@ -15,11 +15,13 @@ INSTALAÇÃO — VOCÊ E TODOS OS AMIGOS PRECISAM INSTALAR
 3. Extraia o ZIP usando "Extrair tudo". Não abra o mod direto dentro do ZIP.
 4. Abra a pasta "transfere pro jogo" do pacote e copie a pasta Mods para
    a pasta do jogo aberta pela Steam. Una as pastas se o Windows perguntar.
+   Para atualizar da 0.1.0, substitua a pasta CraftingDosBaus pela nova inteira.
    Não apague os outros mods nem a pasta 0_TFP_Harmony do próprio jogo.
 5. Confira se ficou exatamente assim:
    7 Days To Die\Mods\CraftingDosBaus\CraftingDosBaus.dll
    7 Days To Die\Mods\CraftingDosBaus\ModInfo.xml
    7 Days To Die\Mods\CraftingDosBaus\config.json
+   7 Days To Die\Mods\CraftingDosBaus\Config\XUi_InGame\windows.xml
 6. Na Steam, clique em Jogar e escolha abrir o launcher/inicializador.
    Desmarque "Use EasyAntiCheat (EAC)" e inicie o jogo por ele.
    Mods de código como este exigem EAC desativado. Todos precisam fazer isso.
@@ -39,7 +41,7 @@ Um servidor de terceiros precisa permitir e instalar este mod também.
 COMO USAR
 - Coloque os materiais em um baú construído/possuído pelos jogadores, até 50 m.
 - Feche o baú: recipientes abertos por qualquer jogador ficam fora da busca.
-- Abra a fabricação do personagem ou uma estação e selecione a receita.
+- Abra a fabricação do personagem e selecione a receita. Estações são normais.
 - Aguarde cerca de um segundo para os materiais próximos aparecerem nas contas.
 - Clique em fabricar normalmente. Um aviso "Usando ingredientes dos baús..."
   aparece enquanto o servidor confirma a retirada.
@@ -48,14 +50,32 @@ COMO USAR
 - Slots bloqueados, equipamentos com modificações instaladas e recipientes
   naturais de saque não são usados. Só baús carregados no mundo são consultados.
 
-FORJA
-A forja continua precisando fundir a matéria-prima e consumir combustível.
-Se faltarem materiais fundidos, tente fabricar a receita: o mod busca ferro,
-argila, latão, chumbo, pedra, vidro quebrado ou areia nos baús e abastece os
-slots de entrada disponíveis. Ligue a forja, espere fundir e clique em fabricar
-novamente. Materiais já nos slots aguardando fundição não são pedidos de novo.
-Não transforma minério instantaneamente, não abastece combustível sozinho e
-não derrete armas, ferramentas ou objetos valiosos automaticamente.
+BOTÃO "GUARDAR NOS BAÚS"
+1. Deixe pelo menos um exemplar do item no baú de destino. Exemplo: coloque
+   madeira no baú de materiais e comida no baú de alimentos.
+2. Feche o baú e abra o inventário. No cabeçalho, ao lado do título do
+   inventário, clique em "Guardar nos baús".
+3. O mod busca baús acessíveis até 50 metros e guarda os itens correspondentes.
+   Preenche pilhas existentes primeiro; depois usa espaços livres apenas em
+   baús que JÁ continham aquele tipo de item. Um baú vazio não recebe nada.
+4. O que não tiver baú correspondente ou não couber fica com você. Se você
+   ocupar os espaços liberados enquanto aguarda a resposta, o excedente da
+   devolução pode cair no chão ao seu lado, com aviso.
+
+Inclui mochila e barra rápida, inclusive armas/ferramentas que tenham um tipo
+correspondente em um baú. Qualidade, durabilidade e modificações são preservadas.
+Armaduras equipadas e o item sendo arrastado pelo cursor não são movidos.
+Para proteger itens, coloque-os em slots BLOQUEADOS da mochila antes de clicar.
+Filtros de busca não limitam o depósito: todos os slots desbloqueados contam.
+Baús privados sem acesso, baús abertos e slots bloqueados de baús são ignorados.
+Espaços livres só recebem itens se houver um exemplar desbloqueado naquele baú.
+Em inventários aumentados por outros mods, cada clique processa até 128 pilhas.
+Espere a mensagem de conclusão antes de clicar novamente ou sair da partida.
+
+ESTAÇÕES
+Forja, betoneira, bancada, fogueira e estação de química funcionam como no jogo
+sem este mod. Coloque os ingredientes/combustível normalmente. Não há mais
+abastecimento automático da forja, mudança de contagens, consumo ou fundição.
 
 O QUE CONTINUA IGUAL
 Receitas desbloqueadas, revistas/perícias, ferramentas exigidas, tempo de
@@ -70,18 +90,20 @@ Com a partida fechada, abra Mods\CraftingDosBaus\config.json no Bloco de Notas.
 Altere somente o número em "AlcanceMetros": 50. Intervalo permitido: 1 a 100.
 O valor do anfitrião/servidor é o que conta no multiplayer. Reinicie após editar.
 
-TESTES E LIMITES DESTA PRIMEIRA VERSÃO
+TESTES E LIMITES DESTA VERSÃO
 Compilado contra as bibliotecas oficiais da 3.4.0 (b6).
-Passou em 1.681 verificações automatizadas de retirada, permissões, alcance,
-repetição de mensagens, reversão de falhas e disputa pelo último ingrediente.
-Também passou em 134 verificações dentro do servidor oficial 3.4: carregamento
-do mod, patches, consumo nativo da mochila/estação, planejamento da forja e
-serialização real de pacotes. Os testes de estação usam uma interface de teste.
+Foram testados retirada/devolução de ingredientes, depósito parcial, espaço
+insuficiente, permissões, slots bloqueados, mensagens repetidas e concorrência
+entre jogadores em ambiente controlado. Também há testes dentro do servidor
+oficial 3.4: fabricação pessoal, estações sem acesso remoto, inventários e
+pacotes reais, limites de pilha e aplicação do botão pelo carregador XML.
+A camada visual das estações é substituída nos testes de lógica.
 Ainda não foi validado em uma sessão com jogadores reais nem na interface
 gráfica do cliente Steam. Por isso o pacote é experimental.
-Não há recuperação persistente de uma retirada interrompida por queda do jogo,
+Não há recuperação persistente de uma retirada/depósito interrompido por queda,
 desconexão ou desligamento durante a confirmação. Espere a fabricação entrar
-na fila antes de sair. Outros mods que alterem crafting/rede podem conflitar.
+na fila ou o aviso de depósito concluído antes de sair. Outros mods que alterem
+crafting/rede podem conflitar.
 
 SE NÃO FUNCIONAR
 Confira a versão 3.4.0, EAC desativado em todos, mod no servidor E nos clientes,
@@ -89,6 +111,8 @@ baú fechado, materiais desbloqueados e distância menor que 50 m.
 Confira se não ficou Mods\Mods\CraftingDosBaus por engano.
 No console/log, procure [CraftingDosBaus]. A mensagem de ativação informa 50 m.
 Se aparecer "Não foi possível ativar", envie esse trecho do log para diagnóstico.
+Se o botão não aparecer, confira se copiou também a pasta Config da versão 0.2.0.
+Todos precisam atualizar para 0.2.0; não misture com a versão 0.1.0.
 Não mude apenas o número da versão para tentar usar o mod em outra atualização.
 
 DESINSTALAR

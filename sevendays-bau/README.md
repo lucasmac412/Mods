@@ -1,33 +1,37 @@
-# Crafting dos Baús — 7 Days to Die 3.4
+# Crafting dos Baús e Guardar Semelhantes — 7 Days to Die 3.4
 
-Ingredientes de baús até **50 metros do jogador** para fabricação pessoal e estações, com retirada validada no servidor. Todos os participantes e o anfitrião/servidor precisam instalar. Requer EAC desativado; usa o Harmony distribuído pelo próprio jogo.
+Versão **0.2.0 experimental**, para **V3.4.0 (b6)**. A fabricação do personagem usa ingredientes dos baús até **50 metros**. **Todas as estações voltaram ao comportamento original**: forja, betoneira, bancada, fogueira e estação de química não recebem materiais remotos nem abastecimento automático.
 
-[Guia de instalação e uso](LEIA-ME.txt) · [Testes e limites](docs/TESTES.md)
+O novo botão **Guardar nos baús**, no cabeçalho do inventário, guarda os itens da mochila **e da barra rápida** em baús próximos que já contenham aquele tipo. Respeita espaço, bloqueios, permissões e atributos dos itens. Não envia itens para baús vazios ou de outras categorias.
 
-Pacote inicial **0.1.0 experimental**, compilado contra **V3.4.0 (b6)** oficial. Não foi testado com clientes Steam reais. Não há garantia de recuperação de transferências interrompidas por queda ou desconexão.
+[Instalação e uso](LEIA-ME.txt) · [Relatório de testes](docs/TESTES.md)
 
-## Comportamento
+Todos os participantes e o anfitrião/servidor devem atualizar a pasta completa do mod para 0.2.0, incluindo `Config`. Requer EAC desativado e usa o Harmony fornecido pelo jogo. Não foi validado com clientes Steam reais; não há recuperação persistente de transferências interrompidas por queda/desconexão.
 
-- Busca somente recipientes de jogadores, carregados, fechados e acessíveis; respeita bloqueios dos slots e baús privados.
-- Usa os mais próximos primeiro; distância 3D inclusiva de 50 m, configurável no servidor.
-- Confere todos os ingredientes antes da retirada, serializa solicitações concorrentes e usa recibos por jogador/pedido para evitar débito repetido.
-- A contagem remota só participa de consultas de fabricação. O snapshot da interface não autoriza consumo; a fila nativa é acionada depois da resposta do servidor.
-- Mantém valores reais dos itens consumidos para cancelamento. Itens com modificações instaladas são excluídos.
-- Na forja, carrega matéria-prima nos três slots de entrada. Fundição e combustível continuam necessários; o jogador fabrica novamente após fundir.
-- Não altera reparos, compras, upgrades ou recargas. As regras nativas de receita, custo, ferramenta e duração continuam em vigor.
+## Funcionamento
 
-## Compilar
+- Baús de jogadores, carregados, fechados e acessíveis, dentro de uma esfera de 50 m do jogador. Alcance configurável no servidor.
+- Fabricação remota restrita à janela de fabricação pessoal. Sem patches nos métodos de contagem/consumo de `XUiC_WorkstationInputGrid`; o abastecimento de forja foi removido.
+- Depósito preenche pilhas compatíveis antes de ocupar espaços livres nos baús correspondentes, priorizando proximidade. Só usa tipos presentes antes do pedido; não espalha categorias novas para outros baús.
+- Slots bloqueados são ignorados na origem e destino. Armaduras equipadas e itens no cursor ficam de fora. Armas da barra rápida podem ser guardadas se houver correspondência; use slots bloqueados da mochila para protegê-las.
+- Qualidade, desgaste, modificações e outros atributos são preservados. Pilhas só são combinadas se os valores completos dos itens forem iguais e houver capacidade.
+- Retirada e depósito compartilham a mesma exclusão mútua no servidor. Solicitações usam IDs por jogador e recibos para impedir aplicação repetida.
+- Antes de depositar, o cliente consulta os tipos disponíveis, reserva os slots exatos uma vez e reutiliza essa reserva nas tentativas. A resposta devolve apenas o excedente, preferindo os slots originais. Se eles forem ocupados durante a espera, tenta o inventário e então o chão com aviso.
+- Uma transferência por cliente de cada vez; até 128 pilhas por clique. Filtros visuais não limitam a seleção de slots.
 
-Obtenha legalmente o servidor dedicado oficial 3.4 pelo Steam/SteamCMD (app 294420). Suas DLLs são referências locais e **não fazem parte deste repositório/pacote**. Com SDK .NET 8 instalado:
+## Compilar e testar
+
+Obtenha legalmente o servidor dedicado oficial 3.4 pelo Steam/SteamCMD (app 294420). DLLs do jogo são referências locais e **não são distribuídas** aqui. Com SDK .NET 8:
 
 ```sh
 dotnet build sevendays-bau/src/CraftingDosBaus.csproj -c Release -p:GameRoot="/caminho/servidor"
 dotnet run --project sevendays-bau/tests/ServerAdapter/ServerAdapter.csproj -c Release
+dotnet run --project sevendays-bau/tests/ClientAdapter/ClientAdapter.csproj -c Release
 python3 sevendays-bau/tools/package.py
 ```
 
-`GameRoot` deve conter `7DaysToDieServer_Data/Managed` e `Mods/0_TFP_Harmony/0Harmony.dll`. O alvo do mod é .NET Framework 4.8; as referências de compilação são restauradas via NuGet. Para a sonda nativa de testes, veja o relatório. Nunca instale a DLL da sonda na partida normal.
+`GameRoot` contém `7DaysToDieServer_Data/Managed` e `Mods/0_TFP_Harmony/0Harmony.dll`. Alvo do plugin: .NET Framework 4.8. Para executar a sonda no servidor oficial, veja o relatório. A DLL da sonda não deve ser instalada em partidas normais.
 
 ## Limites de consistência
 
-Recibos são mantidos em memória durante a sessão, com limite de 20.000 pedidos. Uma repetição pendente recebe o mesmo resultado; um recibo confirmado não debita de novo. Não há transação distribuída durável entre o save do baú e o save do personagem: uma queda/desconexão durante a confirmação pode perder ingredientes. O cache de interface expira em três segundos. O servidor revalida acesso, alcance e quantidade no momento da retirada.
+Recibos ficam em memória durante a sessão, limitados a 20.000 por operação. A confirmação gera um tombstone que impede reaplicação. O cliente valida que qualquer devolução é subconjunto exato dos itens reservados. Não há transação distribuída durável entre os saves do baú e personagem: quedas/desconexões durante uma transferência podem perder itens. Aguarde a conclusão antes de sair. O servidor revalida acesso, distância, espaço e conteúdo em cada novo pedido.

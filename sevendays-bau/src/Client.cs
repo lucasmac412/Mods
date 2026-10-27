@@ -21,13 +21,14 @@ namespace CraftingDosBaus
             public Recipe Recipe;
             public int Count;
             public List<ItemStack> Wanted;
-            public bool FeedForge;
         }
         private static Pending pending;
         private static readonly System.Reflection.FieldInfo CountField=AccessTools.Field(typeof(ItemActionEntryCraft),"craftCountControl");
         private static readonly System.Reflection.FieldInfo IngredientField=AccessTools.Field(typeof(ItemActionEntryCraft),"tempIngredientList");
         private static readonly System.Reflection.MethodInfo HasItemsMethod=AccessTools.Method(typeof(ItemActionEntryCraft),"hasItems");
         internal static EntityPlayerLocal Player=>GameManager.Instance?.World?.GetPrimaryPlayer();
+        internal static bool Busy=>pending!=null||Completing||(Wallet!=null&&Wallet.Any(s=>s.count>0));
+        internal static void Invalidate(){stockAt=-100;nextPoll=0;}
         internal static bool Active=>Plugin.Ready&&!Suppress&&(Scope>0||Completing);
         internal static XUiC_RecipeCraftCount CountControl(ItemActionEntryCraft action)=>(XUiC_RecipeCraftCount)CountField.GetValue(action);
         internal static XUiC_WorkstationInputGrid Grid(ItemActionEntryCraft action)=>CountControl(action).WindowGroup.Controller.GetChildByType<XUiC_WorkstationInputGrid>();
@@ -40,7 +41,7 @@ namespace CraftingDosBaus
             var player=Player;
             if(player==null||player.IsDead())return;
             float now=Time.realtimeSinceStartup;
-            if(now>=nextPoll)
+            if(now>=nextPoll && LocalPlayerUI.GetUIForPlayer(player)?.xui?.GetWindowGroupById("crafting")?.isShowing==true)
             {
                 nextPoll=now+1;
                 Send(NetPackageManager.GetPackage<NetPackageCraftingDosBaus>().Setup(NetPackageCraftingDosBaus.SnapshotRequest,player.entityId,""));
@@ -78,16 +79,16 @@ namespace CraftingDosBaus
             try
             {
                 bool valid=task!=null && task.Action.ItemController?.xui!=null
+                    && Hooks.Personal(task.Action.ItemController)
                     && ReferenceEquals(((XUiC_RecipeEntry)task.Action.ItemController).Recipe,task.Recipe)
                     && CountControl(task.Action).Count==task.Count
                     && CountControl(task.Action).WindowGroup.isShowing;
                 if(valid)
                 {
-                    if(task.FeedForge) ForgeSupply.Apply(task.Action,Wallet);
-                    else task.Action.OnActivated(); // native unlock/tool/fuel/queue/time checks
+                    task.Action.OnActivated(); // native unlock/tool/fuel/queue/time checks
                 }
                 // A full queue/closed UI must not lose already withdrawn physical items.
-                if(!Queued||Spent||task?.FeedForge==true) ReturnRemainder();
+                if(!Queued||Spent) ReturnRemainder();
                 else Say("Falha na confirmação da fila. Saldo retido; consulte o log antes de continuar.");
             }
             catch(Exception e)
@@ -107,7 +108,7 @@ namespace CraftingDosBaus
             foreach(var group in groups)
             {
                 var recipes=group.Controller?.GetChildByType<XUiC_RecipeList>();
-                if(recipes==null)continue;
+                if(recipes==null||!Hooks.Personal(recipes))continue;
                 AccessTools.Field(typeof(XUiC_RecipeList),"resortRecipes").SetValue(recipes,true);
                 group.Controller.SetAllChildrenDirty();
             }
@@ -132,7 +133,8 @@ namespace CraftingDosBaus
         }
         internal static bool Begin(ItemActionEntryCraft action,bool disabled=false)
         {
-            if(!Plugin.Ready||Completing)return true;
+            if(!Plugin.Ready||!Hooks.Personal(action.ItemController)||Completing)return true;
+            if(QuickStore.Busy){Say("Aguarde os itens serem guardados.");return false;}
             if(pending!=null){Say("Aguardando os baús...");return false;}
             if(Wallet!=null&&Wallet.Any(s=>s.count>0))
             {
@@ -154,7 +156,7 @@ namespace CraftingDosBaus
             // Re-run against the snapshot to finish native ingredient computation,
             // including recipes whose first quality ingredient previously caused early return.
             bool withChests=(bool)HasItemsMethod.Invoke(action,new object[]{entry.xui,entry.Recipe});
-            if(!withChests && !(Grid(action) is XUiC_WorkstationMaterialInputGrid))return true;
+            if(!withChests)return true;
             var ingredients=((List<ItemStack>)IngredientField.GetValue(action)).Select(s=>s.Clone()).ToList();
             int count=CountControl(action).Count;
             if(count<1||count>1000000)return true;
@@ -175,13 +177,10 @@ namespace CraftingDosBaus
             }
             finally {Suppress=false;}
             if(wanted.Count==0)return true;
-            bool feed=grid is XUiC_WorkstationMaterialInputGrid && wanted.Any(s=>s.itemValue.ItemClass.GetItemName().StartsWith("unit_",StringComparison.Ordinal));
-            if(feed)wanted=ForgeSupply.Plan(action,wanted,stock);
-            if(wanted==null||wanted.Count==0)return true;
-            if(!feed && wanted.Any(s=>ExtraCount(s.itemValue.type)<s.count))return true;
-            var request=new Pending {Id=Guid.NewGuid().ToString("N"),Action=action,Recipe=entry.Recipe,Count=count,Wanted=wanted,FeedForge=feed};
+            if(wanted.Any(s=>ExtraCount(s.itemValue.type)<s.count))return true;
+            var request=new Pending {Id=Guid.NewGuid().ToString("N"),Action=action,Recipe=entry.Recipe,Count=count,Wanted=wanted};
             pending=request;retryAt=Time.realtimeSinceStartup+3;
-            Say(feed?"Abastecendo a forja pelos baús...":"Usando ingredientes dos baús...");
+            Say("Usando ingredientes dos baús...");
             Send(NetPackageManager.GetPackage<NetPackageCraftingDosBaus>().Setup(NetPackageCraftingDosBaus.Withdraw,Player.entityId,request.Id,wanted));
             return false;
         }

@@ -1,56 +1,67 @@
-# Validação — 0.1.0 experimental
+# Validação — 0.2.0 experimental
 
-Realizada em 27/10/2026. Alvo: **7 Days to Die V3.4.0 (b6), Compatibility V3.4.0**. Versão confirmada na notícia oficial da Steam, nas constantes do assembly e no servidor Linux em execução.
+Realizada em 27/10/2026 contra **7 Days to Die V3.4.0 (b6)** oficial.
 
 ## Resultados
 
-| Camada | Resultado | O que realmente foi executado |
+| Camada | Resultado | Cobertura real |
 | --- | --- | --- |
-| Build .NET Framework 4.8 | 0 erros / 0 avisos | Referências do servidor oficial 3.4.0, não stubs |
-| ServerAdapter | 1.681 verificações aprovadas | Código de produção `Server.cs`, `Network.cs`, `WithdrawalPlan.cs` com substitutos controlados do mundo/API |
-| RuntimeProbe | 134 verificações aprovadas | DLL final e Harmony dentro do servidor Linux oficial 3.4.0 (b6), sem interface gráfica |
-| ZIP | Estrutura e CRC verificados | Somente DLL própria, configuração, manifesto, guia e licença |
-| Clientes Steam em cooperativo | **Não realizado** | Não havia clientes/jogadores disponíveis neste ambiente |
+| Build .NET Framework 4.8 | 0 erros / 0 avisos | Referências oficiais da versão 3.4.0 |
+| ServerAdapter, retirada | 1.681 verificações | Código de produção com mundo/API controlados |
+| ServerAdapter, depósito | 64.009 verificações | Código de produção, incluindo 1.000 inventários aleatórios e 100 disputas concorrentes por espaço |
+| ClientAdapter | 117 verificações | Código real de reserva/devolução, com UI/inventário/rede substituídos |
+| RuntimeProbe | 162 verificações | DLL dentro do servidor Linux oficial, métodos e tipos reais do jogo |
+| ZIP | Estrutura, CRC e igualdade da DLL conferidos | Inclui XML do botão e não inclui DLLs proprietárias/testes |
+| Cooperativo com clientes Steam e UI gráfica | **Não realizado** | Não havia clientes/jogadores disponíveis |
 
-O teste automatizado de concorrência não é uma partida multiplayer. O teste nativo confirma métodos do jogo e formato dos pacotes, mas não exercita a transmissão entre dois clientes, a interface gráfica completa, a fila com um personagem real nem a fundição ao longo do tempo.
+Os números incluem várias asserções por cenário/iteração, não milhares de partidas. Testes de concorrência controlada não substituem uma partida multiplayer.
 
-## ServerAdapter
+## Regressão da fabricação e isolamento das estações
 
-- Retirada exata, ingredientes de mais de um baú, prioridade de proximidade.
-- Falta de um ingrediente impede a alteração dos demais.
-- 100 rodadas com solicitações concorrentes pelo último material: um único vencedor.
-- Repetição do mesmo recibo, confirmação e tentativa de replay sem novo débito.
-- Alcance de 50 m inclusivo, distância vertical e valores inválidos.
-- Exclusão de baús abertos/ocupados, privados sem acesso, slots bloqueados, saque do mundo e equipamentos modificados.
-- Permissão do proprietário e rejeição de pacote com identidade de outro jogador.
-- Reversão quando a notificação do armazenamento falha, inclusive com falha persistente.
-- 1.000 inventários aleatórios comparados com um cálculo independente de disponibilidade.
-- Codificação/decodificação da classe de pacote com codec de ItemStack substituído nessa camada.
+Mantidos os cenários de retirada mais próxima, múltiplos ingredientes, falta parcial sem débito, permissões, slots bloqueados, raio/altura, replay, rollback e 100 disputas pelo último material. No servidor real, 20 combinações executaram `XUiM_PlayerInventory.HasItems/RemoveItems`, conferindo mochila, saldo remoto e materiais de cancelamento.
 
-## RuntimeProbe
+A nova sonda confirma ausência de patches em `XUiC_WorkstationInputGrid.GetItemCount/HasItems/RemoveItems`. Uma estação de teste chama os métodos nativos com um saldo remoto ativo e continua vendo/consumindo apenas seus próprios materiais. Sua camada visual/backend é substituída, não o código nativo desses métodos. Classificação e isolamento de escopo foram conferidos para personagem, forja, betoneira, bancada, fogueira e estação de química.
 
-Iniciou o servidor oficial no mundo `Empty`, sem jogadores, com listagem pública, dashboard, telnet e EAC desativados, senha aleatória e saves isolados. A sonda de testes **não integra o ZIP entregue**.
+## Depósito no servidor
 
-- Todos os patches Harmony instalaram sem erro, inclusive a inserção no cálculo de quantidade máxima.
-- O registro nativo encontrou `NetPackageCraftingDosBaus` e atribuiu um ID.
-- 20 combinações de saldo local/remoto executaram os métodos reais `XUiM_PlayerInventory.HasItems` e `RemoveItems`: contagem sem interferência fora do crafting, débito completo de mochila e saldo remoto e lista real de materiais para cancelamento.
-- Métodos reais `XUiC_WorkstationInputGrid.HasItems/DecItem/RemoveItems`, com apenas a camada visual/backend substituída, consumiram exatamente a soma autorizada.
-- Planejamento da forja usou IDs, categorias e pesos reais de ferro: quantidade correta de matéria-prima, sem modificar o snapshot, sem pedir minério já carregado e sem retirar quando os slots estavam cheios.
-- Pacote serializado com `PooledBinaryWriter`, `PooledBinaryReader` e `ItemStack` reais: ID, operação, destinatário, recibo e materiais preservados.
+- Preencher pilhas em vários baús antes de ocupar espaços livres; respeitar proximidade.
+- Nunca iniciar uma categoria em um baú que não a possuía, mesmo vazio.
+- Devolver exatamente itens sem destino ou sem capacidade.
+- Baús fora do alcance, na vertical, abertos, ocupados, privados, de saque e slots bloqueados excluídos.
+- Acesso do proprietário, fronteira inclusiva de 50 m e slots vazios bloqueados.
+- Metadados diferentes preservados em slots separados.
+- Falha na notificação de um entre vários baús: reversão de todos e devolução integral, inclusive falha persistente.
+- Repetição de pedido/ack sem reaplicação e rejeição de identidade falsa.
+- 100 pares de depósitos concorrentes disputando o último espaço conservam o total.
+- 1.000 conjuntos aleatórios conferem conservação por tipo, capacidade de cada slot, bloqueios e categorias originais.
 
-[Saída filtrada dos testes nativos](runtime-probe.txt). Somente mensagens da sonda e versão; sem logs de conta, senha, IDs de plataforma ou arquivos proprietários.
+## Reserva e devolução no cliente
+
+Executado `QuickStore.cs` de produção com substitutos controlados: consulta não remove itens; reserva exata uma vez; clique/offer duplicados ignorados; retry usa o mesmo ID/saldo; devolução parcial aos slots originais; replay não duplica; slots bloqueados; consulta expirada; resposta inválida rejeitada; retorno à barra rápida; espaços ocupados durante espera; inventário cheio com queda exata no chão e aviso; UI temporariamente indisponível; fabricação concorrente bloqueada. Mais 100 quantidades passaram por vários retries/replays.
+
+## Integração com o servidor oficial
+
+Sonda executada no mundo `Empty`, saves isolados, listagem pública/EAC/telnet/dashboard desativados e senha aleatória. Confirmou:
+
+- Carregamento da DLL, instalação dos hooks e registro dos dois protocolos de rede.
+- Comportamento nativo de inventário e isolamento das estações descritos acima.
+- Plano de depósito com capacidade real de pilhas, aplicação no `ItemStackGrid` nativo, baú vazio excluído e seleção de mochila/barra respeitando bloqueios reais.
+- Validação de devoluções usando `ItemValue` real.
+- Serialização com `PooledBinaryWriter/Reader` e `ItemStack` reais nos dois protocolos.
+- O carregador/patcher XML real aplicou `Config/XUi_InGame/windows.xml` e inseriu exatamente um botão no cabeçalho da mochila.
+
+[Saída filtrada da sonda](runtime-probe.txt). O teste XML não renderiza a interface nem simula clicar no botão dentro do cliente Steam.
 
 ## Reprodução
 
 ```sh
 dotnet run --project sevendays-bau/tests/ServerAdapter/ServerAdapter.csproj -c Release
+dotnet run --project sevendays-bau/tests/ClientAdapter/ClientAdapter.csproj -c Release
 dotnet build sevendays-bau/tests/RuntimeProbe/RuntimeProbe.csproj -c Release -p:GameRoot="/caminho/servidor-oficial-3.4"
 ```
 
-Para a sonda, use uma instalação **descartável e isolada** do servidor oficial. Instale a DLL principal com seu ModInfo/config em `Mods/CraftingDosBaus`; coloque apenas `CraftingDosBaus.RuntimeProbe.dll` em `Mods/ZZ_BausRuntimeProbe` com um `ModInfo.xml` válido. A sonda executa em `GameStartDone` e desliga o servidor ao terminar. Configure mundo `Empty`, nome/save próprios, `EACEnabled=false`, `ServerVisibility=0`, senha, telnet/dashboard desativados e UserDataFolder isolado. A sonda não deve ser usada em partidas ou servidores de usuários.
+Use instalação descartável do servidor oficial. Instale a pasta completa do mod, incluindo `Config`, em `Mods/CraftingDosBaus`; coloque apenas a DLL da sonda em `Mods/ZZ_BausRuntimeProbe` com ModInfo válido. Configure `Empty`, save e UserDataFolder próprios, EAC desativado, `ServerVisibility=0`, senha e telnet/dashboard desativados. A sonda executa em `GameStartDone` e desliga o servidor. Nunca a instale em uma partida normal.
 
-## Limites conhecidos
+## Limites
 
-Ainda é necessária validação visual no cliente Steam e cooperativo real, incluindo fila cheia, cancelamento, saída de alcance, latência, troca de janela, sessões longas e interação com outros mods. Recibos e saldos são de sessão, não persistentes: quedas ou desconexões durante a transferência não têm recuperação garantida. Não há promessa de compatibilidade com futuras versões, consoles, EAC ativado ou mods de overhaul.
-
-O jogo 3.4 também anuncia um problema próprio com bloqueios de slots sendo redefinidos ao fechar o inventário. O mod respeita o estado atual que o servidor expõe; ele não corrige esse problema do jogo.
+Faltam UI visual, transporte real entre clientes Steam, latência real, sessões longas e compatibilidade com overhauls. Recibos/reservas são de sessão: quedas ou desconexões durante uma transferência não têm recuperação garantida. A versão 3.4 anuncia um problema próprio com bloqueios redefinidos ao fechar inventários; o mod respeita o estado atual exposto pelo jogo e não corrige esse problema.

@@ -8,7 +8,7 @@ namespace CraftingDosBaus
 {
     internal static class Server
     {
-        private static readonly object Gate=new object();
+        internal static readonly object Gate=new object();
         private sealed class Receipt { public List<ItemStack> Stacks; public string Message; }
         private sealed class Source { public TEFeatureStorage Storage; public int Index; public TileEntityComposite Parent; }
         private static readonly Dictionary<string,Receipt> Receipts=new Dictionary<string,Receipt>();
@@ -95,9 +95,9 @@ namespace CraftingDosBaus
                 Reply(request,sender,NetPackageCraftingDosBaus.Grant,granted,"");
             }
         }
-        private static List<Source> Sources(World world,EntityPlayer player,PlatformUserIdentifierAbs owner)
+        internal static List<TileEntityComposite> Containers(World world,EntityPlayer player,PlatformUserIdentifierAbs owner)
         {
-            var found=new List<Source>();
+            var found=new List<TileEntityComposite>();
             foreach(var chunk in world.ChunkCache.chunks.dict.Values.ToArray())
             {
                 chunk.EnterReadLock();
@@ -111,13 +111,23 @@ namespace CraftingDosBaus
                         if(storage==null || !storage.ItemGrid.PlayerOwned || te.IsUserAccessing() || LockManager.Instance.IsLockedServer(te))continue;
                         var access=te.GetFeature<TEFeatureLockable>();
                         if(access!=null && access.IsLocked() && !access.IsUserAllowed(owner))continue;
-                        for(int i=0;i<storage.ItemGrid.items.Length;i++)
-                            if(!storage.ItemGrid.IsSlotLocked(i)&&Eligible(storage.ItemGrid.items[i]))found.Add(new Source{Storage=storage,Index=i,Parent=te});
+                        found.Add(te);
                     }
                 }
                 finally {chunk.ExitReadLock();}
             }
-            return found.OrderBy(s=>((Vector3)s.Parent.ToWorldPos()-player.position).sqrMagnitude).ThenBy(s=>s.Parent.ToWorldPos().x).ThenBy(s=>s.Parent.ToWorldPos().y).ThenBy(s=>s.Parent.ToWorldPos().z).ThenBy(s=>s.Index).ToList();
+            return found.OrderBy(t=>((Vector3)t.ToWorldPos()-player.position).sqrMagnitude).ThenBy(t=>t.ToWorldPos().x).ThenBy(t=>t.ToWorldPos().y).ThenBy(t=>t.ToWorldPos().z).ToList();
+        }
+        private static List<Source> Sources(World world,EntityPlayer player,PlatformUserIdentifierAbs owner)
+        {
+            var found=new List<Source>();
+            foreach(var te in Containers(world,player,owner))
+            {
+                var storage=te.GetFeature<TEFeatureStorage>();
+                for(int i=0;i<storage.ItemGrid.items.Length;i++)
+                    if(!storage.ItemGrid.IsSlotLocked(i)&&Eligible(storage.ItemGrid.items[i]))found.Add(new Source{Storage=storage,Index=i,Parent=te});
+            }
+            return found;
         }
         private static void Reply(NetPackageCraftingDosBaus request,ClientInfo sender,byte kind,List<ItemStack> items,string message)
         {

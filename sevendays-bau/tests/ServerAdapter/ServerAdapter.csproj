@@ -1,4 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
- <ItemGroup><Compile Include="../../src/WithdrawalPlan.cs" Link="WithdrawalPlan.cs"/><Compile Include="../../src/Server.cs" Link="Server.cs"/><Compile Include="../../src/Network.cs" Link="Network.cs"/></ItemGroup>
+ <ItemGroup><Compile Include="../../src/WithdrawalPlan.cs" Link="WithdrawalPlan.cs"/><Compile Include="../../src/Server.cs" Link="Server.cs"/><Compile Include="../../src/Network.cs" Link="Network.cs"/><Compile Include="../../src/DepositPlan.cs" Link="DepositPlan.cs"/><Compile Include="../../src/DepositServer.cs" Link="DepositServer.cs"/><Compile Include="../../src/DepositNetwork.cs" Link="DepositNetwork.cs"/></ItemGroup>
 </Project>

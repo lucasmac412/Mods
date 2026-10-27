@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
 using HarmonyLib;
 
 namespace CraftingDosBaus
@@ -21,21 +20,38 @@ namespace CraftingDosBaus
                 harmony.Patch(AccessTools.Method(typeof(ItemActionEntryCraft),"OnDisabledActivate"),prefix:H(nameof(DisabledActivate)));
                 harmony.Patch(AccessTools.Method(typeof(XUiM_PlayerInventory),"GetAllItemStacks"),postfix:H(nameof(AllStacks)));
                 harmony.Patch(AccessTools.Method(typeof(XUiM_PlayerInventory),"GetItemCount",new[]{typeof(ItemValue)}),postfix:H(nameof(ItemCount)));
-                harmony.Patch(AccessTools.Method(typeof(XUiC_WorkstationInputGrid),"GetItemCount"),postfix:H(nameof(ItemCount)));
                 harmony.Patch(AccessTools.Method(typeof(XUiC_RecipeList),"BuildRecipeInfosList"),prefix:H(nameof(RecipeList)));
-                harmony.Patch(AccessTools.Method(typeof(XUiC_RecipeCraftCount),"calcMaxCraftable"),transpiler:H(nameof(Maximum)));
-                foreach(var type in new[]{typeof(XUiM_PlayerInventory),typeof(XUiC_WorkstationInputGrid)})
+                foreach(var type in new[]{typeof(XUiM_PlayerInventory)})
                 {
                     harmony.Patch(AccessTools.Method(type,"HasItems"),postfix:H(nameof(HasItems)));
                     harmony.Patch(AccessTools.Method(type,"RemoveItems"),prefix:H(nameof(BeforeRemove)),postfix:H(nameof(AfterRemove)));
                 }
+                harmony.Patch(AccessTools.Method(typeof(XUiC_BackpackWindow),"Init"),postfix:H(nameof(BackpackReady)));
                 foreach(var method in typeof(XUiC_CraftingQueue).GetMethods().Where(m=>m.Name=="AddRecipeToCraft"&&m.ReturnType==typeof(bool)))
                     harmony.Patch(method,postfix:H(nameof(Queued)));
             }
             catch {harmony.UnpatchSelf();throw;}
         }
-        private static void Enter(out int __state){__state=Client.Scope;Client.Scope++;}
-        private static void Leave(int __state){Client.Scope=__state;}
+        internal static bool Personal(XUiController controller)
+        {
+            var root=controller?.WindowGroup?.Controller as XUiC_CraftingWindowGroup;
+            return root!=null && !(root is XUiC_WorkstationWindowGroup)
+                && (string.IsNullOrEmpty(root.Workstation)||root.Workstation=="player");
+        }
+        private struct ScopeState { public int Depth; public bool Suppressed; }
+        private static void Enter(object __instance,out ScopeState __state)
+        {
+            __state=new ScopeState{Depth=Client.Scope,Suppressed=Client.Suppress};
+            var controller=__instance is ItemActionEntryCraft action?action.ItemController:__instance as XUiController;
+            if(Personal(controller))Client.Scope++;
+            else Client.Suppress=true;
+        }
+        private static void Leave(ScopeState __state){Client.Scope=__state.Depth;Client.Suppress=__state.Suppressed;}
+        private static void BackpackReady(XUiC_BackpackWindow __instance)
+        {
+            var button=__instance.GetChildById("btnGuardarNosBaus");
+            if(button!=null)button.OnPress+=QuickStore.Pressed;
+        }
         private static bool Activate(ItemActionEntryCraft __instance,out bool __state)
         {
             __state=Client.Suppress;
@@ -49,25 +65,12 @@ namespace CraftingDosBaus
         {if(Client.Active){__result=new List<ItemStack>(__result);__result.AddRange(ItemStack.Clone(Client.Extras));}}
         private static void ItemCount(ItemValue __0,ref int __result)
         {if(Client.Active)__result=(int)Math.Min(int.MaxValue,(long)__result+Client.ExtraCount(__0.type));}
-        private static void RecipeList(List<ItemStack> __0)
-        {if(Plugin.Ready&&!Client.Suppress)__0.AddRange(ItemStack.Clone(Client.Extras));}
-        private static ItemStack[] MergeGrid(ItemStack[] items)
-        {return Client.Active?items.Concat(ItemStack.Clone(Client.Extras)).ToArray():items;}
-        private static IEnumerable<CodeInstruction> Maximum(IEnumerable<CodeInstruction> instructions)
-        {
-            int matches=0;
-            foreach(var instruction in instructions)
-            {
-                yield return instruction;
-                if(instruction.operand is MethodInfo method&&method.Name=="GetSlots"&&method.ReturnType==typeof(ItemStack[]))
-                {matches++;yield return new CodeInstruction(OpCodes.Call,AccessTools.Method(typeof(Hooks),nameof(MergeGrid)));}
-            }
-            if(matches!=1)throw new InvalidOperationException("Fluxo de quantidade máxima mudou; esperado GetSlots único da versão 3.4.");
-        }
+        private static void RecipeList(XUiC_RecipeList __instance,List<ItemStack> __0)
+        {if(Plugin.Ready&&!Client.Suppress&&Personal(__instance))__0.AddRange(ItemStack.Clone(Client.Extras));}
         private static int NativeCount(object inventory,ItemValue item)
         {
             bool previous=Client.Suppress;Client.Suppress=true;
-            try {return inventory is XUiM_PlayerInventory p?p.GetItemCount(item):((XUiC_WorkstationInputGrid)inventory).GetItemCount(item);}
+            try {return ((XUiM_PlayerInventory)inventory).GetItemCount(item);}
             finally{Client.Suppress=previous;}
         }
         private static void HasItems(object __instance,IList<ItemStack> __0,int __1,ref bool __result)

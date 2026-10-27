@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configs>
+  <append xpath="/windows/window[@name='windowBackpack']/rect[@name='header']">
+    <button name="btnGuardarNosBaus" depth="5" pos="226,-7" width="138" height="30"
+            sprite="menu_empty3px" type="sliced" pivot="topleft" style="press, hover"
+            defaultcolor="65,65,65" hovercolor="110,100,80" selectedcolor="130,115,80"
+            sound="[paging_click]" tooltip="Guardar itens semelhantes nos baús próximos (50 m)">
+      <label name="lblGuardarNosBaus" depth="1" pos="4,-4" width="130" height="22"
+             text="Guardar nos baús" font_size="17" justify="center" color="222,206,163" />
+    </button>
+  </append>
+</configs>
