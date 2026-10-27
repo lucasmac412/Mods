@@ -65,7 +65,9 @@ jobs:
             if ($before.ExclusionPath) { Remove-MpPreference -ExclusionPath $before.ExclusionPath }
             if ($before.ExclusionProcess) { Remove-MpPreference -ExclusionProcess $before.ExclusionProcess }
             if ($before.ExclusionExtension) { Remove-MpPreference -ExclusionExtension $before.ExclusionExtension }
-            Set-MpPreference -DisableArchiveScanning $false -MAPSReporting Advanced -SubmitSamplesConsent SendSafeSamples
+            Set-MpPreference -DisableArchiveScanning $false -DisableRealtimeMonitoring $false -DisableIOAVProtection $false -DisableBehaviorMonitoring $false -MAPSReporting Advanced -SubmitSamplesConsent SendSafeSamples
+            for ($attempt = 0; $attempt -lt 10 -and -not (Get-MpComputerStatus).RealTimeProtectionEnabled; $attempt++) { Start-Sleep -Seconds 1 }
+            if (-not (Get-MpComputerStatus).RealTimeProtectionEnabled) { throw 'Real-time protection did not become active; do not claim a download-equivalent test.' }
             Update-MpSignature
             Get-MpComputerStatus | ConvertTo-Json -Depth 4 | Set-Content av-report/engine.json
             Get-MpPreference | Select-Object ExclusionPath,ExclusionProcess,ExclusionExtension,DisableArchiveScanning,MAPSReporting,SubmitSamplesConsent | ConvertTo-Json -Depth 4 | Set-Content av-report/preferences.json
