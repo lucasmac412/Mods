@@ -55,23 +55,34 @@ public sealed class Probe : IModApi
             station.RemoveItems(new[]{new ItemStack(wood.Clone(),4)},1,stationRemoved);
             Check(station.GetSlots()[0].IsEmpty()&&Client.Wallet[0].count==6&&!Client.Spent,"station consumption leaves remote wallet untouched");
             Check(stationRemoved.Sum(s=>s.count)==4&&station.Updates>0,"station uses native refund and backend");
-            foreach(string method in new[]{"GetItemCount","HasItems","RemoveItems"})
-                Check(Harmony.GetPatchInfo(AccessTools.Method(typeof(XUiC_WorkstationInputGrid),method))==null,"no workstation patch: "+method);
             Client.Reset();
-            foreach(string area in new[]{"","forge","cementMixer","workbench","campfire","chemistryStation"})
+            foreach(string area in new[]{"","forge","forge_nosmelting","cementMixer","workbench","campfire","chemistryStation","customWorkbench"})
             {
+                bool allowed=area!="forge"&&area!="forge_nosmelting"&&area!="cementMixer";
                 XUiC_CraftingWindowGroup root=area==""?new XUiC_CraftingWindowGroup():new XUiC_WorkstationWindowGroup();
                 root.Workstation=area;
                 var group=(XUiWindowGroup)FormatterServices.GetUninitializedObject(typeof(XUiWindowGroup));
                 group.Controller=root;root.WindowGroup=group;
                 var entry=new XUiC_IngredientEntry{WindowGroup=group};
-                Check(Hooks.Personal(entry)==(area==""),"crafting context classified: "+area);
+                Check(Hooks.Supported(entry)==allowed,"crafting context classified: "+area);
                 object[] args={entry,null};
                 AccessTools.Method(typeof(Hooks),"Enter").Invoke(null,args);
-                Check(area==""?Client.Scope==1&&!Client.Suppress:Client.Scope==0&&Client.Suppress,"scoped remote counts only for player: "+area);
+                Check(allowed?Client.Scope==1&&!Client.Suppress:Client.Scope==0&&Client.Suppress,"remote count scope: "+area);
                 AccessTools.Method(typeof(Hooks),"Leave").Invoke(null,new[]{args[1]});
                 Check(Client.Scope==0&&!Client.Suppress,"crafting scope restored: "+area);
+                var input=new ProbeStation{WindowGroup=group};
+                input.SetSlots(new[]{new ItemStack(wood.Clone(),4)});
+                Client.Wallet=new List<ItemStack>{new ItemStack(wood.Clone(),6)};Client.Completing=true;Client.Spent=false;
+                Check(input.GetItemCount(wood)==(allowed?10:4),"station count eligibility: "+area);
+                Check(input.HasItems(new[]{new ItemStack(wood.Clone(),10)})==allowed,"station availability eligibility: "+area);
+                int cost=allowed?10:4;
+                var consumed=new List<ItemStack>();input.RemoveItems(new[]{new ItemStack(wood.Clone(),cost)},1,consumed);
+                Check(input.GetSlots()[0].IsEmpty()&&Client.Wallet[0].count==(allowed?0:6),"station debit respects exclusion: "+area);
+                Check(consumed.Sum(s=>s.count)==cost,"station refund ingredients preserved: "+area);
+                Client.Reset();
             }
+            foreach(string idText in new[]{"forge","FORGE","workstation_forge","workstation_forge_nosmelting","cementMixer","workstation_cementMixer"})
+                Check(!CraftingPolicy.Allows(idText),"excluded ID: "+idText);
             var chest=ItemStackGrid.Create(new Vector2i(3,1),XUiC_ItemStack.StackLocationTypes.Backpack,true,true,null);
             int max=wood.ItemClass.MaxCount;
             chest.SetItem(0,new ItemStack(wood.Clone(),max-2));

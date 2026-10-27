@@ -1,12 +1,19 @@
 CRAFTING DOS BAÚS — 7 Days to Die 3.4.0 (b6)
-Versão 0.2.0 EXPERIMENTAL — alcance padrão: 50 metros
+Versão 0.3.0 EXPERIMENTAL — alcance padrão: 50 metros
 
-O QUE MUDOU NA 0.2.0
-- Forja, betoneira, bancada, fogueira e estação de química voltaram ao
-  funcionamento original. O mod NÃO busca ingredientes nem abastece estações.
-- A fabricação do PERSONAGEM continua usando ingredientes dos baús até 50 m.
-- Novo botão "Guardar nos baús" no cabeçalho do inventário: guarda os itens
-  da mochila E DA BARRA RÁPIDA que já existam em baús próximos.
+O QUE MUDOU NA 0.3.0
+- Fabricação do personagem, bancada, fogueira e estação de química podem usar
+  os materiais dos baús até 50 m. Outras bancadas sem fundição seguem essa regra.
+- FORJA E BETONEIRA permanecem normais: coloque os materiais manualmente.
+  Não há abastecimento automático nem mudança nas contas dessas duas estações.
+- Mantido o botão "Guardar nos baús" para mochila e barra rápida.
+
+ALERTA DA VERSÃO ANTERIOR
+O download da versão 0.2.0 foi retirado após o relato Trojan:Script/Ulthar.A!ml.
+Não desative o Microsoft Defender, não crie exclusões e não restaure arquivos
+em quarentena para instalar o mod. Se houver alerta nesta versão, interrompa
+a instalação e informe o arquivo afetado. Relatório da investigação:
+https://github.com/lucasmac412/Mods/blob/main/sevendays-bau/docs/SEGURANCA.md
 
 INSTALAÇÃO — VOCÊ E TODOS OS AMIGOS PRECISAM INSTALAR
 1. Fechem o jogo. Guardem uma cópia do save antes de experimentar esta versão.
@@ -15,7 +22,7 @@ INSTALAÇÃO — VOCÊ E TODOS OS AMIGOS PRECISAM INSTALAR
 3. Extraia o ZIP usando "Extrair tudo". Não abra o mod direto dentro do ZIP.
 4. Abra a pasta "transfere pro jogo" do pacote e copie a pasta Mods para
    a pasta do jogo aberta pela Steam. Una as pastas se o Windows perguntar.
-   Para atualizar da 0.1.0, substitua a pasta CraftingDosBaus pela nova inteira.
+   Para atualizar de versões antigas, substitua a pasta CraftingDosBaus pela nova inteira.
    Não apague os outros mods nem a pasta 0_TFP_Harmony do próprio jogo.
 5. Confira se ficou exatamente assim:
    7 Days To Die\Mods\CraftingDosBaus\CraftingDosBaus.dll
@@ -41,7 +48,7 @@ Um servidor de terceiros precisa permitir e instalar este mod também.
 COMO USAR
 - Coloque os materiais em um baú construído/possuído pelos jogadores, até 50 m.
 - Feche o baú: recipientes abertos por qualquer jogador ficam fora da busca.
-- Abra a fabricação do personagem e selecione a receita. Estações são normais.
+- Abra a fabricação do personagem ou uma bancada permitida e selecione a receita.
 - Aguarde cerca de um segundo para os materiais próximos aparecerem nas contas.
 - Clique em fabricar normalmente. Um aviso "Usando ingredientes dos baús..."
   aparece enquanto o servidor confirma a retirada.
@@ -73,9 +80,10 @@ Em inventários aumentados por outros mods, cada clique processa até 128 pilhas
 Espere a mensagem de conclusão antes de clicar novamente ou sair da partida.
 
 ESTAÇÕES
-Forja, betoneira, bancada, fogueira e estação de química funcionam como no jogo
-sem este mod. Coloque os ingredientes/combustível normalmente. Não há mais
-abastecimento automático da forja, mudança de contagens, consumo ou fundição.
+Forja e betoneira funcionam como no jogo sem este mod. Coloque seus materiais
+normalmente. A bancada, fogueira e estação de química usam os ingredientes dos
+baús; ferramentas exigidas, combustível e tempos de produção continuam valendo.
+Não há abastecimento automático de combustível em nenhuma estação.
 
 O QUE CONTINUA IGUAL
 Receitas desbloqueadas, revistas/perícias, ferramentas exigidas, tempo de
@@ -95,7 +103,7 @@ Compilado contra as bibliotecas oficiais da 3.4.0 (b6).
 Foram testados retirada/devolução de ingredientes, depósito parcial, espaço
 insuficiente, permissões, slots bloqueados, mensagens repetidas e concorrência
 entre jogadores em ambiente controlado. Também há testes dentro do servidor
-oficial 3.4: fabricação pessoal, estações sem acesso remoto, inventários e
+oficial 3.4: fabricação pessoal, bancadas permitidas/excluídas, inventários e
 pacotes reais, limites de pilha e aplicação do botão pelo carregador XML.
 A camada visual das estações é substituída nos testes de lógica.
 Ainda não foi validado em uma sessão com jogadores reais nem na interface
@@ -111,8 +119,8 @@ baú fechado, materiais desbloqueados e distância menor que 50 m.
 Confira se não ficou Mods\Mods\CraftingDosBaus por engano.
 No console/log, procure [CraftingDosBaus]. A mensagem de ativação informa 50 m.
 Se aparecer "Não foi possível ativar", envie esse trecho do log para diagnóstico.
-Se o botão não aparecer, confira se copiou também a pasta Config da versão 0.2.0.
-Todos precisam atualizar para 0.2.0; não misture com a versão 0.1.0.
+Se o botão não aparecer, confira se copiou também a pasta Config da versão 0.3.0.
+Todos precisam atualizar para 0.3.0; não misture com versões anteriores.
 Não mude apenas o número da versão para tentar usar o mod em outra atualização.
 
 DESINSTALAR

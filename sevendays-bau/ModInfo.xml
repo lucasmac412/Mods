@@ -2,9 +2,9 @@
 <xml>
   <Name value="CraftingDosBaus" />
   <DisplayName value="Crafting dos Baús e Guardar Semelhantes — 50 metros" />
-  <Description value="Fabricação pessoal e depósito em baús próximos. Estações com funcionamento original. 7 Days to Die 3.4." />
+  <Description value="Fabricação pessoal e depósito em baús próximos. Forja e betoneira com funcionamento original. 7 Days to Die 3.4." />
   <Author value="lucasmac412" />
-  <Version value="0.2.0" />
+  <Version value="0.3.0" />
   <Website value="https://github.com/lucasmac412/Mods/tree/main/sevendays-bau" />
   <SkipWithAntiCheat value="true" />
 </xml>

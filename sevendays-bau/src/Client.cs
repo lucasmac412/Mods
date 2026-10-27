@@ -41,7 +41,7 @@ namespace CraftingDosBaus
             var player=Player;
             if(player==null||player.IsDead())return;
             float now=Time.realtimeSinceStartup;
-            if(now>=nextPoll && LocalPlayerUI.GetUIForPlayer(player)?.xui?.GetWindowGroupById("crafting")?.isShowing==true)
+            if(now>=nextPoll && LocalPlayerUI.GetUIForPlayer(player)?.xui?.WindowGroups?.Any(g=>g.isShowing&&Hooks.Supported(g.Controller))==true)
             {
                 nextPoll=now+1;
                 Send(NetPackageManager.GetPackage<NetPackageCraftingDosBaus>().Setup(NetPackageCraftingDosBaus.SnapshotRequest,player.entityId,""));
@@ -79,7 +79,7 @@ namespace CraftingDosBaus
             try
             {
                 bool valid=task!=null && task.Action.ItemController?.xui!=null
-                    && Hooks.Personal(task.Action.ItemController)
+                    && Hooks.Supported(task.Action.ItemController)
                     && ReferenceEquals(((XUiC_RecipeEntry)task.Action.ItemController).Recipe,task.Recipe)
                     && CountControl(task.Action).Count==task.Count
                     && CountControl(task.Action).WindowGroup.isShowing;
@@ -108,7 +108,7 @@ namespace CraftingDosBaus
             foreach(var group in groups)
             {
                 var recipes=group.Controller?.GetChildByType<XUiC_RecipeList>();
-                if(recipes==null||!Hooks.Personal(recipes))continue;
+                if(recipes==null||!Hooks.Supported(recipes))continue;
                 AccessTools.Field(typeof(XUiC_RecipeList),"resortRecipes").SetValue(recipes,true);
                 group.Controller.SetAllChildrenDirty();
             }
@@ -133,7 +133,7 @@ namespace CraftingDosBaus
         }
         internal static bool Begin(ItemActionEntryCraft action,bool disabled=false)
         {
-            if(!Plugin.Ready||!Hooks.Personal(action.ItemController)||Completing)return true;
+            if(!Plugin.Ready||!Hooks.Supported(action.ItemController)||Completing)return true;
             if(QuickStore.Busy){Say("Aguarde os itens serem guardados.");return false;}
             if(pending!=null){Say("Aguardando os baús...");return false;}
             if(Wallet!=null&&Wallet.Any(s=>s.count>0))

@@ -1,4 +1,4 @@
-# Validação — 0.2.0 experimental
+# Validação — 0.3.0 experimental
 
 Realizada em 27/10/2026 contra **7 Days to Die V3.4.0 (b6)** oficial.
 
@@ -10,7 +10,7 @@ Realizada em 27/10/2026 contra **7 Days to Die V3.4.0 (b6)** oficial.
 | ServerAdapter, retirada | 1.681 verificações | Código de produção com mundo/API controlados |
 | ServerAdapter, depósito | 64.009 verificações | Código de produção, incluindo 1.000 inventários aleatórios e 100 disputas concorrentes por espaço |
 | ClientAdapter | 117 verificações | Código real de reserva/devolução, com UI/inventário/rede substituídos |
-| RuntimeProbe | 162 verificações | DLL dentro do servidor Linux oficial, métodos e tipos reais do jogo |
+| RuntimeProbe | 203 verificações | DLL dentro do servidor Linux oficial, métodos e tipos reais do jogo |
 | ZIP | Estrutura, CRC e igualdade da DLL conferidos | Inclui XML do botão e não inclui DLLs proprietárias/testes |
 | Cooperativo com clientes Steam e UI gráfica | **Não realizado** | Não havia clientes/jogadores disponíveis |
 
@@ -20,7 +20,7 @@ Os números incluem várias asserções por cenário/iteração, não milhares d
 
 Mantidos os cenários de retirada mais próxima, múltiplos ingredientes, falta parcial sem débito, permissões, slots bloqueados, raio/altura, replay, rollback e 100 disputas pelo último material. No servidor real, 20 combinações executaram `XUiM_PlayerInventory.HasItems/RemoveItems`, conferindo mochila, saldo remoto e materiais de cancelamento.
 
-A nova sonda confirma ausência de patches em `XUiC_WorkstationInputGrid.GetItemCount/HasItems/RemoveItems`. Uma estação de teste chama os métodos nativos com um saldo remoto ativo e continua vendo/consumindo apenas seus próprios materiais. Sua camada visual/backend é substituída, não o código nativo desses métodos. Classificação e isolamento de escopo foram conferidos para personagem, forja, betoneira, bancada, fogueira e estação de química.
+A nova sonda executa os métodos reais da grade de entrada em contextos de personagem, forja, forja sem fundição, betoneira, bancada, fogueira, estação de química e bancada personalizada. Confere contagem, disponibilidade, consumo e materiais para cancelamento: bancadas permitidas usam saldo remoto; forja e betoneira o ignoram. Apenas o backend visual da estação é substituído. A política também verifica os IDs completos de janelas e diferenças de maiúsculas/minúsculas.
 
 ## Depósito no servidor
 
@@ -65,3 +65,7 @@ Use instalação descartável do servidor oficial. Instale a pasta completa do m
 ## Limites
 
 Faltam UI visual, transporte real entre clientes Steam, latência real, sessões longas e compatibilidade com overhauls. Recibos/reservas são de sessão: quedas ou desconexões durante uma transferência não têm recuperação garantida. A versão 3.4 anuncia um problema próprio com bloqueios redefinidos ao fechar inventários; o mod respeita o estado atual exposto pelo jogo e não corrige esse problema.
+
+## Antivírus
+
+Os testes acima verificam funcionamento, não segurança antivírus. A retirada do pacote anterior e os resultados do Defender estão registrados em [SEGURANCA.md](SEGURANCA.md).

@@ -1,17 +1,19 @@
 # Crafting dos Baús e Guardar Semelhantes — 7 Days to Die 3.4
 
-Versão **0.2.0 experimental**, para **V3.4.0 (b6)**. A fabricação do personagem usa ingredientes dos baús até **50 metros**. **Todas as estações voltaram ao comportamento original**: forja, betoneira, bancada, fogueira e estação de química não recebem materiais remotos nem abastecimento automático.
+Versão **0.3.0 experimental**, para **V3.4.0 (b6)**. Fabricação do personagem e bancadas usam ingredientes dos baús até **50 metros**, **exceto forja e betoneira**, que mantêm contagem e consumo originais. Bancada, fogueira e estação de química são permitidas; combustível, ferramentas e tempos continuam nativos.
+
+**A versão 0.2.0 foi retirada após um alerta do Defender.** Consulte o [relatório de segurança](docs/SEGURANCA.md). Não ignore alertas nem crie exclusões.
 
 O novo botão **Guardar nos baús**, no cabeçalho do inventário, guarda os itens da mochila **e da barra rápida** em baús próximos que já contenham aquele tipo. Respeita espaço, bloqueios, permissões e atributos dos itens. Não envia itens para baús vazios ou de outras categorias.
 
 [Instalação e uso](LEIA-ME.txt) · [Relatório de testes](docs/TESTES.md)
 
-Todos os participantes e o anfitrião/servidor devem atualizar a pasta completa do mod para 0.2.0, incluindo `Config`. Requer EAC desativado e usa o Harmony fornecido pelo jogo. Não foi validado com clientes Steam reais; não há recuperação persistente de transferências interrompidas por queda/desconexão.
+Todos os participantes e o anfitrião/servidor devem atualizar a pasta completa do mod para 0.3.0, incluindo `Config`. Requer EAC desativado e usa o Harmony fornecido pelo jogo. Não foi validado com clientes Steam reais; não há recuperação persistente de transferências interrompidas por queda/desconexão.
 
 ## Funcionamento
 
 - Baús de jogadores, carregados, fechados e acessíveis, dentro de uma esfera de 50 m do jogador. Alcance configurável no servidor.
-- Fabricação remota restrita à janela de fabricação pessoal. Sem patches nos métodos de contagem/consumo de `XUiC_WorkstationInputGrid`; o abastecimento de forja foi removido.
+- Fabricação remota habilitada por contexto de janela. `CraftingPolicy` exclui IDs de forja e betoneira; janelas com grade de fundição também são excluídas. Hooks compartilhados de inventário verificam o contexto antes de incluir ou consumir saldo remoto. Não há abastecimento da forja.
 - Depósito preenche pilhas compatíveis antes de ocupar espaços livres nos baús correspondentes, priorizando proximidade. Só usa tipos presentes antes do pedido; não espalha categorias novas para outros baús.
 - Slots bloqueados são ignorados na origem e destino. Armaduras equipadas e itens no cursor ficam de fora. Armas da barra rápida podem ser guardadas se houver correspondência; use slots bloqueados da mochila para protegê-las.
 - Qualidade, desgaste, modificações e outros atributos são preservados. Pilhas só são combinadas se os valores completos dos itens forem iguais e houver capacidade.

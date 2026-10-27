@@ -6,7 +6,7 @@ import zipfile
 
 root = Path(__file__).resolve().parents[1]
 repo = root.parent
-name = '7Days-Crafting-dos-Baus-3.4-v0.2.0-Experimental'
+name = '7Days-Crafting-dos-Baus-3.4-v0.3.0-Experimental'
 output = repo / 'downloads' / (name + '.zip')
 files = {
     'LEIA-ME.txt': root / 'LEIA-ME.txt',

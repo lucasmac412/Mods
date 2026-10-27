@@ -28,7 +28,7 @@ namespace CraftingDosBaus
                 ModEvents.GameUpdate.RegisterHandler(Update);
                 ModEvents.WorldShuttingDown.RegisterHandler(Shutdown);
                 Ready=true;
-                Log.Out("[CraftingDosBaus] 0.2.0: 3.4, alcance "+Config.AlcanceMetros+" m, retirada autorizada pelo servidor.");
+                Log.Out("[CraftingDosBaus] 0.3.0: 3.4, alcance "+Config.AlcanceMetros+" m, retirada autorizada pelo servidor.");
             }
             catch(Exception e) { Log.Error("[CraftingDosBaus] Não foi possível ativar: "+e); }
         }

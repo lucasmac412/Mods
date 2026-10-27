@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework><LangVersion>latest</LangVersion>
-    <AssemblyName>CraftingDosBaus</AssemblyName><Version>0.2.0</Version>
+    <AssemblyName>CraftingDosBaus</AssemblyName><Version>0.3.0</Version>
     <DebugType>none</DebugType><Deterministic>true</Deterministic><TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GameRoot Condition="'$(GameRoot)' == ''">/workspace/.cache/sevendays-research/server-v34</GameRoot>
   </PropertyGroup>
